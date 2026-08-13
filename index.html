@@ -121,9 +121,25 @@
   .rbar{height:8px; border-radius:999px; background:var(--surface2); overflow:hidden}
   .rbar > i{display:block; height:100%; background:var(--calm); transition:width .25s}
   .rnote{width:100%; min-height:120px; font-family:var(--sans); font-size:13.5px; color:var(--ink); background:var(--surface2); border:1px solid var(--hair); border-radius:10px; padding:12px; resize:vertical; line-height:1.55}
+  .authgate{position:fixed; inset:0; background:var(--ground); display:flex; align-items:center; justify-content:center; padding:20px; z-index:50}
+  .authgate.hide{display:none}
+  .authcard{background:var(--surface); border:1px solid var(--hair); border-radius:12px; padding:28px; max-width:380px; width:100%; box-shadow:var(--shadow)}
+  #syncBadge{font-size:11.5px; color:var(--muted); min-width:70px; text-align:right}
+  #userEmail{font-size:12px; color:var(--faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div id="authGate" class="authgate">
+  <div class="authcard">
+    <div class="eyebrow">Trading Journal</div>
+    <h1 style="margin:.15em 0 .45em">Entra a tu journal</h1>
+    <p class="small muted" style="margin:0 0 16px">Te enviamos un enlace mágico a tu correo — sin contraseñas. Tus datos son privados y solo tú los ves.</p>
+    <input type="email" id="authEmail" placeholder="tu@email.com" style="width:100%; margin-bottom:10px; padding:11px 12px">
+    <button class="btn calm" id="authSend" style="width:100%; justify-content:center; padding:11px">Enviar enlace de acceso</button>
+    <div class="small" id="authMsg" style="margin-top:12px; min-height:18px; color:var(--muted)"></div>
+  </div>
+</div>
 <div class="app">
   <div class="head">
     <div>
@@ -139,6 +155,9 @@
       <button class="btn ghost small" id="backupBtn" title="Backup (descargar JSON)">⬇ Backup</button>
       <button class="btn ghost small" id="themeBtn" title="Tema">◐</button>
       <button class="btn ghost small" id="wipeBtn" title="Borrar todo">🗑</button>
+      <span id="syncBadge" title="Estado de guardado"></span>
+      <span id="userEmail" title="Sesión"></span>
+      <button class="btn ghost small" id="logoutBtn" title="Cerrar sesión">Salir</button>
     </div>
   </div>
 
@@ -177,7 +196,11 @@
 <script>
 (function(){
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
-const KEY="zbJournal_v1";
+const BASEKEY="zbJournal_v1"; let KEY=BASEKEY;
+const SUPA_URL="https://zglcmffcvgohdroiqyux.supabase.co";
+const SUPA_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnbGNtZmZjdmdvaGRyb2lxeXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzY5NzQsImV4cCI6MjEwMjIxMjk3NH0.py7TSR9BHbZ7oV1gdZiL9zFCMkwP3M-HNcSEWcWtQMs";
+const sb=supabase.createClient(SUPA_URL,SUPA_ANON);
+let user=null, _cloudT=null;
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
 const TICKSZ={NQ:0.25,MNQ:0.25,ES:0.25,MES:0.25,RTY:0.1,M2K:0.1,YM:1,MYM:1,GC:0.1,MGC:0.1,CL:0.01,MCL:0.01};
 const ticksOf=(pts,sym)=>Math.round(pts/(TICKSZ[sym]!==undefined?TICKSZ[sym]:0.25));
@@ -208,15 +231,30 @@ const RULES=[
   {k:"r5",lab:"Ejecuté mi plan (proceso ≥ 75%, si etiquetado)"}
 ];
 
-function load(){
-  let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){}
+function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.routine=s.routine||{};
   s.settings=Object.assign({dpt:900, overtrade:8, session:"Asia"}, s.settings||{});
   s.settings.goals=Object.assign({disc:80, proc:80, nomans:2, rr:1.5}, s.settings.goals||{});
   return s;
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){toast("No se pudo guardar (¿modo privado?)");}}
+function load(){ let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){} return normalizeDB(s); }
+async function loadCloud(){
+  try{
+    const {data,error}=await sb.from('journals').select('data').eq('user_id',user.id).maybeSingle();
+    if(error) throw error;
+    if(data && data.data){ DB=normalizeDB(data.data); try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} return; }
+  }catch(e){ console.warn('loadCloud',e); toast('Sin conexión — usando copia local'); }
+  DB=load();
+}
+function syncBadge(st){ const b=$("#syncBadge"); if(!b)return; b.textContent = st==='ok'?'✓ guardado' : st==='err'?'⚠ sin guardar' : st==='...'?'guardando…':''; b.style.color = st==='err'?'var(--neg)':'var(--muted)'; }
+function scheduleCloud(){ if(!user)return; syncBadge('...'); clearTimeout(_cloudT); _cloudT=setTimeout(cloudSave,1200); }
+async function cloudSave(){
+  if(!user)return;
+  try{ const {error}=await sb.from('journals').upsert({user_id:user.id, data:DB, updated_at:new Date().toISOString()}); if(error)throw error; syncBadge('ok'); }
+  catch(e){ console.warn('cloudSave',e); syncBadge('err'); }
+}
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} scheduleCloud(); }
 function toast(m){const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1800);}
 const money=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
 const money1=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -342,7 +380,7 @@ async function exportBackup(){
 }
 function restoreBackup(j){
   if(!confirm("¿Restaurar backup? Reemplaza TODOS los datos actuales de este navegador.")) return;
-  DB={trades:Array.isArray(j.trades)?j.trades:[], tags:j.tags||{}, checkins:j.checkins||{}, accounts:j.accounts||{}, playbooks:j.playbooks||{}, notes:j.notes||{}, ledger:Array.isArray(j.ledger)?j.ledger:[], settings:Object.assign({dpt:900,overtrade:8,session:"Asia"}, j.settings||{})};
+  DB={trades:Array.isArray(j.trades)?j.trades:[], tags:j.tags||{}, checkins:j.checkins||{}, accounts:j.accounts||{}, playbooks:j.playbooks||{}, notes:j.notes||{}, ledger:Array.isArray(j.ledger)?j.ledger:[], routine:j.routine||{}, settings:Object.assign({dpt:900,overtrade:8,session:"Asia"}, j.settings||{})};
   if(j._images){ Object.keys(j._images).forEach(k=>dataURLtoBlob(j._images[k]).then(b=>idbPut(k,b)).catch(()=>{})); }
   DB.settings.goals=Object.assign({disc:80,proc:80,nomans:2,rr:1.5}, (j.settings&&j.settings.goals)||{});
   DB.trades.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
@@ -1489,7 +1527,30 @@ $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.
 $("#wipeBtn").onclick=()=>{ if(confirm("¿Borrar TODOS los trades y etiquetas guardados en este navegador?")){DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast("Todo borrado.");} };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
 
-ensureTdays(); buildAccounts(); buildPeriods(); render();
+// ---------- auth / arranque en la nube ----------
+function showLogin(){ $("#authGate").classList.remove("hide"); }
+function hideLogin(){ $("#authGate").classList.add("hide"); }
+async function onSession(session){
+  user = session && session.user ? session.user : null;
+  if(!user){ showLogin(); const ue=$("#userEmail"); if(ue)ue.textContent=""; syncBadge(''); return; }
+  hideLogin();
+  KEY = BASEKEY + "_" + user.id;
+  const ue=$("#userEmail"); if(ue)ue.textContent=user.email||"";
+  await loadCloud();
+  ensureTdays(); buildAccounts(); buildPeriods(); render();
+}
+sb.auth.onAuthStateChange((_e,session)=>{ onSession(session); });
+sb.auth.getSession().then(({data})=>onSession(data.session)).catch(e=>{ console.warn(e); showLogin(); });
+$("#authSend").onclick=async()=>{
+  const email=($("#authEmail").value||"").trim();
+  if(!/.+@.+\..+/.test(email)){ $("#authMsg").textContent="Escribe un correo válido."; return; }
+  $("#authSend").disabled=true; $("#authMsg").textContent="Enviando enlace…";
+  const {error}=await sb.auth.signInWithOtp({email, options:{emailRedirectTo:location.origin+location.pathname}});
+  $("#authSend").disabled=false;
+  $("#authMsg").textContent = error ? ("Error: "+error.message) : "✓ Revisa tu correo y abre el enlace para entrar.";
+};
+$("#authEmail").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#authSend").click(); });
+$("#logoutBtn").onclick=async()=>{ try{await sb.auth.signOut();}catch(e){} location.reload(); };
 })();
 </script>
 </body>
