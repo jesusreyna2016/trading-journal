@@ -1,0 +1,14 @@
+# Secretos (Fase 1 en adelante) — NUNCA subir claves
+.env
+.env.*
+*.key
+
+# SO / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencias (si más adelante añadimos build)
+node_modules/
+dist/
