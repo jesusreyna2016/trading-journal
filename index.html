@@ -1799,9 +1799,9 @@ async function onSession(session){
   const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
   if(!DB.settings.onboarded) showOnboard();
 }
-sb.auth.onAuthStateChange((ev,session)=>{ try{console.log("[auth] event:",ev,"| session?",!!session);}catch(e){} onSession(session); });
+sb.auth.onAuthStateChange((ev,session)=>{ try{console.log("[auth] event:",ev,"| session?",!!session);}catch(e){} if(ev==="SIGNED_IN"){setTimeout(()=>{try{console.log("[auth] +0.8s post-SIGNED_IN | tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",Object.keys(localStorage));}catch(e){console.warn("[auth] post-signin LS err",e);}},800);} onSession(session); });
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
-sb.auth.getSession().then(({data})=>{ try{console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"));}catch(e){} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
+sb.auth.getSession().then(({data})=>{ try{var lsk=Object.keys(localStorage);var sz=0;lsk.forEach(k=>{try{sz+=(localStorage.getItem(k)||"").length;}catch(e){}});console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",lsk,"| LSsizeKB:",Math.round(sz/1024));}catch(e){console.warn("[auth] boot LS err",e);} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
 $("#authSend").onclick=async()=>{
   const email=($("#authEmail").value||"").trim();
   if(!/.+@.+\..+/.test(email)){ $("#authMsg").textContent=T("emailInvalid"); return; }
