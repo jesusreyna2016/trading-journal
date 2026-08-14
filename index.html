@@ -398,7 +398,7 @@ function syncBadge(st){ const b=$("#syncBadge"); if(!b)return; b.textContent = s
 function scheduleCloud(){ if(!user)return; syncBadge('...'); clearTimeout(_cloudT); _cloudT=setTimeout(cloudSave,1200); }
 async function cloudSave(){
   if(!user)return;
-  try{ const {error}=await sb.from('journals').upsert({user_id:user.id, data:DB, updated_at:new Date().toISOString()}); if(error)throw error; syncBadge('ok'); }
+  try{ const {error}=await sb.from('journals').upsert({user_id:user.id, data:DB, updated_at:new Date().toISOString()}, {onConflict:'user_id'}); if(error)throw error; syncBadge('ok'); }
   catch(e){ console.warn('cloudSave',e); syncBadge('err'); }
 }
 function save(){ cacheLocal(); scheduleCloud(); }
