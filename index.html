@@ -233,8 +233,8 @@ let DB=load();                       // {trades:[], tags:{}, settings:{dpt, over
 let period="ALL", tab="overview", weekSel=null, monthSel=null, acctFilter="ALL", noteSel=null, jExpanded=null, routineSel=null;
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
 function scoped(){ if(acctFilter==="ALL")return DB.trades; if(acctFilter==="NONE")return DB.trades.filter(t=>!t.acct); return DB.trades.filter(t=>(t.acct||"")===acctFilter); }
-const TABLAB={overview:"Resumen",routine:"Rutina",checkin:"Check-in",leaks:"Fugas",breakdown:"Desglose",playbooks:"Playbooks",score:"Score",journal:"Trades",positions:"Posiciones",notes:"Notas",weekly:"Semanal",progress:"Progreso",calendar:"Calendario",risk:"Riesgo",accounts:"Cuentas",finance:"Finanzas",report:"Informe"};
-const GROUPS=[{lab:"Resumen",subs:["overview"]},{lab:"Rutina",subs:["routine"]},{lab:"Diario",subs:["journal","positions","checkin","notes"]},{lab:"Análisis",subs:["score","leaks","breakdown","playbooks","report"]},{lab:"Progreso",subs:["weekly","progress","calendar"]},{lab:"Cuentas",subs:["accounts","risk","finance"]}];
+const TABLAB={overview:"Resumen",routine:"Rutina",checkin:"Check-in",leaks:"Fugas",playbooks:"Playbooks",score:"Score",journal:"Trades",positions:"Posiciones",notes:"Notas",progress:"Progreso",calendar:"Calendario",risk:"Riesgo",accounts:"Cuentas",finance:"Finanzas",report:"Informe"};
+const GROUPS=[{lab:"Resumen",subs:["overview"]},{lab:"Rutina",subs:["routine"]},{lab:"Diario",subs:["journal","positions","checkin","notes"]},{lab:"Disciplina",subs:["leaks","risk","score"]},{lab:"Análisis",subs:["report","playbooks"]},{lab:"Progreso",subs:["progress","calendar"]},{lab:"Negocio",subs:["accounts","finance"]}];
 let groupLast={};
 function groupOf(t){ return GROUPS.find(g=>g.subs.includes(t))||GROUPS[0]; }
 function buildTabs(){
@@ -993,6 +993,12 @@ function renderProgress(){
   const last=S[S.length-1], prev=S.length>1?S[S.length-2]:null; const g=DB.settings.goals;
   const arrow=(cur,pv,inv)=>{ if(pv==null)return''; if(cur===pv)return''; const up=cur>pv; const good=inv?!up:up; return ` <span class="${good?'pos':'neg'}">${up?'▲':'▼'}</span>`; };
   const pts=S.map(s=>({x:s.w,y:s.discPct}));
+  const allW=dayEval(scoped());
+  const weeksP=[...new Set(allW.map(d=>isoWeek(d.date)))].sort();
+  const curW=weeksP[weeksP.length-1];
+  const wd=allW.filter(d=>isoWeek(d.date)===curW).sort((a,b)=>a.date<b.date?-1:1);
+  const scoreRow=r=>{ const rel=wd.filter(d=>d[r.k]!==null), ok=rel.filter(d=>d[r.k]).length, tot=rel.length; const st=tot===0?'na':(ok===tot?'ok':'no'), t=tot===0?'—':ok+'/'+tot+' días'; return `<div class="r"><span class="lab">${r.lab}</span><span class="pass ${st}">${t}</span></div>`; };
+  const heat=wd.map(d=>`<div class="d ${d.disciplined?'g':'r'}" title="${d.date}: ${money(d.net)}${d.disciplined?' · disciplinado':' · '+failReasons(d)}">${d.date.slice(5)}<span class="n">${d.net>=0?'+':''}${Math.round(d.net)}</span></div>`).join("");
   host.innerHTML=`
     <div class="grid kpis">
       ${kpi("Disciplina (última sem)",Math.round(last.discPct)+"%"+arrow(last.discPct,prev?prev.discPct:null),last.days+" días","calmc")}
@@ -1000,6 +1006,9 @@ function renderProgress(){
       ${kpi("Tierra de nadie",last.nomans+arrow(last.nomans,prev?prev.nomans:null,true),"trades esta sem",last.nomans<=g.nomans?"pos":"neg")}
       ${kpi("Contra sesgo",last.against+arrow(last.against,prev?prev.against:null,true),"trades esta sem",last.against===0?"pos":"neg")}
     </div>
+    <div class="card section"><h2>Scorecard de la semana · ${curW}</h2><div class="score">${RULES.map(scoreRow).join("")}</div></div>
+    <div class="card section"><h2>Días de esta semana</h2><div class="heat">${heat||'<span class="muted">Sin días.</span>'}</div>
+      <p class="small muted" style="margin-top:10px">Verde = día disciplinado · Rojo = rompió alguna regla (pasa el cursor para ver por qué).</p></div>
     <div class="card section"><h2>Disciplina por semana</h2><div id="pghost"></div>
       <p class="small muted" style="margin-top:8px">% de días disciplinados cada semana. La línea que buscas: que suba y se quede arriba.</p></div>
     <div class="card section"><h2>Metas</h2>
