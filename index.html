@@ -386,7 +386,7 @@ async function exportBackup(){
 function restoreBackup(j){
   if(!confirm("¿Restaurar backup? Reemplaza TODOS los datos actuales de este navegador.")) return;
   DB={trades:Array.isArray(j.trades)?j.trades:[], tags:j.tags||{}, checkins:j.checkins||{}, accounts:j.accounts||{}, playbooks:j.playbooks||{}, notes:j.notes||{}, ledger:Array.isArray(j.ledger)?j.ledger:[], routine:j.routine||{}, settings:Object.assign({dpt:900,overtrade:8,session:"Asia"}, j.settings||{})};
-  if(j._images){ Object.keys(j._images).forEach(k=>dataURLtoBlob(j._images[k]).then(b=>idbPut(k,b)).catch(()=>{})); }
+  if(j._images){ Object.keys(j._images).forEach(k=>dataURLtoBlob(j._images[k]).then(b=>{ idbPut(k,b); stUpload(k,b); }).catch(()=>{})); }
   DB.settings.goals=Object.assign({disc:80,proc:80,nomans:2,rr:1.5}, (j.settings&&j.settings.goals)||{});
   DB.trades.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
   ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast("Backup restaurado ("+DB.trades.length+" trades).");
@@ -1147,13 +1147,19 @@ function idbDel(k){ return idb().then(db=>new Promise(res=>{const tx=db.transact
 function idbAll(){ return idb().then(db=>new Promise(res=>{const o={};const tx=db.transaction("imgs","readonly");const rq=tx.objectStore("imgs").openCursor();rq.onsuccess=e=>{const c=e.target.result;if(c){o[c.key]=c.value;c.continue();}else res(o);};tx.onerror=()=>res(o);})); }
 function blobToDataURL(b){ return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(b);}); }
 function dataURLtoBlob(u){ return fetch(u).then(r=>r.blob()); }
+// --- Imágenes en la nube (Supabase Storage), carpeta por usuario ---
+const IMGBUCKET="note-images";
+function stPath(key){ return (user?user.id:"anon")+"/"+key; }
+async function stUpload(key,blob){ if(!user)return; try{ await sb.storage.from(IMGBUCKET).upload(stPath(key),blob,{upsert:true,contentType:(blob&&blob.type)||"image/png"}); }catch(e){ console.warn("stUpload",e); } }
+async function stDownload(key){ if(!user)return null; try{ const {data,error}=await sb.storage.from(IMGBUCKET).download(stPath(key)); if(error)throw error; return data; }catch(e){ return null; } }
+async function stRemove(key){ if(!user)return; try{ await sb.storage.from(IMGBUCKET).remove([stPath(key)]); }catch(e){} }
 const NOTE_TPL=`<b>🎯 Plan de sesión</b><br>Mercado: <br>Contexto: <br><br><b>Objetivos</b><ul><li>Buena gestión de riesgo</li><li></li></ul><b>Trades</b><br><br><b>Cierre / lecciones</b><br><br>`;
 function stripImgSrc(html){ const d=document.createElement("div"); d.innerHTML=html; d.querySelectorAll('img[data-imgkey]').forEach(im=>im.removeAttribute('src')); return d.innerHTML; }
-function hydrateImgs(el){ el.querySelectorAll('img[data-imgkey]').forEach(im=>{ idbGet(im.dataset.imgkey).then(b=>{ if(b) im.src=URL.createObjectURL(b); }).catch(()=>{}); }); }
-function insertImg(file,doSave){ const key="img"+Date.now().toString(36)+Math.floor(Math.random()*1e4); idbPut(key,file).then(()=>{ const url=URL.createObjectURL(file); document.execCommand('insertHTML',false,`<img data-imgkey="${key}" src="${url}" style="max-width:100%;border-radius:8px;margin:6px 0">`); doSave(); }); }
+function hydrateImgs(el){ el.querySelectorAll('img[data-imgkey]').forEach(im=>{ const k=im.dataset.imgkey; idbGet(k).then(b=>{ if(b){ im.src=URL.createObjectURL(b); return; } stDownload(k).then(d=>{ if(d){ idbPut(k,d).catch(()=>{}); im.src=URL.createObjectURL(d); } }); }).catch(()=>{ stDownload(k).then(d=>{ if(d) im.src=URL.createObjectURL(d); }); }); }); }
+function insertImg(file,doSave){ const key="img"+Date.now().toString(36)+Math.floor(Math.random()*1e4); idbPut(key,file).then(()=>{ stUpload(key,file); const url=URL.createObjectURL(file); document.execCommand('insertHTML',false,`<img data-imgkey="${key}" src="${url}" style="max-width:100%;border-radius:8px;margin:6px 0">`); doSave(); }); }
 function noteDayInfo(ds){ if(!ds) return ""; const tr=DB.trades.filter(t=>(t.tday||t.date)===ds); if(!tr.length) return '<span class="muted small">Sin trades ese día</span>'; const net=tr.reduce((s,t)=>s+t.pnl,0); const ev=dayEval(tr)[0]; return `<span class="num ${cls(net)}" style="font-weight:700">Net ${money1(net)}</span> <span class="muted small">· ${tr.length} trades${ev?(ev.disciplined?' · 🟢':' · 🔴 '+failReasons(ev)):''}</span>`; }
 function newNote(){ const id="n"+Date.now().toString(36); const td=tradingDay({date:new Date().toISOString().slice(0,10),time:"18:00:00"}); DB.notes[id]={title:"Nota "+td,html:"",date:td,tags:[],created:Date.now(),updated:Date.now()}; noteSel=id; save(); renderNotes(); }
-function delNote(id){ if(!confirm("¿Eliminar esta nota?"))return; const h=(DB.notes[id]||{}).html||""; (h.match(/data-imgkey="([^"]+)"/g)||[]).forEach(m=>idbDel(m.match(/data-imgkey="([^"]+)"/)[1])); delete DB.notes[id]; if(noteSel===id)noteSel=null; save(); renderNotes(); }
+function delNote(id){ if(!confirm("¿Eliminar esta nota?"))return; const h=(DB.notes[id]||{}).html||""; (h.match(/data-imgkey="([^"]+)"/g)||[]).forEach(m=>{ const k=m.match(/data-imgkey="([^"]+)"/)[1]; idbDel(k); stRemove(k); }); delete DB.notes[id]; if(noteSel===id)noteSel=null; save(); renderNotes(); }
 function renderNotes(){
   const host=$("#view-notes"); const q=(host._q||"").toLowerCase();
   const ids=Object.keys(DB.notes).sort((a,b)=>DB.notes[b].updated-DB.notes[a].updated)
