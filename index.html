@@ -135,7 +135,7 @@
 </style>
 </head>
 <body>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3"></script>
 <div id="authGate" class="authgate">
   <div class="authcard" style="max-width:440px">
     <div class="rowflex" style="justify-content:space-between; align-items:center">
@@ -224,7 +224,7 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const BASEKEY="zbJournal_v1"; let KEY=BASEKEY;
 const SUPA_URL="https://zglcmffcvgohdroiqyux.supabase.co";
 const SUPA_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnbGNtZmZjdmdvaGRyb2lxeXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzY5NzQsImV4cCI6MjEwMjIxMjk3NH0.py7TSR9BHbZ7oV1gdZiL9zFCMkwP3M-HNcSEWcWtQMs";
-const sb=supabase.createClient(SUPA_URL,SUPA_ANON);
+const sb=supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
 let user=null, _cloudT=null;
 // ---------- i18n (EN por defecto + ES) ----------
 const I18N={
