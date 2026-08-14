@@ -254,6 +254,17 @@ const I18N={
   "equityCurve":"Equity curve","pnlByDay":"P&L by day","topInsight":"Top insight",
   "leaksCostTitle":"💸 What your leaks cost you","leaksCostBody":"If you had <b>{act}</b>, your net would be <b class='pos'>{v}</b> instead of {a} — <b class='pos'>+{d}</b> left on the table. <span class='muted'>(detail in Discipline → Leaks)</span>",
   "cf.stop":"stopped at 2 losses in a row","cf.noOt":"avoided over-trading days","cf.noNomans":"not traded in no-man's-land","cf.noAgainst":"not traded against the bias",
+  "lk.side.t":"Longs vs shorts","lk.side.w":"Longs: {ln} trades, {lnet} ({lwr}% win). Shorts: {sn}, {snet} ({swr}%). {tail}","lk.side.bad":"Your long side is the leak: it loses while shorts win.","lk.side.ok":"Longs are holding up.",
+  "lk.rev.t":"Revenge-sizing (sizing up in the red)","lk.rev.w":"You sized up {rev} time(s) after a loss while down on the day. Those entries add {revLoss}. It's the pattern that blows accounts. (Scaling while green isn't flagged.)",
+  "lk.ot.t":"Over-trading / chop days","lk.ot.w":"{n} day(s) with ≥{ot} trades ({dates}). Net on those days: {otnet}. Many trades bunched = trading the noise.",
+  "lk.gb.t":"Round-trip: you gave back the peak","lk.gb.w":"{n} day(s) where you hit a peak and gave back more than half. E.g.: {ex}. Protect profits / stop at your daily loss cap.",
+  "lk.cw.t":"Cutting winners?","lk.cw.w":"Avg win {aw} pts vs avg loss {al} pts (ratio {r}). {tail}","lk.cw.bad":"You cut winners before they run; the runners are what pay.","lk.cw.ok":"You let winners run well.",
+  "lk.emo.t":"Costliest emotion: {e}","lk.emo.w":"When you tagged \"{e}\" ({n} trades) your net was {net}. That's your expensive trigger — make it visible before every click.","lk.emo.t0":"Emotional journal","lk.emo.w0":"Tag the emotion of your trades in the Journal tab. With ≥3 tags I'll show where your losses cluster.",
+  "lk.zone.t":"Valid edge vs no-man's-land","lk.zone.w":"At a valid EDGE ({en_n}): {en}, {ew}% win. In no-man's-land / WAIT / CHOP ({nml_n}): {nn}, {nw}%. {tail}","lk.zone.bad":"Your losses live outside the edge. If it's not VALID, don't click.",
+  "lk.bias.t":"With vs against the bias","lk.bias.w":"With the bias ({wn_n}): {wn}. Against the bias ({an_n}): {an}. {tail}","lk.bias.bad":"Trading against the bias is bleeding — your counter-trend leak.",
+  "leaksCard.title":"What your leaks cost you","leaksCard.sub":"Your current net vs what it would have been avoiding each leak. The green number is what you'd save.","leaksCard.startHere":"🎯 <b>Start here:</b> {act} — your most expensive leak, <b class='pos'>+{d}</b> you'd recover this period.",
+  "cf.rowActual":"Current net","cf.rowStop":"If you stop at 2 losses in a row","cf.rowNoOt":"Without over-trading days (≥{ot})","cf.rowNoNomans":"Without no-man's-land ({n} trades)","cf.rowNoAgainst":"Without trading against the bias ({n})","leaksCard.tagHint":"Tag the context in the Journal to see the cost of no-man's-land / against the bias.",
+  "leaks.autoTitle":"Your leaks — automatic detection","leaks.thresholds":"Thresholds: over-trading ≥ {ot} trades/day · DPT ${dpt}.","apply":"Apply",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.progress":"Progress","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report"
  },
@@ -283,11 +294,23 @@ const I18N={
   "equityCurve":"Curva de equity","pnlByDay":"P&L por día","topInsight":"Insight destacado",
   "leaksCostTitle":"💸 El costo de tus fugas","leaksCostBody":"Si hubieras <b>{act}</b>, tu neto sería <b class='pos'>{v}</b> en vez de {a} — <b class='pos'>+{d}</b> que dejas en la mesa. <span class='muted'>(detalle en Disciplina → Fugas)</span>",
   "cf.stop":"parar a las 2 pérdidas seguidas","cf.noOt":"evitar los días de sobreoperar","cf.noNomans":"no operar en tierra de nadie","cf.noAgainst":"no operar contra el sesgo",
+  "lk.side.t":"Largos vs cortos","lk.side.w":"Largos: {ln} trades, {lnet} ({lwr}% aciertos). Cortos: {sn}, {snet} ({swr}%). {tail}","lk.side.bad":"Tu lado largo es la fuga: pierde mientras el corto gana.","lk.side.ok":"Los largos aguantan.",
+  "lk.rev.t":"Revenge-sizing (subir tamaño en rojo)","lk.rev.w":"Subiste el tamaño {rev} vez(ces) tras una pérdida y estando en negativo el día. Esas entradas suman {revLoss}. Es el patrón que vuela cuentas. (Escalar en verde no se marca.)",
+  "lk.ot.t":"Días de sobreoperar / chop","lk.ot.w":"{n} día(s) con ≥{ot} trades ({dates}). Neto de esos días: {otnet}. Muchos trades juntos = operar el ruido.",
+  "lk.gb.t":"Round-trip: devolviste el pico","lk.gb.w":"{n} día(s) donde llegaste a un pico y devolviste más de la mitad. Ej: {ex}. Falta proteger beneficios / parar en el DPT.",
+  "lk.cw.t":"¿Cortas ganadores?","lk.cw.w":"Ganancia media {aw} pts vs pérdida media {al} pts (ratio {r}). {tail}","lk.cw.bad":"Cortas los ganadores antes de que corran; los runners son los que pagan.","lk.cw.ok":"Dejas correr bien los ganadores.",
+  "lk.emo.t":"Emoción que más te cuesta: {e}","lk.emo.w":"Cuando marcaste \"{e}\" ({n} trades) tu neto fue {net}. Ese es tu gatillo caro — hazlo visible antes de cada clic.","lk.emo.t0":"Diario emocional","lk.emo.w0":"Etiqueta la emoción de tus trades en la pestaña Diario. Con ≥3 etiquetas te muestro en qué emoción se concentran tus pérdidas.",
+  "lk.zone.t":"Borde válido vs tierra de nadie","lk.zone.w":"En un BORDE válido ({en_n}): {en}, {ew}% aciertos. En tierra de nadie / WAIT / CHOP ({nml_n}): {nn}, {nw}%. {tail}","lk.zone.bad":"Tus pérdidas viven fuera del borde. Si no es VALID, no clicas.",
+  "lk.bias.t":"A favor vs contra el sesgo","lk.bias.w":"A favor del sesgo ({wn_n}): {wn}. Contra el sesgo ({an_n}): {an}. {tail}","lk.bias.bad":"Operar contra el bias es sangría — tu fuga contra-tendencia.",
+  "leaksCard.title":"El costo de tus fugas","leaksCard.sub":"Tu neto actual y qué habría sido evitando cada fuga. El número verde es lo que te ahorras.","leaksCard.startHere":"🎯 <b>Empieza por aquí:</b> {act} — es tu fuga más cara, <b class='pos'>+{d}</b> que recuperarías en este periodo.",
+  "cf.rowActual":"Neto actual","cf.rowStop":"Si paras a las 2 pérdidas seguidas","cf.rowNoOt":"Sin días de sobreoperar (≥{ot})","cf.rowNoNomans":"Sin tierra de nadie ({n} trades)","cf.rowNoAgainst":"Sin operar contra el sesgo ({n})","leaksCard.tagHint":"Etiqueta el contexto en el Diario para ver el costo de operar en tierra de nadie / contra el sesgo.",
+  "leaks.autoTitle":"Tus fugas — detección automática","leaks.thresholds":"Umbrales: sobreoperar ≥ {ot} trades/día · DPT ${dpt}.","apply":"Aplicar",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.progress":"Progreso","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
+function fmt(s,o){ return String(s).replace(/\{(\w+)\}/g,(_,k)=>o[k]!=null?o[k]:""); }
 function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); }
 function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); const g=$("#greet"); if(g&&user) g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]); if(user) render(); }
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
@@ -554,64 +577,55 @@ function dayStats(TR){ // ordered per día de trading: net, peak, final, givebac
 // ---------- LEAK DETECTORS ----------
 function detectLeaks(TR){
   const L=[]; const days=dayStats(TR); const M=metrics(TR);
-  // 1 long vs short
   const longs=TR.filter(t=>t.side==="long"), shorts=TR.filter(t=>t.side==="short");
   const lnet=longs.reduce((s,t)=>s+t.pnl,0), snet=shorts.reduce((s,t)=>s+t.pnl,0);
   const lwr=longs.length?longs.filter(t=>t.pnl>0).length/longs.length*100:0;
   const swr=shorts.length?shorts.filter(t=>t.pnl>0).length/shorts.length*100:0;
   if(longs.length){
-    L.push({sev:lnet<0?"hi":"ok", metric:money(lnet), title:"Largos vs cortos",
-      why:`Largos: ${longs.length} trades, ${money(lnet)} (${lwr.toFixed(0)}% aciertos). Cortos: ${shorts.length}, ${money(snet)} (${swr.toFixed(0)}%). `+(lnet<0?"Tu lado largo es la fuga: pierde mientras el corto gana.":"Los largos aguantan.")});
+    L.push({sev:lnet<0?"hi":"ok", metric:money(lnet), title:T("lk.side.t"),
+      why:fmt(T("lk.side.w"),{ln:longs.length,lnet:money(lnet),lwr:lwr.toFixed(0),sn:shorts.length,snet:money(snet),swr:swr.toFixed(0),tail:lnet<0?T("lk.side.bad"):T("lk.side.ok")})});
   }
-  // 2 revenge sizing (subir tamaño tras una pérdida y estando en rojo)
   let rev=0, revLoss=0;
   days.forEach(d=>{ const a=d.arr; let cum=0; for(let i=0;i<a.length;i++){ if(i>0 && a[i-1].status==="Loss" && normSize(a[i])>normSize(a[i-1])+1e-9 && cum<0){ rev++; revLoss+=Math.min(0,a[i].pnl); } cum+=a[i].pnl; } });
-  if(rev>0) L.push({sev:rev>=3?"hi":"md", metric:rev+"×", title:"Revenge-sizing (subir tamaño en rojo)",
-      why:`Subiste el tamaño ${rev} vez(ces) tras una pérdida y estando en negativo el día. Esas entradas suman ${money(revLoss)}. Es el patrón que casi te vuela la cuenta el 07/23. (Escalar en verde no se marca.)`});
-  // 3 overtrading / churn days
+  if(rev>0) L.push({sev:rev>=3?"hi":"md", metric:rev+"×", title:T("lk.rev.t"),
+      why:fmt(T("lk.rev.w"),{rev:rev,revLoss:money(revLoss)})});
   const ot=days.filter(d=>d.count>=DB.settings.overtrade);
   if(ot.length){ const otnet=ot.reduce((s,d)=>s+d.net,0);
-    L.push({sev:otnet<0?"hi":"md", metric:ot.length+" días", title:"Días de sobreoperar / chop",
-      why:`${ot.length} día(s) con ≥${DB.settings.overtrade} trades (${ot.map(d=>d.date).join(", ")}). Neto de esos días: ${money(otnet)}. Muchos trades juntos = operar el ruido.`});
+    L.push({sev:otnet<0?"hi":"md", metric:ot.length+" "+T("dDays"), title:T("lk.ot.t"),
+      why:fmt(T("lk.ot.w"),{n:ot.length,ot:DB.settings.overtrade,dates:ot.map(d=>d.date).join(", "),otnet:money(otnet)})});
   }
-  // 4 give-back / round-trip
   const gb=days.filter(d=>d.peak>50 && d.net < d.peak*0.5);
-  if(gb.length){ L.push({sev:"hi", metric:gb.length+" días", title:"Round-trip: devolviste el pico",
-      why:`${gb.length} día(s) donde llegaste a un pico y devolviste más de la mitad. Ej: ${gb.map(d=>d.date+" (pico "+money(d.peak)+" → "+money(d.net)+")").slice(0,3).join("; ")}. Falta proteger beneficios / parar en el DPT.`});
+  if(gb.length){ L.push({sev:"hi", metric:gb.length+" "+T("dDays"), title:T("lk.gb.t"),
+      why:fmt(T("lk.gb.w"),{n:gb.length,ex:gb.map(d=>d.date+" ("+money(d.peak)+" → "+money(d.net)+")").slice(0,3).join("; ")})});
   }
-  // 5 cutting winners
   if(M.avgWpts>0 && M.avgLpts>0){ const ratio=M.avgWpts/M.avgLpts;
-    L.push({sev:ratio<1?"md":"ok", metric:ratio.toFixed(2)+"R", title:"¿Cortas ganadores?",
-      why:`Ganancia media ${M.avgWpts.toFixed(1)} pts vs pérdida media ${M.avgLpts.toFixed(1)} pts (ratio ${ratio.toFixed(2)}). `+(ratio<1?"Cortas los ganadores antes de que corran; los runners son los que pagan.":"Dejas correr bien los ganadores.")});
+    L.push({sev:ratio<1?"md":"ok", metric:ratio.toFixed(2)+"R", title:T("lk.cw.t"),
+      why:fmt(T("lk.cw.w"),{aw:M.avgWpts.toFixed(1),al:M.avgLpts.toFixed(1),r:ratio.toFixed(2),tail:ratio<1?T("lk.cw.bad"):T("lk.cw.ok")})});
   }
-  // 6 emotion correlation (from tags)
   const tagged=TR.filter(t=>DB.tags[tid(t)]&&DB.tags[tid(t)].emo);
   if(tagged.length>=3){
     const byE={}; tagged.forEach(t=>{const e=DB.tags[tid(t)].emo; (byE[e]=byE[e]||{n:0,net:0}); byE[e].n++; byE[e].net+=t.pnl;});
     const worst=Object.entries(byE).sort((a,b)=>a[1].net-b[1].net)[0];
-    if(worst&&worst[1].net<0) L.push({sev:"hi", metric:money(worst[1].net), title:"Emoción que más te cuesta: "+worst[0],
-      why:`Cuando marcaste "${worst[0]}" (${worst[1].n} trades) tu neto fue ${money(worst[1].net)}. Ese es tu gatillo caro — hazlo visible antes de cada clic.`});
+    if(worst&&worst[1].net<0) L.push({sev:"hi", metric:money(worst[1].net), title:fmt(T("lk.emo.t"),{e:worst[0]}),
+      why:fmt(T("lk.emo.w"),{e:worst[0],n:worst[1].n,net:money(worst[1].net)})});
   } else {
-    L.push({sev:"ok", metric:"—", title:"Diario emocional",
-      why:`Etiqueta la emoción de tus trades en la pestaña Diario. Con ≥3 etiquetas te muestro en qué emoción se concentran tus pérdidas.`});
+    L.push({sev:"ok", metric:"—", title:T("lk.emo.t0"), why:T("lk.emo.w0")});
   }
-  // 7 context: zone (borde vs tierra de nadie) from panel tag
   const tp=TR.filter(t=>DB.tags[tid(t)]&&DB.tags[tid(t)].panel);
   if(tp.length>=3){
     const edge=tp.filter(t=>DB.tags[tid(t)].panel==="VALID"), nml=tp.filter(t=>DB.tags[tid(t)].panel!=="VALID");
     const en=edge.reduce((s,t)=>s+t.pnl,0), nn=nml.reduce((s,t)=>s+t.pnl,0);
     const ew=edge.length?Math.round(edge.filter(t=>t.pnl>0).length/edge.length*100):0;
     const nw=nml.length?Math.round(nml.filter(t=>t.pnl>0).length/nml.length*100):0;
-    L.push({sev:nn<0?"hi":"md", metric:money(nn), title:"Borde válido vs tierra de nadie",
-      why:`En un BORDE válido (${edge.length}): ${money(en)}, ${ew}% aciertos. En tierra de nadie / WAIT / CHOP (${nml.length}): ${money(nn)}, ${nw}%. `+(nn<0?"Tus pérdidas viven fuera del borde. El indicador ya te lo dice: si no es VALID, no clicas.":"")});
+    L.push({sev:nn<0?"hi":"md", metric:money(nn), title:T("lk.zone.t"),
+      why:fmt(T("lk.zone.w"),{en_n:edge.length,en:money(en),ew:ew,nml_n:nml.length,nn:money(nn),nw:nw,tail:nn<0?T("lk.zone.bad"):""})});
   }
-  // 8 context: bias alignment
   const ta2=TR.filter(t=>DB.tags[tid(t)]&&DB.tags[tid(t)].align);
   if(ta2.length>=3){
     const w=ta2.filter(t=>DB.tags[tid(t)].align==="Con sesgo"), ag=ta2.filter(t=>DB.tags[tid(t)].align==="Contra");
     const wn=w.reduce((s,t)=>s+t.pnl,0), an=ag.reduce((s,t)=>s+t.pnl,0);
-    L.push({sev:an<0?"hi":"md", metric:money(an), title:"A favor vs contra el sesgo",
-      why:`A favor del sesgo (${w.length}): ${money(wn)}. Contra el sesgo (${ag.length}): ${money(an)}. `+(an<0?"Operar contra el bias es sangría — es tu fuga de largos contra-tendencia.":"")});
+    L.push({sev:an<0?"hi":"md", metric:money(an), title:T("lk.bias.t"),
+      why:fmt(T("lk.bias.w"),{wn_n:w.length,wn:money(wn),an_n:ag.length,an:money(an),tail:an<0?T("lk.bias.bad"):""})});
   }
   const rank={hi:0,md:1,ok:2};
   return L.sort((a,b)=>rank[a.sev]-rank[b.sev]);
@@ -718,25 +732,25 @@ function counterfactual(TR){
 function cfRow(lab,val,actual){ const d=val-actual; return `<div class="r"><span class="lab">${lab}</span><span><span class="v ${cls(val)}">${money1(val)}</span><span class="delta ${cls(d)}">${d>=0?'+':''}${money(d)}</span></span></div>`; }
 function renderLeaks(){
   const TR=activeTrades(); const L=detectLeaks(TR); const CF=counterfactual(TR);
-  const cfDeltas=[["parar a las 2 pérdidas seguidas",CF.stopNet],["evitar los días de sobreoperar",CF.noOtNet],CF.nomans.length?["no operar en tierra de nadie",CF.noNomansNet]:null,CF.against.length?["no operar contra el sesgo",CF.noAgainstNet]:null].filter(Boolean).map(x=>({l:x[0],d:x[1]-CF.actual})).filter(o=>o.d>0).sort((a,b)=>b.d-a.d);
+  const cfDeltas=[[T("cf.stop"),CF.stopNet],[T("cf.noOt"),CF.noOtNet],CF.nomans.length?[T("cf.noNomans"),CF.noNomansNet]:null,CF.against.length?[T("cf.noAgainst"),CF.noAgainstNet]:null].filter(Boolean).map(x=>({l:x[0],d:x[1]-CF.actual})).filter(o=>o.d>0).sort((a,b)=>b.d-a.d);
   const cfBest=cfDeltas[0];
-  const cfCard=`<div class="card"><h2>El costo de tus fugas</h2>
-    ${cfBest?`<div class="why" style="font-size:14px;margin:0 0 10px;padding:10px 12px;background:var(--surface2);border-radius:8px">🎯 <b>Empieza por aquí:</b> ${cfBest.l} — es tu fuga más cara, <b class="pos">+${money(cfBest.d)}</b> que recuperarías en este periodo.</div>`:''}
-    <p class="small muted" style="margin:0 0 8px">Tu neto actual y qué habría sido evitando cada fuga. El número verde es lo que te ahorras.</p>
+  const cfCard=`<div class="card"><h2>${T("leaksCard.title")}</h2>
+    ${cfBest?`<div class="why" style="font-size:14px;margin:0 0 10px;padding:10px 12px;background:var(--surface2);border-radius:8px">${fmt(T("leaksCard.startHere"),{act:cfBest.l,d:money(cfBest.d)})}</div>`:''}
+    <p class="small muted" style="margin:0 0 8px">${T("leaksCard.sub")}</p>
     <div class="cf">
-      ${cfRow("Neto actual",CF.actual,CF.actual)}
-      ${cfRow("Si paras a las 2 pérdidas seguidas",CF.stopNet,CF.actual)}
-      ${cfRow("Sin días de sobreoperar (≥"+(DB.settings.overtrade||8)+")",CF.noOtNet,CF.actual)}
-      ${CF.nomans.length?cfRow("Sin tierra de nadie ("+CF.nomans.length+" trades)",CF.noNomansNet,CF.actual):""}
-      ${CF.against.length?cfRow("Sin operar contra el sesgo ("+CF.against.length+")",CF.noAgainstNet,CF.actual):""}
+      ${cfRow(T("cf.rowActual"),CF.actual,CF.actual)}
+      ${cfRow(T("cf.rowStop"),CF.stopNet,CF.actual)}
+      ${cfRow(fmt(T("cf.rowNoOt"),{ot:(DB.settings.overtrade||8)}),CF.noOtNet,CF.actual)}
+      ${CF.nomans.length?cfRow(fmt(T("cf.rowNoNomans"),{n:CF.nomans.length}),CF.noNomansNet,CF.actual):""}
+      ${CF.against.length?cfRow(fmt(T("cf.rowNoAgainst"),{n:CF.against.length}),CF.noAgainstNet,CF.actual):""}
     </div>
-    ${(!CF.nomans.length&&!CF.against.length)?'<p class="small muted" style="margin-top:8px">Etiqueta el contexto en el Diario para ver el costo de operar en tierra de nadie / contra el sesgo.</p>':''}
+    ${(!CF.nomans.length&&!CF.against.length)?'<p class="small muted" style="margin-top:8px">'+T("leaksCard.tagHint")+'</p>':''}
   </div>
-  <div class="card section"><h2>Tus fugas — detección automática</h2>${
+  <div class="card section"><h2>${T("leaks.autoTitle")}</h2>${
     L.map(l=>`<div class="leak ${l.sev}"><div class="sev"></div><div class="body"><div class="t">${l.title} <span class="metric ${l.sev==='hi'?'neg':''}">${l.metric}</span></div><div class="why">${l.why}</div></div></div>`).join("")
   }</div>`;
   $("#view-leaks").innerHTML=cfCard+`
-  <div class="card section small muted">Umbrales: sobreoperar ≥ <input type="number" id="otIn" value="${DB.settings.overtrade}" style="width:56px" min="2"> trades/día · DPT $<input type="number" id="dptIn" value="${DB.settings.dpt}" style="width:74px" step="50">. <button class="btn small" id="thApply">Aplicar</button></div>`;
+  <div class="card section small muted">${fmt(T("leaks.thresholds"),{ot:'<input type="number" id="otIn" value="'+DB.settings.overtrade+'" style="width:56px" min="2">',dpt:'<input type="number" id="dptIn" value="'+DB.settings.dpt+'" style="width:74px" step="50">'})} <button class="btn small" id="thApply">${T("apply")}</button></div>`;
   $("#thApply").onclick=()=>{DB.settings.overtrade=+$("#otIn").value||8; DB.settings.dpt=+$("#dptIn").value||900; save(); renderLeaks();};
 }
 function tableFrom(title,rows,cols){
