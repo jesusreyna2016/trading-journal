@@ -265,6 +265,13 @@ const I18N={
   "leaksCard.title":"What your leaks cost you","leaksCard.sub":"Your current net vs what it would have been avoiding each leak. The green number is what you'd save.","leaksCard.startHere":"🎯 <b>Start here:</b> {act} — your most expensive leak, <b class='pos'>+{d}</b> you'd recover this period.",
   "cf.rowActual":"Current net","cf.rowStop":"If you stop at 2 losses in a row","cf.rowNoOt":"Without over-trading days (≥{ot})","cf.rowNoNomans":"Without no-man's-land ({n} trades)","cf.rowNoAgainst":"Without trading against the bias ({n})","leaksCard.tagHint":"Tag the context in the Journal to see the cost of no-man's-land / against the bias.",
   "leaks.autoTitle":"Your leaks — automatic detection","leaks.thresholds":"Thresholds: over-trading ≥ {ot} trades/day · DPT ${dpt}.","apply":"Apply",
+  "risk.compliance":"Compliance","risk.daysOverDpt":"Days over the DPT","risk.hitDpt":"hit −${d}","risk.rrAvg":"Avg R:R","risk.avgWL2":"avg win / avg loss","risk.inWindow":"In window {sess}","risk.worstDD":"Worst day DD","risk.worstDDSub":"lowest you dropped",
+  "risk.setCap":"Daily loss cap (DPT) $","risk.setWindow":"Window","risk.setOver":"Over-trading ≥",
+  "risk.byDay":"Risk by day","th.day":"Day","th.net":"Net","th.worstDD":"Worst (DD)","th.maxLoss":"Max losses in a row","th.inWindow":"In window","th.compl":"Compl.","risk.broke":"broke","risk.ok":"ok","risk.noDays":"No days in this period.",
+  "risk.complNote":"Compliance = of 4 daily risk rules: max 2 losses in a row · don't hit the DPT · don't over-trade · trade within your window. DD is the lowest you were during the day.",
+  "risk.streakTitle":"Losing streaks (per day)","risk.noStreak":"No losses in a row","risk.inRow":"in a row","risk.day":"day","risk.days":"days",
+  "risk.cbNote":"Your circuit-breaker says stop at <b>2</b>. <b class='neg'>{n} day(s)</b> you reached 3+ — that's where most is lost.","risk.cbOk":"Your circuit-breaker says stop at <b>2</b>. No day went past 2. 🟢",
+  "th.Trades":"Trades",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.progress":"Progress","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report"
  },
@@ -305,6 +312,13 @@ const I18N={
   "leaksCard.title":"El costo de tus fugas","leaksCard.sub":"Tu neto actual y qué habría sido evitando cada fuga. El número verde es lo que te ahorras.","leaksCard.startHere":"🎯 <b>Empieza por aquí:</b> {act} — es tu fuga más cara, <b class='pos'>+{d}</b> que recuperarías en este periodo.",
   "cf.rowActual":"Neto actual","cf.rowStop":"Si paras a las 2 pérdidas seguidas","cf.rowNoOt":"Sin días de sobreoperar (≥{ot})","cf.rowNoNomans":"Sin tierra de nadie ({n} trades)","cf.rowNoAgainst":"Sin operar contra el sesgo ({n})","leaksCard.tagHint":"Etiqueta el contexto en el Diario para ver el costo de operar en tierra de nadie / contra el sesgo.",
   "leaks.autoTitle":"Tus fugas — detección automática","leaks.thresholds":"Umbrales: sobreoperar ≥ {ot} trades/día · DPT ${dpt}.","apply":"Aplicar",
+  "risk.compliance":"Cumplimiento","risk.daysOverDpt":"Días sobre el DPT","risk.hitDpt":"tocaron −${d}","risk.rrAvg":"R:R medio","risk.avgWL2":"avg win / avg loss","risk.inWindow":"En ventana {sess}","risk.worstDD":"Peor DD del día","risk.worstDDSub":"lo más abajo que caíste",
+  "risk.setCap":"Límite de pérdida diaria (DPT) $","risk.setWindow":"Ventana","risk.setOver":"Sobreoperar ≥",
+  "risk.byDay":"Riesgo por día","th.day":"Día","th.net":"Neto","th.worstDD":"Peor (DD)","th.maxLoss":"Máx pérd. seg.","th.inWindow":"En ventana","th.compl":"Cumpl.","risk.broke":"rompió","risk.ok":"ok","risk.noDays":"Sin días en este periodo.",
+  "risk.complNote":"Cumplimiento = de 4 reglas de riesgo por día: máx 2 pérdidas seguidas · no tocar el DPT · no sobreoperar · operar dentro de tu ventana. El DD es lo más abajo que estuviste en el día.",
+  "risk.streakTitle":"Rachas de pérdidas seguidas (por día)","risk.noStreak":"Sin pérdidas seguidas","risk.inRow":"seguidas","risk.day":"día","risk.days":"días",
+  "risk.cbNote":"Tu circuit-breaker dice parar a las <b>2</b>. <b class='neg'>{n} día(s)</b> llegaste a 3+ — ahí es donde más se pierde.","risk.cbOk":"Tu circuit-breaker dice parar a las <b>2</b>. Ningún día pasaste de 2. 🟢",
+  "th.Trades":"Trades",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.progress":"Progreso","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe"
  }
@@ -1144,27 +1158,27 @@ function renderRisk(){
   const sessOpts=["Asia","NY","Break"].map(s=>`<option ${s===sess?'selected':''}>${s}</option>`).join("");
   host.innerHTML=`
     <div class="grid kpis">
-      ${kpi("Cumplimiento",Math.round(comp)+"%",RD.length+" días",comp>=80?"pos":comp>=60?"wait":"neg")}
-      ${kpi("Días sobre el DPT",""+breaches,"tocaron −$"+dpt,breaches?"neg":"pos")}
-      ${kpi("R:R medio",rr?rr.toFixed(2):"—","avg win / avg loss",rr>=1.5?"pos":"wait")}
-      ${kpi("En ventana "+sess,Math.round(inPct)+"%",totalIn+"/"+TR.length+" trades",inPct>=90?"pos":"wait")}
-      ${kpi("Peor DD del día",money(worstDD),"lo más abajo que caíste",worstDD<0?"neg":"muted")}
+      ${kpi(T("risk.compliance"),Math.round(comp)+"%",RD.length+" "+T("dDays"),comp>=80?"pos":comp>=60?"wait":"neg")}
+      ${kpi(T("risk.daysOverDpt"),""+breaches,fmt(T("risk.hitDpt"),{d:dpt}),breaches?"neg":"pos")}
+      ${kpi(T("risk.rrAvg"),rr?rr.toFixed(2):"—",T("risk.avgWL2"),rr>=1.5?"pos":"wait")}
+      ${kpi(fmt(T("risk.inWindow"),{sess:sess}),Math.round(inPct)+"%",totalIn+"/"+TR.length+" "+T("trades"),inPct>=90?"pos":"wait")}
+      ${kpi(T("risk.worstDD"),money(worstDD),T("risk.worstDDSub"),worstDD<0?"neg":"muted")}
     </div>
-    <div class="card section small muted rowflex" style="gap:8px">Límite de pérdida diaria (DPT) $<input type="number" id="rDpt" value="${dpt}" step="50" style="width:80px"> · Ventana <select id="rSess">${sessOpts}</select> · Sobreoperar ≥ <input type="number" id="rOt" value="${DB.settings.overtrade}" style="width:52px"> <button class="btn small" id="rApply">Aplicar</button></div>
-    <div class="card section"><h2>Riesgo por día</h2>
-      <table><thead><tr><th>Día</th><th class="mono">Trades</th><th class="mono">Neto</th><th class="mono">Peor (DD)</th><th class="mono">Máx pérd. seg.</th><th class="mono">En ventana</th><th>DPT</th><th class="mono">Cumpl.</th></tr></thead>
+    <div class="card section small muted rowflex" style="gap:8px">${T("risk.setCap")}<input type="number" id="rDpt" value="${dpt}" step="50" style="width:80px"> · ${T("risk.setWindow")} <select id="rSess">${sessOpts}</select> · ${T("risk.setOver")} <input type="number" id="rOt" value="${DB.settings.overtrade}" style="width:52px"> <button class="btn small" id="rApply">${T("apply")}</button></div>
+    <div class="card section"><h2>${T("risk.byDay")}</h2>
+      <table><thead><tr><th>${T("th.day")}</th><th class="mono">${T("th.Trades")}</th><th class="mono">${T("th.net")}</th><th class="mono">${T("th.worstDD")}</th><th class="mono">${T("th.maxLoss")}</th><th class="mono">${T("th.inWindow")}</th><th>DPT</th><th class="mono">${T("th.compl")}</th></tr></thead>
       <tbody>${RD.slice().reverse().map(d=>`<tr>
         <td class="mono small">${d.date}</td><td class="mono">${d.count}</td>
         <td class="mono ${cls(d.net)}">${money(d.net)}</td>
         <td class="mono ${d.trough<0?'neg':'muted'}">${money(d.trough)}</td>
         <td class="mono ${d.maxC>2?'neg':''}">${d.maxC}</td>
         <td class="mono ${d.inW===d.count?'pos':'wait'}">${d.inW}/${d.count}</td>
-        <td>${d.breach?'<span class="pass no">rompió</span>':'<span class="pass ok">ok</span>'}</td>
-        <td class="mono ${d.comp>=1?'pos':d.comp>=0.5?'wait':'neg'}">${Math.round(d.comp*100)}%</td></tr>`).join("")||'<tr><td colspan="8" class="muted">Sin días en este periodo.</td></tr>'}</tbody></table>
-      <p class="small muted" style="margin-top:10px">Cumplimiento = de 4 reglas de riesgo por día: máx 2 pérdidas seguidas · no tocar el DPT · no sobreoperar · operar dentro de tu ventana. El DD es lo más abajo que estuviste en el día.</p></div>
-    <div class="card section"><h2>Rachas de pérdidas seguidas (por día)</h2><div class="cf">
-      ${["0","1","2","3+"].map(k=>{const n=streakDist[k]||0; const bad=k==="3+"&&n>0; return `<div class="r"><span class="lab">${k==="0"?"Sin pérdidas seguidas":k+" seguidas"}</span><span class="v ${bad?'neg':'muted'}">${n} día${n===1?'':'s'}</span></div>`;}).join("")}
-      </div><p class="small muted" style="margin-top:8px">Tu circuit-breaker dice parar a las <b>2</b>. ${over2>0?`<b class="neg">${over2} día(s)</b> llegaste a 3+ — ahí es donde más se pierde.`:'Ningún día pasaste de 2. 🟢'}</p></div>`;
+        <td>${d.breach?'<span class="pass no">'+T("risk.broke")+'</span>':'<span class="pass ok">'+T("risk.ok")+'</span>'}</td>
+        <td class="mono ${d.comp>=1?'pos':d.comp>=0.5?'wait':'neg'}">${Math.round(d.comp*100)}%</td></tr>`).join("")||'<tr><td colspan="8" class="muted">'+T("risk.noDays")+'</td></tr>'}</tbody></table>
+      <p class="small muted" style="margin-top:10px">${T("risk.complNote")}</p></div>
+    <div class="card section"><h2>${T("risk.streakTitle")}</h2><div class="cf">
+      ${["0","1","2","3+"].map(k=>{const n=streakDist[k]||0; const bad=k==="3+"&&n>0; return `<div class="r"><span class="lab">${k==="0"?T("risk.noStreak"):k+" "+T("risk.inRow")}</span><span class="v ${bad?'neg':'muted'}">${n} ${n===1?T("risk.day"):T("risk.days")}</span></div>`;}).join("")}
+      </div><p class="small muted" style="margin-top:8px">${over2>0?fmt(T("risk.cbNote"),{n:over2}):T("risk.cbOk")}</p></div>`;
   $("#rApply").onclick=()=>{DB.settings.dpt=+$("#rDpt").value||900; DB.settings.session=$("#rSess").value; DB.settings.overtrade=+$("#rOt").value||8; save(); renderRisk();};
 }
 
