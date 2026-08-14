@@ -609,6 +609,9 @@ function renderOverview(){
   const bestD=Math.max(...days.map(d=>d.net)), worstD=Math.min(...days.map(d=>d.net));
   let cum=0,peak=0,mdd=0; days.forEach(d=>{cum+=d.net; if(cum>peak)peak=cum; if(peak-cum>mdd)mdd=peak-cum;});
   const ins=generateInsights(TR), hi=ins[0];
+  const cf=counterfactual(TR);
+  const cfOpts=[{l:"parar a las 2 pérdidas seguidas",v:cf.stopNet},{l:"evitar los días de sobreoperar",v:cf.noOtNet},{l:"no operar en tierra de nadie",v:cf.noNomansNet},{l:"no operar contra el sesgo",v:cf.noAgainstNet}];
+  const cfBest=cfOpts.filter(o=>o.v>cf.actual+1).sort((a,b)=>b.v-a.v)[0];
   v.innerHTML=`
     <div class="grid kpis">
       ${kpi("Neto",money1(M.net),M.n+" trades",cls(M.net))}
@@ -624,6 +627,7 @@ function renderOverview(){
       ${kpi("Mejor / peor día",money(bestD)+" / "+money(worstD),"")}
       ${kpi("Máx drawdown",money(-mdd),"pico a valle",mdd?"neg":"muted")}
     </div>
+    ${cfBest?`<div class="card section" style="border-color:var(--calm)"><h2>💸 El costo de tus fugas</h2><div class="why" style="font-size:14px">Si hubieras <b>${cfBest.l}</b>, tu neto sería <b class="pos">${money1(cfBest.v)}</b> en vez de ${money1(cf.actual)} — <b class="pos">+${money(cfBest.v-cf.actual)}</b> que dejas en la mesa. <span class="muted">(detalle en Disciplina → Fugas)</span></div></div>`:''}
     ${hi?`<div class="card section"><h2>Insight destacado</h2><div class="why" style="font-size:13.5px">${mdb(hi.text)}</div></div>`:''}
     <div class="card section"><h2>Curva de equity</h2><div id="eqhost"></div></div>
     <div class="card section"><h2>P&amp;L por día</h2><div id="dyhost"></div></div>`;
