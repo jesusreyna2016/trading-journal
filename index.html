@@ -131,13 +131,22 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div id="authGate" class="authgate">
-  <div class="authcard">
-    <div class="eyebrow">Trading Journal</div>
-    <h1 style="margin:.15em 0 .45em">Entra a tu journal</h1>
-    <p class="small muted" style="margin:0 0 16px">Te enviamos un enlace mágico a tu correo — sin contraseñas. Tus datos son privados y solo tú los ves.</p>
+  <div class="authcard" style="max-width:440px">
+    <div class="eyebrow">Trading Journal · gratis</div>
+    <h1 style="margin:.15em 0 .3em; font-size:25px; line-height:1.2">Opera con disciplina,<br>no con impulso</h1>
+    <p class="small muted" style="margin:0 0 14px; line-height:1.6">Tu diario de trading + rutina diaria en un solo lugar. Registra tus trades, <b style="color:var(--ink)">detecta tus fugas</b> y mide tu progreso. Privado y sin costo.</p>
+    <ul class="small" style="list-style:none; padding:0; margin:0 0 18px; color:var(--muted)">
+      <li style="margin:5px 0">✓ Importa tus trades (CSV de tu broker)</li>
+      <li style="margin:5px 0">✓ Detección automática de fugas y patrones</li>
+      <li style="margin:5px 0">✓ Rutina diaria: trading + salud + familia, a tu medida</li>
+      <li style="margin:5px 0">✓ Tus datos son <b style="color:var(--ink)">solo tuyos</b> — privados</li>
+    </ul>
     <input type="email" id="authEmail" placeholder="tu@email.com" style="width:100%; margin-bottom:10px; padding:11px 12px">
-    <button class="btn calm" id="authSend" style="width:100%; justify-content:center; padding:11px">Enviar enlace de acceso</button>
+    <button class="btn calm" id="authSend" style="width:100%; justify-content:center; padding:11px">Entrar / Crear cuenta gratis</button>
     <div class="small" id="authMsg" style="margin-top:12px; min-height:18px; color:var(--muted)"></div>
+    <div class="small" style="margin-top:16px; padding-top:14px; border-top:1px solid var(--hair); color:var(--faint); line-height:1.55">
+      Te enviamos un <b>enlace mágico</b> a tu correo — sin contraseñas. Herramienta educativa: <b>no es asesoría financiera</b>. Operar futuros implica riesgo de pérdida.
+    </div>
   </div>
 </div>
 <div id="onboard" class="authgate hide"></div>
@@ -1628,11 +1637,13 @@ function showOnboard(){
 async function onSession(session){
   user = session && session.user ? session.user : null;
   if(!user){ showLogin(); const ue=$("#userEmail"); if(ue)ue.textContent=""; syncBadge(''); return; }
-  hideLogin();
   KEY = BASEKEY + "_" + user.id;
   const ue=$("#userEmail"); if(ue)ue.textContent=user.email||"";
+  const am=$("#authMsg"); if(am) am.textContent="Cargando tu journal…";
   await loadCloud();
   ensureTdays(); buildAccounts(); buildPeriods(); render();
+  hideLogin();
+  if(am) am.textContent="";
   const g=$("#greet"); if(g)g.textContent="Hola 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
   if(!DB.settings.onboarded) showOnboard();
 }
