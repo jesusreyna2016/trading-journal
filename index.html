@@ -130,13 +130,19 @@
   .authgate{position:fixed; inset:0; background:var(--ground); display:flex; align-items:center; justify-content:center; padding:20px; z-index:50}
   .authgate.hide{display:none}
   .authcard{background:var(--surface); border:1px solid var(--hair); border-radius:12px; padding:28px; max-width:380px; width:100%; box-shadow:var(--shadow)}
+  .authgate.resolving .authcard{display:none}
+  #authSpin{display:none}
+  .authgate.resolving #authSpin{display:flex; flex-direction:column; align-items:center; gap:14px; color:var(--muted); font-size:13px}
+  .authspin{width:34px; height:34px; border:3px solid var(--hair); border-top-color:var(--calm); border-radius:50%; animation:aspin .8s linear infinite}
+  @keyframes aspin{to{transform:rotate(360deg)}}
   #syncBadge{font-size:11.5px; color:var(--muted); min-width:70px; text-align:right}
   #userEmail{font-size:12px; color:var(--faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 </style>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3"></script>
-<div id="authGate" class="authgate">
+<div id="authGate" class="authgate resolving">
+  <div id="authSpin"><div class="authspin"></div><div data-i18n="loadingSession">Cargando…</div></div>
   <div class="authcard" style="max-width:440px">
     <div class="rowflex" style="justify-content:space-between; align-items:center">
       <div class="eyebrow" data-i18n="landEyebrow">Trading Journal · gratis</div>
@@ -251,7 +257,7 @@ const I18N={
   "landB4":"✓ Your data is <b style=\"color:var(--ink)\">yours only</b> — private",
   "landCta":"Enter / Create free account",
   "landDisc":"We email you a <b>magic link</b> — no passwords. Educational tool: <b>not financial advice</b>. Trading futures carries risk of loss.",
-  "emailPh":"you@email.com","sending":"Sending link…","checkEmail":"✓ Check your email and open the link to sign in.","emailInvalid":"Enter a valid email.","loadingJournal":"Loading your journal…",
+  "emailPh":"you@email.com","sending":"Sending link…","checkEmail":"✓ Check your email and open the link to sign in.","emailInvalid":"Enter a valid email.","loadingJournal":"Loading your journal…","loadingSession":"Loading…",
   "obTitle":"Set up your journal","obLead":"One minute to personalize it. You can change everything later in Risk and Routine.",
   "obName":"Your name (optional)","obNamePh":"What's your name?","obSession":"Which session do you trade?","obDpt":"Daily loss cap ($)","obMaxTrades":"Max trades per day","obStart":"Start","obSkip":"Skip for now",
   "noTrades":"No trades in this period.","trades":"trades",
@@ -307,7 +313,7 @@ const I18N={
   "landB4":"✓ Tus datos son <b style=\"color:var(--ink)\">solo tuyos</b> — privados",
   "landCta":"Entrar / Crear cuenta gratis",
   "landDisc":"Te enviamos un <b>enlace mágico</b> a tu correo — sin contraseñas. Herramienta educativa: <b>no es asesoría financiera</b>. Operar futuros implica riesgo de pérdida.",
-  "emailPh":"tu@email.com","sending":"Enviando enlace…","checkEmail":"✓ Revisa tu correo y abre el enlace para entrar.","emailInvalid":"Escribe un correo válido.","loadingJournal":"Cargando tu journal…",
+  "emailPh":"tu@email.com","sending":"Enviando enlace…","checkEmail":"✓ Revisa tu correo y abre el enlace para entrar.","emailInvalid":"Escribe un correo válido.","loadingJournal":"Cargando tu journal…","loadingSession":"Cargando…",
   "obTitle":"Configura tu journal","obLead":"Un minuto para personalizarlo. Podrás cambiar todo después en Riesgo y en la Rutina.",
   "obName":"Tu nombre (opcional)","obNamePh":"¿Cómo te llamas?","obSession":"¿Qué sesión operas?","obDpt":"Tope de pérdida diaria ($)","obMaxTrades":"Máx. trades por día","obStart":"Empezar","obSkip":"Saltar por ahora",
   "noTrades":"Sin trades en este periodo.","trades":"trades",
@@ -1760,7 +1766,7 @@ $("#wipeBtn").onclick=()=>{ if(confirm("¿Borrar TODOS los trades y etiquetas gu
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
 
 // ---------- auth / arranque en la nube ----------
-function showLogin(){ $("#authGate").classList.remove("hide"); }
+function showLogin(){ const g=$("#authGate"); g.classList.remove("hide"); g.classList.remove("resolving"); }
 function hideLogin(){ $("#authGate").classList.add("hide"); }
 function showOnboard(){
   const s=DB.settings, og=$("#onboard");
@@ -1810,9 +1816,10 @@ async function onSession(session){
 }
 // Migración: mover viejos blobs del journal de localStorage → IndexedDB y liberar el cupo (para que quepa el token de sesión)
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
-sb.auth.onAuthStateChange((ev,session)=>{ onSession(session); });
+let _authResolved=false;
+sb.auth.onAuthStateChange((ev,session)=>{ if(!_authResolved && !session) return; _authResolved=true; onSession(session); });
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
-sb.auth.getSession().then(({data})=>{ onSession(data.session); }).catch(e=>{ console.warn("getSession error",e); showLogin(); });
+sb.auth.getSession().then(({data})=>{ _authResolved=true; onSession(data.session); }).catch(e=>{ _authResolved=true; console.warn("getSession error",e); showLogin(); });
 $("#authSend").onclick=async()=>{
   const email=($("#authEmail").value||"").trim();
   if(!/.+@.+\..+/.test(email)){ $("#authMsg").textContent=T("emailInvalid"); return; }
