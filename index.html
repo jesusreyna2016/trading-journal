@@ -1799,9 +1799,9 @@ async function onSession(session){
   const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
   if(!DB.settings.onboarded) showOnboard();
 }
-sb.auth.onAuthStateChange((_e,session)=>{ onSession(session); });
+sb.auth.onAuthStateChange((ev,session)=>{ try{console.log("[auth] event:",ev,"| session?",!!session);}catch(e){} onSession(session); });
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
-sb.auth.getSession().then(({data})=>onSession(data.session)).catch(e=>{ console.warn(e); showLogin(); });
+sb.auth.getSession().then(({data})=>{ try{console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"));}catch(e){} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
 $("#authSend").onclick=async()=>{
   const email=($("#authEmail").value||"").trim();
   if(!/.+@.+\..+/.test(email)){ $("#authMsg").textContent=T("emailInvalid"); return; }
