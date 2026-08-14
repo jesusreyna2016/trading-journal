@@ -1810,9 +1810,9 @@ async function onSession(session){
 }
 // Migración: mover viejos blobs del journal de localStorage → IndexedDB y liberar el cupo (para que quepa el token de sesión)
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
-sb.auth.onAuthStateChange((ev,session)=>{ try{console.log("[auth] event:",ev,"| session?",!!session);}catch(e){} if(ev==="SIGNED_IN"){setTimeout(()=>{try{console.log("[auth] +0.8s post-SIGNED_IN | tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",Object.keys(localStorage));}catch(e){console.warn("[auth] post-signin LS err",e);}},800);} onSession(session); });
+sb.auth.onAuthStateChange((ev,session)=>{ onSession(session); });
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
-sb.auth.getSession().then(async ({data})=>{ try{var idbTok=await _aGet("sb-zglcmffcvgohdroiqyux-auth-token");console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| tokenInIDB?",!!idbTok);}catch(e){console.warn("[auth] boot LS err",e);} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
+sb.auth.getSession().then(({data})=>{ onSession(data.session); }).catch(e=>{ console.warn("getSession error",e); showLogin(); });
 $("#authSend").onclick=async()=>{
   const email=($("#authEmail").value||"").trim();
   if(!/.+@.+\..+/.test(email)){ $("#authMsg").textContent=T("emailInvalid"); return; }
