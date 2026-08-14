@@ -1050,6 +1050,9 @@ function renderRisk(){
   const breaches=RD.filter(d=>d.breach).length;
   const totalIn=TR.filter(t=>sessionOf(t)===sess).length, inPct=TR.length?totalIn/TR.length*100:0;
   const rr=M.avgL?M.avgW/M.avgL:0;
+  const worstDD=RD.length?Math.min(...RD.map(d=>d.trough)):0;
+  const streakDist={}; RD.forEach(d=>{ const k=d.maxC>=3?"3+":String(d.maxC); streakDist[k]=(streakDist[k]||0)+1; });
+  const over2=RD.filter(d=>d.maxC>2).length;
   const sessOpts=["Asia","NY","Break"].map(s=>`<option ${s===sess?'selected':''}>${s}</option>`).join("");
   host.innerHTML=`
     <div class="grid kpis">
@@ -1057,6 +1060,7 @@ function renderRisk(){
       ${kpi("Días sobre el DPT",""+breaches,"tocaron −$"+dpt,breaches?"neg":"pos")}
       ${kpi("R:R medio",rr?rr.toFixed(2):"—","avg win / avg loss",rr>=1.5?"pos":"wait")}
       ${kpi("En ventana "+sess,Math.round(inPct)+"%",totalIn+"/"+TR.length+" trades",inPct>=90?"pos":"wait")}
+      ${kpi("Peor DD del día",money(worstDD),"lo más abajo que caíste",worstDD<0?"neg":"muted")}
     </div>
     <div class="card section small muted rowflex" style="gap:8px">Límite de pérdida diaria (DPT) $<input type="number" id="rDpt" value="${dpt}" step="50" style="width:80px"> · Ventana <select id="rSess">${sessOpts}</select> · Sobreoperar ≥ <input type="number" id="rOt" value="${DB.settings.overtrade}" style="width:52px"> <button class="btn small" id="rApply">Aplicar</button></div>
     <div class="card section"><h2>Riesgo por día</h2>
@@ -1069,7 +1073,10 @@ function renderRisk(){
         <td class="mono ${d.inW===d.count?'pos':'wait'}">${d.inW}/${d.count}</td>
         <td>${d.breach?'<span class="pass no">rompió</span>':'<span class="pass ok">ok</span>'}</td>
         <td class="mono ${d.comp>=1?'pos':d.comp>=0.5?'wait':'neg'}">${Math.round(d.comp*100)}%</td></tr>`).join("")||'<tr><td colspan="8" class="muted">Sin días en este periodo.</td></tr>'}</tbody></table>
-      <p class="small muted" style="margin-top:10px">Cumplimiento = de 4 reglas de riesgo por día: máx 2 pérdidas seguidas · no tocar el DPT · no sobreoperar · operar dentro de tu ventana. El DD es lo más abajo que estuviste en el día.</p></div>`;
+      <p class="small muted" style="margin-top:10px">Cumplimiento = de 4 reglas de riesgo por día: máx 2 pérdidas seguidas · no tocar el DPT · no sobreoperar · operar dentro de tu ventana. El DD es lo más abajo que estuviste en el día.</p></div>
+    <div class="card section"><h2>Rachas de pérdidas seguidas (por día)</h2><div class="cf">
+      ${["0","1","2","3+"].map(k=>{const n=streakDist[k]||0; const bad=k==="3+"&&n>0; return `<div class="r"><span class="lab">${k==="0"?"Sin pérdidas seguidas":k+" seguidas"}</span><span class="v ${bad?'neg':'muted'}">${n} día${n===1?'':'s'}</span></div>`;}).join("")}
+      </div><p class="small muted" style="margin-top:8px">Tu circuit-breaker dice parar a las <b>2</b>. ${over2>0?`<b class="neg">${over2} día(s)</b> llegaste a 3+ — ahí es donde más se pierde.`:'Ningún día pasaste de 2. 🟢'}</p></div>`;
   $("#rApply").onclick=()=>{DB.settings.dpt=+$("#rDpt").value||900; DB.settings.session=$("#rSess").value; DB.settings.overtrade=+$("#rOt").value||8; save(); renderRisk();};
 }
 
@@ -1331,10 +1338,13 @@ function renderScore(){
   const byHr={}; TR.forEach(t=>{const m=ctMinutes(t); if(m===null)return; const k=String(Math.floor(m/60)).padStart(2,"0"); byHr[k]=(byHr[k]||0)+t.pnl;});
   const hrRows=Object.keys(byHr).sort().map(k=>({k,net:byHr[k]}));
   const oc=S.overall>=70?'var(--pos)':S.overall>=45?'var(--wait)':'var(--neg)';
+  const axes=[{k:"win",l:"Win rate",tip:"gana más seguido o mejora la selección de trades"},{k:"pf",l:"Profit factor",tip:"tus ganancias deben pesar más que tus pérdidas"},{k:"ratio",l:"Avg win/loss",tip:"deja correr los ganadores y corta los perdedores antes"},{k:"dd",l:"Max drawdown",tip:"controla las rachas — respeta el circuit-breaker"},{k:"rec",l:"Recovery",tip:"recuperas lento del drawdown; reduce el tamaño de las pérdidas"},{k:"consist",l:"Consistencia",tip:"menos días rojos, más regularidad"}];
+  const weakest=axes.slice().sort((a,b)=>S.sc[a.k]-S.sc[b.k])[0];
   host.innerHTML=`
     <div class="card"><div class="rowflex" style="justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center">
       <div><h2 style="margin:0 0 2px">Tu Score</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
       <div id="radarhost" style="flex:1 1 300px;max-width:440px"></div></div></div>
+    <div class="card section" style="border-color:var(--wait)"><h2>Tu punto más débil</h2><div class="why" style="font-size:14px"><b>${weakest.l}</b> (${Math.round(S.sc[weakest.k])}/100) es lo que más te baja el score. Enfoque: ${weakest.tip}.</div></div>
     <div class="grid kpis section">
       ${stat("Win rate",M.winrate.toFixed(1)+"%","",S.sc.win)}
       ${stat("Profit factor",isFinite(M.pf)?M.pf.toFixed(2):"∞","",S.sc.pf)}
