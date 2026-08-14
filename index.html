@@ -140,6 +140,7 @@
     <div class="small" id="authMsg" style="margin-top:12px; min-height:18px; color:var(--muted)"></div>
   </div>
 </div>
+<div id="onboard" class="authgate hide"></div>
 <div class="app">
   <div class="head">
     <div>
@@ -1592,15 +1593,48 @@ window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._dr
 // ---------- auth / arranque en la nube ----------
 function showLogin(){ $("#authGate").classList.remove("hide"); }
 function hideLogin(){ $("#authGate").classList.add("hide"); }
+function showOnboard(){
+  const s=DB.settings, og=$("#onboard");
+  const sessOpts=["Asia","NY","Break"].map(x=>`<option ${x===(s.session||"Asia")?'selected':''}>${x}</option>`).join("");
+  og.innerHTML=`
+   <div class="authcard" style="max-width:430px">
+     <div class="eyebrow">Bienvenido 👋</div>
+     <h1 style="margin:.15em 0 .3em">Configura tu journal</h1>
+     <p class="small muted" style="margin:0 0 16px">Un minuto para personalizarlo. Podrás cambiar todo después en Riesgo y en la Rutina.</p>
+     <label class="small muted">Tu nombre (opcional)</label>
+     <input type="text" id="obName" value="${escA(s.name||'')}" placeholder="¿Cómo te llamas?" style="width:100%; margin:4px 0 12px; padding:9px 11px">
+     <label class="small muted">¿Qué sesión operas?</label>
+     <select id="obSess" style="width:100%; margin:4px 0 12px; padding:9px 11px">${sessOpts}</select>
+     <div class="rowflex" style="gap:10px; align-items:flex-end">
+       <div style="flex:1"><label class="small muted">Tope de pérdida diaria ($)</label><input type="number" id="obDpt" value="${s.dpt||900}" step="50" style="width:100%; margin-top:4px; padding:9px 11px"></div>
+       <div style="flex:1"><label class="small muted">Máx. trades por día</label><input type="number" id="obOt" value="${s.overtrade||8}" min="1" style="width:100%; margin-top:4px; padding:9px 11px"></div>
+     </div>
+     <button class="btn calm" id="obStart" style="width:100%; justify-content:center; padding:11px; margin-top:16px">Empezar</button>
+     <div style="text-align:center; margin-top:10px"><a href="#" id="obSkip" class="small muted" style="text-decoration:none">Saltar por ahora</a></div>
+   </div>`;
+  og.classList.remove("hide");
+  $("#obStart").onclick=()=>{
+    DB.settings.name=($("#obName").value||"").trim();
+    DB.settings.session=$("#obSess").value;
+    DB.settings.dpt=+$("#obDpt").value||900;
+    DB.settings.overtrade=+$("#obOt").value||8;
+    DB.settings.onboarded=true; save();
+    og.classList.add("hide");
+    const g=$("#greet"); if(g)g.textContent="Hola 👋 "+(DB.settings.name||(user.email||"").split("@")[0]);
+    render();
+  };
+  $("#obSkip").onclick=(e)=>{ e.preventDefault(); DB.settings.onboarded=true; save(); og.classList.add("hide"); };
+}
 async function onSession(session){
   user = session && session.user ? session.user : null;
   if(!user){ showLogin(); const ue=$("#userEmail"); if(ue)ue.textContent=""; syncBadge(''); return; }
   hideLogin();
   KEY = BASEKEY + "_" + user.id;
   const ue=$("#userEmail"); if(ue)ue.textContent=user.email||"";
-  const g=$("#greet"); if(g)g.textContent="Hola 👋 "+((user.email||"").split("@")[0]);
   await loadCloud();
   ensureTdays(); buildAccounts(); buildPeriods(); render();
+  const g=$("#greet"); if(g)g.textContent="Hola 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
+  if(!DB.settings.onboarded) showOnboard();
 }
 sb.auth.onAuthStateChange((_e,session)=>{ onSession(session); });
 sb.auth.getSession().then(({data})=>onSession(data.session)).catch(e=>{ console.warn(e); showLogin(); });
