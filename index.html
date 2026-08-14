@@ -276,6 +276,11 @@ const I18N={
   "ax.win.l":"Win rate","ax.win.tip":"win more often or improve trade selection","ax.pf.l":"Profit factor","ax.pf.tip":"your wins must outweigh your losses","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"let winners run and cut losers sooner","ax.dd.l":"Max drawdown","ax.dd.tip":"control the streaks — respect the circuit-breaker","ax.rec.l":"Recovery","ax.rec.tip":"you recover slowly from drawdown; shrink your losses","ax.consist.l":"Consistency","ax.consist.tip":"fewer red days, more regularity",
   "score.ratioSub":"win ÷ loss","score.recovery":"Recovery factor","score.recSub":"net ÷ max DD","score.consistency":"Consistency","score.greenDays":"{g}/{t} green days","score.annualized":"annualized","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Performance by weekday","score.byHour":"Performance by hour (CT)",
   "badge.great":"GREAT","badge.good":"GOOD","badge.needs":"NEEDS WORK",
+  "pb.new":"＋ New play","pb.intro":"Each setup you tag is a play: define its rules and see its performance and your adherence (avg process). Tag the setup in the Journal so its stats show up.","pb.yours":"Your plays","pb.mostPrints":"🏆 Most profitable","pb.mostCosts":"💸 Costs you the most","pb.adh":"adh","pb.noneYet":"no trades yet","pb.delTitle":"Delete play",
+  "pb.rAvg":"Avg R","pb.rSub":"win/loss in pts","pb.adherence":"Adherence","pb.adhSub":"avg process",
+  "pb.diagExec":"Good play, weak execution — the problem isn't the play, it's following it better.","pb.diagRules":"You execute it well but it loses — review or adjust this play's rules.","pb.diagSolid":"Solid play, well executed — a candidate to size up with criteria.",
+  "pb.rulesLabel":"Play rules (one per line):","pb.rulesPh":"E.g.:&#10;Bullish bias&#10;Price at VAH&#10;Rejection candle&#10;Wait for ▲ signal","pb.saveRules":"Save rules","pb.empty":"No plays yet. Tag your trades' setup in the Journal, or create a new play.",
+  "pb.promptName":"Play name:","pb.created":"Play created. You can now tag it in the Journal.","pb.saved":"Rules saved.",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.progress":"Progress","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report"
  },
@@ -327,6 +332,11 @@ const I18N={
   "ax.win.l":"Win rate","ax.win.tip":"gana más seguido o mejora la selección de trades","ax.pf.l":"Profit factor","ax.pf.tip":"tus ganancias deben pesar más que tus pérdidas","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"deja correr los ganadores y corta los perdedores antes","ax.dd.l":"Max drawdown","ax.dd.tip":"controla las rachas — respeta el circuit-breaker","ax.rec.l":"Recovery","ax.rec.tip":"recuperas lento del drawdown; reduce el tamaño de las pérdidas","ax.consist.l":"Consistencia","ax.consist.tip":"menos días rojos, más regularidad",
   "score.ratioSub":"ganancia÷pérdida","score.recovery":"Recovery factor","score.recSub":"neto÷max DD","score.consistency":"Consistencia","score.greenDays":"{g}/{t} días verdes","score.annualized":"anualizado","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Rendimiento por día de la semana","score.byHour":"Rendimiento por hora (CT)",
   "badge.great":"GENIAL","badge.good":"BIEN","badge.needs":"MEJORAR",
+  "pb.new":"＋ Nueva jugada","pb.intro":"Cada setup que etiquetas es una jugada: define sus reglas, y mira su rendimiento y tu adherencia (proceso medio). Etiqueta el setup en el Diario para que aparezcan sus stats.","pb.yours":"Tus jugadas","pb.mostPrints":"🏆 La que más imprime","pb.mostCosts":"💸 La que más te cuesta","pb.adh":"adh","pb.noneYet":"sin trades aún","pb.delTitle":"Eliminar jugada",
+  "pb.rAvg":"R medio","pb.rSub":"gan/pérd en pts","pb.adherence":"Adherencia","pb.adhSub":"proceso medio",
+  "pb.diagExec":"Buena jugada, ejecución floja — el problema no es la jugada, es seguirla mejor.","pb.diagRules":"La ejecutas bien pero pierde — revisa o ajusta las reglas de esta jugada.","pb.diagSolid":"Jugada sólida y bien ejecutada — candidata a subir tamaño con criterio.",
+  "pb.rulesLabel":"Reglas de la jugada (una por línea):","pb.rulesPh":"Ej:&#10;Sesgo alcista (nube verde)&#10;Precio en VAH&#10;Vela de rechazo&#10;Esperar señal ▲","pb.saveRules":"Guardar reglas","pb.empty":"Aún no hay jugadas. Etiqueta el setup de tus trades en el Diario, o crea una jugada nueva.",
+  "pb.promptName":"Nombre de la jugada:","pb.created":"Jugada creada. Ya puedes etiquetarla en el Diario.","pb.saved":"Reglas guardadas.",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.progress":"Progreso","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe"
  }
@@ -1255,34 +1265,34 @@ function renderPlaybooks(){
   rows.sort((a,b)=> (b.arr.length?b.m.net:-1e12) - (a.arr.length?a.m.net:-1e12));
   const traded=rows.filter(x=>x.arr.length);
   const best=traded[0], worst=traded[traded.length-1];
-  const summary= traded.length ? `<div class="card"><h2>Tus jugadas</h2><div class="cf">
-     ${best?`<div class="r"><span class="lab">🏆 La que más imprime</span><span><b>${best.n}</b> <span class="v ${cls(best.m.net)}">${money1(best.m.net)}</span> <span class="muted small">${best.m.n} trades · ${best.m.winrate.toFixed(0)}% · adh ${best.adh==null?'—':Math.round(best.adh)+'%'}</span></span></div>`:''}
-     ${(worst&&worst!==best&&worst.m.net<0)?`<div class="r"><span class="lab">💸 La que más te cuesta</span><span><b>${worst.n}</b> <span class="v ${cls(worst.m.net)}">${money1(worst.m.net)}</span> <span class="muted small">${worst.m.n} trades · ${worst.m.winrate.toFixed(0)}%</span></span></div>`:''}
+  const summary= traded.length ? `<div class="card"><h2>${T("pb.yours")}</h2><div class="cf">
+     ${best?`<div class="r"><span class="lab">${T("pb.mostPrints")}</span><span><b>${best.n}</b> <span class="v ${cls(best.m.net)}">${money1(best.m.net)}</span> <span class="muted small">${best.m.n} ${T("trades")} · ${best.m.winrate.toFixed(0)}% · ${T("pb.adh")} ${best.adh==null?'—':Math.round(best.adh)+'%'}</span></span></div>`:''}
+     ${(worst&&worst!==best&&worst.m.net<0)?`<div class="r"><span class="lab">${T("pb.mostCosts")}</span><span><b>${worst.n}</b> <span class="v ${cls(worst.m.net)}">${money1(worst.m.net)}</span> <span class="muted small">${worst.m.n} ${T("trades")} · ${worst.m.winrate.toFixed(0)}%</span></span></div>`:''}
    </div></div>` : '';
   const cards=rows.map(x=>{ const m=x.m; const rulesTxt=((x.pb&&x.pb.rules)||[]).join("\n");
-    const diag=(x.arr.length>=3&&x.adh!=null)?(m.expectancy>0&&x.adh<60?{t:"Buena jugada, ejecución floja — el problema no es la jugada, es seguirla mejor.",c:"wait"}:(m.expectancy<0&&x.adh>=75?{t:"La ejecutas bien pero pierde — revisa o ajusta las reglas de esta jugada.",c:"neg"}:(m.expectancy>0&&x.adh>=75?{t:"Jugada sólida y bien ejecutada — candidata a subir tamaño con criterio.",c:"pos"}:null))):null;
+    const diag=(x.arr.length>=3&&x.adh!=null)?(m.expectancy>0&&x.adh<60?{t:T("pb.diagExec"),c:"wait"}:(m.expectancy<0&&x.adh>=75?{t:T("pb.diagRules"),c:"neg"}:(m.expectancy>0&&x.adh>=75?{t:T("pb.diagSolid"),c:"pos"}:null))):null;
     return `<div class="card section">
       <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${x.n}</h2>
-        <span class="rowflex" style="gap:6px">${x.arr.length?`<span class="tag ${m.net>=0?'S':'L'}">${money(m.net)}</span>`:'<span class="muted small">sin trades aún</span>'}<button class="btn small ghost" data-delpb="${x.n}" title="Eliminar jugada" style="padding:2px 8px">🗑</button></span></div>
+        <span class="rowflex" style="gap:6px">${x.arr.length?`<span class="tag ${m.net>=0?'S':'L'}">${money(m.net)}</span>`:'<span class="muted small">'+T("pb.noneYet")+'</span>'}<button class="btn small ghost" data-delpb="${x.n}" title="${T("pb.delTitle")}" style="padding:2px 8px">🗑</button></span></div>
       ${x.arr.length?`<div class="grid kpis" style="margin-top:10px">
-        ${kpi("Trades",m.n,m.wins+"W / "+m.losses+"L")}
-        ${kpi("Win rate",m.winrate.toFixed(0)+"%","")}
-        ${kpi("Expectancy",money1(m.expectancy),"por trade",cls(m.expectancy))}
-        ${kpi("R medio",x.rr?x.rr.toFixed(2):"—","gan/pérd en pts")}
-        ${kpi("Adherencia",x.adh==null?"—":Math.round(x.adh)+"%","proceso medio","calmc")}
+        ${kpi(T("th.Trades"),m.n,m.wins+"W / "+m.losses+"L")}
+        ${kpi(T("winRate"),m.winrate.toFixed(0)+"%","")}
+        ${kpi(T("expectancy"),money1(m.expectancy),T("perTrade"),cls(m.expectancy))}
+        ${kpi(T("pb.rAvg"),x.rr?x.rr.toFixed(2):"—",T("pb.rSub"))}
+        ${kpi(T("pb.adherence"),x.adh==null?"—":Math.round(x.adh)+"%",T("pb.adhSub"),"calmc")}
       </div>`:''}
       ${diag?`<div class="small" style="margin-top:8px;color:var(--${diag.c})">💡 ${diag.t}</div>`:''}
-      <div style="margin-top:12px"><div class="small muted" style="margin-bottom:4px">Reglas de la jugada (una por línea):</div>
-        <textarea data-rules="${x.n}" style="width:100%; min-height:68px; font-family:var(--sans); font-size:13px; color:var(--ink); background:var(--surface2); border:1px solid var(--hair); border-radius:8px; padding:8px" placeholder="Ej:&#10;Sesgo alcista (nube verde)&#10;Precio en VAH&#10;Vela de rechazo&#10;Esperar señal ▲">${rulesTxt.replace(/</g,'&lt;')}</textarea>
-        <button class="btn small" data-saverules="${x.n}" style="margin-top:6px">Guardar reglas</button></div>
+      <div style="margin-top:12px"><div class="small muted" style="margin-bottom:4px">${T("pb.rulesLabel")}</div>
+        <textarea data-rules="${x.n}" style="width:100%; min-height:68px; font-family:var(--sans); font-size:13px; color:var(--ink); background:var(--surface2); border:1px solid var(--hair); border-radius:8px; padding:8px" placeholder="${T("pb.rulesPh")}">${rulesTxt.replace(/</g,'&lt;')}</textarea>
+        <button class="btn small" data-saverules="${x.n}" style="margin-top:6px">${T("pb.saveRules")}</button></div>
     </div>`;
   }).join("");
-  host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:4px"><h2 style="margin:0">Playbooks</h2><button class="btn calm small" id="newPb">＋ Nueva jugada</button></div>
-    <p class="small muted" style="margin:0 0 8px">Cada setup que etiquetas es una jugada: define sus reglas, y mira su rendimiento y tu adherencia (proceso medio). Etiqueta el setup en el Diario para que aparezcan sus stats.</p>
-    ${summary}${cards||'<div class="card muted">Aún no hay jugadas. Etiqueta el setup de tus trades en el Diario, o crea una jugada nueva.</div>'}`;
-  $("#newPb").onclick=()=>{ const nm=prompt("Nombre de la jugada:"); if(nm===null)return; const n=nm.trim(); if(!n)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; save(); renderPlaybooks(); toast("Jugada creada. Ya puedes etiquetarla en el Diario."); };
+  host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:4px"><h2 style="margin:0">Playbooks</h2><button class="btn calm small" id="newPb">${T("pb.new")}</button></div>
+    <p class="small muted" style="margin:0 0 8px">${T("pb.intro")}</p>
+    ${summary}${cards||'<div class="card muted">'+T("pb.empty")+'</div>'}`;
+  $("#newPb").onclick=()=>{ const nm=prompt(T("pb.promptName")); if(nm===null)return; const n=nm.trim(); if(!n)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; save(); renderPlaybooks(); toast(T("pb.created")); };
   host.querySelectorAll("[data-saverules]").forEach(b=>b.onclick=()=>{ const n=b.dataset.saverules; const ta=[...host.querySelectorAll('[data-rules]')].find(t=>t.dataset.rules===n);
-    if(!ta)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; DB.playbooks[n].rules=ta.value.split("\n").map(s=>s.trim()).filter(Boolean); save(); toast("Reglas guardadas."); });
+    if(!ta)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; DB.playbooks[n].rules=ta.value.split("\n").map(s=>s.trim()).filter(Boolean); save(); toast(T("pb.saved")); });
   host.querySelectorAll("[data-delpb]").forEach(b=>b.onclick=()=>{ const n=b.dataset.delpb; if(confirm("¿Eliminar la jugada "+n+"? No borra los trades ni su etiqueta.")){ delete DB.playbooks[n]; save(); renderPlaybooks(); } });
 }
 
