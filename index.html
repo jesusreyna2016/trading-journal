@@ -649,7 +649,10 @@ function counterfactual(TR){
 function cfRow(lab,val,actual){ const d=val-actual; return `<div class="r"><span class="lab">${lab}</span><span><span class="v ${cls(val)}">${money1(val)}</span><span class="delta ${cls(d)}">${d>=0?'+':''}${money(d)}</span></span></div>`; }
 function renderLeaks(){
   const TR=activeTrades(); const L=detectLeaks(TR); const CF=counterfactual(TR);
+  const cfDeltas=[["parar a las 2 pérdidas seguidas",CF.stopNet],["evitar los días de sobreoperar",CF.noOtNet],CF.nomans.length?["no operar en tierra de nadie",CF.noNomansNet]:null,CF.against.length?["no operar contra el sesgo",CF.noAgainstNet]:null].filter(Boolean).map(x=>({l:x[0],d:x[1]-CF.actual})).filter(o=>o.d>0).sort((a,b)=>b.d-a.d);
+  const cfBest=cfDeltas[0];
   const cfCard=`<div class="card"><h2>El costo de tus fugas</h2>
+    ${cfBest?`<div class="why" style="font-size:14px;margin:0 0 10px;padding:10px 12px;background:var(--surface2);border-radius:8px">🎯 <b>Empieza por aquí:</b> ${cfBest.l} — es tu fuga más cara, <b class="pos">+${money(cfBest.d)}</b> que recuperarías en este periodo.</div>`:''}
     <p class="small muted" style="margin:0 0 8px">Tu neto actual y qué habría sido evitando cada fuga. El número verde es lo que te ahorras.</p>
     <div class="cf">
       ${cfRow("Neto actual",CF.actual,CF.actual)}
@@ -909,6 +912,8 @@ function renderCalendar(){
   const dim=new Date(Date.UTC(Y,Mo,0)).getUTCDate();
   const inMonth=all.filter(d=>d.date.slice(0,7)===monthSel);
   const mNet=inMonth.reduce((s,d)=>s+d.net,0), mDisc=inMonth.filter(d=>d.disciplined).length;
+  const mDays=inMonth.length, greenD=inMonth.filter(d=>d.net>0).length;
+  const bestD=mDays?Math.max(...inMonth.map(d=>d.net)):0, worstD=mDays?Math.min(...inMonth.map(d=>d.net)):0, avgDay=mDays?mNet/mDays:0;
   const dows=["L","M","X","J","V","S","D"]; let cells="";
   for(let i=0;i<startDow;i++) cells+='<div class="cell empty"></div>';
   for(let dd=1;dd<=dim;dd++){ const ds=monthSel+"-"+String(dd).padStart(2,"0"); const d=map[ds];
@@ -917,7 +922,7 @@ function renderCalendar(){
   const opts=months.slice().reverse().map(m=>`<option value="${m}" ${m===monthSel?'selected':''}>${m}</option>`).join("");
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:12px">
     <h2 style="margin:0">Calendario</h2><select id="monthSel">${opts}</select></div>
-    <div class="grid kpis" style="margin-bottom:14px">${kpi("Neto del mes",money1(mNet),"",cls(mNet))}${kpi("Días disciplinados",mDisc+"/"+inMonth.length,"este mes","calmc")}</div>
+    <div class="grid kpis" style="margin-bottom:14px">${kpi("Neto del mes",money1(mNet),"",cls(mNet))}${kpi("Días verdes",greenD+"/"+mDays,mDays?Math.round(greenD/mDays*100)+"%":"—",greenD>=mDays-greenD?"pos":"wait")}${kpi("Día medio",money1(avgDay),"",cls(avgDay))}${kpi("Mejor / peor",money(bestD)+" / "+money(worstD),"del mes")}${kpi("Días disciplinados",mDisc+"/"+mDays,"este mes","calmc")}</div>
     <div class="card"><div class="calhead">${dows.map(x=>'<div>'+x+'</div>').join("")}</div><div class="cal">${cells}</div>
       <p class="small muted" style="margin-top:10px">Verde/rojo = P&amp;L del día · punto = disciplina (verde cumplió / rojo rompió). Pasa el cursor para el detalle.</p></div>`;
   $("#monthSel").addEventListener("change",e=>{monthSel=e.target.value; renderCalendar();});
@@ -1150,6 +1155,7 @@ function renderPlaybooks(){
      ${(worst&&worst!==best&&worst.m.net<0)?`<div class="r"><span class="lab">💸 La que más te cuesta</span><span><b>${worst.n}</b> <span class="v ${cls(worst.m.net)}">${money1(worst.m.net)}</span> <span class="muted small">${worst.m.n} trades · ${worst.m.winrate.toFixed(0)}%</span></span></div>`:''}
    </div></div>` : '';
   const cards=rows.map(x=>{ const m=x.m; const rulesTxt=((x.pb&&x.pb.rules)||[]).join("\n");
+    const diag=(x.arr.length>=3&&x.adh!=null)?(m.expectancy>0&&x.adh<60?{t:"Buena jugada, ejecución floja — el problema no es la jugada, es seguirla mejor.",c:"wait"}:(m.expectancy<0&&x.adh>=75?{t:"La ejecutas bien pero pierde — revisa o ajusta las reglas de esta jugada.",c:"neg"}:(m.expectancy>0&&x.adh>=75?{t:"Jugada sólida y bien ejecutada — candidata a subir tamaño con criterio.",c:"pos"}:null))):null;
     return `<div class="card section">
       <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${x.n}</h2>
         <span class="rowflex" style="gap:6px">${x.arr.length?`<span class="tag ${m.net>=0?'S':'L'}">${money(m.net)}</span>`:'<span class="muted small">sin trades aún</span>'}<button class="btn small ghost" data-delpb="${x.n}" title="Eliminar jugada" style="padding:2px 8px">🗑</button></span></div>
@@ -1160,6 +1166,7 @@ function renderPlaybooks(){
         ${kpi("R medio",x.rr?x.rr.toFixed(2):"—","gan/pérd en pts")}
         ${kpi("Adherencia",x.adh==null?"—":Math.round(x.adh)+"%","proceso medio","calmc")}
       </div>`:''}
+      ${diag?`<div class="small" style="margin-top:8px;color:var(--${diag.c})">💡 ${diag.t}</div>`:''}
       <div style="margin-top:12px"><div class="small muted" style="margin-bottom:4px">Reglas de la jugada (una por línea):</div>
         <textarea data-rules="${x.n}" style="width:100%; min-height:68px; font-family:var(--sans); font-size:13px; color:var(--ink); background:var(--surface2); border:1px solid var(--hair); border-radius:8px; padding:8px" placeholder="Ej:&#10;Sesgo alcista (nube verde)&#10;Precio en VAH&#10;Vela de rechazo&#10;Esperar señal ▲">${rulesTxt.replace(/</g,'&lt;')}</textarea>
         <button class="btn small" data-saverules="${x.n}" style="margin-top:6px">Guardar reglas</button></div>
