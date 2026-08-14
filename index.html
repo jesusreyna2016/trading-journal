@@ -272,6 +272,10 @@ const I18N={
   "risk.streakTitle":"Losing streaks (per day)","risk.noStreak":"No losses in a row","risk.inRow":"in a row","risk.day":"day","risk.days":"days",
   "risk.cbNote":"Your circuit-breaker says stop at <b>2</b>. <b class='neg'>{n} day(s)</b> you reached 3+ — that's where most is lost.","risk.cbOk":"Your circuit-breaker says stop at <b>2</b>. No day went past 2. 🟢",
   "th.Trades":"Trades",
+  "score.needMore":"Import more trades to compute your score.","score.yourScore":"Your Score","score.weakest":"Your weakest point","score.weakestBody":"<b>{l}</b> ({v}/100) is what drags your score down most. Focus: {tip}.",
+  "ax.win.l":"Win rate","ax.win.tip":"win more often or improve trade selection","ax.pf.l":"Profit factor","ax.pf.tip":"your wins must outweigh your losses","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"let winners run and cut losers sooner","ax.dd.l":"Max drawdown","ax.dd.tip":"control the streaks — respect the circuit-breaker","ax.rec.l":"Recovery","ax.rec.tip":"you recover slowly from drawdown; shrink your losses","ax.consist.l":"Consistency","ax.consist.tip":"fewer red days, more regularity",
+  "score.ratioSub":"win ÷ loss","score.recovery":"Recovery factor","score.recSub":"net ÷ max DD","score.consistency":"Consistency","score.greenDays":"{g}/{t} green days","score.annualized":"annualized","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Performance by weekday","score.byHour":"Performance by hour (CT)",
+  "badge.great":"GREAT","badge.good":"GOOD","badge.needs":"NEEDS WORK",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.progress":"Progress","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report"
  },
@@ -319,6 +323,10 @@ const I18N={
   "risk.streakTitle":"Rachas de pérdidas seguidas (por día)","risk.noStreak":"Sin pérdidas seguidas","risk.inRow":"seguidas","risk.day":"día","risk.days":"días",
   "risk.cbNote":"Tu circuit-breaker dice parar a las <b>2</b>. <b class='neg'>{n} día(s)</b> llegaste a 3+ — ahí es donde más se pierde.","risk.cbOk":"Tu circuit-breaker dice parar a las <b>2</b>. Ningún día pasaste de 2. 🟢",
   "th.Trades":"Trades",
+  "score.needMore":"Importa más trades para calcular tu score.","score.yourScore":"Tu Score","score.weakest":"Tu punto más débil","score.weakestBody":"<b>{l}</b> ({v}/100) es lo que más te baja el score. Enfoque: {tip}.",
+  "ax.win.l":"Win rate","ax.win.tip":"gana más seguido o mejora la selección de trades","ax.pf.l":"Profit factor","ax.pf.tip":"tus ganancias deben pesar más que tus pérdidas","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"deja correr los ganadores y corta los perdedores antes","ax.dd.l":"Max drawdown","ax.dd.tip":"controla las rachas — respeta el circuit-breaker","ax.rec.l":"Recovery","ax.rec.tip":"recuperas lento del drawdown; reduce el tamaño de las pérdidas","ax.consist.l":"Consistencia","ax.consist.tip":"menos días rojos, más regularidad",
+  "score.ratioSub":"ganancia÷pérdida","score.recovery":"Recovery factor","score.recSub":"neto÷max DD","score.consistency":"Consistencia","score.greenDays":"{g}/{t} días verdes","score.annualized":"anualizado","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Rendimiento por día de la semana","score.byHour":"Rendimiento por hora (CT)",
+  "badge.great":"GENIAL","badge.good":"BIEN","badge.needs":"MEJORAR",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.progress":"Progreso","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe"
  }
@@ -1433,39 +1441,39 @@ function drawCatBars(c,rows,H){
 }
 function renderScore(){
   const host=$("#view-score"); const TR=activeTrades();
-  if(TR.length<2){ host.innerHTML='<div class="card muted">Importa más trades para calcular tu score.</div>'; return; }
+  if(TR.length<2){ host.innerHTML='<div class="card muted">'+T("score.needMore")+'</div>'; return; }
   const S=scoreStats(TR), M=S.M;
-  const badge=v=>v>=70?'<span class="pass ok">GREAT</span>':v>=45?'<span class="pass" style="background:rgba(232,147,58,.18);color:var(--wait)">GOOD</span>':'<span class="pass no">NEEDS WORK</span>';
+  const badge=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass" style="background:rgba(232,147,58,.18);color:var(--wait)">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
   const stat=(lab,val,sub,v)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><span class="lab">${lab}</span>${badge(v)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
   const wdOrder=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"], byWd={}; TR.forEach(t=>{const k=weekdayOf(t); byWd[k]=(byWd[k]||0)+t.pnl;});
   const wdRows=wdOrder.filter(k=>byWd[k]!==undefined).map(k=>({k,net:byWd[k]}));
   const byHr={}; TR.forEach(t=>{const m=ctMinutes(t); if(m===null)return; const k=String(Math.floor(m/60)).padStart(2,"0"); byHr[k]=(byHr[k]||0)+t.pnl;});
   const hrRows=Object.keys(byHr).sort().map(k=>({k,net:byHr[k]}));
   const oc=S.overall>=70?'var(--pos)':S.overall>=45?'var(--wait)':'var(--neg)';
-  const axes=[{k:"win",l:"Win rate",tip:"gana más seguido o mejora la selección de trades"},{k:"pf",l:"Profit factor",tip:"tus ganancias deben pesar más que tus pérdidas"},{k:"ratio",l:"Avg win/loss",tip:"deja correr los ganadores y corta los perdedores antes"},{k:"dd",l:"Max drawdown",tip:"controla las rachas — respeta el circuit-breaker"},{k:"rec",l:"Recovery",tip:"recuperas lento del drawdown; reduce el tamaño de las pérdidas"},{k:"consist",l:"Consistencia",tip:"menos días rojos, más regularidad"}];
+  const axes=[{k:"win",l:T("ax.win.l"),tip:T("ax.win.tip")},{k:"pf",l:T("ax.pf.l"),tip:T("ax.pf.tip")},{k:"ratio",l:T("ax.ratio.l"),tip:T("ax.ratio.tip")},{k:"dd",l:T("ax.dd.l"),tip:T("ax.dd.tip")},{k:"rec",l:T("ax.rec.l"),tip:T("ax.rec.tip")},{k:"consist",l:T("ax.consist.l"),tip:T("ax.consist.tip")}];
   const weakest=axes.slice().sort((a,b)=>S.sc[a.k]-S.sc[b.k])[0];
   host.innerHTML=`
     <div class="card"><div class="rowflex" style="justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center">
-      <div><h2 style="margin:0 0 2px">Tu Score</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
+      <div><h2 style="margin:0 0 2px">${T("score.yourScore")}</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
       <div id="radarhost" style="flex:1 1 300px;max-width:440px"></div></div></div>
-    <div class="card section" style="border-color:var(--wait)"><h2>Tu punto más débil</h2><div class="why" style="font-size:14px"><b>${weakest.l}</b> (${Math.round(S.sc[weakest.k])}/100) es lo que más te baja el score. Enfoque: ${weakest.tip}.</div></div>
+    <div class="card section" style="border-color:var(--wait)"><h2>${T("score.weakest")}</h2><div class="why" style="font-size:14px">${fmt(T("score.weakestBody"),{l:weakest.l,v:Math.round(S.sc[weakest.k]),tip:weakest.tip})}</div></div>
     <div class="grid kpis section">
-      ${stat("Win rate",M.winrate.toFixed(1)+"%","",S.sc.win)}
-      ${stat("Profit factor",isFinite(M.pf)?M.pf.toFixed(2):"∞","",S.sc.pf)}
-      ${stat("Avg win/loss",S.ratio?S.ratio.toFixed(2):"—","ganancia÷pérdida",S.sc.ratio)}
-      ${stat("Max drawdown",money(-S.mdd),"pico a valle",S.sc.dd)}
-      ${stat("Recovery factor",isFinite(S.recovery)?S.recovery.toFixed(2):"∞","neto÷max DD",S.sc.rec)}
-      ${stat("Consistencia",Math.round(S.consist*100)+"%",S.posDays+"/"+S.days.length+" días verdes",S.sc.consist)}
+      ${stat(T("winRate"),M.winrate.toFixed(1)+"%","",S.sc.win)}
+      ${stat(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞","",S.sc.pf)}
+      ${stat(T("ax.ratio.l"),S.ratio?S.ratio.toFixed(2):"—",T("score.ratioSub"),S.sc.ratio)}
+      ${stat(T("maxDD"),money(-S.mdd),T("peakToValley"),S.sc.dd)}
+      ${stat(T("score.recovery"),isFinite(S.recovery)?S.recovery.toFixed(2):"∞",T("score.recSub"),S.sc.rec)}
+      ${stat(T("score.consistency"),Math.round(S.consist*100)+"%",fmt(T("score.greenDays"),{g:S.posDays,t:S.days.length}),S.sc.consist)}
     </div>
     <div class="grid kpis section">
-      ${kpi("Sharpe",S.sharpe==null?"N/A":S.sharpe.toFixed(2),"anualizado")}
-      ${kpi("Sortino",S.sortino==null?"N/A":S.sortino.toFixed(2),"anualizado")}
-      ${kpi("Expectancy",money1(M.expectancy),"por trade",cls(M.expectancy))}
-      ${kpi("Avg win",money(M.avgW),"","pos")}
-      ${kpi("Avg loss",money(-M.avgL),"","neg")}
+      ${kpi("Sharpe",S.sharpe==null?"N/A":S.sharpe.toFixed(2),T("score.annualized"))}
+      ${kpi("Sortino",S.sortino==null?"N/A":S.sortino.toFixed(2),T("score.annualized"))}
+      ${kpi(T("expectancy"),money1(M.expectancy),T("perTrade"),cls(M.expectancy))}
+      ${kpi(T("score.avgWin"),money(M.avgW),"","pos")}
+      ${kpi(T("score.avgLoss"),money(-M.avgL),"","neg")}
     </div>
-    <div class="card section"><h2>Rendimiento por día de la semana</h2><div id="wdhost"></div></div>
-    <div class="card section"><h2>Rendimiento por hora (CT)</h2><div id="hrhost"></div></div>`;
+    <div class="card section"><h2>${T("score.byWeekday")}</h2><div id="wdhost"></div></div>
+    <div class="card section"><h2>${T("score.byHour")}</h2><div id="hrhost"></div></div>`;
   const rv=[S.sc.win,S.sc.pf,S.sc.ratio,S.sc.dd,S.sc.rec,S.sc.consist], rl=["Win%","PF","Avg W/L","Max DD","Recovery","Consist"];
   const rc=document.createElement("canvas"); wrapCanvas(rc); $("#radarhost").appendChild(rc); requestAnimationFrame(()=>drawRadar(rc,rv,rl,250)); rc._draw=()=>drawRadar(rc,rv,rl,250);
   const wc=document.createElement("canvas"); wrapCanvas(wc); $("#wdhost").appendChild(wc); requestAnimationFrame(()=>drawCatBars(wc,wdRows,150)); wc._draw=()=>drawCatBars(wc,wdRows,150);
