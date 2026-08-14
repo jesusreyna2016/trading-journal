@@ -224,7 +224,13 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const BASEKEY="zbJournal_v1"; let KEY=BASEKEY;
 const SUPA_URL="https://zglcmffcvgohdroiqyux.supabase.co";
 const SUPA_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnbGNtZmZjdmdvaGRyb2lxeXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MzY5NzQsImV4cCI6MjEwMjIxMjk3NH0.py7TSR9BHbZ7oV1gdZiL9zFCMkwP3M-HNcSEWcWtQMs";
-const sb=supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
+// Almacén de sesión resistente a extensiones que rompen localStorage: intenta localStorage y respalda en IndexedDB
+function _aIdb(){ return new Promise((res,rej)=>{ try{ const r=indexedDB.open("zbAuth",1); r.onupgradeneeded=()=>{ try{r.result.createObjectStore("kv");}catch(e){} }; r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }catch(e){ rej(e); } }); }
+function _aGet(k){ return _aIdb().then(db=>new Promise(res=>{ try{ const rq=db.transaction("kv","readonly").objectStore("kv").get(k); rq.onsuccess=()=>res(rq.result==null?null:rq.result); rq.onerror=()=>res(null); }catch(e){ res(null); } })).catch(()=>null); }
+function _aPut(k,v){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db.transaction("kv","readwrite"); tx.objectStore("kv").put(v,k); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }catch(e){ res(); } })).catch(()=>{}); }
+function _aDel(k){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db.transaction("kv","readwrite"); tx.objectStore("kv").delete(k); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }catch(e){ res(); } })).catch(()=>{}); }
+const authStore={ getItem:(k)=>{ let lv=null; try{lv=localStorage.getItem(k);}catch(e){} if(lv!=null) return lv; return _aGet(k); }, setItem:(k,v)=>{ try{localStorage.setItem(k,v);}catch(e){} return _aPut(k,v); }, removeItem:(k)=>{ try{localStorage.removeItem(k);}catch(e){} return _aDel(k); } };
+const sb=supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:authStore}});
 let user=null, _cloudT=null;
 // ---------- i18n (EN por defecto + ES) ----------
 const I18N={
@@ -1806,7 +1812,7 @@ async function onSession(session){
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
 sb.auth.onAuthStateChange((ev,session)=>{ try{console.log("[auth] event:",ev,"| session?",!!session);}catch(e){} if(ev==="SIGNED_IN"){setTimeout(()=>{try{console.log("[auth] +0.8s post-SIGNED_IN | tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",Object.keys(localStorage));}catch(e){console.warn("[auth] post-signin LS err",e);}},800);} onSession(session); });
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
-sb.auth.getSession().then(({data})=>{ try{var lsk=Object.keys(localStorage);var sz=0;lsk.forEach(k=>{try{sz+=(localStorage.getItem(k)||"").length;}catch(e){}});console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",lsk,"| LSsizeKB:",Math.round(sz/1024));}catch(e){console.warn("[auth] boot LS err",e);} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
+sb.auth.getSession().then(async ({data})=>{ try{var idbTok=await _aGet("sb-zglcmffcvgohdroiqyux-auth-token");console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| tokenInIDB?",!!idbTok);}catch(e){console.warn("[auth] boot LS err",e);} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
 $("#authSend").onclick=async()=>{
   const email=($("#authEmail").value||"").trim();
   if(!/.+@.+\..+/.test(email)){ $("#authMsg").textContent=T("emailInvalid"); return; }
