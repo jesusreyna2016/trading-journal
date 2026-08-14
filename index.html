@@ -383,13 +383,16 @@ function normalizeDB(s){
   return s;
 }
 function load(){ let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){} return normalizeDB(s); }
+// Caché local del journal en IndexedDB (localStorage se reserva para el token de sesión de Supabase)
+function cacheLocal(){ try{ idbPut("cache_"+KEY, JSON.stringify(DB)).catch(()=>{}); }catch(e){} }
+async function loadLocal(){ try{ const c=await idbGet("cache_"+KEY); if(c) return normalizeDB(JSON.parse(c)); }catch(e){} return load(); }
 async function loadCloud(){
   try{
     const {data,error}=await sb.from('journals').select('data').eq('user_id',user.id).maybeSingle();
     if(error) throw error;
-    if(data && data.data){ DB=normalizeDB(data.data); try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} return; }
+    if(data && data.data){ DB=normalizeDB(data.data); cacheLocal(); return; }
   }catch(e){ console.warn('loadCloud',e); toast('Sin conexión — usando copia local'); }
-  DB=load();
+  DB=await loadLocal();
 }
 function syncBadge(st){ const b=$("#syncBadge"); if(!b)return; b.textContent = st==='ok'?'✓ guardado' : st==='err'?'⚠ sin guardar' : st==='...'?'guardando…':''; b.style.color = st==='err'?'var(--neg)':'var(--muted)'; }
 function scheduleCloud(){ if(!user)return; syncBadge('...'); clearTimeout(_cloudT); _cloudT=setTimeout(cloudSave,1200); }
@@ -398,7 +401,7 @@ async function cloudSave(){
   try{ const {error}=await sb.from('journals').upsert({user_id:user.id, data:DB, updated_at:new Date().toISOString()}); if(error)throw error; syncBadge('ok'); }
   catch(e){ console.warn('cloudSave',e); syncBadge('err'); }
 }
-function save(){ try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){} scheduleCloud(); }
+function save(){ cacheLocal(); scheduleCloud(); }
 function toast(m){const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1800);}
 const money=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
 const money1=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -1799,6 +1802,8 @@ async function onSession(session){
   const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
   if(!DB.settings.onboarded) showOnboard();
 }
+// Migración: mover viejos blobs del journal de localStorage → IndexedDB y liberar el cupo (para que quepa el token de sesión)
+try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
 sb.auth.onAuthStateChange((ev,session)=>{ try{console.log("[auth] event:",ev,"| session?",!!session);}catch(e){} if(ev==="SIGNED_IN"){setTimeout(()=>{try{console.log("[auth] +0.8s post-SIGNED_IN | tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",Object.keys(localStorage));}catch(e){console.warn("[auth] post-signin LS err",e);}},800);} onSession(session); });
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
 sb.auth.getSession().then(({data})=>{ try{var lsk=Object.keys(localStorage);var sz=0;lsk.forEach(k=>{try{sz+=(localStorage.getItem(k)||"").length;}catch(e){}});console.log("[auth] boot getSession session?",!!data.session,"| tokenInLS?",!!localStorage.getItem("sb-zglcmffcvgohdroiqyux-auth-token"),"| LSkeys:",lsk,"| LSsizeKB:",Math.round(sz/1024));}catch(e){console.warn("[auth] boot LS err",e);} onSession(data.session); }).catch(e=>{ console.warn("[auth] getSession error",e); showLogin(); });
