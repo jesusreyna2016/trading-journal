@@ -248,6 +248,12 @@ const I18N={
   "emailPh":"you@email.com","sending":"Sending link…","checkEmail":"✓ Check your email and open the link to sign in.","emailInvalid":"Enter a valid email.","loadingJournal":"Loading your journal…",
   "obTitle":"Set up your journal","obLead":"One minute to personalize it. You can change everything later in Risk and Routine.",
   "obName":"Your name (optional)","obNamePh":"What's your name?","obSession":"Which session do you trade?","obDpt":"Daily loss cap ($)","obMaxTrades":"Max trades per day","obStart":"Start","obSkip":"Skip for now",
+  "noTrades":"No trades in this period.","trades":"trades",
+  "net":"Net","winRate":"Win rate","pf":"Profit factor","expectancy":"Expectancy","perTrade":"per trade","avgWinLoss":"Avg win / loss","ratioSuffix":"ratio",
+  "daysTraded":"Days traded","tradesPerDayS":"trades/day","discDays":"Disciplined days","streak":"Streak","dDay":"day","dDays":"days","discLower":"disciplined","bestWorstDay":"Best / worst day","maxDD":"Max drawdown","peakToValley":"peak to valley",
+  "equityCurve":"Equity curve","pnlByDay":"P&L by day","topInsight":"Top insight",
+  "leaksCostTitle":"💸 What your leaks cost you","leaksCostBody":"If you had <b>{act}</b>, your net would be <b class='pos'>{v}</b> instead of {a} — <b class='pos'>+{d}</b> left on the table. <span class='muted'>(detail in Discipline → Leaks)</span>",
+  "cf.stop":"stopped at 2 losses in a row","cf.noOt":"avoided over-trading days","cf.noNomans":"not traded in no-man's-land","cf.noAgainst":"not traded against the bias",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.progress":"Progress","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report"
  },
@@ -271,6 +277,12 @@ const I18N={
   "emailPh":"tu@email.com","sending":"Enviando enlace…","checkEmail":"✓ Revisa tu correo y abre el enlace para entrar.","emailInvalid":"Escribe un correo válido.","loadingJournal":"Cargando tu journal…",
   "obTitle":"Configura tu journal","obLead":"Un minuto para personalizarlo. Podrás cambiar todo después en Riesgo y en la Rutina.",
   "obName":"Tu nombre (opcional)","obNamePh":"¿Cómo te llamas?","obSession":"¿Qué sesión operas?","obDpt":"Tope de pérdida diaria ($)","obMaxTrades":"Máx. trades por día","obStart":"Empezar","obSkip":"Saltar por ahora",
+  "noTrades":"Sin trades en este periodo.","trades":"trades",
+  "net":"Neto","winRate":"Win rate","pf":"Profit factor","expectancy":"Expectancy","perTrade":"por trade","avgWinLoss":"Avg win / loss","ratioSuffix":"ratio",
+  "daysTraded":"Días operados","tradesPerDayS":"trades/día","discDays":"Días disciplinados","streak":"Racha","dDay":"día","dDays":"días","discLower":"disciplinados","bestWorstDay":"Mejor / peor día","maxDD":"Máx drawdown","peakToValley":"pico a valle",
+  "equityCurve":"Curva de equity","pnlByDay":"P&L por día","topInsight":"Insight destacado",
+  "leaksCostTitle":"💸 El costo de tus fugas","leaksCostBody":"Si hubieras <b>{act}</b>, tu neto sería <b class='pos'>{v}</b> en vez de {a} — <b class='pos'>+{d}</b> que dejas en la mesa. <span class='muted'>(detalle en Disciplina → Fugas)</span>",
+  "cf.stop":"parar a las 2 pérdidas seguidas","cf.noOt":"evitar los días de sobreoperar","cf.noNomans":"no operar en tierra de nadie","cf.noAgainst":"no operar contra el sesgo",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.progress":"Progreso","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe"
  }
@@ -660,33 +672,34 @@ function kpi(lab,val,sub,klass){ return `<div class="kpi"><div class="lab">${lab
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
-  if(!TR.length){ v.innerHTML='<div class="card muted">Sin trades en este periodo.</div>'; return; }
+  if(!TR.length){ v.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
   const days=dayStats(TR), ev=dayEval(TR), disc=ev.filter(d=>d.disciplined).length, streak=streakDisc(ev);
   const bestD=Math.max(...days.map(d=>d.net)), worstD=Math.min(...days.map(d=>d.net));
   let cum=0,peak=0,mdd=0; days.forEach(d=>{cum+=d.net; if(cum>peak)peak=cum; if(peak-cum>mdd)mdd=peak-cum;});
   const ins=generateInsights(TR), hi=ins[0];
   const cf=counterfactual(TR);
-  const cfOpts=[{l:"parar a las 2 pérdidas seguidas",v:cf.stopNet},{l:"evitar los días de sobreoperar",v:cf.noOtNet},{l:"no operar en tierra de nadie",v:cf.noNomansNet},{l:"no operar contra el sesgo",v:cf.noAgainstNet}];
+  const cfOpts=[{l:T("cf.stop"),v:cf.stopNet},{l:T("cf.noOt"),v:cf.noOtNet},{l:T("cf.noNomans"),v:cf.noNomansNet},{l:T("cf.noAgainst"),v:cf.noAgainstNet}];
   const cfBest=cfOpts.filter(o=>o.v>cf.actual+1).sort((a,b)=>b.v-a.v)[0];
+  const cfBody=cfBest?T("leaksCostBody").replace("{act}",cfBest.l).replace("{v}",money1(cfBest.v)).replace("{a}",money1(cf.actual)).replace("{d}",money(cfBest.v-cf.actual)):"";
   v.innerHTML=`
     <div class="grid kpis">
-      ${kpi("Neto",money1(M.net),M.n+" trades",cls(M.net))}
-      ${kpi("Win rate",M.winrate.toFixed(1)+"%",M.wins+"W / "+M.losses+"L")}
-      ${kpi("Profit factor",isFinite(M.pf)?M.pf.toFixed(2):"∞","")}
-      ${kpi("Expectancy",money1(M.expectancy),"por trade",cls(M.expectancy))}
-      ${kpi("Avg win / loss",money(M.avgW)+" / "+money(-M.avgL),(M.avgL?(M.avgW/M.avgL).toFixed(2):"—")+" ratio")}
+      ${kpi(T("net"),money1(M.net),M.n+" "+T("trades"),cls(M.net))}
+      ${kpi(T("winRate"),M.winrate.toFixed(1)+"%",M.wins+"W / "+M.losses+"L")}
+      ${kpi(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞","")}
+      ${kpi(T("expectancy"),money1(M.expectancy),T("perTrade"),cls(M.expectancy))}
+      ${kpi(T("avgWinLoss"),money(M.avgW)+" / "+money(-M.avgL),(M.avgL?(M.avgW/M.avgL).toFixed(2):"—")+" "+T("ratioSuffix"))}
     </div>
     <div class="grid kpis section">
-      ${kpi("Días operados",days.length,(days.length?(M.n/days.length).toFixed(1):"0")+" trades/día")}
-      ${kpi("Días disciplinados",disc+"/"+days.length,days.length?Math.round(disc/days.length*100)+"%":"—","calmc")}
-      ${kpi("Racha",streak+(streak===1?" día":" días"),"disciplinados",streak>0?"calmc":"muted")}
-      ${kpi("Mejor / peor día",money(bestD)+" / "+money(worstD),"")}
-      ${kpi("Máx drawdown",money(-mdd),"pico a valle",mdd?"neg":"muted")}
+      ${kpi(T("daysTraded"),days.length,(days.length?(M.n/days.length).toFixed(1):"0")+" "+T("tradesPerDayS"))}
+      ${kpi(T("discDays"),disc+"/"+days.length,days.length?Math.round(disc/days.length*100)+"%":"—","calmc")}
+      ${kpi(T("streak"),streak+" "+(streak===1?T("dDay"):T("dDays")),T("discLower"),streak>0?"calmc":"muted")}
+      ${kpi(T("bestWorstDay"),money(bestD)+" / "+money(worstD),"")}
+      ${kpi(T("maxDD"),money(-mdd),T("peakToValley"),mdd?"neg":"muted")}
     </div>
-    ${cfBest?`<div class="card section" style="border-color:var(--calm)"><h2>💸 El costo de tus fugas</h2><div class="why" style="font-size:14px">Si hubieras <b>${cfBest.l}</b>, tu neto sería <b class="pos">${money1(cfBest.v)}</b> en vez de ${money1(cf.actual)} — <b class="pos">+${money(cfBest.v-cf.actual)}</b> que dejas en la mesa. <span class="muted">(detalle en Disciplina → Fugas)</span></div></div>`:''}
-    ${hi?`<div class="card section"><h2>Insight destacado</h2><div class="why" style="font-size:13.5px">${mdb(hi.text)}</div></div>`:''}
-    <div class="card section"><h2>Curva de equity</h2><div id="eqhost"></div></div>
-    <div class="card section"><h2>P&amp;L por día</h2><div id="dyhost"></div></div>`;
+    ${cfBest?`<div class="card section" style="border-color:var(--calm)"><h2>${T("leaksCostTitle")}</h2><div class="why" style="font-size:14px">${cfBody}</div></div>`:''}
+    ${hi?`<div class="card section"><h2>${T("topInsight")}</h2><div class="why" style="font-size:13.5px">${mdb(hi.text)}</div></div>`:''}
+    <div class="card section"><h2>${T("equityCurve")}</h2><div id="eqhost"></div></div>
+    <div class="card section"><h2>${T("pnlByDay")}</h2><div id="dyhost"></div></div>`;
   $("#eqhost").appendChild(chartEquity(TR));
   $("#dyhost").appendChild(chartDaily(TR));
 }
