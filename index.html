@@ -42,6 +42,12 @@
   .moremenu-pop{position:absolute; right:0; top:calc(100% + 6px); background:var(--surface); border:1px solid var(--hair); border-radius:10px; box-shadow:var(--shadow); padding:6px; display:flex; flex-direction:column; gap:4px; z-index:40; min-width:148px}
   .moremenu-pop .btn{justify-content:flex-start; text-align:left; width:100%}
   .moremenu-pop.hide{display:none}
+  .moremenu-pop .acctrow{display:flex; gap:9px; align-items:center; padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px}
+  .moremenu-pop .acctrow:hover{background:var(--surface2)}
+  .moremenu-pop .acctrow span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .moremenu-pop .acctrow input{flex:none; width:15px; height:15px; accent-color:var(--calm); cursor:pointer}
+  .moremenu-pop .acsep{height:1px; background:var(--hair); margin:5px 2px}
+  .moremenu-pop .aclbl{font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); font-weight:700; padding:4px 8px}
   .btn{font-family:var(--sans); font-size:13px; font-weight:600; border-radius:8px; padding:8px 13px; cursor:pointer; border:1px solid var(--hair); background:var(--surface2); color:var(--ink)}
   .btn:hover{border-color:var(--faint)}
   .btn.calm{background:var(--calm); border-color:var(--calm); color:var(--calmink)}
@@ -205,7 +211,7 @@
       <input type="file" id="file" accept=".csv,.json" multiple class="hide">
       <button class="btn calm" id="importBtn" data-i18n="importCsv" data-i18n-title="tt.import">Importar CSV</button>
       <button class="btn ghost small" id="ctxBtn" data-i18n="context" data-i18n-title="tt.context">＋ Contexto</button>
-      <select id="acctSel" data-i18n-title="tt.account"></select>
+      <div class="moremenu" id="acctMenu"><button class="btn ghost small" id="acctBtn" data-i18n-title="tt.account">…</button><div class="moremenu-pop hide" id="acctPop" style="min-width:236px; max-height:62vh; overflow:auto"></div></div>
       <select id="periodSel" data-i18n-title="tt.period"></select>
       <button class="btn ghost small" id="fbBtn" data-i18n-title="tt.feedback">💬</button>
       <button class="btn ghost small hide" id="admBtn" data-i18n-title="tt.admin">🛠</button>
@@ -370,7 +376,7 @@ const I18N={
   "sync.saved":"✓ saved","sync.saving":"saving…","sync.err":"⚠ not saved","sync.conflict":"⚠ conflict","sync.offline":"Offline — using local copy",
   "conf.title":"Newer version on another device","conf.body":"This journal was updated more recently on another device (or tab). If you overwrite, you'll lose those changes.","conf.reload":"Reload the newer version","conf.overwrite":"Overwrite with what's here",
   "ob3.title":"How it works — 3 steps","ob3.s1":"<b>Import</b> your trades — a CSV from your broker (Tradovate / Zella).","ob3.s2":"<b>Tag</b> each trade: emotion, valid edge, setup, process.","ob3.s3":"<b>See</b> your leaks, discipline score and weekly progress.","ob3.noTrades":"No trades yet? Start with your <b>Daily Routine</b> — it works without any data.",
-  "hdr.allAccounts":"All accounts","hdr.noAccountN":"(no account · {n})","hdr.allHistory":"All history","hdr.last7days":"Last 7 days with data",
+  "hdr.allAccounts":"All accounts","hdr.noAccountN":"(no account · {n})","hdr.allHistory":"All history","hdr.last7days":"Last 7 days with data","hdr.nAccounts":"{n} accounts","hdr.myAccounts":"My accounts",
   "card.weeklyTitle":"Weekly summary (shareable)","card.disc":"Discipline","card.win":"Win","card.bestWorst":"Best day {bd} · Worst {wd}","card.tagline":"Discipline over results.","card.savePng":"💾 Save image","card.copyImg":"📋 Copy","card.copied":"Image copied.","card.copyFail":"Couldn't copy the image.",
   "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on — I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked — I'll remind you inside the app.",
   "tilt.title":"Today's tilt risk","tilt.low":"LOW","tilt.med":"MEDIUM","tilt.high":"HIGH","tilt.recLow":"Neutral conditions — follow your plan.","tilt.recMed":"Careful — respect the circuit-breaker (stop at 2).","tilt.recHigh":"High risk — trade half size or stop after 1 loss.","tilt.rLastBroke":"you broke rules last session","tilt.rLastRed":"last session was red","tilt.rStreak":"{n} tough days in a row","tilt.rMood":"you arrive in “{m}”","tilt.why":"Why:","tilt.noData":"Import some trades to compute your tilt risk.",
@@ -476,7 +482,7 @@ const I18N={
   "sync.saved":"✓ guardado","sync.saving":"guardando…","sync.err":"⚠ sin guardar","sync.conflict":"⚠ conflicto","sync.offline":"Sin conexión — usando copia local",
   "conf.title":"Versión más nueva en otro dispositivo","conf.body":"Este journal se actualizó más recientemente en otro dispositivo (o pestaña). Si sobrescribes, perderás esos cambios.","conf.reload":"Cargar la versión más nueva","conf.overwrite":"Sobrescribir con lo de aquí",
   "ob3.title":"Cómo funciona — 3 pasos","ob3.s1":"<b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).","ob3.s2":"<b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.","ob3.s3":"<b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.","ob3.noTrades":"¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato.",
-  "hdr.allAccounts":"Todas las cuentas","hdr.noAccountN":"(sin cuenta · {n})","hdr.allHistory":"Todo el histórico","hdr.last7days":"Últimos 7 días con datos",
+  "hdr.allAccounts":"Todas las cuentas","hdr.noAccountN":"(sin cuenta · {n})","hdr.allHistory":"Todo el histórico","hdr.last7days":"Últimos 7 días con datos","hdr.nAccounts":"{n} cuentas","hdr.myAccounts":"Mis cuentas",
   "card.weeklyTitle":"Resumen semanal (compartible)","card.disc":"Disciplina","card.win":"Win","card.bestWorst":"Mejor día {bd} · Peor {wd}","card.tagline":"Disciplina antes que resultados.","card.savePng":"💾 Guardar imagen","card.copyImg":"📋 Copiar","card.copied":"Imagen copiada.","card.copyFail":"No se pudo copiar la imagen.",
   "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado — te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas — te recordaré dentro de la app.",
   "tilt.title":"Riesgo de tilt hoy","tilt.low":"BAJO","tilt.med":"MEDIO","tilt.high":"ALTO","tilt.recLow":"Condiciones neutrales — sigue tu plan.","tilt.recMed":"Cuidado — respeta el circuit-breaker (para a las 2).","tilt.recHigh":"Riesgo alto — media posición o para tras 1 pérdida.","tilt.rLastBroke":"rompiste reglas la última sesión","tilt.rLastRed":"la última sesión fue roja","tilt.rStreak":"{n} días difíciles seguidos","tilt.rMood":"llegas en “{m}”","tilt.why":"Por qué:","tilt.noData":"Importa trades para calcular tu riesgo de tilt.",
@@ -511,9 +517,9 @@ const ALIGN=["Con sesgo","Contra","Neutro"];
 const SETUPS=[];  // ya no hay setups por defecto; el usuario añade los suyos (DB.settings.setups)
 const MISTAKES=["revenge","oversize","overwin","fighting","earlyexit","onemore","pressure","fomo","moved_sl","noplan","early","noconfirm","tightsl","chase"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
-let period="ALL", tab="overview", monthSel=null, acctFilter="ALL", noteSel=null, jExpanded=null, routineSel=null;
+let period="ALL", tab="overview", monthSel=null, acctSel=new Set(), noteSel=null, jExpanded=null, routineSel=null;
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
-function scoped(){ if(acctFilter==="ALL")return DB.trades; if(acctFilter==="NONE")return DB.trades.filter(t=>!t.acct); return DB.trades.filter(t=>(t.acct||"")===acctFilter); }
+function scoped(){ if(!acctSel.size)return DB.trades; return DB.trades.filter(t=>acctSel.has(t.acct||"__none")); }
 const GROUPS=[{lab:"grp.summary",subs:["overview"]},{lab:"grp.routine",subs:["routine"]},{lab:"grp.diary",subs:["journal","positions","checkin","notes"]},{lab:"grp.discipline",subs:["leaks","risk","score"]},{lab:"grp.analysis",subs:["report","playbooks"]},{lab:"grp.progress",subs:["progress","calendar"]},{lab:"grp.business",subs:["accounts","finance"]}];
 let groupLast={};
 function groupOf(t){ return GROUPS.find(g=>g.subs.includes(t))||GROUPS[0]; }
@@ -698,14 +704,14 @@ function accountForm(id, onDone){
     const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, maxPerTrade:+$("#afMaxPer").value||0, phase:$("#afPhase").value, status:$("#afStatus").value };
     let newId=id;
     if(editing){ Object.assign(DB.accounts[id],data); }
-    else { let base=slug(nm)||"cuenta", k=base, i=2; while(DB.accounts[k]){k=base+"-"+i;i++;} newId=k; DB.accounts[newId]=data; acctFilter=newId; }
+    else { let base=slug(nm)||"cuenta", k=base, i=2; while(DB.accounts[k]){k=base+"-"+i;i++;} newId=k; DB.accounts[newId]=data; acctSel=new Set([newId]); }
     save(); buildAccounts(); renderAccounts(); fin(newId); closeModal(); toast(editing?T("af.updated"):T("af.created"));
   };
 }
 // Selector de cuenta al importar (modal, devuelve Promise: id | "" sin cuenta | null cancelar)
 function pickAccountModal(){
   return new Promise(resolve=>{
-    if(acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter]) return resolve(acctFilter);
+    if(acctSel.size===1){ const k=[...acctSel][0]; if(DB.accounts[k]) return resolve(k); }
     const ids=Object.keys(DB.accounts);
     let done=false, toCreate=false; const fin=(v)=>{ if(done)return; done=true; resolve(v); };
     const openCreate=()=>{ toCreate=true; closeModal(); accountForm(null,(nid)=>fin(nid||null)); };
@@ -786,12 +792,24 @@ function readFile(f, acct){
   };
   rd.readAsText(f);
 }
-function buildAccounts(){ const sel=$("#acctSel"); if(!sel)return; sel.innerHTML="";
-  const add=(v,l)=>{const o=document.createElement("option");o.value=v;o.textContent=l;sel.appendChild(o);};
-  add("ALL",T("hdr.allAccounts")); Object.keys(DB.accounts).forEach(id=>add(id,DB.accounts[id].name));
-  const un=DB.trades.filter(t=>!t.acct).length; if(un)add("NONE",fmt(T("hdr.noAccountN"),{n:un}));
-  if(acctFilter!=="ALL"&&acctFilter!=="NONE"&&!DB.accounts[acctFilter]) acctFilter="ALL";
-  sel.value=acctFilter;
+function buildAccounts(){ const btn=$("#acctBtn"), pop=$("#acctPop"); if(!btn||!pop)return;
+  const ids=Object.keys(DB.accounts); const unN=DB.trades.filter(t=>!t.acct).length;
+  [...acctSel].forEach(k=>{ if(k!=="__none" && !DB.accounts[k]) acctSel.delete(k); if(k==="__none" && !unN) acctSel.delete(k); });
+  let label;
+  if(!acctSel.size) label=T("hdr.allAccounts");
+  else if(acctSel.size===1){ const k=[...acctSel][0]; label=k==="__none"?T("pk.none"):(DB.accounts[k]?DB.accounts[k].name:T("hdr.allAccounts")); }
+  else label=fmt(T("hdr.nAccounts"),{n:acctSel.size});
+  btn.textContent=label+"  ▾";
+  const row=(v,l,ck)=>`<label class="acctrow"><input type="checkbox" data-acc="${escA(v)}" ${ck?'checked':''}><span>${l}</span></label>`;
+  let html=row("__all",T("hdr.allAccounts"),!acctSel.size)+'<div class="acsep"></div>';
+  if(ids.length){ html+='<div class="aclbl">'+T("hdr.myAccounts")+'</div>'; ids.forEach(id=>{ html+=row(id,escA(DB.accounts[id].name),acctSel.has(id)); }); }
+  if(unN) html+=row("__none",T("pk.none")+" · "+unN, acctSel.has("__none"));
+  pop.innerHTML=html;
+  pop.querySelectorAll("[data-acc]").forEach(cb=>cb.onchange=()=>{ const v=cb.dataset.acc;
+    if(v==="__all"){ acctSel.clear(); }
+    else { if(cb.checked) acctSel.add(v); else acctSel.delete(v); }
+    buildAccounts(); render();
+  });
 }
 async function exportBackup(){
   let images={}; try{ const all=await idbAll(); for(const k of Object.keys(all)){ images[k]=await blobToDataURL(all[k]); } }catch(e){}
@@ -1618,7 +1636,7 @@ function renderAccounts(){
   const reCard=unassigned?`<div class="card section"><p class="small wait" style="margin:0 0 8px">${fmt(T("ac.unassigned"),{n:unassigned})}</p>${ids.length?`<div class="rowflex small">${T("ac.assignAllTo")} <select id="reAcct">${ids.map(i=>`<option value="${i}">${escA(DB.accounts[i].name)}</option>`).join("")}</select> <button class="btn small" id="reApply">${T("ac.assign")}</button></div>`:'<span class="small muted">'+T("ac.createToAssign")+'</span>'}</div>`:'';
   if(!ids.length){ host.innerHTML=`<div class="card"><h2>${T("ac.title")}</h2><p class="muted small">${T("ac.emptyLead")}</p><button class="btn calm" id="newAcct">${T("ac.new")}</button></div>${reCard}`;
     $("#newAcct").onclick=addAccount; return; }
-  const showIds = (acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter])?[acctFilter]:ids;
+  const selReal=[...acctSel].filter(k=>DB.accounts[k]); const showIds = selReal.length?selReal:ids;
   const cards=showIds.map(id=>{ const st=acctStats(id), a=st.a; const prog=a.target>0?st.net/a.target*100:0; const ff=firmFinance(a.firm);
     const viol=(a.maxPerTrade>0)?DB.trades.filter(t=>(t.acct||"")===id && t.pnl<0 && Math.abs(t.pnl)>a.maxPerTrade).length:0;
     return `<div class="card section">
@@ -1647,7 +1665,7 @@ function renderAccounts(){
   $("#newAcct").onclick=addAccount;
   host.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>accountForm(b.dataset.edit));
   host.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{ const a=DB.accounts[b.dataset.id]; if(a){ a.status=b.dataset.st; save(); renderAccounts(); } });
-  host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=b.dataset.del; confirmModal(fmt(T("ac.delConfirm"),{name:DB.accounts[id].name}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB.trades.forEach(t=>{if(t.acct===id)delete t.acct;}); delete DB.accounts[id]; if(acctFilter===id)acctFilter="ALL"; save(); buildAccounts(); renderAccounts(); }); });
+  host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=b.dataset.del; confirmModal(fmt(T("ac.delConfirm"),{name:DB.accounts[id].name}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB.trades.forEach(t=>{if(t.acct===id)delete t.acct;}); delete DB.accounts[id]; acctSel.delete(id); save(); buildAccounts(); renderAccounts(); }); });
   const re=$("#reApply"); if(re)re.onclick=()=>{ const to=$("#reAcct").value; DB.trades.forEach(t=>{if(!t.acct)t.acct=to;}); save(); buildAccounts(); render(); toast(fmt(T("ac.assigned"),{name:DB.accounts[to].name})); };
 }
 
@@ -2096,7 +2114,8 @@ $("#drop").addEventListener("drop",async e=>{ const files=Array.from(e.dataTrans
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; const g=GROUPS.find(x=>x.lab===b.dataset.g); if(!g)return; tab=groupLast[g.lab]||g.subs[0]; render();});
 $("#subtabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; tab=b.dataset.t; render();});
 $("#periodSel").addEventListener("change",e=>{period=e.target.value; render();});
-$("#acctSel").addEventListener("change",e=>{acctFilter=e.target.value; render();});
+$("#acctBtn").onclick=(e)=>{ e.stopPropagation(); $("#acctPop").classList.toggle("hide"); };
+document.addEventListener("click",e=>{ const p=$("#acctPop"); if(p&&!p.classList.contains("hide")&&!e.target.closest("#acctMenu")) p.classList.add("hide"); });
 $("#backupBtn").onclick=exportBackup;
 $("#fbBtn").onclick=showFeedback;
 $("#admBtn").onclick=showAdmin;
@@ -2106,7 +2125,7 @@ document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classLi
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
 $("#ctxBtn").onclick=showContextModal;
 $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
-$("#wipeBtn").onclick=()=>{ confirmModal(T("io.wipeConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped")); }); };
+$("#wipeBtn").onclick=()=>{ confirmModal(T("io.wipeConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctSel=new Set(); noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped")); }); };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
 
 // ---------- auth / arranque en la nube ----------
