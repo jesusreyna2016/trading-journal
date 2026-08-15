@@ -62,6 +62,10 @@
   #subtabs button{font-size:12.5px; padding:5px 12px; border:1px solid var(--hair); border-radius:999px; color:var(--muted)}
   #subtabs button.active{background:var(--surface2); border-color:var(--calm); color:var(--ink)}
   .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px; box-shadow:var(--shadow)}
+  .qbar{display:flex; align-items:flex-start; gap:11px; margin:2px 0 16px; padding:11px 15px; border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:10px; background:color-mix(in srgb,var(--calm) 5%,var(--surface))}
+  .qbar .qi{color:var(--calm); font:800 22px/1 Georgia,serif; flex:none; margin-top:-1px}
+  .qbar .qt{color:var(--ink); font-style:italic; font-size:13.5px; line-height:1.5}
+  .qbar .qa{color:var(--muted); font-style:normal; white-space:nowrap}
   .grid{display:grid; gap:12px}
   .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
   .kpi{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:15px 16px; position:relative; overflow:hidden}
@@ -451,6 +455,7 @@
   </div>
 
   <div id="views" class="hide">
+    <div id="quoteSlot"></div>
     <div id="view-overview"></div>
     <div id="view-routine" class="hide"></div>
     <div id="view-checkin" class="hide"></div>
@@ -1274,6 +1279,60 @@ function showWhyEditor(){
     else finish();
   };
 }
+// ---------- frases de trading / psicología (rotan al cambiar de pestaña) ----------
+const QUOTES={
+  discipline:[
+    {en:"Discipline is the bridge between goals and results.",es:"La disciplina es el puente entre las metas y los resultados.",by:"Jim Rohn"},
+    {en:"The goal of a successful trader is to make the best trades. Money is secondary.",es:"La meta de un buen trader es hacer las mejores operaciones. El dinero es secundario.",by:"Alexander Elder"},
+    {en:"A clean day is a day you followed your rules — win or lose.",es:"Un día limpio es un día en que seguiste tus reglas — ganes o pierdas."},
+    {en:"Amateurs think about how much they can make. Pros think about how much they can lose.",es:"El amateur piensa cuánto puede ganar. El profesional piensa cuánto puede perder.",by:"Jack Schwager"}
+  ],
+  process:[
+    {en:"What isn't measured isn't improved. The best traders keep a journal.",es:"Lo que no se mide no se mejora. Los mejores traders llevan un journal."},
+    {en:"Trade the plan. Don't plan while you trade.",es:"Opera el plan. No planifiques mientras operas."},
+    {en:"Every trade is data. Tag it, review it, learn from it.",es:"Cada trade es información. Etiquétalo, revísalo, aprende de él."}
+  ],
+  emotion:[
+    {en:"The market transfers money from the impatient to the patient.",es:"El mercado transfiere el dinero de los impacientes a los pacientes.",by:"Warren Buffett"},
+    {en:"Your biggest enemy in trading is yourself.",es:"Tu mayor enemigo en el trading eres tú mismo."},
+    {en:"Don't trade to feel better. Trade because your edge showed up.",es:"No operes para sentirte mejor. Opera porque apareció tu ventaja."}
+  ],
+  edge:[
+    {en:"Trading is a game of probabilities, not certainties.",es:"El trading es un juego de probabilidades, no de certezas.",by:"Mark Douglas"},
+    {en:"Cut your losses short and let your winners run.",es:"Corta rápido las pérdidas y deja correr las ganancias."},
+    {en:"An edge you don't follow with discipline is no edge at all.",es:"Una ventaja que no sigues con disciplina no es ninguna ventaja."}
+  ],
+  patience:[
+    {en:"It's not whether you're right or wrong, but how much you make when right and lose when wrong.",es:"No se trata de acertar o fallar, sino de cuánto ganas al acertar y cuánto pierdes al fallar.",by:"George Soros"},
+    {en:"Consistency beats intensity. Small clean days compound.",es:"La constancia le gana a la intensidad. Los días limpios se acumulan."},
+    {en:"Patience is a position. Waiting is a trade.",es:"La paciencia es una posición. Esperar también es operar."}
+  ],
+  risk:[
+    {en:"Risk comes from not knowing what you're doing.",es:"El riesgo viene de no saber lo que haces.",by:"Warren Buffett"},
+    {en:"Take care of your losses and the profits will take care of themselves.",es:"Cuida las pérdidas y las ganancias se cuidarán solas."},
+    {en:"Never risk your whole account on a single idea.",es:"Nunca arriesgues toda la cuenta en una sola idea."}
+  ],
+  goals:[
+    {en:"Trade for a living, not for a thrill.",es:"Opera para vivir, no por adrenalina."},
+    {en:"Protect the capital first. You can't trade if you're out of the game.",es:"Protege primero el capital. No puedes operar si estás fuera del juego."},
+    {en:"Know your why. The money is a tool, not the mission.",es:"Ten claro tu porqué. El dinero es una herramienta, no la misión."}
+  ],
+  habits:[
+    {en:"You don't rise to your goals; you fall to your systems.",es:"No subes al nivel de tus metas; caes al nivel de tus sistemas.",by:"James Clear"},
+    {en:"Win the morning, win the day.",es:"Gana la mañana, gana el día."},
+    {en:"The trade is won in preparation, before the market opens.",es:"La operación se gana en la preparación, antes de que abra el mercado."}
+  ]
+};
+const QCAT={overview:'discipline',leaks:'discipline',journal:'process',notes:'process',playbooks:'process',positions:'process',checkin:'emotion',score:'edge',report:'edge',calendar:'patience',progress:'patience',risk:'risk',accounts:'goals',finance:'goals',routine:'habits'};
+function qcatOf(t){ return QCAT[t]||'discipline'; }
+const _qCache={};
+function qbar(tab){
+  const cat=qcatOf(tab), arr=QUOTES[cat]||QUOTES.discipline;
+  if(_qCache[cat]==null) _qCache[cat]=Math.floor(Math.random()*arr.length);
+  const q=arr[_qCache[cat]], L=(DB&&DB.settings&&DB.settings.lang)||'en', txt=q[L]||q.en;
+  return `<div class="qbar"><span class="qi">“</span><span class="qt">${txt}${q.by?` <span class="qa">— ${q.by}</span>`:''}</span></div>`;
+}
+
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
@@ -2298,6 +2357,7 @@ function render(){
   if(!showViews) return;
   $$('[id^="view-"]').forEach(v=>v.classList.add("hide"));
   $("#view-"+tab).classList.remove("hide");
+  { const qs=$("#quoteSlot"); if(qs) qs.innerHTML=qbar(tab); }
   if(tab==="routine"){renderRoutine(); return;}
   if(!has) return;
   if(tab==="overview")renderOverview();
@@ -2323,8 +2383,8 @@ $("#file").addEventListener("change",async e=>{ const files=Array.from(e.target.
 ["dragover","dragenter"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.add("over");}));
 ["dragleave","drop"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.remove("over");}));
 $("#drop").addEventListener("drop",async e=>{ const files=Array.from(e.dataTransfer.files); if(!files.length)return; const hasCsv=files.some(f=>!/\.json$/i.test(f.name)); let acct=null; if(hasCsv){ acct=await pickAccountModal(); if(acct===null)return; } files.forEach(f=>readFile(f,acct)); });
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; const g=GROUPS.find(x=>x.lab===b.dataset.g); if(!g)return; tab=groupLast[g.lab]||g.subs[0]; render();});
-$("#subtabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; tab=b.dataset.t; render();});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; const g=GROUPS.find(x=>x.lab===b.dataset.g); if(!g)return; tab=groupLast[g.lab]||g.subs[0]; delete _qCache[qcatOf(tab)]; render();});
+$("#subtabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; tab=b.dataset.t; delete _qCache[qcatOf(tab)]; render();});
 $("#periodSel").addEventListener("change",e=>{period=e.target.value; render();});
 $("#acctBtn").onclick=(e)=>{ e.stopPropagation(); $("#acctPop").classList.toggle("hide"); };
 document.addEventListener("click",e=>{ const p=$("#acctPop"); if(p&&!p.classList.contains("hide")&&!e.target.closest("#acctMenu")) p.classList.add("hide"); });
