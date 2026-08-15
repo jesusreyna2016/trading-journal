@@ -235,13 +235,11 @@
     <div id="view-routine" class="hide"></div>
     <div id="view-checkin" class="hide"></div>
     <div id="view-leaks" class="hide"></div>
-    <div id="view-breakdown" class="hide"></div>
     <div id="view-score" class="hide"></div>
     <div id="view-playbooks" class="hide"></div>
     <div id="view-journal" class="hide"></div>
     <div id="view-positions" class="hide"></div>
     <div id="view-notes" class="hide"></div>
-    <div id="view-weekly" class="hide"></div>
     <div id="view-progress" class="hide"></div>
     <div id="view-calendar" class="hide"></div>
     <div id="view-risk" class="hide"></div>
@@ -366,7 +364,9 @@ const I18N={
   "coach.title":"🧭 Coach's read","coach.disc":"You kept {clean}/{total} days clean ({pct}%).","coach.leak":"Biggest leak right now: {leak} ({metric}).","coach.leakNone":"No critical leak right now — keep protecting your discipline.",
   "lk.disp.t":"Disposition effect (you hold losers longer)","lk.disp.w":"Your losing trades last {lossDur} on average vs {winDur} for winners. Holding losers and cutting winners is the classic leak — set your exit before you enter.","lk.eupho.t":"Euphoria — sizing up after a win","lk.eupho.w":"You sized up {n} time(s) right after a winning trade; those entries net {net}. Winning doesn't mean the next setup is better — keep size fixed.",
   "fb.eyebrow":"Feedback","fb.title":"Report a bug or suggest something","fb.lead":"Found a bug? Want a feature or an improvement? Tell me — it helps everyone.","fb.type":"Type","fb.bug":"🐞 Bug","fb.feature":"✨ New feature","fb.improve":"🔧 Improvement","fb.other":"💬 Other","fb.msg":"Message","fb.msgPh":"Describe it as clearly as you can…","fb.send":"Send","fb.needMsg":"Write a message first.","fb.thanks":"Thanks! Sent. 🙏","fb.err":"Couldn't send — try again.","fb.thDate":"Date","fb.btn":"Feedback",
-  "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?)."
+  "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?).",
+  "io.jsonUnknown":"Unrecognized JSON (context or backup).","io.backupDown":"Backup downloaded ({n} trades, {img} images).","io.restoreConfirm":"Restore backup? It replaces ALL current data in this browser.","io.restored":"Backup restored ({n} trades).","io.wipeConfirm":"Erase ALL trades and tags saved in this browser?","io.wiped":"All cleared.","pb.delConfirm":"Delete play {n}? It won't delete trades or their tags.",
+  "fr.revenge":"revenge-sizing","fr.streak":"{n} losses in a row","fr.overtrade":"over-traded ({n})","fr.roundtrip":"round-trip","fr.plan":"didn't follow the plan (process <75%)"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -464,7 +464,9 @@ const I18N={
   "coach.title":"🧭 Lectura del coach","coach.disc":"Mantuviste {clean}/{total} días limpios ({pct}%).","coach.leak":"Tu mayor fuga ahora: {leak} ({metric}).","coach.leakNone":"Sin fuga crítica ahora — sigue protegiendo tu disciplina.",
   "lk.disp.t":"Efecto disposición (aguantas más los perdedores)","lk.disp.w":"Tus trades perdedores duran {lossDur} de media vs {winDur} los ganadores. Aguantar perdedores y cortar ganadores es la fuga clásica — define tu salida antes de entrar.","lk.eupho.t":"Euforia — subir tamaño tras ganar","lk.eupho.w":"Subiste tamaño {n} vez(es) justo después de un trade ganador; esas entradas suman {net}. Ganar no hace mejor el siguiente setup — mantén el tamaño fijo.",
   "fb.eyebrow":"Feedback","fb.title":"Reporta un bug o sugiere algo","fb.lead":"¿Encontraste un bug? ¿Quieres una función o una mejora? Dímelo — ayuda a todos.","fb.type":"Tipo","fb.bug":"🐞 Bug","fb.feature":"✨ Nueva función","fb.improve":"🔧 Mejora","fb.other":"💬 Otro","fb.msg":"Mensaje","fb.msgPh":"Descríbelo lo más claro que puedas…","fb.send":"Enviar","fb.needMsg":"Escribe un mensaje primero.","fb.thanks":"¡Gracias! Enviado. 🙏","fb.err":"No se pudo enviar — reintenta.","fb.thDate":"Fecha","fb.btn":"Feedback",
-  "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?)."
+  "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?).",
+  "io.jsonUnknown":"JSON no reconocido (contexto o backup).","io.backupDown":"Backup descargado ({n} trades, {img} imágenes).","io.restoreConfirm":"¿Restaurar backup? Reemplaza TODOS los datos actuales de este navegador.","io.restored":"Backup restaurado ({n} trades).","io.wipeConfirm":"¿Borrar TODOS los trades y etiquetas guardados en este navegador?","io.wiped":"Todo borrado.","pb.delConfirm":"¿Eliminar la jugada {n}? No borra los trades ni su etiqueta.",
+  "fr.revenge":"revenge-sizing","fr.streak":"{n} pérdidas seguidas","fr.overtrade":"sobreoperó ({n})","fr.roundtrip":"round-trip","fr.plan":"no siguió el plan (proceso <75%)"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -480,10 +482,9 @@ const PANEL=["VALID","WAIT","CHOP"];
 const ALIGN=["Con sesgo","Contra","Neutro"];
 const SETUPS=["Fade VAH","Fade VAL","POC→VAL","POC→VAH","Quiebre POC","Rebote VAL","Rebote VAH","Pivote","Otro"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
-let period="ALL", tab="overview", weekSel=null, monthSel=null, acctFilter="ALL", noteSel=null, jExpanded=null, routineSel=null;
+let period="ALL", tab="overview", monthSel=null, acctFilter="ALL", noteSel=null, jExpanded=null, routineSel=null;
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
 function scoped(){ if(acctFilter==="ALL")return DB.trades; if(acctFilter==="NONE")return DB.trades.filter(t=>!t.acct); return DB.trades.filter(t=>(t.acct||"")===acctFilter); }
-const TABLAB={overview:"Resumen",routine:"Rutina",checkin:"Check-in",leaks:"Fugas",playbooks:"Playbooks",score:"Score",journal:"Trades",positions:"Posiciones",notes:"Notas",progress:"Progreso",calendar:"Calendario",risk:"Riesgo",accounts:"Cuentas",finance:"Finanzas",report:"Informe"};
 const GROUPS=[{lab:"grp.summary",subs:["overview"]},{lab:"grp.routine",subs:["routine"]},{lab:"grp.diary",subs:["journal","positions","checkin","notes"]},{lab:"grp.discipline",subs:["leaks","risk","score"]},{lab:"grp.analysis",subs:["report","playbooks"]},{lab:"grp.progress",subs:["progress","calendar"]},{lab:"grp.business",subs:["accounts","finance"]}];
 let groupLast={};
 function groupOf(t){ return GROUPS.find(g=>g.subs.includes(t))||GROUPS[0]; }
@@ -722,8 +723,8 @@ function readFile(f, acct){
     if(isJson){ try{ const j=JSON.parse(txt);
         if(Array.isArray(j)) importContext(j);
         else if(j && Array.isArray(j.trades)) restoreBackup(j);
-        else toast("JSON no reconocido (contexto o backup).");
-      }catch(e){ toast("JSON inválido."); } }
+        else toast(T("io.jsonUnknown"));
+      }catch(e){ toast(T("ctx.invalid")); } }
     else importText(txt, acct);
   };
   rd.readAsText(f);
@@ -741,15 +742,15 @@ async function exportBackup(){
   const blob=new Blob([JSON.stringify(out)],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
   a.download="zb_journal_backup_"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),2000); toast("Backup descargado ("+DB.trades.length+" trades, "+Object.keys(images).length+" imágenes).");
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000); toast(fmt(T("io.backupDown"),{n:DB.trades.length,img:Object.keys(images).length}));
 }
 function restoreBackup(j){
-  if(!confirm("¿Restaurar backup? Reemplaza TODOS los datos actuales de este navegador.")) return;
+  if(!confirm(T("io.restoreConfirm"))) return;
   DB={trades:Array.isArray(j.trades)?j.trades:[], tags:j.tags||{}, checkins:j.checkins||{}, accounts:j.accounts||{}, playbooks:j.playbooks||{}, notes:j.notes||{}, ledger:Array.isArray(j.ledger)?j.ledger:[], routine:j.routine||{}, routineDef:j.routineDef, settings:Object.assign({dpt:900,overtrade:8,session:"Asia"}, j.settings||{})};
   if(j._images){ Object.keys(j._images).forEach(k=>dataURLtoBlob(j._images[k]).then(b=>{ idbPut(k,b); stUpload(k,b); }).catch(()=>{})); }
   DB.settings.goals=Object.assign({disc:80,proc:80,nomans:2,rr:1.5}, (j.settings&&j.settings.goals)||{});
   DB.trades.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
-  ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast("Backup restaurado ("+DB.trades.length+" trades).");
+  ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast(fmt(T("io.restored"),{n:DB.trades.length}));
 }
 
 // ---------- session (America/Chicago) ----------
@@ -1043,33 +1044,6 @@ function renderLeaks(){
   <div class="card section small muted">${fmt(T("leaks.thresholds"),{ot:'<input type="number" id="otIn" value="'+DB.settings.overtrade+'" style="width:56px" min="2">',dpt:'<input type="number" id="dptIn" value="'+DB.settings.dpt+'" style="width:74px" step="50">'})} <button class="btn small" id="thApply">${T("apply")}</button></div>`;
   $("#thApply").onclick=()=>{DB.settings.overtrade=+$("#otIn").value||8; DB.settings.dpt=+$("#dptIn").value||900; save(); renderLeaks();};
 }
-function tableFrom(title,rows,cols){
-  return `<div class="card section"><h2>${title}</h2><table><thead><tr>${cols.map(c=>`<th class="${c.mono?'mono':''}">${c.h}</th>`).join("")}</tr></thead><tbody>${
-    rows.map(r=>`<tr>${cols.map(c=>`<td class="${c.mono?'mono':''}">${c.f(r)}</td>`).join("")}</tr>`).join("")
-  }</tbody></table></div>`;
-}
-function renderBreakdown(){
-  const TR=activeTrades();
-  const sideRows=["long","short"].map(s=>{const a=TR.filter(t=>t.side===s);const m=metrics(a);return {k:s,m};}).filter(r=>r.m.n);
-  const bySess=byKey(TR,sessionOf); const sessRows=Object.keys(bySess).map(k=>({k,m:metrics(bySess[k])}));
-  const byHour=byKey(TR,t=>{const m=ctMinutes(t);return m===null?"—":String(Math.floor(m/60)).padStart(2,"0")+":00";});
-  const hourRows=Object.keys(byHour).sort().map(k=>({k,m:metrics(byHour[k])}));
-  const mc=(m)=>`<span class="${cls(m.net)}">${money1(m.net)}</span>`;
-  const setupTagged=TR.filter(t=>DB.tags[tid(t)]&&DB.tags[tid(t)].setup);
-  const bySetup=byKey(setupTagged,t=>DB.tags[tid(t)].setup);
-  const setupRows=Object.keys(bySetup).map(k=>({k,m:metrics(bySetup[k])})).sort((a,b)=>b.m.net-a.m.net);
-  $("#view-breakdown").innerHTML=
-    (setupRows.length?tableFrom("Por setup (de tus etiquetas)",setupRows,[
-      {h:"Setup",f:r=>r.k},{h:"Trades",mono:1,f:r=>r.m.n},{h:"Win%",mono:1,f:r=>r.m.winrate.toFixed(0)+"%"},{h:"Neto",mono:1,f:r=>mc(r.m)},{h:"PF",mono:1,f:r=>isFinite(r.m.pf)?r.m.pf.toFixed(2):"∞"}]):"")+
-    tableFrom("Largo vs Corto",sideRows,[
-      {h:"Lado",f:r=>`<span class="tag ${r.k==='long'?'L':'S'}">${r.k==='long'?'LONG':'SHORT'}</span>`},
-      {h:"Trades",mono:1,f:r=>r.m.n},{h:"Win%",mono:1,f:r=>r.m.winrate.toFixed(0)+"%"},
-      {h:"Neto",mono:1,f:r=>mc(r.m)},{h:"PF",mono:1,f:r=>isFinite(r.m.pf)?r.m.pf.toFixed(2):"∞"}])+
-    tableFrom("Por sesión (hora Central)",sessRows,[
-      {h:"Sesión",f:r=>r.k},{h:"Trades",mono:1,f:r=>r.m.n},{h:"Win%",mono:1,f:r=>r.m.winrate.toFixed(0)+"%"},{h:"Neto",mono:1,f:r=>mc(r.m)}])+
-    tableFrom("Por hora de apertura (CT)",hourRows,[
-      {h:"Hora",f:r=>r.k},{h:"Trades",mono:1,f:r=>r.m.n},{h:"Win%",mono:1,f:r=>r.m.winrate.toFixed(0)+"%"},{h:"Neto",mono:1,f:r=>mc(r.m)}]);
-}
 function dayTradeRows(arr){
   return arr.map(t=>{ const id=tid(t), tg=DB.tags[id]||{}, cd=ctDisp(t);
     const emoChips=EMO.map(e=>`<button class="chip ${e==='Calma'?'calm':''}" data-id="${id}" data-k="emo" data-v="${e}" aria-pressed="${tg.emo===e}">${vLabel("emo",e)}</button>`).join("");
@@ -1122,7 +1096,6 @@ function renderJournal(){
 function periodLabel(){ return period==="ALL"?T("pl.all"):period==="7"?T("pl.last7"):period.slice(2); }
 function mdb(s){ return s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); }
 function bucketStats(TR,fn,minN){ const by=byKey(TR,fn); return Object.keys(by).filter(k=>k!=="null"&&k!=="—").map(k=>({k,m:metrics(by[k])})).filter(r=>r.m.n>=(minN||3)); }
-const WD=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 function weekdayOf(t){ const d=new Date((t.tday||t.date)+"T12:00:00Z"); return T("wd.short").split(",")[d.getUTCDay()]; }
 // Data-driven insights — adapts to whatever the data shows, no strategy assumed.
 function generateInsights(TR){
@@ -1247,53 +1220,7 @@ function dayEval(TR){
   });
 }
 function streakDisc(days){ let s=0; for(let i=days.length-1;i>=0;i--){ if(days[i].disciplined)s++; else break; } return s; }
-function failReasons(d){ const f=[]; if(!d.r1)f.push("revenge-sizing"); if(!d.r2)f.push(d.maxC+" pérdidas seguidas"); if(!d.r3)f.push("sobreoperó ("+d.count+")"); if(!d.r4)f.push("round-trip"); if(d.r5===false)f.push("no siguió el plan (proceso <75%)"); return f.join(", "); }
-function weeklyNarrative(wk,wd,net,pnet,M,streak,disc,top){
-  const o=[]; o.push("SEMANAL "+wk);
-  o.push("Neto: "+money1(net)+(pnet?(" ("+((net-pnet)>=0?"+":"")+money(net-pnet)+" vs previa)"):""));
-  o.push(M.n+" trades · win "+M.winrate.toFixed(0)+"% · días disciplinados "+disc+"/"+wd.length+" · racha "+streak);
-  o.push("");
-  const broke=wd.filter(d=>!d.disciplined);
-  if(broke.length){ o.push("Días que rompieron reglas:"); broke.forEach(d=>o.push("  "+d.date+" ("+money(d.net)+"): "+failReasons(d))); }
-  else o.push("Todos los días cumplieron las reglas core. \u{1F7E2}");
-  o.push(""); o.push("FUGA #1: "+(top?top.title+" ("+top.metric+")":"sin fuga crítica"));
-  if(top)o.push("  "+top.why);
-  return o.join("\n");
-}
-function renderWeekly(){
-  const host=$("#view-weekly"); const all=dayEval(scoped());
-  if(!all.length){host.innerHTML='<div class="card muted">Importa trades para ver el resumen semanal.</div>';return;}
-  const weeks=[...new Set(all.map(d=>isoWeek(d.date)))].sort();
-  if(!weekSel||!weeks.includes(weekSel)) weekSel=weeks[weeks.length-1];
-  const wd=all.filter(d=>isoWeek(d.date)===weekSel).sort((a,b)=>a.date<b.date?-1:1);
-  const pi=weeks.indexOf(weekSel)-1, pw=pi>=0?all.filter(d=>isoWeek(d.date)===weeks[pi]):[];
-  const net=wd.reduce((s,d)=>s+d.net,0), pnet=pw.reduce((s,d)=>s+d.net,0);
-  const TRw=scoped().filter(t=>isoWeek(t.date)===weekSel); const Mw=metrics(TRw);
-  const streak=streakDisc(all); const disc=wd.filter(d=>d.disciplined).length;
-  const dtxt=pw.length?(((net-pnet)>=0?"+":"")+money(net-pnet)+" vs previa"):"primera semana";
-  const wkOpts=weeks.slice().reverse().map(w=>`<option value="${w}" ${w===weekSel?'selected':''}>${w}</option>`).join("");
-  const scoreRow=r=>{ const rel=wd.filter(d=>d[r.k]!==null), ok=rel.filter(d=>d[r.k]).length, tot=rel.length;
-    const st=tot===0?'na':(ok===tot?'ok':'no'), txt=tot===0?'—':ok+'/'+tot+' días'; return `<div class="r"><span class="lab">${r.lab}</span><span class="pass ${st}">${txt}</span></div>`; };
-  const heat=wd.map(d=>`<div class="d ${d.disciplined?'g':'r'}" title="${d.date}: ${money(d.net)}${d.disciplined?' · disciplinado':' · '+failReasons(d)}">${d.date.slice(5)}<span class="n">${d.net>=0?'+':''}${Math.round(d.net)}</span></div>`).join("");
-  const top=detectLeaks(TRw).filter(x=>x.sev==="hi")[0];
-  host.innerHTML=`
-    <div class="rowflex" style="justify-content:space-between; margin-bottom:12px">
-      <h2 style="margin:0">Resumen semanal</h2><select id="weekSel">${wkOpts}</select></div>
-    <div class="grid kpis">
-      ${kpi("Neto semana",money1(net),dtxt,cls(net))}
-      ${kpi("Trades",Mw.n,Mw.wins+"W / "+Mw.losses+"L")}
-      ${kpi("Win rate",Mw.winrate.toFixed(0)+"%","")}
-      ${kpi("Días disciplinados",disc+"/"+wd.length,"esta semana","calmc")}
-      ${kpi("Racha",streak+(streak===1?" día":" días"),"disciplinados seguidos",streak>0?"calmc":"neg")}
-    </div>
-    <div class="card section"><h2>Scorecard de reglas</h2><div class="score">${RULES.map(scoreRow).join("")}</div></div>
-    <div class="card section"><h2>Días de la semana</h2><div class="heat">${heat||'<span class="muted">Sin días.</span>'}</div>
-      <p class="small muted" style="margin-top:10px">Verde = día disciplinado. Rojo = alguna regla rota (pasa el cursor para ver por qué).</p></div>
-    <div class="card section"><h2>Lectura de la semana</h2><pre class="report" id="wkrep">${weeklyNarrative(weekSel,wd,net,pnet,Mw,streak,disc,top)}</pre>
-      <button class="btn calm" id="copyWk">Copiar informe semanal</button></div>`;
-  $("#weekSel").addEventListener("change",e=>{weekSel=e.target.value; renderWeekly();});
-  $("#copyWk").onclick=()=>{navigator.clipboard.writeText($("#wkrep").textContent).then(()=>toast("Informe semanal copiado.")).catch(()=>toast("No se pudo copiar."));};
-}
+function failReasons(d){ const f=[]; if(!d.r1)f.push(T("fr.revenge")); if(!d.r2)f.push(fmt(T("fr.streak"),{n:d.maxC})); if(!d.r3)f.push(fmt(T("fr.overtrade"),{n:d.count})); if(!d.r4)f.push(T("fr.roundtrip")); if(d.r5===false)f.push(T("fr.plan")); return f.join(", "); }
 function renderCalendar(){
   const host=$("#view-calendar"); const all=dayEval(scoped());
   if(!all.length){host.innerHTML='<div class="card muted">'+T("cal.empty")+'</div>';return;}
@@ -1621,7 +1548,7 @@ function renderPlaybooks(){
   $("#newPb").onclick=()=>{ const nm=prompt(T("pb.promptName")); if(nm===null)return; const n=nm.trim(); if(!n)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; save(); renderPlaybooks(); toast(T("pb.created")); };
   host.querySelectorAll("[data-saverules]").forEach(b=>b.onclick=()=>{ const n=b.dataset.saverules; const ta=[...host.querySelectorAll('[data-rules]')].find(t=>t.dataset.rules===n);
     if(!ta)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; DB.playbooks[n].rules=ta.value.split("\n").map(s=>s.trim()).filter(Boolean); save(); toast(T("pb.saved")); });
-  host.querySelectorAll("[data-delpb]").forEach(b=>b.onclick=()=>{ const n=b.dataset.delpb; if(confirm("¿Eliminar la jugada "+n+"? No borra los trades ni su etiqueta.")){ delete DB.playbooks[n]; save(); renderPlaybooks(); } });
+  host.querySelectorAll("[data-delpb]").forEach(b=>b.onclick=()=>{ const n=b.dataset.delpb; if(confirm(fmt(T("pb.delConfirm"),{n}))){ delete DB.playbooks[n]; save(); renderPlaybooks(); } });
 }
 
 // ---------- NOTEBOOK (notes + images in IndexedDB) ----------
@@ -1639,7 +1566,6 @@ function stPath(key){ return (user?user.id:"anon")+"/"+key; }
 async function stUpload(key,blob){ if(!user)return; try{ await sb.storage.from(IMGBUCKET).upload(stPath(key),blob,{upsert:true,contentType:(blob&&blob.type)||"image/png"}); }catch(e){ console.warn("stUpload",e); } }
 async function stDownload(key){ if(!user)return null; try{ const {data,error}=await sb.storage.from(IMGBUCKET).download(stPath(key)); if(error)throw error; return data; }catch(e){ return null; } }
 async function stRemove(key){ if(!user)return; try{ await sb.storage.from(IMGBUCKET).remove([stPath(key)]); }catch(e){} }
-const NOTE_TPL=`<b>🎯 Plan de sesión</b><br>Mercado: <br>Contexto: <br><br><b>Objetivos</b><ul><li>Buena gestión de riesgo</li><li></li></ul><b>Trades</b><br><br><b>Cierre / lecciones</b><br><br>`;
 function stripImgSrc(html){ const d=document.createElement("div"); d.innerHTML=html; d.querySelectorAll('img[data-imgkey]').forEach(im=>im.removeAttribute('src')); return d.innerHTML; }
 function hydrateImgs(el){ el.querySelectorAll('img[data-imgkey]').forEach(im=>{ const k=im.dataset.imgkey; idbGet(k).then(b=>{ if(b){ im.src=URL.createObjectURL(b); return; } stDownload(k).then(d=>{ if(d){ idbPut(k,d).catch(()=>{}); im.src=URL.createObjectURL(d); } }); }).catch(()=>{ stDownload(k).then(d=>{ if(d) im.src=URL.createObjectURL(d); }); }); }); }
 function insertImg(file,doSave){ const key="img"+Date.now().toString(36)+Math.floor(Math.random()*1e4); idbPut(key,file).then(()=>{ stUpload(key,file); const url=URL.createObjectURL(file); document.execCommand('insertHTML',false,`<img data-imgkey="${key}" src="${url}" style="max-width:100%;border-radius:8px;margin:6px 0">`); doSave(); }); }
@@ -2002,13 +1928,11 @@ function render(){
   if(tab==="overview")renderOverview();
   else if(tab==="checkin")renderCheckin();
   else if(tab==="leaks")renderLeaks();
-  else if(tab==="breakdown")renderBreakdown();
   else if(tab==="score")renderScore();
   else if(tab==="playbooks")renderPlaybooks();
   else if(tab==="journal")renderJournal();
   else if(tab==="positions")renderPositions();
   else if(tab==="notes")renderNotes();
-  else if(tab==="weekly")renderWeekly();
   else if(tab==="progress")renderProgress();
   else if(tab==="calendar")renderCalendar();
   else if(tab==="risk")renderRisk();
@@ -2034,7 +1958,7 @@ $("#admBtn").onclick=showAdmin;
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
 $("#ctxBtn").onclick=showContextModal;
 $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
-$("#wipeBtn").onclick=()=>{ if(confirm("¿Borrar TODOS los trades y etiquetas guardados en este navegador?")){DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast("Todo borrado.");} };
+$("#wipeBtn").onclick=()=>{ if(confirm(T("io.wipeConfirm"))){DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped"));} };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
 
 // ---------- auth / arranque en la nube ----------
@@ -2116,7 +2040,9 @@ async function onSession(session){
   const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
   if(!DB.settings.onboarded) showOnboard();
   maybeRemindCheckin();
-  const ab=$("#admBtn"); if(ab) ab.classList.toggle("hide", user.email!==ADMIN_EMAIL);
+  const isAdmin=user.email===ADMIN_EMAIL;
+  const ab=$("#admBtn"); if(ab) ab.classList.toggle("hide", !isAdmin);
+  const fbb=$("#fbBtn"); if(fbb) fbb.classList.toggle("hide", isAdmin);
 }
 // Migración: mover viejos blobs del journal de localStorage → IndexedDB y liberar el cupo (para que quepa el token de sesión)
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
