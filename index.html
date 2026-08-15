@@ -320,7 +320,8 @@ const I18N={
   "dim.side":"side","dim.session":"session","dim.symbol":"symbol","dim.hour":"hour (CT)","dim.weekday":"weekday","dim.setup":"setup","dim.size":"size","side.long":"longs","side.short":"shorts","size.lots":"lots",
   "ins.dim":"By {dim}: best is **{bk}** ({bnet}, {bn} trades, {bwr}%) · worst **{wk}** ({wnet}, {wwr}%).","ins.decay":"First 3 trades of the day: **{ee}/trade** ({en}). From the 4th on: **{le}/trade** ({ln}). {tail}","ins.decayBad":"Over-trading costs you — the edge fades after the first ones.","ins.decayMid":"You perform a bit better early in the day.","ins.decayOk":"You hold up well all day.","ins.tilt":"After a LOSS, your next trade averages **{al}** ({aln}×). After a WIN: **{aw}** ({awn}×). {tail}","ins.tiltBad":"Tilt/revenge signal: the trade after a loss is your most expensive.","ins.tiltOk":"You react well to losses.","ins.conc":"Concentration: your 3 best trades add **{top3}**; your 3 worst **{bot3}**. {tail}","ins.concBad":"Without your 3 worst your result would change completely — loss size is your biggest lever.","ins.concOk":"Neither gains nor losses depend on a handful of trades — good sign.","ins.cons":"Consistency: **{posD}/{total} green days** ({pct}%). Best {best} · worst {worst}.",
   "foc.decay":"Cut the day shorter: your performance drops after the first trades. Set a max trades/day.","foc.tilt":"Circuit-breaker: after a loss (especially 2 in a row), pause — that's your most expensive trade.","foc.dim":"Trim or avoid **{k}** — that's where you consistently lose most.","foc.conc":"Set a max $ stop per trade and respect it — loss size is your biggest lever.","foc.revenge":"FIXED size; no sizing up after a loss.","foc.chop":"Less is more: in range/chop, stay out.",
-  "rep.title":"REPORT — {p}","rep.stats":"{n} trades · Net {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Best day {bd} {bn} · Worst day {wd} {wn} · Avg day {avg}","rep.whatData":"WHAT YOUR DATA SAYS:","rep.mainLeak":"MAIN LEAK: ","rep.noLeak":"no critical leak in the period","rep.whereFocus":"WHERE TO FOCUS (per your numbers):","rep.whatDataH":"What your data says","rep.needMore":"Import more trades (≥4) to generate insights.","rep.mainLeakH":"Main leak","rep.whereFocusH":"Where to focus (per your numbers)","rep.copyableH":"Copyable report","rep.copyBtn":"Copy report","rep.copied":"Report copied.","rep.copyFail":"Couldn't copy."
+  "rep.title":"REPORT — {p}","rep.stats":"{n} trades · Net {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Best day {bd} {bn} · Worst day {wd} {wn} · Avg day {avg}","rep.whatData":"WHAT YOUR DATA SAYS:","rep.mainLeak":"MAIN LEAK: ","rep.noLeak":"no critical leak in the period","rep.whereFocus":"WHERE TO FOCUS (per your numbers):","rep.whatDataH":"What your data says","rep.needMore":"Import more trades (≥4) to generate insights.","rep.mainLeakH":"Main leak","rep.whereFocusH":"Where to focus (per your numbers)","rep.copyableH":"Copyable report","rep.copyBtn":"Copy report","rep.copied":"Report copied.","rep.copyFail":"Couldn't copy.",
+  "emo.Calma":"Calm","emo.Aburrido":"Bored","emo.FOMO":"FOMO","emo.Revancha":"Revenge","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"With bias","aln.Contra":"Against","aln.Neutro":"Neutral"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -401,11 +402,13 @@ const I18N={
   "dim.side":"lado","dim.session":"sesión","dim.symbol":"símbolo","dim.hour":"hora (CT)","dim.weekday":"día de la semana","dim.setup":"setup","dim.size":"tamaño","side.long":"largos","side.short":"cortos","size.lots":"lotes",
   "ins.dim":"Por {dim}: lo mejor son **{bk}** ({bnet}, {bn} trades, {bwr}%) · lo peor **{wk}** ({wnet}, {wwr}%).","ins.decay":"Primeros 3 trades del día: **{ee}/trade** ({en}). Del 4º en adelante: **{le}/trade** ({ln}). {tail}","ins.decayBad":"Operar de más te cuesta — el edge se agota tras los primeros.","ins.decayMid":"Rindes algo mejor al principio del día.","ins.decayOk":"Aguantas bien todo el día.","ins.tilt":"Tras una PÉRDIDA, tu siguiente trade promedia **{al}** ({aln}×). Tras una GANANCIA: **{aw}** ({awn}×). {tail}","ins.tiltBad":"Señal de tilt/revancha: el trade tras perder es tu más caro.","ins.tiltOk":"Reaccionas bien a las pérdidas.","ins.conc":"Concentración: tus 3 mejores trades suman **{top3}**; tus 3 peores **{bot3}**. {tail}","ins.concBad":"Sin tus 3 peores tu resultado cambiaría por completo — el tamaño de la pérdida es tu mayor palanca.","ins.concOk":"Ni ganancias ni pérdidas dependen de un puñado de trades — buena señal.","ins.cons":"Consistencia: **{posD}/{total} días en verde** ({pct}%). Mejor {best} · peor {worst}.",
   "foc.decay":"Corta el día antes: tu rendimiento cae tras los primeros trades. Fija un máximo de trades/día.","foc.tilt":"Circuit-breaker: tras una pérdida (sobre todo 2 seguidas), pausa — ahí está tu trade más caro.","foc.dim":"Recorta o evita **{k}** — es donde más pierdes de forma consistente.","foc.conc":"Define un stop máximo por trade en $ y respétalo — el tamaño de la pérdida es tu mayor palanca.","foc.revenge":"Tamaño FIJO; nada de subir el tamaño tras perder.","foc.chop":"Menos es más: en rango/chop, fuera.",
-  "rep.title":"INFORME — {p}","rep.stats":"{n} trades · Neto {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Mejor día {bd} {bn} · Peor día {wd} {wn} · Día medio {avg}","rep.whatData":"QUÉ DICEN TUS DATOS:","rep.mainLeak":"FUGA PRINCIPAL: ","rep.noLeak":"sin fuga crítica en el periodo","rep.whereFocus":"DÓNDE ENFOCAR (según tus números):","rep.whatDataH":"Qué dicen tus datos","rep.needMore":"Importa más trades (≥4) para generar insights.","rep.mainLeakH":"Fuga principal","rep.whereFocusH":"Dónde enfocar (según tus números)","rep.copyableH":"Informe copiable","rep.copyBtn":"Copiar informe","rep.copied":"Informe copiado.","rep.copyFail":"No se pudo copiar."
+  "rep.title":"INFORME — {p}","rep.stats":"{n} trades · Neto {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Mejor día {bd} {bn} · Peor día {wd} {wn} · Día medio {avg}","rep.whatData":"QUÉ DICEN TUS DATOS:","rep.mainLeak":"FUGA PRINCIPAL: ","rep.noLeak":"sin fuga crítica en el periodo","rep.whereFocus":"DÓNDE ENFOCAR (según tus números):","rep.whatDataH":"Qué dicen tus datos","rep.needMore":"Importa más trades (≥4) para generar insights.","rep.mainLeakH":"Fuga principal","rep.whereFocusH":"Dónde enfocar (según tus números)","rep.copyableH":"Informe copiable","rep.copyBtn":"Copiar informe","rep.copied":"Informe copiado.","rep.copyFail":"No se pudo copiar.",
+  "emo.Calma":"Calma","emo.Aburrido":"Aburrido","emo.FOMO":"FOMO","emo.Revancha":"Revancha","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"Con sesgo","aln.Contra":"Contra","aln.Neutro":"Neutro"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
 function fmt(s,o){ return String(s).replace(/\{(\w+)\}/g,(_,k)=>o[k]!=null?o[k]:""); }
+function vLabel(p,v){ if(v==null||v==="")return v; const k=p+"."+v, r=T(k); return r===k?v:r; }
 function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); }
 function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); const g=$("#greet"); if(g&&user) g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]); if(user) render(); }
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
@@ -777,8 +780,8 @@ function detectLeaks(TR){
   if(tagged.length>=3){
     const byE={}; tagged.forEach(t=>{const e=DB.tags[tid(t)].emo; (byE[e]=byE[e]||{n:0,net:0}); byE[e].n++; byE[e].net+=t.pnl;});
     const worst=Object.entries(byE).sort((a,b)=>a[1].net-b[1].net)[0];
-    if(worst&&worst[1].net<0) L.push({sev:"hi", metric:money(worst[1].net), title:fmt(T("lk.emo.t"),{e:worst[0]}),
-      why:fmt(T("lk.emo.w"),{e:worst[0],n:worst[1].n,net:money(worst[1].net)})});
+    if(worst&&worst[1].net<0) L.push({sev:"hi", metric:money(worst[1].net), title:fmt(T("lk.emo.t"),{e:vLabel("emo",worst[0])}),
+      why:fmt(T("lk.emo.w"),{e:vLabel("emo",worst[0]),n:worst[1].n,net:money(worst[1].net)})});
   } else {
     L.push({sev:"ok", metric:"—", title:T("lk.emo.t0"), why:T("lk.emo.w0")});
   }
@@ -953,9 +956,9 @@ function renderBreakdown(){
 }
 function dayTradeRows(arr){
   return arr.map(t=>{ const id=tid(t), tg=DB.tags[id]||{}, cd=ctDisp(t);
-    const emoChips=EMO.map(e=>`<button class="chip ${e==='Calma'?'calm':''}" data-id="${id}" data-k="emo" data-v="${e}" aria-pressed="${tg.emo===e}">${e}</button>`).join("");
-    const panChips=PANEL.map(p=>`<button class="chip ${p==='VALID'?'v':p==='WAIT'?'w':'c'}" data-id="${id}" data-k="panel" data-v="${p}" aria-pressed="${tg.panel===p}">${p}</button>`).join("");
-    const alnChips=ALIGN.map(a=>`<button class="chip ${a==='Con sesgo'?'calm':a==='Contra'?'c':''}" data-id="${id}" data-k="align" data-v="${a}" aria-pressed="${tg.align===a}">${a}</button>`).join("");
+    const emoChips=EMO.map(e=>`<button class="chip ${e==='Calma'?'calm':''}" data-id="${id}" data-k="emo" data-v="${e}" aria-pressed="${tg.emo===e}">${vLabel("emo",e)}</button>`).join("");
+    const panChips=PANEL.map(p=>`<button class="chip ${p==='VALID'?'v':p==='WAIT'?'w':'c'}" data-id="${id}" data-k="panel" data-v="${p}" aria-pressed="${tg.panel===p}">${vLabel("pan",p)}</button>`).join("");
+    const alnChips=ALIGN.map(a=>`<button class="chip ${a==='Con sesgo'?'calm':a==='Contra'?'c':''}" data-id="${id}" data-k="align" data-v="${a}" aria-pressed="${tg.align===a}">${vLabel("aln",a)}</button>`).join("");
     return `<tr>
       <td class="mono small">${cd.hm}</td>
       <td><span class="tag ${t.side==='long'?'L':'S'}">${t.side==='long'?'L':'S'}</span> <span class="mono small">${t.sym} ×${t.qty}</span><br><span class="muted small">${t.entry}→${t.exit}${t.dur?' · '+t.dur:''}</span></td>
@@ -1195,13 +1198,13 @@ function renderCheckin(){
   const days=[...new Set(scoped().map(t=>t.tday||t.date))].sort();
   const latest=days[days.length-1]||tradingDay({date:new Date().toISOString().slice(0,10),time:"18:00:00"});
   const cur=DB.checkins[latest]||{};
-  const moodChips=EMO.map(e=>`<button class="chip ${e==='Calma'?'calm':''}" data-ci="mood" data-v="${e}" aria-pressed="${cur.mood===e}">${e}</button>`).join("");
+  const moodChips=EMO.map(e=>`<button class="chip ${e==='Calma'?'calm':''}" data-ci="mood" data-v="${e}" aria-pressed="${cur.mood===e}">${vLabel("emo",e)}</button>`).join("");
   const hist=Object.keys(DB.checkins).sort().reverse().map(d=>{ const c=DB.checkins[d]; const dd=netByDay[d];
-    return `<tr><td class="mono small">${d}</td><td>${c.mood||'—'}</td><td class="small">${(c.plan||'').replace(/</g,'&lt;')||'—'}</td>
+    return `<tr><td class="mono small">${d}</td><td>${c.mood?vLabel("emo",c.mood):'—'}</td><td class="small">${(c.plan||'').replace(/</g,'&lt;')||'—'}</td>
       <td class="mono ${dd?cls(dd.net):'muted'}">${dd?money1(dd.net):'—'}</td>
       <td>${dd?(dd.disciplined?'<span class="pass ok">✓</span>':'<span class="pass no">✗</span>'):'<span class="pass na">—</span>'}</td></tr>`;}).join("");
   const byMood={}; Object.keys(DB.checkins).forEach(d=>{const c=DB.checkins[d],dd=netByDay[d]; if(c.mood&&dd){(byMood[c.mood]=byMood[c.mood]||{n:0,net:0}); byMood[c.mood].n++; byMood[c.mood].net+=dd.net;}});
-  const corr=Object.entries(byMood).sort((a,b)=>a[1].net-b[1].net).map(([m,o])=>`<div class="r"><span class="lab">${m} <span class="muted small">(${o.n} ${T("dDays")})</span></span><span class="v ${cls(o.net)}">${money1(o.net)}</span></div>`).join("");
+  const corr=Object.entries(byMood).sort((a,b)=>a[1].net-b[1].net).map(([m,o])=>`<div class="r"><span class="lab">${vLabel("emo",m)} <span class="muted small">(${o.n} ${T("dDays")})</span></span><span class="v ${cls(o.net)}">${money1(o.net)}</span></div>`).join("");
   host.innerHTML=`
     <div class="card"><h2>${fmt(T("ci.title"),{d:latest})}</h2>
       <p class="small muted" style="margin:0 0 10px">${T("ci.lead")}</p>
