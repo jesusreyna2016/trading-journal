@@ -351,7 +351,8 @@ const I18N={
   "card.weeklyTitle":"Weekly summary (shareable)","card.disc":"Discipline","card.win":"Win","card.bestWorst":"Best day {bd} · Worst {wd}","card.tagline":"Discipline over results.","card.savePng":"💾 Save image","card.copyImg":"📋 Copy","card.copied":"Image copied.","card.copyFail":"Couldn't copy the image.",
   "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on — I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked — I'll remind you inside the app.",
   "tilt.title":"Today's tilt risk","tilt.low":"LOW","tilt.med":"MEDIUM","tilt.high":"HIGH","tilt.recLow":"Neutral conditions — follow your plan.","tilt.recMed":"Careful — respect the circuit-breaker (stop at 2).","tilt.recHigh":"High risk — trade half size or stop after 1 loss.","tilt.rLastBroke":"you broke rules last session","tilt.rLastRed":"last session was red","tilt.rStreak":"{n} tough days in a row","tilt.rMood":"you arrive in “{m}”","tilt.why":"Why:","tilt.noData":"Import some trades to compute your tilt risk.",
-  "clean.title":"🎯 Clean days — your real scoreboard","clean.body":"A clean day = you followed all your rules, win or lose. That's the win you control. Chase clean days; the P&L follows.","clean.streak":"Clean streak","clean.rate":"Clean days"
+  "clean.title":"🎯 Clean days — your real scoreboard","clean.body":"A clean day = you followed all your rules, win or lose. That's the win you control. Chase clean days; the P&L follows.","clean.streak":"Clean streak","clean.rate":"Clean days",
+  "rules.title":"🧠 Your rules (from your own data)","rules.intro":"Not generic rules — what YOUR history proves. Adopt the ones you trust.","rules.adopted":"Rule adopted.","rule.maxTrades":"Max 3 trades a day — your 4th+ trades average <b>{v}</b>.","rule.adoptMax":"Adopt","rule.noAgainst":"Never trade against the bias — {n} such trades net <b>{net}</b>.","rule.onlyEdge":"Only trade valid edges — no-man's-land ({n}) nets <b>{net}</b>.","rule.sideLeak":"Skip {side} unless it's a clear edge — they net <b>{net}</b>.","rule.avoidWorst":"Cut or avoid <b>{k}</b> — nets {net}.","rule.circuitBreak":"Stop after a loss — your next trade averages <b>{net}</b>."
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -443,7 +444,8 @@ const I18N={
   "card.weeklyTitle":"Resumen semanal (compartible)","card.disc":"Disciplina","card.win":"Win","card.bestWorst":"Mejor día {bd} · Peor {wd}","card.tagline":"Disciplina antes que resultados.","card.savePng":"💾 Guardar imagen","card.copyImg":"📋 Copiar","card.copied":"Imagen copiada.","card.copyFail":"No se pudo copiar la imagen.",
   "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado — te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas — te recordaré dentro de la app.",
   "tilt.title":"Riesgo de tilt hoy","tilt.low":"BAJO","tilt.med":"MEDIO","tilt.high":"ALTO","tilt.recLow":"Condiciones neutrales — sigue tu plan.","tilt.recMed":"Cuidado — respeta el circuit-breaker (para a las 2).","tilt.recHigh":"Riesgo alto — media posición o para tras 1 pérdida.","tilt.rLastBroke":"rompiste reglas la última sesión","tilt.rLastRed":"la última sesión fue roja","tilt.rStreak":"{n} días difíciles seguidos","tilt.rMood":"llegas en “{m}”","tilt.why":"Por qué:","tilt.noData":"Importa trades para calcular tu riesgo de tilt.",
-  "clean.title":"🎯 Días limpios — tu marcador real","clean.body":"Un día limpio = seguiste todas tus reglas, ganes o pierdas. Ese es el triunfo que controlas. Persigue días limpios; el P&L viene detrás.","clean.streak":"Racha limpia","clean.rate":"Días limpios"
+  "clean.title":"🎯 Días limpios — tu marcador real","clean.body":"Un día limpio = seguiste todas tus reglas, ganes o pierdas. Ese es el triunfo que controlas. Persigue días limpios; el P&L viene detrás.","clean.streak":"Racha limpia","clean.rate":"Días limpios",
+  "rules.title":"🧠 Tus reglas (según tus propios datos)","rules.intro":"No son reglas genéricas — son lo que TU histórico demuestra. Adopta las que te convenzan.","rules.adopted":"Regla adoptada.","rule.maxTrades":"Máx 3 trades al día — del 4º en adelante promedias <b>{v}</b>.","rule.adoptMax":"Adoptar","rule.noAgainst":"Nunca operes contra el sesgo — {n} trades así suman <b>{net}</b>.","rule.onlyEdge":"Opera solo bordes válidos — tierra de nadie ({n}) suma <b>{net}</b>.","rule.sideLeak":"Evita {side} salvo borde claro — suman <b>{net}</b>.","rule.avoidWorst":"Recorta o evita <b>{k}</b> — suma {net}.","rule.circuitBreak":"Para tras una pérdida — tu siguiente trade promedia <b>{net}</b>."
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -1131,6 +1133,26 @@ function generateInsights(TR){
   }
   return out.sort((a,b)=>b.score-a.score);
 }
+// Reglas personales cuantificadas derivadas de los datos del propio usuario.
+function personalRules(TR){
+  const out=[]; if(TR.length<5) return out;
+  const byDay=byKey(TR,t=>t.tday);
+  let eN=0,eNet=0,lN=0,lNet=0;
+  Object.values(byDay).forEach(a=>{const s=a.slice().sort((x,y)=>x.time<y.time?-1:1); s.forEach((t,i)=>{ if(i<3){eNet+=t.pnl;eN++;} else {lNet+=t.pnl;lN++;} });});
+  if(lN>=3 && lNet/lN<0) out.push({text:fmt(T("rule.maxTrades"),{v:money1(lNet/lN)}), adopt:{field:"overtrade",value:4,label:T("rule.adoptMax")}});
+  const ag=TR.filter(t=>{const g=DB.tags[tid(t)];return g&&g.align==="Contra";}); const agNet=ag.reduce((s,t)=>s+t.pnl,0);
+  if(ag.length>=3 && agNet<0) out.push({text:fmt(T("rule.noAgainst"),{n:ag.length,net:money(agNet)})});
+  const nm=TR.filter(t=>{const g=DB.tags[tid(t)];return g&&g.panel&&g.panel!=="VALID";}); const nmNet=nm.reduce((s,t)=>s+t.pnl,0);
+  if(nm.length>=3 && nmNet<0) out.push({text:fmt(T("rule.onlyEdge"),{n:nm.length,net:money(nmNet)})});
+  const longs=TR.filter(t=>t.side==="long"), shorts=TR.filter(t=>t.side==="short");
+  const lNetS=longs.reduce((s,t)=>s+t.pnl,0), sNet=shorts.reduce((s,t)=>s+t.pnl,0);
+  if(longs.length>=3 && lNetS<0 && sNet>lNetS) out.push({text:fmt(T("rule.sideLeak"),{side:T("side.long"),net:money(lNetS)})});
+  const ins=generateInsights(TR).filter(i=>i.kind==="dim"&&i.worstNet<0);
+  if(ins[0]) out.push({text:fmt(T("rule.avoidWorst"),{k:ins[0].worstK,net:money(ins[0].worstNet)})});
+  let alN=0,alNet=0; Object.values(byDay).forEach(a=>{const s=a.slice().sort((x,y)=>x.time<y.time?-1:1); for(let i=1;i<s.length;i++){ if(s[i-1].pnl<0){alNet+=s[i].pnl;alN++;} }});
+  if(alN>=3 && alNet<0) out.push({text:fmt(T("rule.circuitBreak"),{net:money1(alNet/alN)})});
+  return out;
+}
 function renderReport(){
   const TR=activeTrades(), M=metrics(TR);
   if(!TR.length){ $("#view-report").innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
@@ -1382,6 +1404,8 @@ function renderProgress(){
   const TRw=scoped().filter(t=>isoWeek(t.tday||t.date)===curW); const Mw=metrics(TRw);
   const wdNets=wd.map(d=>d.net); const bestD=wdNets.length?Math.max(...wdNets):0, worstD=wdNets.length?Math.min(...wdNets):0;
   const cardD={ week:curW, netLabel:T("net"), net:last.net, netStr:money1(last.net), discLabel:T("card.disc"), discPct:Math.round(last.discPct), tradesLabel:T("th.Trades"), trades:Mw.n, winLabel:T("card.win"), winRate:Mw.winrate.toFixed(0), streakLabel:T("streak"), streak:streakDisc(allW), bestWorst:fmt(T("card.bestWorst"),{bd:money(bestD),wd:money(worstD)}), tagline:T("card.tagline") };
+  const rls=personalRules(scoped());
+  const rulesHtml=rls.length?`<div class="card section" style="border-color:var(--calm)"><h2>${T("rules.title")}</h2><p class="small muted" style="margin:0 0 8px">${T("rules.intro")}</p>${rls.map((r,i)=>`<div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--hair)"><span class="small">• ${mdb(r.text)}</span>${r.adopt?`<button class="btn small" data-adopt="${i}" style="flex:none">${r.adopt.label}</button>`:''}</div>`).join("")}</div>`:'';
   host.innerHTML=`
     <div class="card"><h2>${T("card.weeklyTitle")}</h2><div id="sumCardHost"></div>
       <div class="rowflex" style="gap:8px; margin-top:10px"><button class="btn small" id="sumSave">${T("card.savePng")}</button><button class="btn small ghost" id="sumCopy">${T("card.copyImg")}</button></div></div>
@@ -1403,6 +1427,7 @@ function renderProgress(){
       ${goalRow(fmt(T("pg.goalRr"),{v:g.rr}),last.rr?last.rr.toFixed(2):"—",(last.rr||0)/g.rr*100,last.rr>=g.rr,""+g.rr)}
       <div class="rowflex small muted" style="margin-top:12px">${T("pg.goalsLabel")} ${T("pg.gDisc")} <input type="number" id="gDisc" value="${g.disc}" style="width:56px"> · ${T("pg.gProc")} <input type="number" id="gProc" value="${g.proc}" style="width:56px"> · ${T("pg.gNomans")} <input type="number" id="gNo" value="${g.nomans}" style="width:48px"> · R:R <input type="number" id="gRr" value="${g.rr}" step="0.1" style="width:56px"> <button class="btn small" id="gApply">${T("apply")}</button></div>
     </div>
+    ${rulesHtml}
     <div class="card section"><h2>${T("pg.weekTrend")}</h2>
       <table><thead><tr><th>${T("pg.thWeek")}</th><th class="mono">${T("pg.gDisc")}</th><th class="mono">${T("pg.gProc")}</th><th class="mono">${T("pg.thNomans")}</th><th class="mono">${T("pg.thAgainst")}</th><th class="mono">R:R</th><th class="mono">${T("net")}</th></tr></thead>
       <tbody>${S.slice().reverse().map(s=>`<tr><td class="mono small">${s.w}</td><td class="mono">${Math.round(s.discPct)}%</td><td class="mono">${s.proc==null?'—':Math.round(s.proc)+'%'}</td><td class="mono ${s.nomans?'neg':'pos'}">${s.nomans}</td><td class="mono ${s.against?'neg':'pos'}">${s.against}</td><td class="mono">${s.rr?s.rr.toFixed(2):'—'}</td><td class="mono ${cls(s.net)}">${money(s.net)}</td></tr>`).join("")}</tbody></table></div>`;
@@ -1413,6 +1438,7 @@ function renderProgress(){
   $("#sumSave").onclick=()=>{ sc.toBlob(b=>{ if(!b)return; const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="week_"+curW+".png"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }); };
   $("#sumCopy").onclick=()=>{ try{ sc.toBlob(async b=>{ try{ await navigator.clipboard.write([new ClipboardItem({"image/png":b})]); toast(T("card.copied")); }catch(e){ toast(T("card.copyFail")); } }); }catch(e){ toast(T("card.copyFail")); } };
   $("#gApply").onclick=()=>{g.disc=+$("#gDisc").value||80;g.proc=+$("#gProc").value||80;g.nomans=+$("#gNo").value||2;g.rr=+$("#gRr").value||1.5;save();renderProgress();};
+  host.querySelectorAll("[data-adopt]").forEach(b=>b.onclick=()=>{ const r=rls[+b.dataset.adopt]; if(r&&r.adopt){ DB.settings[r.adopt.field]=r.adopt.value; save(); toast(T("rules.adopted")); renderProgress(); } });
 }
 
 // ---------- RISK PANEL ----------
