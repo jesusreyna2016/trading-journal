@@ -137,6 +137,19 @@
   @keyframes aspin{to{transform:rotate(360deg)}}
   #syncBadge{font-size:11.5px; color:var(--muted); min-width:70px; text-align:right}
   #userEmail{font-size:12px; color:var(--faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  @media (max-width:640px){
+    .app{padding:14px 12px 72px}
+    h1{font-size:20px}
+    .head{gap:10px} .head .actions{gap:6px}
+    .btn{padding:7px 11px; font-size:12.5px} .btn.small{padding:5px 9px}
+    #userEmail{display:none}
+    .card{padding:14px}
+    .authcard{padding:22px 18px}
+    .kpi{padding:12px 13px} .kpi .val{font-size:21px}
+    .kpis{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}
+    .tabs button{padding:9px 11px; font-size:13px}
+    table{font-size:12.5px} th,td{padding:6px 7px}
+  }
 </style>
 </head>
 <body>
@@ -193,12 +206,19 @@
 
   <div id="empty" class="card">
     <div style="font-size:17px; font-weight:700; color:var(--ink)" data-i18n="welcomeTitle">Bienvenido a tu journal 👋</div>
-    <div class="small muted" style="margin:6px 0 16px" data-i18n="welcomeSub">Privado y gratis — solo tú ves tus datos. Registra tus trades, detecta tus fugas y sigue tu rutina diaria.</div>
+    <div class="small muted" style="margin:6px 0 14px" data-i18n="welcomeSub">Privado y gratis — solo tú ves tus datos. Registra tus trades, detecta tus fugas y sigue tu rutina diaria.</div>
+    <div class="eyebrow" style="margin-bottom:6px" data-i18n="ob3.title">Cómo funciona — 3 pasos</div>
+    <ol class="small muted" style="margin:0 0 16px; padding-left:20px; line-height:1.9">
+      <li data-i18n-html="ob3.s1"><b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).</li>
+      <li data-i18n-html="ob3.s2"><b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.</li>
+      <li data-i18n-html="ob3.s3"><b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.</li>
+    </ol>
     <div class="drop" id="drop">
       <div style="font-size:15px; font-weight:600; color:var(--ink)" data-i18n="dropTitle">Arrastra aquí tu CSV de trades</div>
       <div class="small" style="margin-top:6px" data-i18n-html="dropSub">o pulsa <b>Importar CSV</b> arriba (export de tu broker: Zella / Tradovate). También puedes restaurar un backup (JSON). Tus datos se guardan en la nube, privados.</div>
     </div>
-    <div class="rowflex" style="margin-top:14px; justify-content:center">
+    <div class="small muted" style="margin-top:14px; text-align:center" data-i18n-html="ob3.noTrades">¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato.</div>
+    <div class="rowflex" style="margin-top:8px; justify-content:center">
       <button class="btn" id="startRoutine" data-i18n="startRoutine">📋 Empezar por la Rutina diaria</button>
     </div>
   </div>
@@ -238,7 +258,7 @@ function _aPut(k,v){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db
 function _aDel(k){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db.transaction("kv","readwrite"); tx.objectStore("kv").delete(k); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }catch(e){ res(); } })).catch(()=>{}); }
 const authStore={ getItem:(k)=>{ let lv=null; try{lv=localStorage.getItem(k);}catch(e){} if(lv!=null) return lv; return _aGet(k); }, setItem:(k,v)=>{ try{localStorage.setItem(k,v);}catch(e){} return _aPut(k,v); }, removeItem:(k)=>{ try{localStorage.removeItem(k);}catch(e){} return _aDel(k); } };
 const sb=supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:authStore}});
-let user=null, _cloudT=null;
+let user=null, _cloudT=null, _syncStamp=null, _conflictShown=false;
 // ---------- i18n (EN por defecto + ES) ----------
 const I18N={
  en:{
@@ -323,7 +343,10 @@ const I18N={
   "rep.title":"REPORT — {p}","rep.stats":"{n} trades · Net {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Best day {bd} {bn} · Worst day {wd} {wn} · Avg day {avg}","rep.whatData":"WHAT YOUR DATA SAYS:","rep.mainLeak":"MAIN LEAK: ","rep.noLeak":"no critical leak in the period","rep.whereFocus":"WHERE TO FOCUS (per your numbers):","rep.whatDataH":"What your data says","rep.needMore":"Import more trades (≥4) to generate insights.","rep.mainLeakH":"Main leak","rep.whereFocusH":"Where to focus (per your numbers)","rep.copyableH":"Copyable report","rep.copyBtn":"Copy report","rep.copied":"Report copied.","rep.copyFail":"Couldn't copy.",
   "emo.Calma":"Calm","emo.Aburrido":"Bored","emo.FOMO":"FOMO","emo.Revancha":"Revenge","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"With bias","aln.Contra":"Against","aln.Neutro":"Neutral",
   "setup.Quiebre POC":"Break POC","setup.Rebote VAL":"Bounce VAL","setup.Rebote VAH":"Bounce VAH","setup.Pivote":"Pivot","setup.Otro":"Other",
-  "rt.starterNote":"This is a starter template — press ✏️ Edit to make it your own (add, remove or change blocks and items). Your daily check-offs are saved."
+  "rt.starterNote":"This is a starter template — press ✏️ Edit to make it your own (add, remove or change blocks and items). Your daily check-offs are saved.",
+  "sync.saved":"✓ saved","sync.saving":"saving…","sync.err":"⚠ not saved","sync.conflict":"⚠ conflict","sync.offline":"Offline — using local copy",
+  "conf.title":"Newer version on another device","conf.body":"This journal was updated more recently on another device (or tab). If you overwrite, you'll lose those changes.","conf.reload":"Reload the newer version","conf.overwrite":"Overwrite with what's here",
+  "ob3.title":"How it works — 3 steps","ob3.s1":"<b>Import</b> your trades — a CSV from your broker (Tradovate / Zella).","ob3.s2":"<b>Tag</b> each trade: emotion, valid edge, setup, process.","ob3.s3":"<b>See</b> your leaks, discipline score and weekly progress.","ob3.noTrades":"No trades yet? Start with your <b>Daily Routine</b> — it works without any data."
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -407,7 +430,10 @@ const I18N={
   "rep.title":"INFORME — {p}","rep.stats":"{n} trades · Neto {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Mejor día {bd} {bn} · Peor día {wd} {wn} · Día medio {avg}","rep.whatData":"QUÉ DICEN TUS DATOS:","rep.mainLeak":"FUGA PRINCIPAL: ","rep.noLeak":"sin fuga crítica en el periodo","rep.whereFocus":"DÓNDE ENFOCAR (según tus números):","rep.whatDataH":"Qué dicen tus datos","rep.needMore":"Importa más trades (≥4) para generar insights.","rep.mainLeakH":"Fuga principal","rep.whereFocusH":"Dónde enfocar (según tus números)","rep.copyableH":"Informe copiable","rep.copyBtn":"Copiar informe","rep.copied":"Informe copiado.","rep.copyFail":"No se pudo copiar.",
   "emo.Calma":"Calma","emo.Aburrido":"Aburrido","emo.FOMO":"FOMO","emo.Revancha":"Revancha","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"Con sesgo","aln.Contra":"Contra","aln.Neutro":"Neutro",
   "setup.Quiebre POC":"Quiebre POC","setup.Rebote VAL":"Rebote VAL","setup.Rebote VAH":"Rebote VAH","setup.Pivote":"Pivote","setup.Otro":"Otro",
-  "rt.starterNote":"Esta es una plantilla de arranque — pulsa ✏️ Editar para hacerla tuya (añade, quita o cambia bloques e ítems). Lo que marcas cada día se guarda."
+  "rt.starterNote":"Esta es una plantilla de arranque — pulsa ✏️ Editar para hacerla tuya (añade, quita o cambia bloques e ítems). Lo que marcas cada día se guarda.",
+  "sync.saved":"✓ guardado","sync.saving":"guardando…","sync.err":"⚠ sin guardar","sync.conflict":"⚠ conflicto","sync.offline":"Sin conexión — usando copia local",
+  "conf.title":"Versión más nueva en otro dispositivo","conf.body":"Este journal se actualizó más recientemente en otro dispositivo (o pestaña). Si sobrescribes, perderás esos cambios.","conf.reload":"Cargar la versión más nueva","conf.overwrite":"Sobrescribir con lo de aquí",
+  "ob3.title":"Cómo funciona — 3 pasos","ob3.s1":"<b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).","ob3.s2":"<b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.","ob3.s3":"<b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.","ob3.noTrades":"¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato."
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -458,18 +484,32 @@ function cacheLocal(){ try{ idbPut("cache_"+KEY, JSON.stringify(DB)).catch(()=>{
 async function loadLocal(){ try{ const c=await idbGet("cache_"+KEY); if(c) return normalizeDB(JSON.parse(c)); }catch(e){} return load(); }
 async function loadCloud(){
   try{
-    const {data,error}=await sb.from('journals').select('data').eq('user_id',user.id).maybeSingle();
+    const {data,error}=await sb.from('journals').select('data,updated_at').eq('user_id',user.id).maybeSingle();
     if(error) throw error;
-    if(data && data.data){ DB=normalizeDB(data.data); cacheLocal(); return; }
-  }catch(e){ console.warn('loadCloud',e); toast('Sin conexión — usando copia local'); }
+    if(data && data.data){ DB=normalizeDB(data.data); _syncStamp=data.updated_at||null; cacheLocal(); return; }
+    _syncStamp=null;
+  }catch(e){ console.warn('loadCloud',e); toast(T("sync.offline")); }
   DB=await loadLocal();
 }
-function syncBadge(st){ const b=$("#syncBadge"); if(!b)return; b.textContent = st==='ok'?'✓ guardado' : st==='err'?'⚠ sin guardar' : st==='...'?'guardando…':''; b.style.color = st==='err'?'var(--neg)':'var(--muted)'; }
+function syncBadge(st){ const b=$("#syncBadge"); if(!b)return; b.textContent = st==='ok'?T("sync.saved") : st==='err'?T("sync.err") : st==='...'?T("sync.saving") : st==='conflict'?T("sync.conflict") : ''; b.style.color = (st==='err'||st==='conflict')?'var(--neg)':'var(--muted)'; }
 function scheduleCloud(){ if(!user)return; syncBadge('...'); clearTimeout(_cloudT); _cloudT=setTimeout(cloudSave,1200); }
 async function cloudSave(){
   if(!user)return;
-  try{ const {error}=await sb.from('journals').upsert({user_id:user.id, data:DB, updated_at:new Date().toISOString()}, {onConflict:'user_id'}); if(error)throw error; syncBadge('ok'); }
-  catch(e){ console.warn('cloudSave',e); syncBadge('err'); }
+  try{
+    // Guarda contra "el último que escribe gana": si la nube es más nueva que lo que cargamos, no pisar.
+    const {data:cur}=await sb.from('journals').select('updated_at').eq('user_id',user.id).maybeSingle();
+    if(cur && cur.updated_at && _syncStamp && cur.updated_at>_syncStamp){ syncBadge('conflict'); showConflict(); return; }
+    const stamp=new Date().toISOString();
+    const {error}=await sb.from('journals').upsert({user_id:user.id, data:DB, updated_at:stamp}, {onConflict:'user_id'}); if(error)throw error;
+    _syncStamp=stamp; syncBadge('ok');
+  }catch(e){ console.warn('cloudSave',e); syncBadge('err'); }
+}
+function showConflict(){ if(_conflictShown)return; _conflictShown=true;
+  openModal(`<div class="eyebrow">⚠</div><h1 style="margin:.1em 0 .5em; font-size:20px">${T("conf.title")}</h1>
+    <p class="small muted" style="margin:0 0 16px; line-height:1.5">${T("conf.body")}</p>
+    <div class="rowflex" style="gap:10px; flex-wrap:wrap"><button class="btn calm" id="cfReload" style="flex:1; justify-content:center; padding:11px">${T("conf.reload")}</button><button class="btn ghost" id="cfOver" style="flex:1; justify-content:center; padding:11px">${T("conf.overwrite")}</button></div>`, ()=>{_conflictShown=false;});
+  $("#cfReload").onclick=()=>location.reload();
+  $("#cfOver").onclick=async()=>{ closeModal(); _conflictShown=false; try{ const {data:cur}=await sb.from('journals').select('updated_at').eq('user_id',user.id).maybeSingle(); _syncStamp=(cur&&cur.updated_at)||new Date().toISOString(); }catch(e){ _syncStamp=new Date().toISOString(); } save(); };
 }
 function save(){ cacheLocal(); scheduleCloud(); }
 function toast(m){const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1800);}
