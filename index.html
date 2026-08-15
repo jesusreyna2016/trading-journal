@@ -38,6 +38,10 @@
   h1{font-size:23px; font-weight:800; margin:.1em 0 0; letter-spacing:-.02em}
   .head{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px}
   .head .actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .moremenu{position:relative}
+  .moremenu-pop{position:absolute; right:0; top:calc(100% + 6px); background:var(--surface); border:1px solid var(--hair); border-radius:10px; box-shadow:var(--shadow); padding:6px; display:flex; flex-direction:column; gap:4px; z-index:40; min-width:148px}
+  .moremenu-pop .btn{justify-content:flex-start; text-align:left; width:100%}
+  .moremenu-pop.hide{display:none}
   .btn{font-family:var(--sans); font-size:13px; font-weight:600; border-radius:8px; padding:8px 13px; cursor:pointer; border:1px solid var(--hair); background:var(--surface2); color:var(--ink)}
   .btn:hover{border-color:var(--faint)}
   .btn.calm{background:var(--calm); border-color:var(--calm); color:var(--calmink)}
@@ -196,11 +200,16 @@
       <button class="btn ghost small" id="ctxBtn" data-i18n="context" title="Analyst context (JSON)">＋ Contexto</button>
       <select id="acctSel" title="Account"></select>
       <select id="periodSel" title="Period"></select>
-      <button class="btn ghost small" id="backupBtn" data-i18n="backup" title="Backup (JSON)">⬇ Backup</button>
       <button class="btn ghost small" id="fbBtn" title="Feedback">💬</button>
       <button class="btn ghost small hide" id="admBtn" title="Admin">🛠</button>
-      <button class="btn ghost small" id="themeBtn" title="Theme">◐</button>
-      <button class="btn ghost small" id="wipeBtn" title="Erase all">🗑</button>
+      <div class="moremenu">
+        <button class="btn ghost small" id="moreBtn" title="More">⋯</button>
+        <div class="moremenu-pop hide" id="morePop">
+          <button class="btn ghost small" id="backupBtn" data-i18n="backup" title="Backup (JSON)">⬇ Backup</button>
+          <button class="btn ghost small" id="themeBtn" title="Theme">◐ Theme</button>
+          <button class="btn ghost small" id="wipeBtn" title="Erase all">🗑 Erase</button>
+        </div>
+      </div>
       <select id="langSelHead" class="langSel" title="Idioma / Language"><option value="en">EN</option><option value="es">ES</option></select>
       <span id="syncBadge" title="Save status"></span>
       <span id="userEmail" title="Session"></span>
@@ -1955,6 +1964,9 @@ $("#acctSel").addEventListener("change",e=>{acctFilter=e.target.value; render();
 $("#backupBtn").onclick=exportBackup;
 $("#fbBtn").onclick=showFeedback;
 $("#admBtn").onclick=showAdmin;
+$("#moreBtn").onclick=(e)=>{ e.stopPropagation(); $("#morePop").classList.toggle("hide"); };
+$("#morePop").addEventListener("click",()=>$("#morePop").classList.add("hide"));
+document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classList.contains("hide") && !e.target.closest(".moremenu")) p.classList.add("hide"); });
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
 $("#ctxBtn").onclick=showContextModal;
 $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
