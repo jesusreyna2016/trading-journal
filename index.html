@@ -376,7 +376,9 @@ const I18N={
   "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?).",
   "io.jsonUnknown":"Unrecognized JSON (context or backup).","io.backupDown":"Backup downloaded ({n} trades, {img} images).","io.restoreConfirm":"Restore backup? It replaces ALL current data in this browser.","io.restored":"Backup restored ({n} trades).","io.wipeConfirm":"Erase ALL trades and tags saved in this browser?","io.wiped":"All cleared.","pb.delConfirm":"Delete play {n}? It won't delete trades or their tags.",
   "fr.revenge":"revenge-sizing","fr.streak":"{n} losses in a row","fr.overtrade":"over-traded ({n})","fr.roundtrip":"round-trip","fr.plan":"didn't follow the plan (process <75%)",
-  "tt.import":"Import CSV","tt.context":"Analyst context (JSON)","tt.account":"Account","tt.period":"Period","tt.feedback":"Send feedback","tt.admin":"Admin panel","tt.more":"More","tt.backup":"Backup (JSON)","tt.theme":"Theme","tt.erase":"Erase everything","tt.saveStatus":"Save status","tt.session":"Session","tt.signout":"Sign out","tt.lang":"Language"
+  "tt.import":"Import CSV","tt.context":"Analyst context (JSON)","tt.account":"Account","tt.period":"Period","tt.feedback":"Send feedback","tt.admin":"Admin panel","tt.more":"More","tt.backup":"Backup (JSON)","tt.theme":"Theme","tt.erase":"Erase everything","tt.saveStatus":"Save status","tt.session":"Session","tt.signout":"Sign out","tt.lang":"Language",
+  "ci.bias":"Today's bias","bias.long":"Bullish","bias.short":"Bearish","bias.neutral":"Neutral","bias.notrade":"No-trade","ci.levels":"Key levels","ci.levelsPh":"Support / resistance, POC, VAH/VAL…",
+  "af.maxPerTrade":"Max loss per trade $","ac.violations":"⚠ {n} trade(s) over your max per-trade loss","mist.title":"Mistakes on this trade","mist.btn":"Mistakes","mist.saved":"Mistakes saved.","mist.top":"⚠ Your most-reported mistakes","mist.none":"No self-reported mistakes yet. Tag them on each trade in the Journal.","mist.close":"Done","m.early":"Entered early","m.noconfirm":"Didn't wait for confirmation","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL too tight","m.oversize":"Oversizing","m.earlyexit":"Exited early","m.noplan":"Didn't follow the plan","m.chase":"Chased price","m.moved_sl":"Moved my stop"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -477,7 +479,9 @@ const I18N={
   "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?).",
   "io.jsonUnknown":"JSON no reconocido (contexto o backup).","io.backupDown":"Backup descargado ({n} trades, {img} imágenes).","io.restoreConfirm":"¿Restaurar backup? Reemplaza TODOS los datos actuales de este navegador.","io.restored":"Backup restaurado ({n} trades).","io.wipeConfirm":"¿Borrar TODOS los trades y etiquetas guardados en este navegador?","io.wiped":"Todo borrado.","pb.delConfirm":"¿Eliminar la jugada {n}? No borra los trades ni su etiqueta.",
   "fr.revenge":"revenge-sizing","fr.streak":"{n} pérdidas seguidas","fr.overtrade":"sobreoperó ({n})","fr.roundtrip":"round-trip","fr.plan":"no siguió el plan (proceso <75%)",
-  "tt.import":"Importar CSV","tt.context":"Contexto del Analyst (JSON)","tt.account":"Cuenta","tt.period":"Periodo","tt.feedback":"Enviar feedback","tt.admin":"Panel admin","tt.more":"Más","tt.backup":"Backup (JSON)","tt.theme":"Tema","tt.erase":"Borrar todo","tt.saveStatus":"Estado de guardado","tt.session":"Sesión","tt.signout":"Salir","tt.lang":"Idioma"
+  "tt.import":"Importar CSV","tt.context":"Contexto del Analyst (JSON)","tt.account":"Cuenta","tt.period":"Periodo","tt.feedback":"Enviar feedback","tt.admin":"Panel admin","tt.more":"Más","tt.backup":"Backup (JSON)","tt.theme":"Tema","tt.erase":"Borrar todo","tt.saveStatus":"Estado de guardado","tt.session":"Sesión","tt.signout":"Salir","tt.lang":"Idioma",
+  "ci.bias":"Sesgo de hoy","bias.long":"Alcista","bias.short":"Bajista","bias.neutral":"Neutral","bias.notrade":"No operar","ci.levels":"Niveles clave","ci.levelsPh":"Soporte / resistencia, POC, VAH/VAL…",
+  "af.maxPerTrade":"Pérdida máx por trade $","ac.violations":"⚠ {n} trade(s) por encima de tu pérdida máx por trade","mist.title":"Errores en este trade","mist.btn":"Errores","mist.saved":"Errores guardados.","mist.top":"⚠ Tus errores más reportados","mist.none":"Aún no reportas errores. Etiquétalos en cada trade en el Diario.","mist.close":"Listo","m.early":"Entré temprano","m.noconfirm":"No esperé confirmación","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL muy ajustado","m.oversize":"Oversizing","m.earlyexit":"Salí temprano","m.noplan":"No seguí el plan","m.chase":"Perseguí el precio","m.moved_sl":"Moví el stop"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -618,7 +622,7 @@ function allFirms(){ const s=new Set(); (DB.ledger||[]).forEach(e=>{if(e.firm)s.
 // Formulario modal de cuenta (crear/editar). onDone(id) al guardar, onDone(null) al cancelar.
 function accountForm(id, onDone){
   const editing=!!(id&&DB.accounts[id]);
-  const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000,phase:"eval",status:"active"};
+  const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000,maxPerTrade:0,phase:"eval",status:"active"};
   const firms=allFirms();
   let done=false; const fin=(v)=>{ if(done)return; done=true; if(onDone)onDone(v); };
   openModal(`
@@ -637,6 +641,7 @@ function accountForm(id, onDone){
     <div class="rowflex" style="gap:10px; margin-top:12px">
       <div style="flex:1"><label class="small muted">${T("af.ddType")}</label><select id="afDdType" style="width:100%; margin-top:4px; padding:9px 11px"><option value="trailing"${a.ddType==='trailing'?' selected':''}>${T("dd.trailing")}</option><option value="static"${a.ddType==='static'?' selected':''}>${T("dd.static")}</option><option value="eod"${a.ddType==='eod'?' selected':''}>${T("dd.eod")}</option></select></div>
       <div style="flex:1"><label class="small muted">${T("af.ddLimit")}</label><input type="number" id="afDdLimit" value="${a.ddLimit||0}" step="100" style="width:100%; margin-top:4px; padding:9px 11px"></div>
+      <div style="flex:1"><label class="small muted">${T("af.maxPerTrade")}</label><input type="number" id="afMaxPer" value="${a.maxPerTrade||0}" step="50" style="width:100%; margin-top:4px; padding:9px 11px"></div>
     </div>
     <div class="rowflex" style="gap:10px; margin-top:12px">
       <div style="flex:1"><label class="small muted">${T("af.phase")}</label><select id="afPhase" style="width:100%; margin-top:4px; padding:9px 11px"><option value="eval"${(a.phase||'eval')==='eval'?' selected':''}>${T("phase.eval")}</option><option value="funded"${a.phase==='funded'?' selected':''}>${T("phase.funded")}</option></select></div>
@@ -649,7 +654,7 @@ function accountForm(id, onDone){
   $("#afCancel").onclick=closeModal;
   $("#afSave").onclick=()=>{
     const nm=($("#afName").value||"").trim(); if(!nm){toast(T("af.needName"));return;}
-    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, phase:$("#afPhase").value, status:$("#afStatus").value };
+    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, maxPerTrade:+$("#afMaxPer").value||0, phase:$("#afPhase").value, status:$("#afStatus").value };
     let newId=id;
     if(editing){ Object.assign(DB.accounts[id],data); }
     else { let base=slug(nm)||"cuenta", k=base, i=2; while(DB.accounts[k]){k=base+"-"+i;i++;} newId=k; DB.accounts[newId]=data; acctFilter=newId; }
@@ -1313,7 +1318,9 @@ function renderCheckin(){
     <div class="card"><h2>${fmt(T("ci.title"),{d:latest})}</h2>
       <p class="small muted" style="margin:0 0 10px">${T("ci.lead")}</p>
       <div class="rowflex" style="margin-bottom:10px"><span class="small muted" style="min-width:64px">${T("ci.mood")}</span><div class="chips">${moodChips}</div></div>
+      <div class="rowflex" style="margin-bottom:10px"><span class="small muted" style="min-width:64px">${T("ci.bias")}</span><div class="chips">${["long","short","neutral","notrade"].map(bv=>`<button class="chip ${bv==='long'?'calm':bv==='short'?'c':''}" data-ci="bias" data-v="${bv}" aria-pressed="${cur.bias===bv}">${T("bias."+bv)}</button>`).join("")}</div></div>
       <div class="rowflex" style="margin-bottom:10px"><span class="small muted" style="min-width:64px">${T("ci.plan")}</span><input type="text" id="ciPlan" placeholder="${T("ci.planPh")}" style="flex:1; min-width:220px" value="${(cur.plan||'').replace(/"/g,'&quot;')}"></div>
+      <div class="rowflex" style="margin-bottom:10px; align-items:flex-start"><span class="small muted" style="min-width:64px; margin-top:8px">${T("ci.levels")}</span><textarea id="ciLevels" placeholder="${T("ci.levelsPh")}" style="flex:1; min-width:220px; min-height:46px; padding:8px 11px; resize:vertical">${(cur.levels||'').replace(/</g,'&lt;')}</textarea></div>
       <div class="rowflex" style="margin-bottom:12px"><span class="small muted" style="min-width:64px">${T("ci.day")}</span><input type="text" id="ciDate" value="${latest}" style="width:120px"></div>
       <label class="rowflex small" style="gap:7px; cursor:pointer; margin-bottom:12px; align-items:flex-start"><input type="checkbox" id="ciRules" ${cur.rules?'checked':''} style="margin-top:3px"> <span>${T("ci.rules")}</span></label>
       <button class="btn calm" id="ciSave">${T("ci.save")}</button>
@@ -1325,11 +1332,12 @@ function renderCheckin(){
     <div class="card section"><h2>${T("ci.history")}</h2>
       <table><thead><tr><th>${T("th.day")}</th><th>${T("ci.thMood")}</th><th>${T("ci.thPlan")}</th><th class="mono">${T("ci.thNetDay")}</th><th>${T("ci.thDisc")}</th></tr></thead>
       <tbody>${hist||'<tr><td colspan="5" class="muted">'+T("ci.none")+'</td></tr>'}</tbody></table></div>`;
-  let selMood=cur.mood||"";
+  let selMood=cur.mood||"", selBias=cur.bias||"";
   updateTilt(selMood);
   host.querySelectorAll('[data-ci="mood"]').forEach(b=>b.onclick=()=>{selMood=selMood===b.dataset.v?"":b.dataset.v; host.querySelectorAll('[data-ci="mood"]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.v===selMood)); updateTilt(selMood);});
+  host.querySelectorAll('[data-ci="bias"]').forEach(b=>b.onclick=()=>{selBias=selBias===b.dataset.v?"":b.dataset.v; host.querySelectorAll('[data-ci="bias"]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.v===selBias));});
   $("#ciSave").onclick=()=>{ const d=$("#ciDate").value.trim()||latest;
-    DB.checkins[d]={mood:selMood,plan:$("#ciPlan").value.trim(),rules:$("#ciRules").checked,ts:Date.now()};
+    DB.checkins[d]={mood:selMood,bias:selBias,levels:($("#ciLevels").value||"").trim(),plan:$("#ciPlan").value.trim(),rules:$("#ciRules").checked,ts:Date.now()};
     save(); toast(fmt(T("ci.saved"),{d})); renderCheckin(); };
   const cr=$("#ciRemind"); if(cr)cr.onchange=async e=>{ DB.settings.remindCheckin=e.target.checked; save(); if(e.target.checked && window.Notification){ try{ const p=await Notification.requestPermission(); toast(p==="granted"?T("rem.on"):T("rem.blocked")); }catch(err){} } };
 }
@@ -1488,6 +1496,7 @@ function renderAccounts(){
     $("#newAcct").onclick=addAccount; return; }
   const showIds = (acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter])?[acctFilter]:ids;
   const cards=showIds.map(id=>{ const st=acctStats(id), a=st.a; const prog=a.target>0?st.net/a.target*100:0; const ff=firmFinance(a.firm);
+    const viol=(a.maxPerTrade>0)?DB.trades.filter(t=>(t.acct||"")===id && t.pnl<0 && Math.abs(t.pnl)>a.maxPerTrade).length:0;
     return `<div class="card section">
       <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${escA(a.name)}${a.firm?` <span class="tag" style="font-weight:600; background:var(--surface2); color:var(--muted)">${escA(a.firm)}</span>`:''} <span class="tag" style="font-weight:600; background:var(--surface2); color:var(--muted)">${T("phase."+(a.phase||'eval'))}</span>${a.status&&a.status!=='active'?` <span class="tag ${a.status==='passed'?'S':'L'}">${T("status."+a.status)}</span>`:''}</h2><span class="small muted">${st.count} ${T("trades")} · ${st.nDays} ${T("dDays")}</span></div>
       <div class="grid kpis" style="margin-top:10px">
@@ -1498,6 +1507,7 @@ function renderAccounts(){
       </div>
       ${bar(Math.max(0,Math.min(100,prog)),prog>=100)}
       ${ff&&(ff.spent||ff.earned)?`<div class="small muted" style="margin-top:10px">💳 <b>${escA(a.firm)}</b> · ${T("ac.evalsSpent")} <b class="neg">${money(ff.spent)}</b> · ${T("ac.payouts")} <b class="pos">${money(ff.earned)}</b> · ${T("ac.bizNet")} <b class="${cls(ff.earned-ff.spent)}">${money(ff.earned-ff.spent)}</b> <span class="faint">${T("ac.fromFinance")}</span></div>`:''}
+      ${viol>0?`<div class="small neg" style="margin-top:8px">${fmt(T("ac.violations"),{n:viol})}</div>`:''}
       <div class="rowflex small muted" style="margin-top:12px; gap:8px; align-items:center; flex-wrap:wrap">
         <span>Target ${money(a.target)} · DD ${st.ddLabel} ${money(a.ddLimit)} · Balance ${money(a.startBal||0)}</span>
         <span style="flex:1; min-width:8px"></span>
