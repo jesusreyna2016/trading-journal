@@ -218,6 +218,23 @@
   .lfv-bar > i{ display:block; height:100%; background:linear-gradient(90deg,var(--calm),color-mix(in srgb,var(--calm) 50%,#fff)) }
   @media (max-width:860px){ .lfgrid{ grid-template-columns:repeat(2,1fr) } .lfgrid .b2x2{ grid-row:span 1 } }
   @media (max-width:560px){ .lfgrid{ grid-template-columns:1fr } .lfgrid .b2,.lfgrid .b2x2{ grid-column:auto } }
+  /* ---- Showcase (rendered app panels in browser frames) ---- */
+  .lshowcase{ padding:4px 22px 30px }
+  .scwrap{ max-width:980px; margin:0 auto }
+  .scframe{ border:1px solid var(--hair); border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:0 30px 70px -34px rgba(0,0,0,.75) }
+  .scbar{ display:flex; align-items:center; gap:6px; padding:10px 13px; border-bottom:1px solid var(--hair); background:color-mix(in srgb,var(--surface2) 65%,var(--surface)) }
+  .scbar i{ width:10px; height:10px; border-radius:50%; background:var(--hair) }
+  .scbar b{ margin-left:8px; font:600 10.5px/1 var(--sans); color:var(--faint); letter-spacing:.07em }
+  /* spotlight rows: real screenshot + text, alternating sides */
+  .scspot{ display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:center; margin-top:34px }
+  .scspot:nth-of-type(even) .scspot-media{ order:2 }
+  .scspot-txt .eb{ font:700 11px/1 var(--sans); letter-spacing:.09em; color:var(--calm); margin-bottom:12px }
+  .scspot-txt h3{ font:700 22px/1.2 var(--sans); color:var(--ink); letter-spacing:-.015em }
+  .scspot-txt p{ color:var(--muted); margin-top:11px; font-size:14px; line-height:1.62 }
+  .scshot{ position:relative; max-height:400px; overflow:hidden }
+  .scshot img{ display:block; width:100%; height:auto }
+  .scshot::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:64px; background:linear-gradient(to bottom, transparent, var(--surface)); pointer-events:none }
+  @media (max-width:820px){ .scspot{ grid-template-columns:1fr; gap:16px; margin-top:24px } .scspot .scspot-media{ order:0 } }
   .lfcard{ background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:22px; transition:border-color .18s, transform .18s, box-shadow .18s }
   .lfcard:hover{ border-color:color-mix(in srgb,var(--calm) 48%,var(--hair)); transform:translateY(-3px); box-shadow:0 16px 34px -18px rgba(0,0,0,.55) }
   .lfcard .lfico{ display:inline-flex; width:44px; height:44px; align-items:center; justify-content:center; border-radius:12px; background:color-mix(in srgb,var(--calm) 13%,transparent); border:1px solid color-mix(in srgb,var(--calm) 26%,transparent); color:var(--calm) }
@@ -314,6 +331,28 @@
         <div class="lfcard lfade"><div class="lfico a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7-4.6-7-9.5a3.8 3.8 0 017-2 3.8 3.8 0 017 2c0 4.9-7 9.5-7 9.5z"/></svg></div><h3 data-i18n="l2.f7t">Routine & daily review</h3><p data-i18n="l2.f7d">Holistic routine (health, family, trading) plus a forced daily review.</p></div>
         <div class="lfcard b2 lfade"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4.5h11l-2 3.5 2 3.5H6"/></svg></div><h3 data-i18n="l2.f8t">Motivation that shows up</h3><p data-i18n="l2.f8d">Your ‘Why’ front and center — louder when your discipline drops.</p></div>
         <div class="lfcard b2 lfade"><div class="lfico a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10"/><path d="M8 10.5l4 4 4-4"/><path d="M5 20h14"/></svg></div><h3 data-i18n="l2.f9t">Easy import</h3><p data-i18n="l2.f9d">CSV from Tradovate, Zella or a generic format. Restore backups too.</p></div>
+      </div>
+    </div></section>
+
+    <section class="lshowcase"><div class="lwrap">
+      <div class="lfhead lfade"><div class="lcenter-eb" data-i18n="l2.ebSc">A LOOK INSIDE</div><h2 data-i18n="l2.scT">See it in action</h2><p data-i18n="l2.scP">A real journal, built for discipline. Here's what it looks like in use.</p></div>
+      <div class="scwrap">
+        <div class="scspot">
+          <div class="scframe scspot-media lfade"><div class="scbar"><i></i><i></i><i></i><b>Summary</b></div><div class="scshot"><img src="shots/summary.png" alt="Summary dashboard" loading="lazy"></div></div>
+          <div class="scspot-txt lfade"><div class="eb" data-i18n="l2.sc1e">DASHBOARD</div><h3 data-i18n="l2.sc1t">A coach reads your day — not just your P&amp;L</h3><p data-i18n="l2.sc1d">Coach's Read tells you what happened and what to fix. KPIs, the clean-day scoreboard and your top insight — all auto-calculated the moment you import.</p></div>
+        </div>
+        <div class="scspot">
+          <div class="scframe scspot-media lfade"><div class="scbar"><i></i><i></i><i></i><b>Journal · Trades</b></div><div class="scshot"><img src="shots/journal.png" alt="Journal — trades of the day" loading="lazy"></div></div>
+          <div class="scspot-txt lfade"><div class="eb" data-i18n="l2.sc2e">JOURNAL</div><h3 data-i18n="l2.sc2t">Tag every trade in seconds</h3><p data-i18n="l2.sc2d">Emotion, panel context, bias, setup, mistakes and a rich note per trade. The day's equity curve turns red under water and green in profit.</p></div>
+        </div>
+        <div class="scspot">
+          <div class="scframe scspot-media lfade"><div class="scbar"><i></i><i></i><i></i><b>Analysis · Score</b></div><div class="scshot"><img src="shots/score.png" alt="Trader score and radar" loading="lazy"></div></div>
+          <div class="scspot-txt lfade"><div class="eb" data-i18n="l2.sc3e">SCORE</div><h3 data-i18n="l2.sc3t">A grade out of 100 — and your weakest point</h3><p data-i18n="l2.sc3d">Six factors — win rate, profit factor, avg win/loss, drawdown, recovery and consistency — on a radar, with the one thing dragging your score down called out.</p></div>
+        </div>
+        <div class="scspot">
+          <div class="scframe scspot-media lfade"><div class="scbar"><i></i><i></i><i></i><b>Progress · Calendar</b></div><div class="scshot"><img src="shots/calendar.png" alt="P&L calendar" loading="lazy"></div></div>
+          <div class="scspot-txt lfade"><div class="eb" data-i18n="l2.sc4e">CALENDAR</div><h3 data-i18n="l2.sc4t">Your whole month at a glance</h3><p data-i18n="l2.sc4d">Daily P&amp;L with trades and win rate in each cell, weekly totals on the side, and a dot for discipline kept or broken.</p></div>
+        </div>
       </div>
     </div></section>
 
@@ -541,7 +580,7 @@ const I18N={
   "l2.featT":"One journal. Everything you need.","l2.featP":"Analytics, discipline coaching, routine and multi-account — all free, all private.",
   "l2.f1t":"Full analytics","l2.f1d":"KPIs, equity curve, profit factor, expectancy, drawdown — auto-calculated.","l2.f2t":"Automatic leak detection","l2.f2d":"Revenge sizing, over-trading, cutting winners, your costliest emotion — found for you.","l2.f3t":"Discipline coach","l2.f3d":"Tilt-risk score, clean-day streak and rules built from YOUR data.","l2.f4t":"Multi-account & prop firms","l2.f4d":"Track many funded accounts: targets, drawdown, per-trade limits, funding progress.","l2.f5t":"Calendar & weekly","l2.f5d":"A P&L calendar with trades and win rate, plus a weekly breakdown.","l2.f6t":"Rich trade journal","l2.f6d":"Tag emotion, setup and mistakes; rich notes with images on every trade.","l2.f7t":"Routine & daily review","l2.f7d":"Holistic routine (health, family, trading) plus a forced daily review.","l2.f8t":"Motivation that shows up","l2.f8d":"Your ‘Why’ front and center — louder when your discipline drops.","l2.f9t":"Easy import","l2.f9d":"CSV from Tradovate, Zella or a generic format. Restore backups too.",
   "l2.stepsT":"How it works","l2.st1t":"Import","l2.st1d":"Bring your trades in via CSV — or start with the daily routine.","l2.st2t":"Tag","l2.st2d":"Mark emotion, edge, setup and mistakes on each trade.","l2.st3t":"Improve","l2.st3d":"See your leaks, discipline score and weekly progress — and fix them.",
-  "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email — we send you a magic link. No password, no card.","l2.footNote":"Educational tool — not financial advice.","l2.ebProblem":"THE REAL PROBLEM","l2.ebFeatures":"WHAT'S INSIDE","l2.ebSteps":"3 SIMPLE STEPS","l2.ebGet":"JOIN FREE","l2.fvTilt":"TILT RISK","l2.fvClean":"CLEAN STREAK"
+  "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email — we send you a magic link. No password, no card.","l2.footNote":"Educational tool — not financial advice.","l2.ebProblem":"THE REAL PROBLEM","l2.ebFeatures":"WHAT'S INSIDE","l2.ebSteps":"3 SIMPLE STEPS","l2.ebGet":"JOIN FREE","l2.fvTilt":"TILT RISK","l2.fvClean":"CLEAN STREAK","l2.ebSc":"A LOOK INSIDE","l2.scT":"See it in action","l2.scP":"A real journal, built for discipline. Here's what it looks like in use.","l2.sc1e":"DASHBOARD","l2.sc1t":"A coach reads your day — not just your P&L","l2.sc1d":"Coach's Read tells you what happened and what to fix. KPIs, the clean-day scoreboard and your top insight — all auto-calculated the moment you import.","l2.sc2e":"JOURNAL","l2.sc2t":"Tag every trade in seconds","l2.sc2d":"Emotion, panel context, bias, setup, mistakes and a rich note per trade. The day's equity curve turns red under water and green in profit.","l2.sc3e":"SCORE","l2.sc3t":"A grade out of 100 — and your weakest point","l2.sc3d":"Six factors — win rate, profit factor, avg win/loss, drawdown, recovery and consistency — on a radar, with the one thing dragging your score down called out.","l2.sc4e":"CALENDAR","l2.sc4t":"Your whole month at a glance","l2.sc4d":"Daily P&L with trades and win rate in each cell, weekly totals on the side, and a dot for discipline kept or broken."
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -654,7 +693,7 @@ const I18N={
   "l2.featT":"Un journal. Todo lo que necesitas.","l2.featP":"Analítica, coach de disciplina, rutina y multi-cuenta — todo gratis, todo privado.",
   "l2.f1t":"Analítica completa","l2.f1d":"KPIs, curva de equity, profit factor, expectativa, drawdown — calculado solo.","l2.f2t":"Detección automática de fugas","l2.f2d":"Revenge sizing, sobreoperar, cortar ganadores, tu emoción más cara — detectadas por ti.","l2.f3t":"Coach de disciplina","l2.f3d":"Score de riesgo de tilt, racha de días limpios y reglas hechas con TUS datos.","l2.f4t":"Multi-cuenta y prop firms","l2.f4d":"Trackea varias cuentas fondeadas: targets, drawdown, límite por trade, progreso.","l2.f5t":"Calendario y semanal","l2.f5d":"Un calendario de P&L con trades y winrate, más desglose por semana.","l2.f6t":"Diario de trades rico","l2.f6d":"Etiqueta emoción, setup y errores; notas con imágenes en cada trade.","l2.f7t":"Rutina y revisión diaria","l2.f7d":"Rutina holística (salud, familia, trading) más una revisión diaria forzada.","l2.f8t":"Motivación que aparece","l2.f8d":"Tu ‘Porqué’ al frente — más visible cuando baja tu disciplina.","l2.f9t":"Import fácil","l2.f9d":"CSV de Tradovate, Zella o formato genérico. También restaura backups.",
   "l2.stepsT":"Cómo funciona","l2.st1t":"Importa","l2.st1d":"Trae tus trades por CSV — o empieza por la rutina diaria.","l2.st2t":"Etiqueta","l2.st2d":"Marca emoción, borde, setup y errores en cada trade.","l2.st3t":"Mejora","l2.st3d":"Descubre tus fugas, tu score de disciplina y tu progreso semanal — y corrígelos.",
-  "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo — te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa — no es asesoría financiera.","l2.ebProblem":"EL PROBLEMA REAL","l2.ebFeatures":"QUÉ INCLUYE","l2.ebSteps":"3 PASOS SIMPLES","l2.ebGet":"ÚNETE GRATIS","l2.fvTilt":"RIESGO DE TILT","l2.fvClean":"RACHA LIMPIA"
+  "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo — te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa — no es asesoría financiera.","l2.ebProblem":"EL PROBLEMA REAL","l2.ebFeatures":"QUÉ INCLUYE","l2.ebSteps":"3 PASOS SIMPLES","l2.ebGet":"ÚNETE GRATIS","l2.fvTilt":"RIESGO DE TILT","l2.fvClean":"RACHA LIMPIA","l2.ebSc":"POR DENTRO","l2.scT":"Míralo en acción","l2.scP":"Un journal real, hecho para la disciplina. Así se ve cuando lo usas.","l2.sc1e":"PANEL","l2.sc1t":"Un coach lee tu día — no solo tu P&L","l2.sc1d":"El Coach's Read te dice qué pasó y qué corregir. KPIs, el marcador de días limpios y tu insight principal — todo calculado al importar.","l2.sc2e":"JOURNAL","l2.sc2t":"Etiqueta cada trade en segundos","l2.sc2d":"Emoción, contexto del panel, sesgo, setup, errores y una nota enriquecida por trade. La curva del día se pone roja bajo agua y verde en ganancia.","l2.sc3e":"SCORE","l2.sc3t":"Una nota sobre 100 — y tu punto más débil","l2.sc3d":"Seis factores — winrate, profit factor, win/loss, drawdown, recuperación y consistencia — en un radar, señalando lo que más baja tu score.","l2.sc4e":"CALENDARIO","l2.sc4t":"Todo tu mes de un vistazo","l2.sc4d":"P&L diario con trades y winrate en cada casilla, totales por semana al lado, y un punto por disciplina cumplida o rota."
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
