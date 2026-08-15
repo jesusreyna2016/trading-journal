@@ -159,6 +159,67 @@
   @keyframes aspin{to{transform:rotate(360deg)}}
   #syncBadge{font-size:11.5px; color:var(--muted); min-width:70px; text-align:right}
   #userEmail{font-size:12px; color:var(--faint); max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  /* ---------- Landing ---------- */
+  #authGate{ overflow-y:auto }
+  #authGate:not(.resolving){ display:block; align-items:initial; padding:0 }
+  #authGate.resolving .authbody{ display:none }
+  .authbody{ color:var(--ink) }
+  .authbody h1,.authbody h2,.authbody h3{ font-family:var(--sans); text-transform:none; letter-spacing:-.01em; color:var(--ink); margin:0 }
+  .lwrap{ max-width:1080px; margin:0 auto; padding:0 22px }
+  .lnav{ position:sticky; top:0; z-index:5; background:var(--ground); background:color-mix(in srgb,var(--ground) 88%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--hair) }
+  .lnav-in{ display:flex; justify-content:space-between; align-items:center; padding:12px 0 }
+  .llogo{ font-weight:800; font-size:16px; display:flex; align-items:center; gap:8px }
+  .lhero{ padding:64px 0 44px }
+  .lhero-in{ display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center }
+  .leyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:.18em; color:var(--calm); font-weight:700 }
+  .ltitle{ font-size:46px; font-weight:800; line-height:1.06; margin-top:14px }
+  .ltitle .accent{ color:var(--calm) }
+  .llead{ font-size:17px; color:var(--muted); line-height:1.6; margin:18px 0 26px; max-width:520px }
+  .lhero-cta{ display:flex; gap:16px; align-items:center; flex-wrap:wrap }
+  .lhero-cta .btn{ padding:12px 20px; font-size:15px }
+  .lmock{ background:var(--surface); border:1px solid var(--hair); border-radius:16px; padding:16px; box-shadow:var(--shadow) }
+  .lmock-top{ display:flex; gap:6px; margin-bottom:12px }
+  .lmock-dot{ width:9px; height:9px; border-radius:50%; background:var(--hair) }
+  .lmock-kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px }
+  .lmock-kpi{ background:var(--surface2); border:1px solid var(--hair); border-radius:10px; padding:10px 12px }
+  .lmock-kpi .k-l{ font-size:9px; letter-spacing:.08em; color:var(--muted); font-weight:700 }
+  .lmock-kpi .k-v{ font-family:var(--mono); font-weight:800; font-size:19px; margin-top:3px }
+  .lmock-eq{ width:100%; height:96px; display:block; background:var(--surface2); border:1px solid var(--hair); border-radius:10px }
+  .lmock-cal{ display:grid; grid-template-columns:repeat(10,1fr); gap:5px; margin-top:12px }
+  .lmock-cal i{ height:15px; border-radius:4px; background:var(--surface2); display:block }
+  .lstrip{ display:flex; gap:22px; flex-wrap:wrap; justify-content:center; align-items:center; padding:16px 22px; color:var(--muted); font-size:13.5px; font-weight:600; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair) }
+  .lsec{ padding:58px 22px; text-align:center }
+  .lsec h2{ font-size:30px; font-weight:800 }
+  .lsec p{ color:var(--muted); font-size:16px; line-height:1.6; max-width:640px; margin:14px auto 0 }
+  .lfeatures{ padding:24px 22px 44px }
+  .lfhead{ text-align:center; margin-bottom:28px }
+  .lfhead h2{ font-size:30px; font-weight:800 }
+  .lfhead p{ color:var(--muted); margin-top:10px }
+  .lfgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px }
+  .lfcard{ background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:22px }
+  .lfcard .lfico{ font-size:24px }
+  .lfcard h3{ font-size:16px; margin:12px 0 6px; font-weight:700 }
+  .lfcard p{ color:var(--muted); font-size:13.5px; line-height:1.55 }
+  .lsteps{ padding:20px 22px 56px; text-align:center }
+  .lsteps h2{ font-size:30px; font-weight:800; margin-bottom:26px }
+  .lstepgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; text-align:left }
+  .lstep{ background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:22px }
+  .lstep h3{ font-size:15px; margin:6px 0 5px; font-weight:700; color:var(--calm) }
+  .lstep p{ color:var(--muted); font-size:13.5px; line-height:1.55 }
+  .lget{ background:var(--surface); border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:58px 22px; text-align:center }
+  .lget h2{ font-size:30px; font-weight:800 }
+  .lget .lgetp{ color:var(--muted); margin-top:10px }
+  .lform{ display:flex; gap:10px; max-width:470px; margin:20px auto 0 }
+  .lform input{ flex:1; padding:12px 14px }
+  .lform .btn{ padding:12px 18px; white-space:nowrap }
+  .lfoot{ padding:28px 22px 44px; text-align:center; color:var(--faint); font-size:12px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap }
+  @media (max-width:760px){
+    .lhero-in{ grid-template-columns:1fr; gap:28px }
+    .ltitle{ font-size:33px }
+    .lhero{ padding:38px 0 28px }
+    .lsec h2,.lfhead h2,.lsteps h2,.lget h2{ font-size:24px }
+    .lform{ flex-direction:column }
+  }
   @media (max-width:640px){
     .app{padding:14px 12px 72px}
     h1{font-size:20px}
@@ -178,25 +239,71 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3"></script>
 <div id="authGate" class="authgate resolving">
   <div id="authSpin"><div class="authspin"></div><div data-i18n="loadingSession">Cargando…</div></div>
-  <div class="authcard" style="max-width:440px">
-    <div class="rowflex" style="justify-content:space-between; align-items:center">
-      <div class="eyebrow" data-i18n="landEyebrow">Trading Journal · gratis</div>
-      <select class="langSel" title="Idioma / Language" style="padding:3px 6px; font-size:12px"><option value="en">EN</option><option value="es">ES</option></select>
-    </div>
-    <h1 style="margin:.15em 0 .3em; font-size:25px; line-height:1.2" data-i18n-html="landTitle">Opera con disciplina,<br>no con impulso</h1>
-    <p class="small muted" style="margin:0 0 14px; line-height:1.6" data-i18n-html="landLead">Tu diario de trading + rutina diaria en un solo lugar. Registra tus trades, <b style="color:var(--ink)">detecta tus fugas</b> y mide tu progreso. Privado y sin costo.</p>
-    <ul class="small" style="list-style:none; padding:0; margin:0 0 18px; color:var(--muted)">
-      <li style="margin:5px 0" data-i18n-html="landB1">✓ Importa tus trades (CSV de tu broker)</li>
-      <li style="margin:5px 0" data-i18n-html="landB2">✓ Detección automática de fugas y patrones</li>
-      <li style="margin:5px 0" data-i18n-html="landB3">✓ Rutina diaria: trading + salud + familia, a tu medida</li>
-      <li style="margin:5px 0" data-i18n-html="landB4">✓ Tus datos son <b style="color:var(--ink)">solo tuyos</b> — privados</li>
-    </ul>
-    <input type="email" id="authEmail" data-i18n-ph="emailPh" placeholder="tu@email.com" style="width:100%; margin-bottom:10px; padding:11px 12px">
-    <button class="btn calm" id="authSend" data-i18n="landCta" style="width:100%; justify-content:center; padding:11px">Entrar / Crear cuenta gratis</button>
-    <div class="small" id="authMsg" style="margin-top:12px; min-height:18px; color:var(--muted)"></div>
-    <div class="small" data-i18n-html="landDisc" style="margin-top:16px; padding-top:14px; border-top:1px solid var(--hair); color:var(--faint); line-height:1.55">
-      Te enviamos un <b>enlace mágico</b> a tu correo — sin contraseñas. Herramienta educativa: <b>no es asesoría financiera</b>. Operar futuros implica riesgo de pérdida.
-    </div>
+  <div class="authbody">
+    <nav class="lnav"><div class="lwrap lnav-in">
+      <div class="llogo">📊 Trading Journal</div>
+      <div class="rowflex" style="gap:10px; align-items:center">
+        <select class="langSel" data-i18n-title="tt.lang" style="padding:4px 7px; font-size:12px"><option value="en">EN</option><option value="es">ES</option></select>
+        <a href="#get" class="btn calm small" data-i18n="l2.navcta">Get started</a>
+      </div>
+    </div></nav>
+
+    <header class="lhero"><div class="lwrap lhero-in">
+      <div>
+        <div class="leyebrow" data-i18n="l2.eyebrow">FREE · PRIVATE · ALL-IN-ONE</div>
+        <h1 class="ltitle" data-i18n-html="l2.title">Everything a prop trader needs — <span class="accent">in one free journal</span>.</h1>
+        <p class="llead" data-i18n="l2.lead">Journal, analytics, daily routine, multi-account tracking and a discipline coach that spots your leaks. All in one place — free, forever.</p>
+        <div class="lhero-cta"><a href="#get" class="btn calm" data-i18n="l2.cta1">Get started free →</a><span class="small muted" data-i18n="l2.cta2">No card. No limits.</span></div>
+      </div>
+      <div class="lmock">
+        <div class="lmock-top"><span class="lmock-dot"></span><span class="lmock-dot"></span><span class="lmock-dot"></span></div>
+        <div class="lmock-kpis">
+          <div class="lmock-kpi"><div class="k-l">NET</div><div class="k-v pos">+$5.26K</div></div>
+          <div class="lmock-kpi"><div class="k-l">WIN RATE</div><div class="k-v">68%</div></div>
+          <div class="lmock-kpi"><div class="k-l">CLEAN</div><div class="k-v calmc">7🔥</div></div>
+        </div>
+        <svg class="lmock-eq" viewBox="0 0 300 96" preserveAspectRatio="none"><polyline points="6,64 40,58 70,80 108,52 150,58 190,36 232,44 270,22 294,16" fill="none" stroke="var(--pos)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <div class="lmock-cal"><i style="background:var(--pos)"></i><i></i><i style="background:var(--neg)"></i><i style="background:var(--pos)"></i><i style="background:var(--pos)"></i><i></i><i style="background:var(--pos)"></i><i style="background:var(--neg)"></i><i style="background:var(--pos)"></i><i style="background:var(--pos)"></i></div>
+      </div>
+    </div></header>
+
+    <div class="lstrip"><span data-i18n="l2.s1">🆓 Free forever</span><span data-i18n="l2.s2">🔒 100% private</span><span data-i18n="l2.s3">🌍 EN / ES</span><span data-i18n="l2.s4">📲 Installable (PWA)</span></div>
+
+    <section class="lsec"><div class="lwrap"><h2 data-i18n="l2.probT">You don't lose from lack of analysis</h2><p data-i18n="l2.probP">You lose from revenge trading, oversizing, breaking your daily loss cap, trading under pressure. This journal attacks the behavior that blows accounts — not just pretty stats.</p></div></section>
+
+    <section class="lfeatures"><div class="lwrap">
+      <div class="lfhead"><h2 data-i18n="l2.featT">One journal. Everything you need.</h2><p data-i18n="l2.featP">Analytics, discipline coaching, routine and multi-account — all free, all private.</p></div>
+      <div class="lfgrid">
+        <div class="lfcard"><div class="lfico">📊</div><h3 data-i18n="l2.f1t">Full analytics</h3><p data-i18n="l2.f1d">KPIs, equity curve, profit factor, expectancy, drawdown — auto-calculated.</p></div>
+        <div class="lfcard"><div class="lfico">🔎</div><h3 data-i18n="l2.f2t">Automatic leak detection</h3><p data-i18n="l2.f2d">Revenge sizing, over-trading, cutting winners, your costliest emotion — found for you.</p></div>
+        <div class="lfcard"><div class="lfico">🧭</div><h3 data-i18n="l2.f3t">Discipline coach</h3><p data-i18n="l2.f3d">Tilt-risk score, clean-day streak and rules built from YOUR data.</p></div>
+        <div class="lfcard"><div class="lfico">🏦</div><h3 data-i18n="l2.f4t">Multi-account & prop firms</h3><p data-i18n="l2.f4d">Track many funded accounts: targets, drawdown, per-trade limits, funding progress.</p></div>
+        <div class="lfcard"><div class="lfico">📅</div><h3 data-i18n="l2.f5t">Calendar & weekly</h3><p data-i18n="l2.f5d">A P&L calendar with trades and win rate, plus a weekly breakdown.</p></div>
+        <div class="lfcard"><div class="lfico">📝</div><h3 data-i18n="l2.f6t">Rich trade journal</h3><p data-i18n="l2.f6d">Tag emotion, setup and mistakes; rich notes with images on every trade.</p></div>
+        <div class="lfcard"><div class="lfico">🧘</div><h3 data-i18n="l2.f7t">Routine & daily review</h3><p data-i18n="l2.f7d">Holistic routine (health, family, trading) plus a forced daily review.</p></div>
+        <div class="lfcard"><div class="lfico">🎯</div><h3 data-i18n="l2.f8t">Motivation that shows up</h3><p data-i18n="l2.f8d">Your ‘Why’ front and center — louder when your discipline drops.</p></div>
+        <div class="lfcard"><div class="lfico">📥</div><h3 data-i18n="l2.f9t">Easy import</h3><p data-i18n="l2.f9d">CSV from Tradovate, Zella or a generic format. Restore backups too.</p></div>
+      </div>
+    </div></section>
+
+    <section class="lsteps"><div class="lwrap">
+      <h2 data-i18n="l2.stepsT">How it works</h2>
+      <div class="lstepgrid">
+        <div class="lstep"><h3 data-i18n="l2.st1t">1 · Import</h3><p data-i18n="l2.st1d">Bring your trades in via CSV — or start with the daily routine.</p></div>
+        <div class="lstep"><h3 data-i18n="l2.st2t">2 · Tag</h3><p data-i18n="l2.st2d">Mark emotion, edge, setup and mistakes on each trade.</p></div>
+        <div class="lstep"><h3 data-i18n="l2.st3t">3 · Improve</h3><p data-i18n="l2.st3d">See your leaks, discipline score and weekly progress — and fix them.</p></div>
+      </div>
+    </div></section>
+
+    <section id="get" class="lget"><div class="lwrap">
+      <h2 data-i18n="l2.getT">Start free in 30 seconds</h2>
+      <p class="lgetp" data-i18n="l2.getP">Enter your email — we send you a magic link. No password, no card.</p>
+      <div class="lform"><input type="email" id="authEmail" data-i18n-ph="emailPh" placeholder="you@email.com"><button class="btn calm" id="authSend" data-i18n="landCta">Enter / Create free account</button></div>
+      <div class="small" id="authMsg" style="min-height:18px; margin-top:10px; color:var(--muted)"></div>
+      <div class="small" data-i18n-html="landDisc" style="max-width:540px; margin:16px auto 0; color:var(--faint); line-height:1.55">We email you a <b>magic link</b> — no passwords. Educational tool: <b>not financial advice</b>. Trading futures carries risk of loss.</div>
+    </div></section>
+
+    <footer class="lfoot"><span>© Trading Journal</span><span data-i18n="l2.footNote">Educational tool — not financial advice.</span></footer>
   </div>
 </div>
 <div id="onboard" class="authgate hide"></div>
@@ -394,7 +501,14 @@ const I18N={
   "af.maxPerTrade":"Max loss per trade $","ac.violations":"⚠ {n} trade(s) over your max per-trade loss","mist.title":"Mistakes on this trade","mist.btn":"Mistakes","mist.saved":"Mistakes saved.","mist.top":"⚠ Your most-reported mistakes","mist.none":"No self-reported mistakes yet. Tag them on each trade in the Journal.","mist.close":"Done","m.early":"Entered early","m.noconfirm":"Didn't wait for confirmation","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL too tight","m.oversize":"Oversizing","m.earlyexit":"Exited early","m.noplan":"Didn't follow the plan","m.chase":"Chased price","m.moved_sl":"Moved my stop","m.pressure":"Traded out of financial pressure","m.onemore":"“Just one more trade”","m.overwin":"Oversized after a win","m.fighting":"Fought the trend",
   "why.title":"🎯 My Why","why.edit":"Edit","why.set":"Set your Why","why.prompt":"Why do you trade? Set your motivation.","why.reminder":"Discipline is low — remember why you started.","why.editTitle":"My Why — your motivation","why.textPh":"e.g. For my kids. I refuse to fail them. Discipline pays the bills, not revenge.","why.image":"Photo (optional)","why.removeImg":"Remove photo","why.saved":"Saved.",
   "dr.title":"📝 Daily review","dr.lead":"Answer honestly before closing the day — this is where change happens.","dr.worst":"What was my worst decision today?","dr.knew":"When did I know I was breaking my rules — and kept going?","dr.self":"What would my disciplined self have told me?","dr.tomorrow":"What will I do differently tomorrow? (specific)","dr.save":"Save review","dr.saved":"Review saved.",
-  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:","cal.week":"Week {n}","note.title":"Trade note","cm.yes":"Yes","cm.delete":"Delete"
+  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:","cal.week":"Week {n}","note.title":"Trade note","cm.yes":"Yes","cm.delete":"Delete",
+  "l2.navcta":"Get started","l2.eyebrow":"FREE · PRIVATE · ALL-IN-ONE","l2.title":"Everything a prop trader needs — <span class='accent'>in one free journal</span>.","l2.lead":"Journal, analytics, daily routine, multi-account tracking and a discipline coach that spots your leaks. All in one place — free, forever.","l2.cta1":"Get started free →","l2.cta2":"No card. No limits.",
+  "l2.s1":"🆓 Free forever","l2.s2":"🔒 100% private","l2.s3":"🌍 EN / ES","l2.s4":"📲 Installable (PWA)",
+  "l2.probT":"You don't lose from lack of analysis","l2.probP":"You lose from revenge trading, oversizing, breaking your daily loss cap, trading under pressure. This journal attacks the behavior that blows accounts — not just pretty stats.",
+  "l2.featT":"One journal. Everything you need.","l2.featP":"Analytics, discipline coaching, routine and multi-account — all free, all private.",
+  "l2.f1t":"Full analytics","l2.f1d":"KPIs, equity curve, profit factor, expectancy, drawdown — auto-calculated.","l2.f2t":"Automatic leak detection","l2.f2d":"Revenge sizing, over-trading, cutting winners, your costliest emotion — found for you.","l2.f3t":"Discipline coach","l2.f3d":"Tilt-risk score, clean-day streak and rules built from YOUR data.","l2.f4t":"Multi-account & prop firms","l2.f4d":"Track many funded accounts: targets, drawdown, per-trade limits, funding progress.","l2.f5t":"Calendar & weekly","l2.f5d":"A P&L calendar with trades and win rate, plus a weekly breakdown.","l2.f6t":"Rich trade journal","l2.f6d":"Tag emotion, setup and mistakes; rich notes with images on every trade.","l2.f7t":"Routine & daily review","l2.f7d":"Holistic routine (health, family, trading) plus a forced daily review.","l2.f8t":"Motivation that shows up","l2.f8d":"Your ‘Why’ front and center — louder when your discipline drops.","l2.f9t":"Easy import","l2.f9d":"CSV from Tradovate, Zella or a generic format. Restore backups too.",
+  "l2.stepsT":"How it works","l2.st1t":"1 · Import","l2.st1d":"Bring your trades in via CSV — or start with the daily routine.","l2.st2t":"2 · Tag","l2.st2d":"Mark emotion, edge, setup and mistakes on each trade.","l2.st3t":"3 · Improve","l2.st3d":"See your leaks, discipline score and weekly progress — and fix them.",
+  "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email — we send you a magic link. No password, no card.","l2.footNote":"Educational tool — not financial advice."
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -500,7 +614,14 @@ const I18N={
   "af.maxPerTrade":"Pérdida máx por trade $","ac.violations":"⚠ {n} trade(s) por encima de tu pérdida máx por trade","mist.title":"Errores en este trade","mist.btn":"Errores","mist.saved":"Errores guardados.","mist.top":"⚠ Tus errores más reportados","mist.none":"Aún no reportas errores. Etiquétalos en cada trade en el Diario.","mist.close":"Listo","m.early":"Entré temprano","m.noconfirm":"No esperé confirmación","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL muy ajustado","m.oversize":"Oversizing","m.earlyexit":"Salí temprano","m.noplan":"No seguí el plan","m.chase":"Perseguí el precio","m.moved_sl":"Moví el stop","m.pressure":"Operé por presión económica","m.onemore":"“Solo un trade más”","m.overwin":"Subí tamaño tras ganar","m.fighting":"Operé contra la tendencia",
   "why.title":"🎯 Mi Porqué","why.edit":"Editar","why.set":"Define tu Porqué","why.prompt":"¿Por qué operas? Define tu motivación.","why.reminder":"La disciplina está baja — recuerda por qué empezaste.","why.editTitle":"Mi Porqué — tu motivación","why.textPh":"Ej. Por mis hijos. No pienso fallarles. La disciplina paga las cuentas, no la revancha.","why.image":"Foto (opcional)","why.removeImg":"Quitar foto","why.saved":"Guardado.",
   "dr.title":"📝 Revisión diaria","dr.lead":"Responde con honestidad antes de cerrar el día — aquí es donde ocurre el cambio.","dr.worst":"¿Cuál fue mi peor decisión hoy?","dr.knew":"¿Cuándo supe que rompía mis reglas y aun así seguí?","dr.self":"¿Qué me habría dicho mi yo disciplinado?","dr.tomorrow":"¿Qué haré distinto mañana? (específico)","dr.save":"Guardar revisión","dr.saved":"Revisión guardada.",
-  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:","cal.week":"Semana {n}","note.title":"Nota del trade","cm.yes":"Sí","cm.delete":"Eliminar"
+  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:","cal.week":"Semana {n}","note.title":"Nota del trade","cm.yes":"Sí","cm.delete":"Eliminar",
+  "l2.navcta":"Empezar","l2.eyebrow":"GRATIS · PRIVADO · TODO-EN-UNO","l2.title":"Todo lo que un trader de prop firm necesita — <span class='accent'>en un journal gratis</span>.","l2.lead":"Diario, analítica, rutina diaria, multi-cuenta y un coach de disciplina que detecta tus fugas. Todo en un solo lugar — gratis, para siempre.","l2.cta1":"Empieza gratis →","l2.cta2":"Sin tarjeta. Sin límites.",
+  "l2.s1":"🆓 Gratis para siempre","l2.s2":"🔒 100% privado","l2.s3":"🌍 EN / ES","l2.s4":"📲 Instalable (PWA)",
+  "l2.probT":"No pierdes por falta de análisis","l2.probP":"Pierdes por revenge trading, oversizing, romper tu tope de pérdida diaria, operar bajo presión. Este journal ataca el comportamiento que quiebra cuentas — no solo stats bonitas.",
+  "l2.featT":"Un journal. Todo lo que necesitas.","l2.featP":"Analítica, coach de disciplina, rutina y multi-cuenta — todo gratis, todo privado.",
+  "l2.f1t":"Analítica completa","l2.f1d":"KPIs, curva de equity, profit factor, expectativa, drawdown — calculado solo.","l2.f2t":"Detección automática de fugas","l2.f2d":"Revenge sizing, sobreoperar, cortar ganadores, tu emoción más cara — detectadas por ti.","l2.f3t":"Coach de disciplina","l2.f3d":"Score de riesgo de tilt, racha de días limpios y reglas hechas con TUS datos.","l2.f4t":"Multi-cuenta y prop firms","l2.f4d":"Trackea varias cuentas fondeadas: targets, drawdown, límite por trade, progreso.","l2.f5t":"Calendario y semanal","l2.f5d":"Un calendario de P&L con trades y winrate, más desglose por semana.","l2.f6t":"Diario de trades rico","l2.f6d":"Etiqueta emoción, setup y errores; notas con imágenes en cada trade.","l2.f7t":"Rutina y revisión diaria","l2.f7d":"Rutina holística (salud, familia, trading) más una revisión diaria forzada.","l2.f8t":"Motivación que aparece","l2.f8d":"Tu ‘Porqué’ al frente — más visible cuando baja tu disciplina.","l2.f9t":"Import fácil","l2.f9d":"CSV de Tradovate, Zella o formato genérico. También restaura backups.",
+  "l2.stepsT":"Cómo funciona","l2.st1t":"1 · Importa","l2.st1d":"Trae tus trades por CSV — o empieza por la rutina diaria.","l2.st2t":"2 · Etiqueta","l2.st2d":"Marca emoción, borde, setup y errores en cada trade.","l2.st3t":"3 · Mejora","l2.st3d":"Descubre tus fugas, tu score de disciplina y tu progreso semanal — y corrígelos.",
+  "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo — te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa — no es asesoría financiera."
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
