@@ -21,7 +21,7 @@
   :root{
     --ground:#0a0d11; --surface:#11161c; --surface2:#161e26; --hair:#242f3a;
     --ink:#e9eef3; --muted:#8695a6; --faint:#54626f;
-    --calm:#c79235; --calmink:#130c02; --pos:#34c98a; --neg:#ef5f6b; --wait:#e8933a;
+    --calm:#c79235; --calmink:#130c02; --pos:#34c98a; --neg:#ef5f6b; --wait:#e8933a; --a2:#6f8cf5;
     --sans:"Segoe UI",-apple-system,Inter,Roboto,system-ui,sans-serif;
     --mono:ui-monospace,"JetBrains Mono","SF Mono","Cascadia Code",Consolas,monospace;
     --r:8px; --shadow:0 6px 20px rgba(0,0,0,.42);
@@ -29,7 +29,7 @@
   :root[data-theme="light"]{
     --ground:#f3f5f8; --surface:#ffffff; --surface2:#eef2f6; --hair:#e0e6ec;
     --ink:#131b24; --muted:#5a6875; --faint:#93a1ae;
-    --calm:#9c6f18; --calmink:#fff; --pos:#12a06a; --neg:#d84150; --wait:#bd7a1c;
+    --calm:#9c6f18; --calmink:#fff; --pos:#12a06a; --neg:#d84150; --wait:#bd7a1c; --a2:#4f5fe0;
     --shadow:0 4px 16px rgba(20,30,45,.08);
   }
   *{box-sizing:border-box}
@@ -165,7 +165,10 @@
   #authGate{ overflow-y:auto }
   #authGate:not(.resolving){ display:block; align-items:initial; padding:0 }
   #authGate.resolving .authbody{ display:none }
-  .authbody{ color:var(--ink); background:radial-gradient(1100px 480px at 74% -60px, color-mix(in srgb,var(--calm) 14%, transparent), transparent 62%), var(--ground) }
+  .authbody{ color:var(--ink); background:radial-gradient(1100px 480px at 76% -60px, color-mix(in srgb,var(--calm) 15%,transparent), transparent 62%), radial-gradient(880px 420px at 6% 4%, color-mix(in srgb,var(--a2) 13%,transparent), transparent 60%), var(--ground) }
+  .lfade{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease }
+  .lfade.in{ opacity:1; transform:none }
+  @media (prefers-reduced-motion:reduce){ .lfade{ opacity:1; transform:none; transition:none } }
   .authbody h1,.authbody h2,.authbody h3,.llogo,.lstepn{ font-family:'Space Grotesk',var(--sans); text-transform:none; letter-spacing:-.02em; color:var(--ink); margin:0 }
   .authbody .btn.calm{ background:linear-gradient(180deg,color-mix(in srgb,var(--calm) 88%,#fff),var(--calm)); border-color:var(--calm); box-shadow:0 8px 22px color-mix(in srgb,var(--calm) 30%,transparent); font-weight:700 }
   .authbody .btn.calm:hover{ transform:translateY(-1px) }
@@ -201,7 +204,20 @@
   .lfhead{ text-align:center; margin-bottom:28px }
   .lfhead h2{ font-size:30px; font-weight:800 }
   .lfhead p{ color:var(--muted); margin-top:10px }
-  .lfgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px }
+  .lfgrid{ display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:minmax(150px,auto); gap:16px }
+  .lfgrid .lfcard{ display:flex; flex-direction:column }
+  .lfgrid .b2{ grid-column:span 2 }
+  .lfgrid .b2x2{ grid-column:span 2; grid-row:span 2; background:linear-gradient(155deg, color-mix(in srgb,var(--calm) 9%,var(--surface)), var(--surface) 60%) }
+  .lfico.a2{ background:color-mix(in srgb,var(--a2) 15%,transparent); border-color:color-mix(in srgb,var(--a2) 30%,transparent); color:var(--a2) }
+  .lfeat-vis{ margin-top:auto; padding-top:16px; display:flex; flex-direction:column; gap:9px }
+  .lfv-row{ display:flex; justify-content:space-between; align-items:center; font-size:12px }
+  .lfv-l{ font-family:var(--mono); letter-spacing:.06em; color:var(--muted); font-weight:700; font-size:10px }
+  .lfv-pill{ font-family:var(--mono); font-weight:700; font-size:11px; padding:3px 10px; border-radius:999px; background:color-mix(in srgb,var(--pos) 16%,transparent); color:var(--pos) }
+  .lfv-v{ font-family:var(--mono); font-weight:800; color:var(--ink) }
+  .lfv-bar{ height:7px; border-radius:999px; background:var(--surface2); overflow:hidden }
+  .lfv-bar > i{ display:block; height:100%; background:linear-gradient(90deg,var(--calm),color-mix(in srgb,var(--calm) 50%,#fff)) }
+  @media (max-width:860px){ .lfgrid{ grid-template-columns:repeat(2,1fr) } .lfgrid .b2x2{ grid-row:span 1 } }
+  @media (max-width:560px){ .lfgrid{ grid-template-columns:1fr } .lfgrid .b2,.lfgrid .b2x2{ grid-column:auto } }
   .lfcard{ background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:22px; transition:border-color .18s, transform .18s, box-shadow .18s }
   .lfcard:hover{ border-color:color-mix(in srgb,var(--calm) 48%,var(--hair)); transform:translateY(-3px); box-shadow:0 16px 34px -18px rgba(0,0,0,.55) }
   .lfcard .lfico{ display:inline-flex; width:44px; height:44px; align-items:center; justify-content:center; border-radius:12px; background:color-mix(in srgb,var(--calm) 13%,transparent); border:1px solid color-mix(in srgb,var(--calm) 26%,transparent); color:var(--calm) }
@@ -277,22 +293,27 @@
       </div>
     </div></header>
 
-    <div class="lstrip"><span data-i18n="l2.s1">🆓 Free forever</span><span data-i18n="l2.s2">🔒 100% private</span><span data-i18n="l2.s3">🌍 EN / ES</span><span data-i18n="l2.s4">📲 Installable (PWA)</span></div>
+    <div class="lstrip lfade"><span data-i18n="l2.s1">🆓 Free forever</span><span data-i18n="l2.s2">🔒 100% private</span><span data-i18n="l2.s3">🌍 EN / ES</span><span data-i18n="l2.s4">📲 Installable (PWA)</span></div>
 
-    <section class="lsec"><div class="lwrap"><div class="lcenter-eb" data-i18n="l2.ebProblem">THE REAL PROBLEM</div><h2 data-i18n="l2.probT">You don't lose from lack of analysis</h2><p data-i18n="l2.probP">You lose from revenge trading, oversizing, breaking your daily loss cap, trading under pressure. This journal attacks the behavior that blows accounts — not just pretty stats.</p></div></section>
+    <section class="lsec"><div class="lwrap lfade"><div class="lcenter-eb" data-i18n="l2.ebProblem">THE REAL PROBLEM</div><h2 data-i18n="l2.probT">You don't lose from lack of analysis</h2><p data-i18n="l2.probP">You lose from revenge trading, oversizing, breaking your daily loss cap, trading under pressure. This journal attacks the behavior that blows accounts — not just pretty stats.</p></div></section>
 
     <section class="lfeatures"><div class="lwrap">
-      <div class="lfhead"><div class="lcenter-eb" data-i18n="l2.ebFeatures">WHAT'S INSIDE</div><h2 data-i18n="l2.featT">One journal. Everything you need.</h2><p data-i18n="l2.featP">Analytics, discipline coaching, routine and multi-account — all free, all private.</p></div>
+      <div class="lfhead lfade"><div class="lcenter-eb" data-i18n="l2.ebFeatures">WHAT'S INSIDE</div><h2 data-i18n="l2.featT">One journal. Everything you need.</h2><p data-i18n="l2.featP">Analytics, discipline coaching, routine and multi-account — all free, all private.</p></div>
       <div class="lfgrid">
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><rect x="5" y="12" width="3.4" height="6" rx="1"/><rect x="10.3" y="7" width="3.4" height="11" rx="1"/><rect x="15.6" y="4" width="3.4" height="14" rx="1"/></svg></div><h3 data-i18n="l2.f1t">Full analytics</h3><p data-i18n="l2.f1d">KPIs, equity curve, profit factor, expectancy, drawdown — auto-calculated.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/></svg></div><h3 data-i18n="l2.f2t">Automatic leak detection</h3><p data-i18n="l2.f2d">Revenge sizing, over-trading, cutting winners, your costliest emotion — found for you.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2.2 5.3-5.3 2.2 2.2-5.3z"/></svg></div><h3 data-i18n="l2.f3t">Discipline coach</h3><p data-i18n="l2.f3d">Tilt-risk score, clean-day streak and rules built from YOUR data.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5L12 4l8.5 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3.5 20.5h17"/></svg></div><h3 data-i18n="l2.f4t">Multi-account & prop firms</h3><p data-i18n="l2.f4d">Track many funded accounts: targets, drawdown, per-trade limits, funding progress.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/></svg></div><h3 data-i18n="l2.f5t">Calendar & weekly</h3><p data-i18n="l2.f5d">A P&L calendar with trades and win rate, plus a weekly breakdown.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/><path d="M14 7l3 3"/></svg></div><h3 data-i18n="l2.f6t">Rich trade journal</h3><p data-i18n="l2.f6d">Tag emotion, setup and mistakes; rich notes with images on every trade.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7-4.6-7-9.5a3.8 3.8 0 017-2 3.8 3.8 0 017 2c0 4.9-7 9.5-7 9.5z"/></svg></div><h3 data-i18n="l2.f7t">Routine & daily review</h3><p data-i18n="l2.f7d">Holistic routine (health, family, trading) plus a forced daily review.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4.5h11l-2 3.5 2 3.5H6"/></svg></div><h3 data-i18n="l2.f8t">Motivation that shows up</h3><p data-i18n="l2.f8d">Your ‘Why’ front and center — louder when your discipline drops.</p></div>
-        <div class="lfcard"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10"/><path d="M8 10.5l4 4 4-4"/><path d="M5 20h14"/></svg></div><h3 data-i18n="l2.f9t">Easy import</h3><p data-i18n="l2.f9d">CSV from Tradovate, Zella or a generic format. Restore backups too.</p></div>
+        <div class="lfcard b2x2 lfade"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2.2 5.3-5.3 2.2 2.2-5.3z"/></svg></div><h3 data-i18n="l2.f3t">Discipline coach</h3><p data-i18n="l2.f3d">Tilt-risk score, clean-day streak and rules built from YOUR data.</p>
+          <div class="lfeat-vis">
+            <div class="lfv-row"><span class="lfv-l" data-i18n="l2.fvTilt">TILT RISK</span><span class="lfv-pill" data-i18n="tilt.low">LOW</span></div>
+            <div class="lfv-row"><span class="lfv-l" data-i18n="l2.fvClean">CLEAN STREAK</span><span class="lfv-v">7 🔥</span></div>
+            <div class="lfv-bar"><i style="width:84%"></i></div>
+          </div></div>
+        <div class="lfcard b2 lfade"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><rect x="5" y="12" width="3.4" height="6" rx="1"/><rect x="10.3" y="7" width="3.4" height="11" rx="1"/><rect x="15.6" y="4" width="3.4" height="14" rx="1"/></svg></div><h3 data-i18n="l2.f1t">Full analytics</h3><p data-i18n="l2.f1d">KPIs, equity curve, profit factor, expectancy, drawdown — auto-calculated.</p></div>
+        <div class="lfcard b2 lfade"><div class="lfico a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/></svg></div><h3 data-i18n="l2.f2t">Automatic leak detection</h3><p data-i18n="l2.f2d">Revenge sizing, over-trading, cutting winners, your costliest emotion — found for you.</p></div>
+        <div class="lfcard lfade"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5L12 4l8.5 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3.5 20.5h17"/></svg></div><h3 data-i18n="l2.f4t">Multi-account & prop firms</h3><p data-i18n="l2.f4d">Track many funded accounts: targets, drawdown, per-trade limits, funding progress.</p></div>
+        <div class="lfcard lfade"><div class="lfico a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/></svg></div><h3 data-i18n="l2.f5t">Calendar & weekly</h3><p data-i18n="l2.f5d">A P&L calendar with trades and win rate, plus a weekly breakdown.</p></div>
+        <div class="lfcard lfade"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16 5l3 3L8.2 18.8 4 20z"/><path d="M14 7l3 3"/></svg></div><h3 data-i18n="l2.f6t">Rich trade journal</h3><p data-i18n="l2.f6d">Tag emotion, setup and mistakes; rich notes with images on every trade.</p></div>
+        <div class="lfcard lfade"><div class="lfico a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7-4.6-7-9.5a3.8 3.8 0 017-2 3.8 3.8 0 017 2c0 4.9-7 9.5-7 9.5z"/></svg></div><h3 data-i18n="l2.f7t">Routine & daily review</h3><p data-i18n="l2.f7d">Holistic routine (health, family, trading) plus a forced daily review.</p></div>
+        <div class="lfcard b2 lfade"><div class="lfico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4.5h11l-2 3.5 2 3.5H6"/></svg></div><h3 data-i18n="l2.f8t">Motivation that shows up</h3><p data-i18n="l2.f8d">Your ‘Why’ front and center — louder when your discipline drops.</p></div>
+        <div class="lfcard b2 lfade"><div class="lfico a2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10"/><path d="M8 10.5l4 4 4-4"/><path d="M5 20h14"/></svg></div><h3 data-i18n="l2.f9t">Easy import</h3><p data-i18n="l2.f9d">CSV from Tradovate, Zella or a generic format. Restore backups too.</p></div>
       </div>
     </div></section>
 
@@ -300,13 +321,13 @@
       <div class="lcenter-eb" data-i18n="l2.ebSteps">3 SIMPLE STEPS</div>
       <h2 data-i18n="l2.stepsT">How it works</h2>
       <div class="lstepgrid">
-        <div class="lstep"><span class="lstepn">01</span><h3 data-i18n="l2.st1t">1 · Import</h3><p data-i18n="l2.st1d">Bring your trades in via CSV — or start with the daily routine.</p></div>
-        <div class="lstep"><span class="lstepn">02</span><h3 data-i18n="l2.st2t">2 · Tag</h3><p data-i18n="l2.st2d">Mark emotion, edge, setup and mistakes on each trade.</p></div>
-        <div class="lstep"><span class="lstepn">03</span><h3 data-i18n="l2.st3t">3 · Improve</h3><p data-i18n="l2.st3d">See your leaks, discipline score and weekly progress — and fix them.</p></div>
+        <div class="lstep lfade"><span class="lstepn">01</span><h3 data-i18n="l2.st1t">Import</h3><p data-i18n="l2.st1d">Bring your trades in via CSV — or start with the daily routine.</p></div>
+        <div class="lstep lfade"><span class="lstepn">02</span><h3 data-i18n="l2.st2t">Tag</h3><p data-i18n="l2.st2d">Mark emotion, edge, setup and mistakes on each trade.</p></div>
+        <div class="lstep lfade"><span class="lstepn">03</span><h3 data-i18n="l2.st3t">Improve</h3><p data-i18n="l2.st3d">See your leaks, discipline score and weekly progress — and fix them.</p></div>
       </div>
     </div></section>
 
-    <section id="get" class="lget"><div class="lwrap">
+    <section id="get" class="lget"><div class="lwrap lfade">
       <div class="lcenter-eb" data-i18n="l2.ebGet">JOIN FREE</div>
       <h2 data-i18n="l2.getT">Start free in 30 seconds</h2>
       <p class="lgetp" data-i18n="l2.getP">Enter your email — we send you a magic link. No password, no card.</p>
@@ -520,7 +541,7 @@ const I18N={
   "l2.featT":"One journal. Everything you need.","l2.featP":"Analytics, discipline coaching, routine and multi-account — all free, all private.",
   "l2.f1t":"Full analytics","l2.f1d":"KPIs, equity curve, profit factor, expectancy, drawdown — auto-calculated.","l2.f2t":"Automatic leak detection","l2.f2d":"Revenge sizing, over-trading, cutting winners, your costliest emotion — found for you.","l2.f3t":"Discipline coach","l2.f3d":"Tilt-risk score, clean-day streak and rules built from YOUR data.","l2.f4t":"Multi-account & prop firms","l2.f4d":"Track many funded accounts: targets, drawdown, per-trade limits, funding progress.","l2.f5t":"Calendar & weekly","l2.f5d":"A P&L calendar with trades and win rate, plus a weekly breakdown.","l2.f6t":"Rich trade journal","l2.f6d":"Tag emotion, setup and mistakes; rich notes with images on every trade.","l2.f7t":"Routine & daily review","l2.f7d":"Holistic routine (health, family, trading) plus a forced daily review.","l2.f8t":"Motivation that shows up","l2.f8d":"Your ‘Why’ front and center — louder when your discipline drops.","l2.f9t":"Easy import","l2.f9d":"CSV from Tradovate, Zella or a generic format. Restore backups too.",
   "l2.stepsT":"How it works","l2.st1t":"Import","l2.st1d":"Bring your trades in via CSV — or start with the daily routine.","l2.st2t":"Tag","l2.st2d":"Mark emotion, edge, setup and mistakes on each trade.","l2.st3t":"Improve","l2.st3d":"See your leaks, discipline score and weekly progress — and fix them.",
-  "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email — we send you a magic link. No password, no card.","l2.footNote":"Educational tool — not financial advice.","l2.ebProblem":"THE REAL PROBLEM","l2.ebFeatures":"WHAT'S INSIDE","l2.ebSteps":"3 SIMPLE STEPS","l2.ebGet":"JOIN FREE"
+  "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email — we send you a magic link. No password, no card.","l2.footNote":"Educational tool — not financial advice.","l2.ebProblem":"THE REAL PROBLEM","l2.ebFeatures":"WHAT'S INSIDE","l2.ebSteps":"3 SIMPLE STEPS","l2.ebGet":"JOIN FREE","l2.fvTilt":"TILT RISK","l2.fvClean":"CLEAN STREAK"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -633,7 +654,7 @@ const I18N={
   "l2.featT":"Un journal. Todo lo que necesitas.","l2.featP":"Analítica, coach de disciplina, rutina y multi-cuenta — todo gratis, todo privado.",
   "l2.f1t":"Analítica completa","l2.f1d":"KPIs, curva de equity, profit factor, expectativa, drawdown — calculado solo.","l2.f2t":"Detección automática de fugas","l2.f2d":"Revenge sizing, sobreoperar, cortar ganadores, tu emoción más cara — detectadas por ti.","l2.f3t":"Coach de disciplina","l2.f3d":"Score de riesgo de tilt, racha de días limpios y reglas hechas con TUS datos.","l2.f4t":"Multi-cuenta y prop firms","l2.f4d":"Trackea varias cuentas fondeadas: targets, drawdown, límite por trade, progreso.","l2.f5t":"Calendario y semanal","l2.f5d":"Un calendario de P&L con trades y winrate, más desglose por semana.","l2.f6t":"Diario de trades rico","l2.f6d":"Etiqueta emoción, setup y errores; notas con imágenes en cada trade.","l2.f7t":"Rutina y revisión diaria","l2.f7d":"Rutina holística (salud, familia, trading) más una revisión diaria forzada.","l2.f8t":"Motivación que aparece","l2.f8d":"Tu ‘Porqué’ al frente — más visible cuando baja tu disciplina.","l2.f9t":"Import fácil","l2.f9d":"CSV de Tradovate, Zella o formato genérico. También restaura backups.",
   "l2.stepsT":"Cómo funciona","l2.st1t":"Importa","l2.st1d":"Trae tus trades por CSV — o empieza por la rutina diaria.","l2.st2t":"Etiqueta","l2.st2d":"Marca emoción, borde, setup y errores en cada trade.","l2.st3t":"Mejora","l2.st3d":"Descubre tus fugas, tu score de disciplina y tu progreso semanal — y corrígelos.",
-  "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo — te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa — no es asesoría financiera.","l2.ebProblem":"EL PROBLEMA REAL","l2.ebFeatures":"QUÉ INCLUYE","l2.ebSteps":"3 PASOS SIMPLES","l2.ebGet":"ÚNETE GRATIS"
+  "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo — te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa — no es asesoría financiera.","l2.ebProblem":"EL PROBLEMA REAL","l2.ebFeatures":"QUÉ INCLUYE","l2.ebSteps":"3 PASOS SIMPLES","l2.ebGet":"ÚNETE GRATIS","l2.fvTilt":"RIESGO DE TILT","l2.fvClean":"RACHA LIMPIA"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -2364,6 +2385,12 @@ async function onSession(session){
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
 let _authResolved=false;
 sb.auth.onAuthStateChange((ev,session)=>{ if(!_authResolved && !session) return; _authResolved=true; onSession(session); });
+function initLandingAnim(){
+  const gate=$("#authGate"); if(!gate || !('IntersectionObserver' in window)){ if(gate) gate.querySelectorAll('.lfade').forEach(el=>el.classList.add('in')); return; }
+  const io=new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {root:gate, threshold:.1});
+  gate.querySelectorAll('.lfade').forEach((el,i)=>{ el.style.transitionDelay=(Math.min(i,6)*45)+'ms'; io.observe(el); });
+}
+initLandingAnim();
 applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{ s.value=(DB.settings.lang||'en'); s.onchange=e=>setLang(e.target.value); });
 sb.auth.getSession().then(({data})=>{ _authResolved=true; onSession(data.session); }).catch(e=>{ _authResolved=true; console.warn("getSession error",e); showLogin(); });
 $("#authSend").onclick=async()=>{
