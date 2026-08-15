@@ -381,7 +381,7 @@ const I18N={
   "af.maxPerTrade":"Max loss per trade $","ac.violations":"⚠ {n} trade(s) over your max per-trade loss","mist.title":"Mistakes on this trade","mist.btn":"Mistakes","mist.saved":"Mistakes saved.","mist.top":"⚠ Your most-reported mistakes","mist.none":"No self-reported mistakes yet. Tag them on each trade in the Journal.","mist.close":"Done","m.early":"Entered early","m.noconfirm":"Didn't wait for confirmation","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL too tight","m.oversize":"Oversizing","m.earlyexit":"Exited early","m.noplan":"Didn't follow the plan","m.chase":"Chased price","m.moved_sl":"Moved my stop","m.pressure":"Traded out of financial pressure","m.onemore":"“Just one more trade”","m.overwin":"Oversized after a win","m.fighting":"Fought the trend",
   "why.title":"🎯 My Why","why.edit":"Edit","why.set":"Set your Why","why.prompt":"Why do you trade? Set your motivation.","why.reminder":"Discipline is low — remember why you started.","why.editTitle":"My Why — your motivation","why.textPh":"e.g. For my kids. I refuse to fail them. Discipline pays the bills, not revenge.","why.image":"Photo (optional)","why.removeImg":"Remove photo","why.saved":"Saved.",
   "dr.title":"📝 Daily review","dr.lead":"Answer honestly before closing the day — this is where change happens.","dr.worst":"What was my worst decision today?","dr.knew":"When did I know I was breaking my rules — and kept going?","dr.self":"What would my disciplined self have told me?","dr.tomorrow":"What will I do differently tomorrow? (specific)","dr.save":"Save review","dr.saved":"Review saved.",
-  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure"
+  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -487,7 +487,7 @@ const I18N={
   "af.maxPerTrade":"Pérdida máx por trade $","ac.violations":"⚠ {n} trade(s) por encima de tu pérdida máx por trade","mist.title":"Errores en este trade","mist.btn":"Errores","mist.saved":"Errores guardados.","mist.top":"⚠ Tus errores más reportados","mist.none":"Aún no reportas errores. Etiquétalos en cada trade en el Diario.","mist.close":"Listo","m.early":"Entré temprano","m.noconfirm":"No esperé confirmación","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL muy ajustado","m.oversize":"Oversizing","m.earlyexit":"Salí temprano","m.noplan":"No seguí el plan","m.chase":"Perseguí el precio","m.moved_sl":"Moví el stop","m.pressure":"Operé por presión económica","m.onemore":"“Solo un trade más”","m.overwin":"Subí tamaño tras ganar","m.fighting":"Operé contra la tendencia",
   "why.title":"🎯 Mi Porqué","why.edit":"Editar","why.set":"Define tu Porqué","why.prompt":"¿Por qué operas? Define tu motivación.","why.reminder":"La disciplina está baja — recuerda por qué empezaste.","why.editTitle":"Mi Porqué — tu motivación","why.textPh":"Ej. Por mis hijos. No pienso fallarles. La disciplina paga las cuentas, no la revancha.","why.image":"Foto (opcional)","why.removeImg":"Quitar foto","why.saved":"Guardado.",
   "dr.title":"📝 Revisión diaria","dr.lead":"Responde con honestidad antes de cerrar el día — aquí es donde ocurre el cambio.","dr.worst":"¿Cuál fue mi peor decisión hoy?","dr.knew":"¿Cuándo supe que rompía mis reglas y aun así seguí?","dr.self":"¿Qué me habría dicho mi yo disciplinado?","dr.tomorrow":"¿Qué haré distinto mañana? (específico)","dr.save":"Guardar revisión","dr.saved":"Revisión guardada.",
-  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta"
+  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -501,7 +501,7 @@ const ticksOf=(pts,sym)=>Math.round(pts/(TICKSZ[sym]!==undefined?TICKSZ[sym]:0.2
 const EMO=["Calma","Aburrido","FOMO","Revancha","DPT"];
 const PANEL=["VALID","WAIT","CHOP"];
 const ALIGN=["Con sesgo","Contra","Neutro"];
-const SETUPS=["Fade VAH","Fade VAL","POC→VAL","POC→VAH","Quiebre POC","Rebote VAL","Rebote VAH","Pivote","Otro"];
+const SETUPS=[];  // ya no hay setups por defecto; el usuario añade los suyos (DB.settings.setups)
 const MISTAKES=["revenge","oversize","overwin","fighting","earlyexit","onemore","pressure","fomo","moved_sl","noplan","early","noconfirm","tightsl","chase"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
 let period="ALL", tab="overview", monthSel=null, acctFilter="ALL", noteSel=null, jExpanded=null, routineSel=null;
@@ -985,15 +985,19 @@ function drawLine(c,pts,H){
   const ys=pts.map(p=>p.y); let mn=Math.min(0,...ys), mx=Math.max(0,...ys); if(mn===mx)mx=mn+1;
   const X=i=>pad+ (pts.length>1? i*(w-2*pad)/(pts.length-1):(w/2));
   const Y=v=>bottom-(v-mn)/(mx-mn)*(bottom-pad);
-  x.strokeStyle=css('--hair'); x.lineWidth=1; x.beginPath(); x.moveTo(pad,Y(0)); x.lineTo(w-pad,Y(0)); x.stroke();
-  // area
-  const grad=x.createLinearGradient(0,pad,0,bottom); const end=ys[ys.length-1];
-  const col=end>=0?css('--pos'):css('--neg');
-  grad.addColorStop(0,col+"55"); grad.addColorStop(1,col+"00");
-  x.beginPath(); pts.forEach((p,i)=>{const px=X(i),py=Y(p.y); i?x.lineTo(px,py):x.moveTo(px,py);});
-  x.lineTo(X(pts.length-1),Y(0)); x.lineTo(X(0),Y(0)); x.closePath(); x.fillStyle=grad; x.fill();
-  x.beginPath(); pts.forEach((p,i)=>{const px=X(i),py=Y(p.y); i?x.lineTo(px,py):x.moveTo(px,py);}); x.strokeStyle=col; x.lineWidth=2; x.stroke();
-  const lx=X(pts.length-1),ly=Y(end); x.fillStyle=col; x.beginPath(); x.arc(lx,ly,3.5,0,7); x.fill();
+  const zeroY=Y(0), end=ys[ys.length-1], pos=css('--pos'), neg=css('--neg');
+  x.strokeStyle=css('--hair'); x.lineWidth=1; x.beginPath(); x.moveTo(pad,zeroY); x.lineTo(w-pad,zeroY); x.stroke();
+  const areaPath=()=>{ x.beginPath(); pts.forEach((p,i)=>{const px=X(i),py=Y(p.y); i?x.lineTo(px,py):x.moveTo(px,py);}); x.lineTo(X(pts.length-1),zeroY); x.lineTo(X(0),zeroY); x.closePath(); };
+  const linePath=()=>{ x.beginPath(); pts.forEach((p,i)=>{const px=X(i),py=Y(p.y); i?x.lineTo(px,py):x.moveTo(px,py);}); };
+  // Colorea por región: verde arriba del cero, rojo debajo (recorte por bandas horizontales).
+  [[pos,pad,zeroY],[neg,zeroY,bottom+4]].forEach(([col,y0,y1])=>{ if(y1-y0<=0.5) return;
+    x.save(); x.beginPath(); x.rect(0,y0,w,y1-y0); x.clip();
+    areaPath(); x.fillStyle=col+"2e"; x.fill();
+    linePath(); x.strokeStyle=col; x.lineWidth=2; x.stroke();
+    x.restore();
+  });
+  const lx=X(pts.length-1),ly=Y(end), ecol=end>=0?pos:neg;
+  x.fillStyle=ecol; x.beginPath(); x.arc(lx,ly,3.5,0,7); x.fill();
   x.fillStyle=css('--ink'); x.font="600 12px "+css('--mono'); x.textAlign="right";
   x.fillText((end<0?"−$":"$")+Math.abs(Math.round(end)), lx-6, ly-8);
 }
@@ -1134,7 +1138,7 @@ function dayTradeRows(arr){
       <td><div class="chips">${emoChips}</div></td>
       <td><div class="chips">${panChips}</div></td>
       <td><div class="chips">${alnChips}</div></td>
-      <td><select class="setupSel" data-id="${id}"><option value="">—</option>${allSetups().map(s=>'<option value="'+escA(s)+'"'+(tg.setup===s?' selected':'')+'>'+vLabel("setup",s)+'</option>').join("")}</select></td>
+      <td><select class="setupSel" data-id="${id}"><option value="">—</option>${allSetups().map(s=>'<option value="'+escA(s)+'"'+(tg.setup===s?' selected':'')+'>'+vLabel("setup",s)+'</option>').join("")}<option value="__add">${T("setup.add")}</option></select></td>
       <td><div class="chips">
         <button class="chip w" data-id="${id}" data-k="wait" data-v="1" aria-pressed="${tg.wait?'true':'false'}">${T("j.signal")}</button>
         <button class="chip calm" data-id="${id}" data-k="stop" data-v="1" aria-pressed="${tg.stop?'true':'false'}">${T("j.stopBtn")}</button>
@@ -1179,7 +1183,9 @@ function renderJournal(){
     const nb=e.target.closest("[data-note]"); if(nb){ const id=nb.dataset.note; DB.tags[id]=DB.tags[id]||{}; const v=prompt(T("j.notePrompt"),DB.tags[id].note||""); if(v!==null){DB.tags[id].note=v.trim(); save(); renderJournal();} return; }
     const mb=e.target.closest("[data-mist]"); if(mb){ showMistakes(mb.dataset.mist); return; }
   };
-  host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{}; DB.tags[id].setup=s.value; save(); };
+  host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{};
+    if(s.value==="__add"){ const nm=prompt(T("setup.addPrompt")); if(nm&&nm.trim()){ const n=nm.trim(); DB.settings.setups=DB.settings.setups||[]; if(!allSetups().includes(n)) DB.settings.setups.push(n); DB.tags[id].setup=n; save(); } renderJournal(); return; }
+    DB.tags[id].setup=s.value; save(); };
 }
 function periodLabel(){ return period==="ALL"?T("pl.all"):period==="7"?T("pl.last7"):period.slice(2); }
 function mdb(s){ return s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); }
@@ -1617,7 +1623,7 @@ function renderAccounts(){
 }
 
 // ---------- PLAYBOOKS ----------
-function allSetups(){ return [...new Set([...SETUPS, ...Object.keys(DB.playbooks)])]; }
+function allSetups(){ const used=new Set(); DB.trades.forEach(t=>{ const s=(DB.tags[tid(t)]||{}).setup; if(s)used.add(s); }); return [...new Set([...(DB.settings.setups||[]), ...Object.keys(DB.playbooks), ...used])]; }
 function renderPlaybooks(){
   const host=$("#view-playbooks"); const TR=scoped();
   const bySetup={}; TR.forEach(t=>{const g=DB.tags[tid(t)]; if(g&&g.setup){(bySetup[g.setup]=bySetup[g.setup]||[]).push(t);}});
