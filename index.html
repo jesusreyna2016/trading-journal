@@ -346,7 +346,8 @@ const I18N={
   "rt.starterNote":"This is a starter template — press ✏️ Edit to make it your own (add, remove or change blocks and items). Your daily check-offs are saved.",
   "sync.saved":"✓ saved","sync.saving":"saving…","sync.err":"⚠ not saved","sync.conflict":"⚠ conflict","sync.offline":"Offline — using local copy",
   "conf.title":"Newer version on another device","conf.body":"This journal was updated more recently on another device (or tab). If you overwrite, you'll lose those changes.","conf.reload":"Reload the newer version","conf.overwrite":"Overwrite with what's here",
-  "ob3.title":"How it works — 3 steps","ob3.s1":"<b>Import</b> your trades — a CSV from your broker (Tradovate / Zella).","ob3.s2":"<b>Tag</b> each trade: emotion, valid edge, setup, process.","ob3.s3":"<b>See</b> your leaks, discipline score and weekly progress.","ob3.noTrades":"No trades yet? Start with your <b>Daily Routine</b> — it works without any data."
+  "ob3.title":"How it works — 3 steps","ob3.s1":"<b>Import</b> your trades — a CSV from your broker (Tradovate / Zella).","ob3.s2":"<b>Tag</b> each trade: emotion, valid edge, setup, process.","ob3.s3":"<b>See</b> your leaks, discipline score and weekly progress.","ob3.noTrades":"No trades yet? Start with your <b>Daily Routine</b> — it works without any data.",
+  "hdr.allAccounts":"All accounts","hdr.noAccountN":"(no account · {n})","hdr.allHistory":"All history","hdr.last7days":"Last 7 days with data"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -433,14 +434,15 @@ const I18N={
   "rt.starterNote":"Esta es una plantilla de arranque — pulsa ✏️ Editar para hacerla tuya (añade, quita o cambia bloques e ítems). Lo que marcas cada día se guarda.",
   "sync.saved":"✓ guardado","sync.saving":"guardando…","sync.err":"⚠ sin guardar","sync.conflict":"⚠ conflicto","sync.offline":"Sin conexión — usando copia local",
   "conf.title":"Versión más nueva en otro dispositivo","conf.body":"Este journal se actualizó más recientemente en otro dispositivo (o pestaña). Si sobrescribes, perderás esos cambios.","conf.reload":"Cargar la versión más nueva","conf.overwrite":"Sobrescribir con lo de aquí",
-  "ob3.title":"Cómo funciona — 3 pasos","ob3.s1":"<b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).","ob3.s2":"<b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.","ob3.s3":"<b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.","ob3.noTrades":"¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato."
+  "ob3.title":"Cómo funciona — 3 pasos","ob3.s1":"<b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).","ob3.s2":"<b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.","ob3.s3":"<b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.","ob3.noTrades":"¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato.",
+  "hdr.allAccounts":"Todas las cuentas","hdr.noAccountN":"(sin cuenta · {n})","hdr.allHistory":"Todo el histórico","hdr.last7days":"Últimos 7 días con datos"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
 function fmt(s,o){ return String(s).replace(/\{(\w+)\}/g,(_,k)=>o[k]!=null?o[k]:""); }
 function vLabel(p,v){ if(v==null||v==="")return v; const k=p+"."+v, r=T(k); return r===k?v:r; }
 function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); }
-function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); const g=$("#greet"); if(g&&user) g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]); if(user) render(); }
+function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); const g=$("#greet"); if(g&&user) g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]); if(user){ buildAccounts(); buildPeriods(); render(); } }
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
 const TICKSZ={NQ:0.25,MNQ:0.25,ES:0.25,MES:0.25,RTY:0.1,M2K:0.1,YM:1,MYM:1,GC:0.1,MGC:0.1,CL:0.01,MCL:0.01};
 const ticksOf=(pts,sym)=>Math.round(pts/(TICKSZ[sym]!==undefined?TICKSZ[sym]:0.25));
@@ -695,8 +697,8 @@ function readFile(f, acct){
 }
 function buildAccounts(){ const sel=$("#acctSel"); if(!sel)return; sel.innerHTML="";
   const add=(v,l)=>{const o=document.createElement("option");o.value=v;o.textContent=l;sel.appendChild(o);};
-  add("ALL","Todas las cuentas"); Object.keys(DB.accounts).forEach(id=>add(id,DB.accounts[id].name));
-  const un=DB.trades.filter(t=>!t.acct).length; if(un)add("NONE","(sin cuenta · "+un+")");
+  add("ALL",T("hdr.allAccounts")); Object.keys(DB.accounts).forEach(id=>add(id,DB.accounts[id].name));
+  const un=DB.trades.filter(t=>!t.acct).length; if(un)add("NONE",fmt(T("hdr.noAccountN"),{n:un}));
   if(acctFilter!=="ALL"&&acctFilter!=="NONE"&&!DB.accounts[acctFilter]) acctFilter="ALL";
   sel.value=acctFilter;
 }
@@ -752,8 +754,8 @@ function buildPeriods(){
   const days=[...new Set(DB.trades.map(t=>t.tday||t.date))].sort();
   const sel=$("#periodSel"); sel.innerHTML="";
   const add=(v,l)=>{const o=document.createElement("option");o.value=v;o.textContent=l;sel.appendChild(o);};
-  add("ALL","Todo el histórico");
-  add("7","Últimos 7 días con datos");
+  add("ALL",T("hdr.allHistory"));
+  add("7",T("hdr.last7days"));
   days.slice().reverse().forEach(d=>add("D:"+d,d));
   sel.value=period;
 }
