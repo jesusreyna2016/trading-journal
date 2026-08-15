@@ -120,6 +120,13 @@
   .cal .cell.gneg{background:rgba(242,73,92,.12)} .cal .cell.gneg .dv{color:var(--neg)}
   .cal .cell .dot{position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%}
   .cal .cell .dot.ok{background:var(--pos)} .cal .cell .dot.no{background:var(--neg)}
+  .cal .cell{min-height:64px}
+  .cal .cell .cst{font-size:9px; color:var(--muted); font-family:var(--mono)}
+  .calwrap{display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap}
+  .calmain{flex:1; min-width:300px}
+  .calweeks{flex:0 0 118px; display:flex; flex-direction:column; gap:8px}
+  .calweeks .wkbox{border:1px solid var(--hair); border-radius:8px; padding:9px 11px}
+  .calweeks .wkbox .lbl{font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); font-weight:700}
   .cf{display:flex; flex-direction:column}
   .cf .r{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 0; border-top:1px solid var(--hair)}
   .cf .r:first-child{border-top:0}
@@ -381,7 +388,7 @@ const I18N={
   "af.maxPerTrade":"Max loss per trade $","ac.violations":"⚠ {n} trade(s) over your max per-trade loss","mist.title":"Mistakes on this trade","mist.btn":"Mistakes","mist.saved":"Mistakes saved.","mist.top":"⚠ Your most-reported mistakes","mist.none":"No self-reported mistakes yet. Tag them on each trade in the Journal.","mist.close":"Done","m.early":"Entered early","m.noconfirm":"Didn't wait for confirmation","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL too tight","m.oversize":"Oversizing","m.earlyexit":"Exited early","m.noplan":"Didn't follow the plan","m.chase":"Chased price","m.moved_sl":"Moved my stop","m.pressure":"Traded out of financial pressure","m.onemore":"“Just one more trade”","m.overwin":"Oversized after a win","m.fighting":"Fought the trend",
   "why.title":"🎯 My Why","why.edit":"Edit","why.set":"Set your Why","why.prompt":"Why do you trade? Set your motivation.","why.reminder":"Discipline is low — remember why you started.","why.editTitle":"My Why — your motivation","why.textPh":"e.g. For my kids. I refuse to fail them. Discipline pays the bills, not revenge.","why.image":"Photo (optional)","why.removeImg":"Remove photo","why.saved":"Saved.",
   "dr.title":"📝 Daily review","dr.lead":"Answer honestly before closing the day — this is where change happens.","dr.worst":"What was my worst decision today?","dr.knew":"When did I know I was breaking my rules — and kept going?","dr.self":"What would my disciplined self have told me?","dr.tomorrow":"What will I do differently tomorrow? (specific)","dr.save":"Save review","dr.saved":"Review saved.",
-  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:"
+  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:","cal.week":"Week {n}"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -487,7 +494,7 @@ const I18N={
   "af.maxPerTrade":"Pérdida máx por trade $","ac.violations":"⚠ {n} trade(s) por encima de tu pérdida máx por trade","mist.title":"Errores en este trade","mist.btn":"Errores","mist.saved":"Errores guardados.","mist.top":"⚠ Tus errores más reportados","mist.none":"Aún no reportas errores. Etiquétalos en cada trade en el Diario.","mist.close":"Listo","m.early":"Entré temprano","m.noconfirm":"No esperé confirmación","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL muy ajustado","m.oversize":"Oversizing","m.earlyexit":"Salí temprano","m.noplan":"No seguí el plan","m.chase":"Perseguí el precio","m.moved_sl":"Moví el stop","m.pressure":"Operé por presión económica","m.onemore":"“Solo un trade más”","m.overwin":"Subí tamaño tras ganar","m.fighting":"Operé contra la tendencia",
   "why.title":"🎯 Mi Porqué","why.edit":"Editar","why.set":"Define tu Porqué","why.prompt":"¿Por qué operas? Define tu motivación.","why.reminder":"La disciplina está baja — recuerda por qué empezaste.","why.editTitle":"Mi Porqué — tu motivación","why.textPh":"Ej. Por mis hijos. No pienso fallarles. La disciplina paga las cuentas, no la revancha.","why.image":"Foto (opcional)","why.removeImg":"Quitar foto","why.saved":"Guardado.",
   "dr.title":"📝 Revisión diaria","dr.lead":"Responde con honestidad antes de cerrar el día — aquí es donde ocurre el cambio.","dr.worst":"¿Cuál fue mi peor decisión hoy?","dr.knew":"¿Cuándo supe que rompía mis reglas y aun así seguí?","dr.self":"¿Qué me habría dicho mi yo disciplinado?","dr.tomorrow":"¿Qué haré distinto mañana? (específico)","dr.save":"Guardar revisión","dr.saved":"Revisión guardada.",
-  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:"
+  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:","cal.week":"Semana {n}"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -1329,17 +1336,23 @@ function renderCalendar(){
   const mNet=inMonth.reduce((s,d)=>s+d.net,0), mDisc=inMonth.filter(d=>d.disciplined).length;
   const mDays=inMonth.length, greenD=inMonth.filter(d=>d.net>0).length;
   const bestD=mDays?Math.max(...inMonth.map(d=>d.net)):0, worstD=mDays?Math.min(...inMonth.map(d=>d.net)):0, avgDay=mDays?mNet/mDays:0;
-  const dows=T("cal.dows").split(","); let cells="";
+  const tstats={}; scoped().forEach(t=>{ const k=t.tday||t.date; (tstats[k]=tstats[k]||{n:0,w:0}); tstats[k].n++; if(t.pnl>0)tstats[k].w++; });
+  const dows=T("cal.dows").split(","); let cells=""; const weeks=[];
   for(let i=0;i<startDow;i++) cells+='<div class="cell empty"></div>';
-  for(let dd=1;dd<=dim;dd++){ const ds=monthSel+"-"+String(dd).padStart(2,"0"); const d=map[ds];
-    if(d) cells+=`<div class="cell ${d.net>=0?'gpos':'gneg'}" title="${ds}: ${money(d.net)}${d.disciplined?' · '+T("w.disciplined"):' · '+failReasons(d)}"><span class="dn">${dd}</span><span class="dv">${d.net>=0?'+':''}${Math.round(d.net)}</span><span class="dot ${d.disciplined?'ok':'no'}"></span></div>`;
-    else cells+=`<div class="cell"><span class="dn">${dd}</span></div>`; }
+  for(let dd=1;dd<=dim;dd++){ const ds=monthSel+"-"+String(dd).padStart(2,"0"); const d=map[ds]; const wi=Math.floor((startDow+dd-1)/7); weeks[wi]=weeks[wi]||{net:0,days:0};
+    if(d){ weeks[wi].net+=d.net; weeks[wi].days++; const st=tstats[ds]||{n:0,w:0}; const wr=st.n?Math.round(st.w/st.n*100):0;
+      cells+=`<div class="cell ${d.net>=0?'gpos':'gneg'}" title="${ds}: ${money(d.net)}${d.disciplined?' · '+T("w.disciplined"):' · '+failReasons(d)}"><span class="dn">${dd}</span><span class="dv">${d.net>=0?'+':''}${Math.round(d.net)}</span><span class="cst">${st.n}t · ${wr}%</span><span class="dot ${d.disciplined?'ok':'no'}"></span></div>`;
+    } else cells+=`<div class="cell"><span class="dn">${dd}</span></div>`; }
   const opts=months.slice().reverse().map(m=>`<option value="${m}" ${m===monthSel?'selected':''}>${m}</option>`).join("");
+  const wkCol=weeks.map((wk,i)=>`<div class="wkbox"><div class="lbl">${fmt(T("cal.week"),{n:i+1})}</div><div class="num ${cls(wk.net)}" style="font-weight:700; font-size:17px; margin-top:2px">${money1(wk.net)}</div><div class="small muted">${wk.days} ${T("dDays")}</div></div>`).join("");
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:12px">
     <h2 style="margin:0">${T("tab.calendar")}</h2><select id="monthSel">${opts}</select></div>
     <div class="grid kpis" style="margin-bottom:14px">${kpi(T("cal.monthNet"),money1(mNet),"",cls(mNet))}${kpi(T("cal.greenDays"),greenD+"/"+mDays,mDays?Math.round(greenD/mDays*100)+"%":"—",greenD>=mDays-greenD?"pos":"wait")}${kpi(T("cal.avgDay"),money1(avgDay),"",cls(avgDay))}${kpi(T("cal.bestWorst"),money(bestD)+" / "+money(worstD),T("cal.ofMonth"))}${kpi(T("discDays"),mDisc+"/"+mDays,T("cal.thisMonth"),"calmc")}</div>
-    <div class="card"><div class="calhead">${dows.map(x=>'<div>'+x+'</div>').join("")}</div><div class="cal">${cells}</div>
-      <p class="small muted" style="margin-top:10px">${T("cal.legend")}</p></div>`;
+    <div class="card"><div class="calwrap">
+      <div class="calmain"><div class="calhead">${dows.map(x=>'<div>'+x+'</div>').join("")}</div><div class="cal">${cells}</div>
+        <p class="small muted" style="margin-top:10px">${T("cal.legend")}</p></div>
+      <div class="calweeks">${wkCol}</div>
+    </div></div>`;
   $("#monthSel").addEventListener("change",e=>{monthSel=e.target.value; renderCalendar();});
 }
 // ---------- PROCESS SCORE (grade the process, not P&L) ----------
