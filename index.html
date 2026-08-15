@@ -321,7 +321,9 @@ const I18N={
   "ins.dim":"By {dim}: best is **{bk}** ({bnet}, {bn} trades, {bwr}%) · worst **{wk}** ({wnet}, {wwr}%).","ins.decay":"First 3 trades of the day: **{ee}/trade** ({en}). From the 4th on: **{le}/trade** ({ln}). {tail}","ins.decayBad":"Over-trading costs you — the edge fades after the first ones.","ins.decayMid":"You perform a bit better early in the day.","ins.decayOk":"You hold up well all day.","ins.tilt":"After a LOSS, your next trade averages **{al}** ({aln}×). After a WIN: **{aw}** ({awn}×). {tail}","ins.tiltBad":"Tilt/revenge signal: the trade after a loss is your most expensive.","ins.tiltOk":"You react well to losses.","ins.conc":"Concentration: your 3 best trades add **{top3}**; your 3 worst **{bot3}**. {tail}","ins.concBad":"Without your 3 worst your result would change completely — loss size is your biggest lever.","ins.concOk":"Neither gains nor losses depend on a handful of trades — good sign.","ins.cons":"Consistency: **{posD}/{total} green days** ({pct}%). Best {best} · worst {worst}.",
   "foc.decay":"Cut the day shorter: your performance drops after the first trades. Set a max trades/day.","foc.tilt":"Circuit-breaker: after a loss (especially 2 in a row), pause — that's your most expensive trade.","foc.dim":"Trim or avoid **{k}** — that's where you consistently lose most.","foc.conc":"Set a max $ stop per trade and respect it — loss size is your biggest lever.","foc.revenge":"FIXED size; no sizing up after a loss.","foc.chop":"Less is more: in range/chop, stay out.",
   "rep.title":"REPORT — {p}","rep.stats":"{n} trades · Net {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Best day {bd} {bn} · Worst day {wd} {wn} · Avg day {avg}","rep.whatData":"WHAT YOUR DATA SAYS:","rep.mainLeak":"MAIN LEAK: ","rep.noLeak":"no critical leak in the period","rep.whereFocus":"WHERE TO FOCUS (per your numbers):","rep.whatDataH":"What your data says","rep.needMore":"Import more trades (≥4) to generate insights.","rep.mainLeakH":"Main leak","rep.whereFocusH":"Where to focus (per your numbers)","rep.copyableH":"Copyable report","rep.copyBtn":"Copy report","rep.copied":"Report copied.","rep.copyFail":"Couldn't copy.",
-  "emo.Calma":"Calm","emo.Aburrido":"Bored","emo.FOMO":"FOMO","emo.Revancha":"Revenge","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"With bias","aln.Contra":"Against","aln.Neutro":"Neutral"
+  "emo.Calma":"Calm","emo.Aburrido":"Bored","emo.FOMO":"FOMO","emo.Revancha":"Revenge","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"With bias","aln.Contra":"Against","aln.Neutro":"Neutral",
+  "setup.Quiebre POC":"Break POC","setup.Rebote VAL":"Bounce VAL","setup.Rebote VAH":"Bounce VAH","setup.Pivote":"Pivot","setup.Otro":"Other",
+  "rt.starterNote":"This is a starter template — press ✏️ Edit to make it your own (add, remove or change blocks and items). Your daily check-offs are saved."
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -403,7 +405,9 @@ const I18N={
   "ins.dim":"Por {dim}: lo mejor son **{bk}** ({bnet}, {bn} trades, {bwr}%) · lo peor **{wk}** ({wnet}, {wwr}%).","ins.decay":"Primeros 3 trades del día: **{ee}/trade** ({en}). Del 4º en adelante: **{le}/trade** ({ln}). {tail}","ins.decayBad":"Operar de más te cuesta — el edge se agota tras los primeros.","ins.decayMid":"Rindes algo mejor al principio del día.","ins.decayOk":"Aguantas bien todo el día.","ins.tilt":"Tras una PÉRDIDA, tu siguiente trade promedia **{al}** ({aln}×). Tras una GANANCIA: **{aw}** ({awn}×). {tail}","ins.tiltBad":"Señal de tilt/revancha: el trade tras perder es tu más caro.","ins.tiltOk":"Reaccionas bien a las pérdidas.","ins.conc":"Concentración: tus 3 mejores trades suman **{top3}**; tus 3 peores **{bot3}**. {tail}","ins.concBad":"Sin tus 3 peores tu resultado cambiaría por completo — el tamaño de la pérdida es tu mayor palanca.","ins.concOk":"Ni ganancias ni pérdidas dependen de un puñado de trades — buena señal.","ins.cons":"Consistencia: **{posD}/{total} días en verde** ({pct}%). Mejor {best} · peor {worst}.",
   "foc.decay":"Corta el día antes: tu rendimiento cae tras los primeros trades. Fija un máximo de trades/día.","foc.tilt":"Circuit-breaker: tras una pérdida (sobre todo 2 seguidas), pausa — ahí está tu trade más caro.","foc.dim":"Recorta o evita **{k}** — es donde más pierdes de forma consistente.","foc.conc":"Define un stop máximo por trade en $ y respétalo — el tamaño de la pérdida es tu mayor palanca.","foc.revenge":"Tamaño FIJO; nada de subir el tamaño tras perder.","foc.chop":"Menos es más: en rango/chop, fuera.",
   "rep.title":"INFORME — {p}","rep.stats":"{n} trades · Neto {net} · Win {wr}% · PF {pf} · Exp {exp}/trade","rep.bestWorst":"Mejor día {bd} {bn} · Peor día {wd} {wn} · Día medio {avg}","rep.whatData":"QUÉ DICEN TUS DATOS:","rep.mainLeak":"FUGA PRINCIPAL: ","rep.noLeak":"sin fuga crítica en el periodo","rep.whereFocus":"DÓNDE ENFOCAR (según tus números):","rep.whatDataH":"Qué dicen tus datos","rep.needMore":"Importa más trades (≥4) para generar insights.","rep.mainLeakH":"Fuga principal","rep.whereFocusH":"Dónde enfocar (según tus números)","rep.copyableH":"Informe copiable","rep.copyBtn":"Copiar informe","rep.copied":"Informe copiado.","rep.copyFail":"No se pudo copiar.",
-  "emo.Calma":"Calma","emo.Aburrido":"Aburrido","emo.FOMO":"FOMO","emo.Revancha":"Revancha","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"Con sesgo","aln.Contra":"Contra","aln.Neutro":"Neutro"
+  "emo.Calma":"Calma","emo.Aburrido":"Aburrido","emo.FOMO":"FOMO","emo.Revancha":"Revancha","emo.DPT":"DPT","pan.VALID":"VALID","pan.WAIT":"WAIT","pan.CHOP":"CHOP","aln.Con sesgo":"Con sesgo","aln.Contra":"Contra","aln.Neutro":"Neutro",
+  "setup.Quiebre POC":"Quiebre POC","setup.Rebote VAL":"Rebote VAL","setup.Rebote VAH":"Rebote VAH","setup.Pivote":"Pivote","setup.Otro":"Otro",
+  "rt.starterNote":"Esta es una plantilla de arranque — pulsa ✏️ Editar para hacerla tuya (añade, quita o cambia bloques e ítems). Lo que marcas cada día se guarda."
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -966,7 +970,7 @@ function dayTradeRows(arr){
       <td><div class="chips">${emoChips}</div></td>
       <td><div class="chips">${panChips}</div></td>
       <td><div class="chips">${alnChips}</div></td>
-      <td><select class="setupSel" data-id="${id}"><option value="">—</option>${allSetups().map(s=>'<option'+(tg.setup===s?' selected':'')+'>'+s+'</option>').join("")}</select></td>
+      <td><select class="setupSel" data-id="${id}"><option value="">—</option>${allSetups().map(s=>'<option value="'+escA(s)+'"'+(tg.setup===s?' selected':'')+'>'+vLabel("setup",s)+'</option>').join("")}</select></td>
       <td><div class="chips">
         <button class="chip w" data-id="${id}" data-k="wait" data-v="1" aria-pressed="${tg.wait?'true':'false'}">${T("j.signal")}</button>
         <button class="chip calm" data-id="${id}" data-k="stop" data-v="1" aria-pressed="${tg.stop?'true':'false'}">${T("j.stopBtn")}</button>
@@ -1407,13 +1411,13 @@ function renderPlaybooks(){
   const traded=rows.filter(x=>x.arr.length);
   const best=traded[0], worst=traded[traded.length-1];
   const summary= traded.length ? `<div class="card"><h2>${T("pb.yours")}</h2><div class="cf">
-     ${best?`<div class="r"><span class="lab">${T("pb.mostPrints")}</span><span><b>${best.n}</b> <span class="v ${cls(best.m.net)}">${money1(best.m.net)}</span> <span class="muted small">${best.m.n} ${T("trades")} · ${best.m.winrate.toFixed(0)}% · ${T("pb.adh")} ${best.adh==null?'—':Math.round(best.adh)+'%'}</span></span></div>`:''}
-     ${(worst&&worst!==best&&worst.m.net<0)?`<div class="r"><span class="lab">${T("pb.mostCosts")}</span><span><b>${worst.n}</b> <span class="v ${cls(worst.m.net)}">${money1(worst.m.net)}</span> <span class="muted small">${worst.m.n} ${T("trades")} · ${worst.m.winrate.toFixed(0)}%</span></span></div>`:''}
+     ${best?`<div class="r"><span class="lab">${T("pb.mostPrints")}</span><span><b>${vLabel("setup",best.n)}</b> <span class="v ${cls(best.m.net)}">${money1(best.m.net)}</span> <span class="muted small">${best.m.n} ${T("trades")} · ${best.m.winrate.toFixed(0)}% · ${T("pb.adh")} ${best.adh==null?'—':Math.round(best.adh)+'%'}</span></span></div>`:''}
+     ${(worst&&worst!==best&&worst.m.net<0)?`<div class="r"><span class="lab">${T("pb.mostCosts")}</span><span><b>${vLabel("setup",worst.n)}</b> <span class="v ${cls(worst.m.net)}">${money1(worst.m.net)}</span> <span class="muted small">${worst.m.n} ${T("trades")} · ${worst.m.winrate.toFixed(0)}%</span></span></div>`:''}
    </div></div>` : '';
   const cards=rows.map(x=>{ const m=x.m; const rulesTxt=((x.pb&&x.pb.rules)||[]).join("\n");
     const diag=(x.arr.length>=3&&x.adh!=null)?(m.expectancy>0&&x.adh<60?{t:T("pb.diagExec"),c:"wait"}:(m.expectancy<0&&x.adh>=75?{t:T("pb.diagRules"),c:"neg"}:(m.expectancy>0&&x.adh>=75?{t:T("pb.diagSolid"),c:"pos"}:null))):null;
     return `<div class="card section">
-      <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${x.n}</h2>
+      <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${vLabel("setup",x.n)}</h2>
         <span class="rowflex" style="gap:6px">${x.arr.length?`<span class="tag ${m.net>=0?'S':'L'}">${money(m.net)}</span>`:'<span class="muted small">'+T("pb.noneYet")+'</span>'}<button class="btn small ghost" data-delpb="${x.n}" title="${T("pb.delTitle")}" style="padding:2px 8px">🗑</button></span></div>
       ${x.arr.length?`<div class="grid kpis" style="margin-top:10px">
         ${kpi(T("th.Trades"),m.n,m.wins+"W / "+m.losses+"L")}
@@ -1688,7 +1692,9 @@ function reglas(){ return [1,2,3,4,5,6,7,8].map(n=>T("rt.rule"+n)); }
 function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function addDays(str,n){ const p=str.split("-").map(Number); const dt=new Date(p[0],p[1]-1,p[2]+n); return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0"); }
 let routineEdit=false;
-function routineDef(){ if(!Array.isArray(DB.routineDef)||!DB.routineDef.length){ DB.routineDef=JSON.parse(JSON.stringify(routineDefault())); } return DB.routineDef; }
+// Hasta que el usuario personaliza su rutina, se muestra la plantilla por defecto en su idioma (no se congela).
+function routineCustomized(){ return !!(DB.settings&&DB.settings.routineCustomized && Array.isArray(DB.routineDef) && DB.routineDef.length); }
+function routineDef(){ return routineCustomized() ? DB.routineDef : routineDefault(); }
 function routMin(){ return routineDef().flatMap(b=>b.items).filter(i=>i.min); }
 function newItemId(){ return "it"+Date.now().toString(36)+Math.floor(Math.random()*1e4); }
 function escA(s){ return String(s==null?"":s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
@@ -1740,6 +1746,7 @@ function renderRoutine(){
        <div class="kpi"><div class="lab">${T("streak")}</div><div class="val calmc">${streak} 🔥</div><div class="sub">${T("rt.streakSub")}</div></div>
      </div>
      <div class="rbar" style="margin-top:12px"><i style="width:${pct}%"></i></div>
+     ${!routineCustomized()?'<div class="small muted" style="margin-top:12px; padding:8px 11px; background:var(--surface2); border-radius:8px; line-height:1.5">💡 '+T("rt.starterNote")+'</div>':''}
      ${blocks || '<div class="small muted" style="margin-top:14px">'+T("rt.empty")+'</div>'}
    </div>
    <div class="card section">
@@ -1756,7 +1763,7 @@ function renderRoutine(){
   const rp=$("#rPrev"); if(rp)rp.onclick=()=>{ routineSel=addDays(d,-1); renderRoutine(); };
   const rn=$("#rNext"); if(rn&&!isToday)rn.onclick=()=>{ routineSel=addDays(d,1); renderRoutine(); };
   const rt=$("#rToday"); if(rt)rt.onclick=()=>{ routineSel=todayStr(); renderRoutine(); };
-  const re=$("#rEdit"); if(re)re.onclick=()=>{ routineEdit=true; renderRoutine(); };
+  const re=$("#rEdit"); if(re)re.onclick=()=>{ if(!routineCustomized()){ DB.routineDef=JSON.parse(JSON.stringify(routineDefault())); DB.settings.routineCustomized=true; save(); } routineEdit=true; renderRoutine(); };
   const nt=$("#rNote"); if(nt){ nt.value=rec.note||""; nt.oninput=()=>{ rec.note=nt.value; save(); }; }
 }
 
@@ -1795,7 +1802,7 @@ function renderRoutineEditor(host, def){
   host.querySelectorAll("[data-additem]").forEach(b=>b.onclick=()=>{ def[+b.dataset.additem].items.push({id:newItemId(),t:T("rt.newItem"),min:false}); save(); renderRoutine(); });
   host.querySelectorAll("[data-delblock]").forEach(b=>b.onclick=()=>{ if(confirm(T("rt.delBlockConfirm"))){ def.splice(+b.dataset.delblock,1); save(); renderRoutine(); } });
   $("#rAddBlock").onclick=()=>{ def.push({lab:T("rt.newBlock"),items:[{id:newItemId(),t:T("rt.newItem"),min:false}]}); save(); renderRoutine(); };
-  $("#rResetDef").onclick=()=>{ if(confirm(T("rt.restoreConfirm"))){ DB.routineDef=JSON.parse(JSON.stringify(routineDefault())); save(); renderRoutine(); } };
+  $("#rResetDef").onclick=()=>{ if(confirm(T("rt.restoreConfirm"))){ DB.routineDef=[]; DB.settings.routineCustomized=false; routineEdit=false; save(); renderRoutine(); } };
 }
 
 function render(){
