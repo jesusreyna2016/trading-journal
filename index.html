@@ -283,7 +283,7 @@ const I18N={
   "welcomeTitle":"Welcome to your journal 👋",
   "welcomeSub":"Private and free — only you see your data. Log your trades, spot your leaks and keep your daily routine.",
   "dropTitle":"Drag your trades CSV here",
-  "dropSub":"or click <b>Import CSV</b> above (your broker export: Zella / Tradovate). You can also restore a backup (JSON). Your data is stored privately in the cloud.",
+  "dropSub":"or click <b>Import CSV</b> above (Zella / Tradovate, or a generic CSV: <span class='mono'>date, symbol, direction, entry, exit, size, pnl</span>). You can also restore a backup (JSON). Your data is stored privately in the cloud.",
   "startRoutine":"📋 Start with the Daily Routine",
   "landEyebrow":"Trading Journal · free",
   "landTitle":"Trade with discipline,<br>not on impulse",
@@ -386,7 +386,7 @@ const I18N={
   "welcomeTitle":"Bienvenido a tu journal 👋",
   "welcomeSub":"Privado y gratis — solo tú ves tus datos. Registra tus trades, detecta tus fugas y sigue tu rutina diaria.",
   "dropTitle":"Arrastra aquí tu CSV de trades",
-  "dropSub":"o pulsa <b>Importar CSV</b> arriba (export de tu broker: Zella / Tradovate). También puedes restaurar un backup (JSON). Tus datos se guardan en la nube, privados.",
+  "dropSub":"o pulsa <b>Importar CSV</b> arriba (Zella / Tradovate, o un CSV genérico: <span class='mono'>date, symbol, direction, entry, exit, size, pnl</span>). También puedes restaurar un backup (JSON). Tus datos se guardan en la nube, privados.",
   "startRoutine":"📋 Empezar por la Rutina diaria",
   "landEyebrow":"Trading Journal · gratis",
   "landTitle":"Opera con disciplina,<br>no con impulso",
@@ -496,6 +496,7 @@ const EMO=["Calma","Aburrido","FOMO","Revancha","DPT"];
 const PANEL=["VALID","WAIT","CHOP"];
 const ALIGN=["Con sesgo","Contra","Neutro"];
 const SETUPS=["Fade VAH","Fade VAL","POC→VAL","POC→VAH","Quiebre POC","Rebote VAL","Rebote VAH","Pivote","Otro"];
+const MISTAKES=["early","noconfirm","revenge","fomo","tightsl","oversize","earlyexit","noplan","chase","moved_sl"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
 let period="ALL", tab="overview", monthSel=null, acctFilter="ALL", noteSel=null, jExpanded=null, routineSel=null;
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
@@ -596,6 +597,7 @@ function parseCSV(txt){
   if(!lines.length) return [];
   const H=lines[0].split(",").map(s=>s.trim().toLowerCase());
   if(H.includes("boughttimestamp") && H.includes("soldtimestamp")) return parseTradovate(lines);
+  if(!(H.includes("open date")&&H.includes("net p&l")) && (H.includes("direction") || (H.includes("entry")&&H.includes("exit")) || (H.includes("profit")&&!H.includes("net p&l")))) return parseGeneric(lines,H);
   const idx=n=>H.indexOf(n);
   const iDate=idx("open date"), iTime=idx("open time"), iSym=idx("symbol"), iSide=idx("side"),
         iQty=idx("quantity"), iStat=idx("status"), iEntry=idx("entry price"), iExit=idx("exit price"),
@@ -615,6 +617,32 @@ function parseCSV(txt){
       entry:parseFloat(c[iEntry])||0, exit:parseFloat(c[iExit])||0,
       pnl:parseFloat(c[iPnl])||0, pts:parseFloat(c[iPts])||0, comm:parseFloat(c[iComm])||0
     });
+  }
+  return out;
+}
+// Parser CSV genérico/flexible (TradingView simple, exports genéricos): date, symbol/asset, direction/side, entry, exit, size/qty, pnl/profit.
+function parseGeneric(lines,H){
+  const gi=(...names)=>{ for(const n of names){ const i=H.indexOf(n); if(i>=0) return i; } return -1; };
+  const iDate=gi("date","open date","date/time","datetime"), iTime=gi("time","open time"),
+        iSym=gi("symbol","asset","ticker","instrument"), iSide=gi("direction","side","type"),
+        iEntry=gi("entry","entry price","open price","avg entry price","buy price"),
+        iExit=gi("exit","exit price","close price","avg exit price","sell price"),
+        iQty=gi("size","qty","quantity","contracts","volume"),
+        iPnl=gi("pnl","p&l","profit","net p&l","profit usd","realized p&l"),
+        iComm=gi("commission","fees","comm","commissions");
+  const num=v=>parseFloat(String(v==null?"":v).replace(/[^0-9.\-]/g,""))||0;
+  const out=[];
+  for(let i=1;i<lines.length;i++){
+    const c=lines[i].split(","); let dt=(c[iDate]||"").trim(); if(!dt) continue;
+    const date=dt.slice(0,10);
+    const sideRaw=(c[iSide]||"").trim().toLowerCase();
+    const side=(sideRaw.startsWith("s")||sideRaw.includes("short")||sideRaw.includes("sell"))?"short":"long";
+    const entry=num(c[iEntry]), exit=num(c[iExit]), qty=num(c[iQty])||1, comm=iComm>=0?num(c[iComm]):0;
+    let praw=(iPnl>=0?(c[iPnl]||""):"").trim(); const neg=/^\(.*\)$/.test(praw)||praw.startsWith("-");
+    const pnl=(neg?-1:1)*Math.abs(num(praw));
+    const pts=+((side==="long"?(exit-entry):(entry-exit))).toFixed(2);
+    let time=iTime>=0?(c[iTime]||"").replace("UTC","").trim():""; if(!time){ const m=dt.match(/[T ](\d{2}:\d{2}(:\d{2})?)/); time=m?m[1]:"12:00:00"; }
+    out.push({ date, time, sym:(c[iSym]||"").trim().toUpperCase(), side, qty, status:pnl>=0?"Win":"Loss", entry, exit, pnl:+pnl.toFixed(2), pts, comm });
   }
   return out;
 }
@@ -1078,6 +1106,7 @@ function dayTradeRows(arr){
         <button class="chip calm" data-id="${id}" data-k="stop" data-v="1" aria-pressed="${tg.stop?'true':'false'}">${T("j.stopBtn")}</button>
         ${isGraded(tg)?(pr=>`<span class="pass ${pr>=0.75?'ok':pr>=0.5?'na':'no'}">${Math.round(pr*100)}%</span>`)(procScore(id,tg).score):''}
         <button class="btn small ghost" data-note="${id}" title="${(tg.note||'').replace(/"/g,'&quot;')||T("j.addNote")}" style="padding:2px 7px">📝${tg.note?' •':''}</button>
+        <button class="btn small ghost" data-mist="${id}" title="${T("mist.btn")}" style="padding:2px 7px">⚠${(tg.mistakes&&tg.mistakes.length)?' '+tg.mistakes.length:''}</button>
       </div></td>
     </tr>`;}).join("");
 }
@@ -1095,6 +1124,14 @@ function dayCard(d,arrRaw){
       <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} ${T("trades")}${left>1?' · '+fmt(T("j.leftOnTable"),{v:money(left)}):''}</span></div>
     </div>${body}</div>`;
 }
+function showMistakes(id){
+  const tg=DB.tags[id]||(DB.tags[id]={}); const sel=new Set(tg.mistakes||[]);
+  openModal(`<div class="eyebrow">⚠</div><h1 style="margin:.1em 0 .6em; font-size:20px">${T("mist.title")}</h1>
+    <div class="chips" id="mChips" style="margin-bottom:16px">${MISTAKES.map(m=>`<button class="chip c" data-m="${m}" aria-pressed="${sel.has(m)}">${T("m."+m)}</button>`).join("")}</div>
+    <button class="btn calm" id="mSave" style="width:100%; justify-content:center; padding:11px">${T("mist.close")}</button>`);
+  $("#mChips").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{ const m=b.dataset.m; if(sel.has(m))sel.delete(m); else sel.add(m); b.setAttribute("aria-pressed", sel.has(m)); });
+  $("#mSave").onclick=()=>{ DB.tags[id].mistakes=[...sel]; save(); closeModal(); toast(T("mist.saved")); renderJournal(); };
+}
 function renderJournal(){
   const TR=activeTrades(); const host=$("#view-journal");
   if(!TR.length){ host.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
@@ -1106,6 +1143,7 @@ function renderJournal(){
     const day=e.target.closest("[data-day]"); if(day){ jExpanded=jExpanded===day.dataset.day?null:day.dataset.day; renderJournal(); return; }
     const b=e.target.closest(".chip"); if(b){ const id=b.dataset.id,k=b.dataset.k,vv=b.dataset.v; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][k]=DB.tags[id][k]===vv?"":vv; save(); renderJournal(); return; }
     const nb=e.target.closest("[data-note]"); if(nb){ const id=nb.dataset.note; DB.tags[id]=DB.tags[id]||{}; const v=prompt(T("j.notePrompt"),DB.tags[id].note||""); if(v!==null){DB.tags[id].note=v.trim(); save(); renderJournal();} return; }
+    const mb=e.target.closest("[data-mist]"); if(mb){ showMistakes(mb.dataset.mist); return; }
   };
   host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{}; DB.tags[id].setup=s.value; save(); };
 }
@@ -1212,6 +1250,7 @@ function renderReport(){
     <div class="card section"><h2>${T("rep.whatDataH")}</h2>${ins.length?ins.map(i=>`<div class="leak ok"><div class="sev"></div><div class="body"><div class="why" style="font-size:13.5px">${icon[i.kind]||"•"} ${mdb(i.text)}</div></div></div>`).join(""):'<p class="muted small">'+T("rep.needMore")+'</p>'}</div>
     ${top.length?`<div class="card section"><h2>${T("rep.mainLeakH")}</h2><div class="leak hi"><div class="sev"></div><div class="body"><div class="t">${top[0].title} <span class="metric neg">${top[0].metric}</span></div><div class="why">${top[0].why}</div></div></div></div>`:''}
     ${uf.length?`<div class="card section"><h2>${T("rep.whereFocusH")}</h2><ul style="margin:0; padding-left:18px; line-height:1.75">${uf.map(f=>`<li>${mdb(f)}</li>`).join("")}</ul></div>`:''}
+    ${(()=>{ const mc={}; TR.forEach(t=>{((DB.tags[tid(t)]||{}).mistakes||[]).forEach(m=>mc[m]=(mc[m]||0)+1);}); const rws=Object.entries(mc).sort((a,b)=>b[1]-a[1]); return rws.length?`<div class="card section"><h2>${T("mist.top")}</h2>${rws.map(([m,n])=>`<div class="r"><span class="lab">${T("m."+m)}</span><span class="v neg">${n}</span></div>`).join("")}</div>`:''; })()}
     <div class="card section"><h2>${T("rep.copyableH")}</h2><pre class="report" id="rep">${txt.replace(/</g,'&lt;')}</pre><button class="btn calm" id="copyRep">${T("rep.copyBtn")}</button></div>`;
   $("#copyRep").onclick=()=>{navigator.clipboard.writeText(txt).then(()=>toast(T("rep.copied"))).catch(()=>toast(T("rep.copyFail")));};
 }
