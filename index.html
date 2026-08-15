@@ -388,7 +388,7 @@ const I18N={
   "af.maxPerTrade":"Max loss per trade $","ac.violations":"⚠ {n} trade(s) over your max per-trade loss","mist.title":"Mistakes on this trade","mist.btn":"Mistakes","mist.saved":"Mistakes saved.","mist.top":"⚠ Your most-reported mistakes","mist.none":"No self-reported mistakes yet. Tag them on each trade in the Journal.","mist.close":"Done","m.early":"Entered early","m.noconfirm":"Didn't wait for confirmation","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL too tight","m.oversize":"Oversizing","m.earlyexit":"Exited early","m.noplan":"Didn't follow the plan","m.chase":"Chased price","m.moved_sl":"Moved my stop","m.pressure":"Traded out of financial pressure","m.onemore":"“Just one more trade”","m.overwin":"Oversized after a win","m.fighting":"Fought the trend",
   "why.title":"🎯 My Why","why.edit":"Edit","why.set":"Set your Why","why.prompt":"Why do you trade? Set your motivation.","why.reminder":"Discipline is low — remember why you started.","why.editTitle":"My Why — your motivation","why.textPh":"e.g. For my kids. I refuse to fail them. Discipline pays the bills, not revenge.","why.image":"Photo (optional)","why.removeImg":"Remove photo","why.saved":"Saved.",
   "dr.title":"📝 Daily review","dr.lead":"Answer honestly before closing the day — this is where change happens.","dr.worst":"What was my worst decision today?","dr.knew":"When did I know I was breaking my rules — and kept going?","dr.self":"What would my disciplined self have told me?","dr.tomorrow":"What will I do differently tomorrow? (specific)","dr.save":"Save review","dr.saved":"Review saved.",
-  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:","cal.week":"Week {n}","note.title":"Trade note"
+  "ci.pressure":"Financial/family pressure","ci.pressureHint":"1 = none · 10 = trading out of need","ci.whyTrading":"Was I trading the setup, or out of need for money?","ci.whyTradingPh":"Be honest…","tilt.rPressure":"high financial pressure","setup.add":"＋ Add setup…","setup.addPrompt":"New setup name:","cal.week":"Week {n}","note.title":"Trade note","cm.yes":"Yes","cm.delete":"Delete"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -494,7 +494,7 @@ const I18N={
   "af.maxPerTrade":"Pérdida máx por trade $","ac.violations":"⚠ {n} trade(s) por encima de tu pérdida máx por trade","mist.title":"Errores en este trade","mist.btn":"Errores","mist.saved":"Errores guardados.","mist.top":"⚠ Tus errores más reportados","mist.none":"Aún no reportas errores. Etiquétalos en cada trade en el Diario.","mist.close":"Listo","m.early":"Entré temprano","m.noconfirm":"No esperé confirmación","m.revenge":"Revenge trade","m.fomo":"FOMO","m.tightsl":"SL muy ajustado","m.oversize":"Oversizing","m.earlyexit":"Salí temprano","m.noplan":"No seguí el plan","m.chase":"Perseguí el precio","m.moved_sl":"Moví el stop","m.pressure":"Operé por presión económica","m.onemore":"“Solo un trade más”","m.overwin":"Subí tamaño tras ganar","m.fighting":"Operé contra la tendencia",
   "why.title":"🎯 Mi Porqué","why.edit":"Editar","why.set":"Define tu Porqué","why.prompt":"¿Por qué operas? Define tu motivación.","why.reminder":"La disciplina está baja — recuerda por qué empezaste.","why.editTitle":"Mi Porqué — tu motivación","why.textPh":"Ej. Por mis hijos. No pienso fallarles. La disciplina paga las cuentas, no la revancha.","why.image":"Foto (opcional)","why.removeImg":"Quitar foto","why.saved":"Guardado.",
   "dr.title":"📝 Revisión diaria","dr.lead":"Responde con honestidad antes de cerrar el día — aquí es donde ocurre el cambio.","dr.worst":"¿Cuál fue mi peor decisión hoy?","dr.knew":"¿Cuándo supe que rompía mis reglas y aun así seguí?","dr.self":"¿Qué me habría dicho mi yo disciplinado?","dr.tomorrow":"¿Qué haré distinto mañana? (específico)","dr.save":"Guardar revisión","dr.saved":"Revisión guardada.",
-  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:","cal.week":"Semana {n}","note.title":"Nota del trade"
+  "ci.pressure":"Presión económica/familiar","ci.pressureHint":"1 = ninguna · 10 = operando por necesidad","ci.whyTrading":"¿Operaba por el setup o por necesidad de dinero?","ci.whyTradingPh":"Sé honesto…","tilt.rPressure":"presión económica alta","setup.add":"＋ Añadir setup…","setup.addPrompt":"Nombre del nuevo setup:","cal.week":"Semana {n}","note.title":"Nota del trade","cm.yes":"Sí","cm.delete":"Eliminar"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -802,12 +802,13 @@ async function exportBackup(){
   setTimeout(()=>URL.revokeObjectURL(a.href),2000); toast(fmt(T("io.backupDown"),{n:DB.trades.length,img:Object.keys(images).length}));
 }
 function restoreBackup(j){
-  if(!confirm(T("io.restoreConfirm"))) return;
-  DB={trades:Array.isArray(j.trades)?j.trades:[], tags:j.tags||{}, checkins:j.checkins||{}, accounts:j.accounts||{}, playbooks:j.playbooks||{}, notes:j.notes||{}, ledger:Array.isArray(j.ledger)?j.ledger:[], routine:j.routine||{}, routineDef:j.routineDef, settings:Object.assign({dpt:900,overtrade:8,session:"Asia"}, j.settings||{})};
-  if(j._images){ Object.keys(j._images).forEach(k=>dataURLtoBlob(j._images[k]).then(b=>{ idbPut(k,b); stUpload(k,b); }).catch(()=>{})); }
-  DB.settings.goals=Object.assign({disc:80,proc:80,nomans:2,rr:1.5}, (j.settings&&j.settings.goals)||{});
-  DB.trades.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
-  ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast(fmt(T("io.restored"),{n:DB.trades.length}));
+  confirmModal(T("io.restoreConfirm"),{danger:true}).then(ok=>{ if(!ok)return;
+    DB={trades:Array.isArray(j.trades)?j.trades:[], tags:j.tags||{}, checkins:j.checkins||{}, accounts:j.accounts||{}, playbooks:j.playbooks||{}, notes:j.notes||{}, ledger:Array.isArray(j.ledger)?j.ledger:[], routine:j.routine||{}, routineDef:j.routineDef, settings:Object.assign({dpt:900,overtrade:8,session:"Asia"}, j.settings||{})};
+    if(j._images){ Object.keys(j._images).forEach(k=>dataURLtoBlob(j._images[k]).then(b=>{ idbPut(k,b); stUpload(k,b); }).catch(()=>{})); }
+    DB.settings.goals=Object.assign({disc:80,proc:80,nomans:2,rr:1.5}, (j.settings&&j.settings.goals)||{});
+    DB.trades.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
+    ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast(fmt(T("io.restored"),{n:DB.trades.length}));
+  });
 }
 
 // ---------- session (America/Chicago) ----------
@@ -1206,7 +1207,7 @@ function renderJournal(){
     const mb=e.target.closest("[data-mist]"); if(mb){ showMistakes(mb.dataset.mist); return; }
   };
   host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{};
-    if(s.value==="__add"){ const nm=prompt(T("setup.addPrompt")); if(nm&&nm.trim()){ const n=nm.trim(); DB.settings.setups=DB.settings.setups||[]; if(!allSetups().includes(n)) DB.settings.setups.push(n); DB.tags[id].setup=n; save(); } renderJournal(); return; }
+    if(s.value==="__add"){ promptModal(T("setup.addPrompt")).then(nm=>{ if(nm){ DB.settings.setups=DB.settings.setups||[]; if(!allSetups().includes(nm)) DB.settings.setups.push(nm); DB.tags[id].setup=nm; save(); } renderJournal(); }); return; }
     DB.tags[id].setup=s.value; save(); };
 }
 function periodLabel(){ return period==="ALL"?T("pl.all"):period==="7"?T("pl.last7"):period.slice(2); }
@@ -1646,7 +1647,7 @@ function renderAccounts(){
   $("#newAcct").onclick=addAccount;
   host.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>accountForm(b.dataset.edit));
   host.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{ const a=DB.accounts[b.dataset.id]; if(a){ a.status=b.dataset.st; save(); renderAccounts(); } });
-  host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=b.dataset.del; if(confirm(fmt(T("ac.delConfirm"),{name:DB.accounts[id].name}))){ DB.trades.forEach(t=>{if(t.acct===id)delete t.acct;}); delete DB.accounts[id]; if(acctFilter===id)acctFilter="ALL"; save(); buildAccounts(); renderAccounts(); } });
+  host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=b.dataset.del; confirmModal(fmt(T("ac.delConfirm"),{name:DB.accounts[id].name}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB.trades.forEach(t=>{if(t.acct===id)delete t.acct;}); delete DB.accounts[id]; if(acctFilter===id)acctFilter="ALL"; save(); buildAccounts(); renderAccounts(); }); });
   const re=$("#reApply"); if(re)re.onclick=()=>{ const to=$("#reAcct").value; DB.trades.forEach(t=>{if(!t.acct)t.acct=to;}); save(); buildAccounts(); render(); toast(fmt(T("ac.assigned"),{name:DB.accounts[to].name})); };
 }
 
@@ -1689,10 +1690,10 @@ function renderPlaybooks(){
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:4px"><h2 style="margin:0">Playbooks</h2><button class="btn calm small" id="newPb">${T("pb.new")}</button></div>
     <p class="small muted" style="margin:0 0 8px">${T("pb.intro")}</p>
     ${summary}${cards||'<div class="card muted">'+T("pb.empty")+'</div>'}`;
-  $("#newPb").onclick=()=>{ const nm=prompt(T("pb.promptName")); if(nm===null)return; const n=nm.trim(); if(!n)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; save(); renderPlaybooks(); toast(T("pb.created")); };
+  $("#newPb").onclick=()=>{ promptModal(T("pb.promptName")).then(nm=>{ if(!nm)return; DB.playbooks[nm]=DB.playbooks[nm]||{rules:[],note:""}; save(); renderPlaybooks(); toast(T("pb.created")); }); };
   host.querySelectorAll("[data-saverules]").forEach(b=>b.onclick=()=>{ const n=b.dataset.saverules; const ta=[...host.querySelectorAll('[data-rules]')].find(t=>t.dataset.rules===n);
     if(!ta)return; DB.playbooks[n]=DB.playbooks[n]||{rules:[],note:""}; DB.playbooks[n].rules=ta.value.split("\n").map(s=>s.trim()).filter(Boolean); save(); toast(T("pb.saved")); });
-  host.querySelectorAll("[data-delpb]").forEach(b=>b.onclick=()=>{ const n=b.dataset.delpb; if(confirm(fmt(T("pb.delConfirm"),{n}))){ delete DB.playbooks[n]; save(); renderPlaybooks(); } });
+  host.querySelectorAll("[data-delpb]").forEach(b=>b.onclick=()=>{ const n=b.dataset.delpb; confirmModal(fmt(T("pb.delConfirm"),{n}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; delete DB.playbooks[n]; save(); renderPlaybooks(); }); });
 }
 
 // ---------- NOTEBOOK (notes + images in IndexedDB) ----------
@@ -1715,7 +1716,7 @@ function hydrateImgs(el){ el.querySelectorAll('img[data-imgkey]').forEach(im=>{ 
 function insertImg(file,doSave){ const key="img"+Date.now().toString(36)+Math.floor(Math.random()*1e4); idbPut(key,file).then(()=>{ stUpload(key,file); const url=URL.createObjectURL(file); document.execCommand('insertHTML',false,`<img data-imgkey="${key}" src="${url}" style="max-width:100%;border-radius:8px;margin:6px 0">`); doSave(); }); }
 function noteDayInfo(ds){ if(!ds) return ""; const tr=DB.trades.filter(t=>(t.tday||t.date)===ds); if(!tr.length) return '<span class="muted small">'+T("nt.noTradesDay")+'</span>'; const net=tr.reduce((s,t)=>s+t.pnl,0); const ev=dayEval(tr)[0]; return `<span class="num ${cls(net)}" style="font-weight:700">${T("net")} ${money1(net)}</span> <span class="muted small">· ${tr.length} ${T("trades")}${ev?(ev.disciplined?' · 🟢':' · 🔴 '+failReasons(ev)):''}</span>`; }
 function newNote(){ const id="n"+Date.now().toString(36); const td=tradingDay({date:new Date().toISOString().slice(0,10),time:"18:00:00"}); DB.notes[id]={title:fmt(T("nt.newTitle"),{d:td}),html:"",date:td,tags:[],created:Date.now(),updated:Date.now()}; noteSel=id; save(); renderNotes(); }
-function delNote(id){ if(!confirm(T("nt.delConfirm")))return; const h=(DB.notes[id]||{}).html||""; (h.match(/data-imgkey="([^"]+)"/g)||[]).forEach(m=>{ const k=m.match(/data-imgkey="([^"]+)"/)[1]; idbDel(k); stRemove(k); }); delete DB.notes[id]; if(noteSel===id)noteSel=null; save(); renderNotes(); }
+function delNote(id){ confirmModal(T("nt.delConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; const h=(DB.notes[id]||{}).html||""; (h.match(/data-imgkey="([^"]+)"/g)||[]).forEach(m=>{ const k=m.match(/data-imgkey="([^"]+)"/)[1]; idbDel(k); stRemove(k); }); delete DB.notes[id]; if(noteSel===id)noteSel=null; save(); renderNotes(); }); }
 function renderNotes(){
   const host=$("#view-notes"); const q=(host._q||"").toLowerCase();
   const ids=Object.keys(DB.notes).sort((a,b)=>DB.notes[b].updated-DB.notes[a].updated)
@@ -2053,9 +2054,9 @@ function renderRoutineEditor(host, def){
   host.querySelectorAll(".rEditMin").forEach(cb=>cb.onchange=()=>{ def[+cb.dataset.bi].items[+cb.dataset.ii].min=cb.checked; save(); });
   host.querySelectorAll("[data-delitem]").forEach(b=>b.onclick=()=>{ const p=b.dataset.delitem.split("."); def[+p[0]].items.splice(+p[1],1); save(); renderRoutine(); });
   host.querySelectorAll("[data-additem]").forEach(b=>b.onclick=()=>{ def[+b.dataset.additem].items.push({id:newItemId(),t:T("rt.newItem"),min:false}); save(); renderRoutine(); });
-  host.querySelectorAll("[data-delblock]").forEach(b=>b.onclick=()=>{ if(confirm(T("rt.delBlockConfirm"))){ def.splice(+b.dataset.delblock,1); save(); renderRoutine(); } });
+  host.querySelectorAll("[data-delblock]").forEach(b=>b.onclick=()=>{ confirmModal(T("rt.delBlockConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; def.splice(+b.dataset.delblock,1); save(); renderRoutine(); }); });
   $("#rAddBlock").onclick=()=>{ def.push({lab:T("rt.newBlock"),items:[{id:newItemId(),t:T("rt.newItem"),min:false}]}); save(); renderRoutine(); };
-  $("#rResetDef").onclick=()=>{ if(confirm(T("rt.restoreConfirm"))){ DB.routineDef=[]; DB.settings.routineCustomized=false; routineEdit=false; save(); renderRoutine(); } };
+  $("#rResetDef").onclick=()=>{ confirmModal(T("rt.restoreConfirm")).then(ok=>{ if(!ok)return; DB.routineDef=[]; DB.settings.routineCustomized=false; routineEdit=false; save(); renderRoutine(); }); };
 }
 
 function render(){
@@ -2105,7 +2106,7 @@ document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classLi
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
 $("#ctxBtn").onclick=showContextModal;
 $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
-$("#wipeBtn").onclick=()=>{ if(confirm(T("io.wipeConfirm"))){DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped"));} };
+$("#wipeBtn").onclick=()=>{ confirmModal(T("io.wipeConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped")); }); };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
 
 // ---------- auth / arranque en la nube ----------
@@ -2115,6 +2116,22 @@ let _modalOnClose=null;
 function openModal(html,onClose){ const m=$("#modal"); m.innerHTML=`<div class="authcard" style="max-width:470px; max-height:88vh; overflow:auto">${html}</div>`; m.classList.remove("hide"); _modalOnClose=(typeof onClose==="function")?onClose:null; m.onclick=(e)=>{ if(e.target===m) closeModal(); }; }
 function closeModal(){ const m=$("#modal"); if(m.classList.contains("hide"))return; m.classList.add("hide"); m.innerHTML=""; m.onclick=null; const c=_modalOnClose; _modalOnClose=null; if(c)c(); }
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ const m=$("#modal"); if(m&&!m.classList.contains("hide")) closeModal(); } });
+function confirmModal(msg,opts){ opts=opts||{};
+  return new Promise(res=>{ let done=false; const fin=v=>{ if(done)return; done=true; res(v); };
+    openModal(`<h1 style="margin:.1em 0 .2em; font-size:18px; line-height:1.4; font-weight:700">${msg}</h1>
+      <div class="rowflex" style="gap:10px; margin-top:16px"><button class="btn ${opts.danger?'':'calm'}" id="cfmOk" style="flex:1; justify-content:center; padding:11px${opts.danger?'; background:var(--neg); border-color:var(--neg); color:#fff':''}">${opts.ok||T("cm.yes")}</button><button class="btn ghost" id="cfmNo" style="flex:1; justify-content:center; padding:11px">${T("cancel")}</button></div>`, ()=>fin(false));
+    $("#cfmOk").onclick=()=>{ fin(true); closeModal(); }; $("#cfmNo").onclick=closeModal;
+  });
+}
+function promptModal(title,opts){ opts=opts||{};
+  return new Promise(res=>{ let done=false; const fin=v=>{ if(done)return; done=true; res(v); };
+    openModal(`<h1 style="margin:.1em 0 .5em; font-size:18px; font-weight:700">${title}</h1>
+      <input type="text" id="pmIn" value="${escA(opts.value||'')}" placeholder="${escA(opts.placeholder||'')}" style="width:100%; padding:10px 12px; margin-bottom:14px">
+      <div class="rowflex" style="gap:10px"><button class="btn calm" id="pmOk" style="flex:1; justify-content:center; padding:11px">${opts.ok||T("af.save")}</button><button class="btn ghost" id="pmNo" style="justify-content:center; padding:11px">${T("cancel")}</button></div>`, ()=>fin(null));
+    const inp=$("#pmIn"); if(inp){ setTimeout(()=>{try{inp.focus();inp.select();}catch(e){}},30); inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); $("#pmOk").click(); } }); }
+    $("#pmOk").onclick=()=>{ fin(((inp&&inp.value)||"").trim()); closeModal(); }; $("#pmNo").onclick=closeModal;
+  });
+}
 function showFeedback(){
   if(!user){ showLogin(); return; }
   openModal(`<div class="eyebrow">${T("fb.eyebrow")}</div><h1 style="margin:.1em 0 .5em; font-size:21px">${T("fb.title")}</h1>
