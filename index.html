@@ -52,7 +52,7 @@
   .kpi .lab{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
   .kpi .val{font-family:var(--mono); font-size:25px; font-weight:700; margin-top:7px; letter-spacing:-.02em}
   .kpi .sub{font-size:12px; color:var(--faint); margin-top:2px}
-  .pos{color:var(--pos)} .neg{color:var(--neg)} .wait{color:var(--wait)} .calmc{color:var(--calm)}
+  .pos{color:var(--pos)} .neg{color:var(--neg)} .wait{color:var(--wait)} .calmc{color:var(--calm)} .faint{color:var(--faint)}
   h2{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700; margin:0 0 12px}
   .section{margin-top:16px}
   canvas{width:100%; display:block}
@@ -165,6 +165,7 @@
   </div>
 </div>
 <div id="onboard" class="authgate hide"></div>
+<div id="modal" class="authgate hide"></div>
 <div class="app">
   <div class="head">
     <div>
@@ -473,13 +474,64 @@ function parseCSV(txt){
   }
   return out;
 }
-function pickAccount(){
-  if(acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter]) return acctFilter;
-  const names=Object.values(DB.accounts).map(a=>a.name);
-  const inp=prompt("¿A qué cuenta pertenecen estos trades?"+(names.length?"\nExistentes: "+names.join(", "):"")+"\nEscribe el nombre (nueva o existente):", names[0]||"Cuenta 1");
-  if(inp===null) return null; const nm=inp.trim(); if(!nm) return null;
-  const id=slug(nm); if(!DB.accounts[id]) DB.accounts[id]={name:nm,target:3000,ddType:"trailing",ddLimit:2000,startBal:50000};
-  return id;
+function allFirms(){ const s=new Set(); (DB.ledger||[]).forEach(e=>{if(e.firm)s.add(e.firm);}); Object.values(DB.accounts||{}).forEach(a=>{if(a.firm)s.add(a.firm);}); return [...s]; }
+// Formulario modal de cuenta (crear/editar). onDone(id) al guardar, onDone(null) al cancelar.
+function accountForm(id, onDone){
+  const editing=!!(id&&DB.accounts[id]);
+  const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000};
+  const firms=allFirms();
+  let done=false; const fin=(v)=>{ if(done)return; done=true; if(onDone)onDone(v); };
+  openModal(`
+    <div class="eyebrow">${editing?'Editar cuenta':'Nueva cuenta fondeada'}</div>
+    <h1 style="margin:.1em 0 .5em; font-size:22px">${editing?escA(a.name):'Cuenta'}</h1>
+    <label class="small muted">Nombre</label>
+    <input type="text" id="afName" value="${escA(a.name||'')}" placeholder="Ej. Apex 50K #1" style="width:100%; margin:4px 0 12px; padding:9px 11px">
+    <label class="small muted">Prop firm</label>
+    <input type="text" id="afFirm" list="afFirmList" value="${escA(a.firm||'')}" placeholder="Ej. Apex, TopStep, Tradeify…" style="width:100%; margin:4px 0 4px; padding:9px 11px">
+    <datalist id="afFirmList">${firms.map(f=>`<option value="${escA(f)}"></option>`).join("")}</datalist>
+    <div class="small faint" style="margin-bottom:12px">Vincula esta cuenta con la pestaña Finanzas (mismo nombre de prop firm).</div>
+    <div class="rowflex" style="gap:10px">
+      <div style="flex:1"><label class="small muted">Balance inicial $</label><input type="number" id="afBal" value="${a.startBal||0}" step="1000" style="width:100%; margin-top:4px; padding:9px 11px"></div>
+      <div style="flex:1"><label class="small muted">Profit target $</label><input type="number" id="afTarget" value="${a.target||0}" step="100" style="width:100%; margin-top:4px; padding:9px 11px"></div>
+    </div>
+    <div class="rowflex" style="gap:10px; margin-top:12px">
+      <div style="flex:1"><label class="small muted">Tipo de drawdown</label><select id="afDdType" style="width:100%; margin-top:4px; padding:9px 11px"><option value="trailing"${a.ddType==='trailing'?' selected':''}>Trailing</option><option value="static"${a.ddType==='static'?' selected':''}>Estático</option><option value="eod"${a.ddType==='eod'?' selected':''}>Diario (EOD)</option></select></div>
+      <div style="flex:1"><label class="small muted">Límite drawdown $</label><input type="number" id="afDdLimit" value="${a.ddLimit||0}" step="100" style="width:100%; margin-top:4px; padding:9px 11px"></div>
+    </div>
+    <div class="rowflex" style="gap:10px; margin-top:18px">
+      <button class="btn calm" id="afSave" style="flex:1; justify-content:center; padding:11px">${editing?'Guardar':'Crear cuenta'}</button>
+      <button class="btn ghost" id="afCancel" style="justify-content:center; padding:11px">Cancelar</button>
+    </div>`, ()=>fin(null));
+  $("#afCancel").onclick=closeModal;
+  $("#afSave").onclick=()=>{
+    const nm=($("#afName").value||"").trim(); if(!nm){toast("Ponle un nombre a la cuenta.");return;}
+    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0 };
+    let newId=id;
+    if(editing){ Object.assign(DB.accounts[id],data); }
+    else { let base=slug(nm)||"cuenta", k=base, i=2; while(DB.accounts[k]){k=base+"-"+i;i++;} newId=k; DB.accounts[newId]=data; acctFilter=newId; }
+    save(); buildAccounts(); renderAccounts(); fin(newId); closeModal(); toast(editing?"Cuenta actualizada.":"Cuenta creada.");
+  };
+}
+// Selector de cuenta al importar (modal, devuelve Promise: id | "" sin cuenta | null cancelar)
+function pickAccountModal(){
+  return new Promise(resolve=>{
+    if(acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter]) return resolve(acctFilter);
+    const ids=Object.keys(DB.accounts);
+    let done=false, toCreate=false; const fin=(v)=>{ if(done)return; done=true; resolve(v); };
+    const openCreate=()=>{ toCreate=true; closeModal(); accountForm(null,(nid)=>fin(nid||null)); };
+    const body=`<div class="eyebrow">Importar trades</div><h1 style="margin:.1em 0 .5em; font-size:21px">¿A qué cuenta pertenecen?</h1>`+
+      (ids.length
+        ? `<select id="pkSel" style="width:100%; padding:10px 11px; margin:0 0 14px">${ids.map(i=>`<option value="${i}">${escA(DB.accounts[i].name)}</option>`).join("")}<option value="__new">＋ Crear cuenta nueva…</option><option value="__none">(Sin cuenta)</option></select><div class="rowflex" style="gap:10px"><button class="btn calm" id="pkOk" style="flex:1; justify-content:center; padding:11px">Continuar</button><button class="btn ghost" id="pkCancel" style="justify-content:center; padding:11px">Cancelar</button></div>`
+        : `<p class="small muted" style="margin:0 0 14px">Aún no tienes cuentas. Crea una para trackear tu fondeo, o importa sin cuenta.</p><div class="rowflex" style="gap:10px"><button class="btn calm" id="pkNew" style="flex:1; justify-content:center; padding:11px">＋ Crear cuenta</button><button class="btn ghost" id="pkNone" style="justify-content:center; padding:11px">Sin cuenta</button></div>`);
+    openModal(body,()=>{ if(!toCreate) fin(null); });
+    if(ids.length){
+      $("#pkOk").onclick=()=>{ const v=$("#pkSel").value; if(v==="__new"){ openCreate(); } else { fin(v==="__none"?"":v); closeModal(); } };
+      $("#pkCancel").onclick=closeModal;
+    } else {
+      $("#pkNew").onclick=openCreate;
+      $("#pkNone").onclick=()=>{ fin(""); closeModal(); };
+    }
+  });
 }
 function importText(txt, acct){
   const rows=parseCSV(txt);
@@ -508,6 +560,27 @@ function importContext(arr){
       n++;}
   });
   save(); buildPeriods(); render(); toast(n+" trades enriquecidos con contexto del Analyst.");
+}
+function ctxMatchPreview(arr){ let m=0; const bad=[]; arr.forEach(c=>{ const sym=(c.sym||"").toUpperCase(); const t=DB.trades.find(x=>x.date===c.date && x.sym===sym && Math.abs(x.entry-(+c.entry))<0.3); if(t)m++; else bad.push((c.date||"?")+" "+sym+" @"+(c.entry!=null?c.entry:"?")); }); return {m,total:arr.length,bad}; }
+function showContextModal(){
+  openModal(`<div class="eyebrow">Contexto del Analyst</div><h1 style="margin:.1em 0 .4em; font-size:21px">Importar contexto (avanzado)</h1>
+    <p class="small muted" style="margin:0 0 12px; line-height:1.5">Pega un JSON <code>[{date,sym,entry,panel,align,setup,emo,wait,stop,note}]</code> para rellenar en bloque el contexto de varios trades. <b>El camino normal</b> es etiquetar cada trade en el Diario; esto es un atajo masivo (p. ej. para backfill).</p>
+    <textarea id="ctxTa" placeholder='[{"date":"2026-08-14","sym":"NQ","entry":18500,"panel":"VALID","align":"Con sesgo"}]' style="width:100%; height:150px; font-family:var(--mono,monospace); font-size:12px; padding:10px; resize:vertical; border:1px solid var(--hair); border-radius:8px; background:var(--surface2); color:var(--ink)"></textarea>
+    <div class="small" id="ctxPrev" style="min-height:20px; margin:8px 0"></div>
+    <div class="rowflex" style="gap:10px; margin-top:6px">
+      <button class="btn ghost" id="ctxCheck" style="justify-content:center; padding:10px">Vista previa</button>
+      <button class="btn calm" id="ctxApply" style="flex:1; justify-content:center; padding:10px" disabled>Aplicar</button>
+    </div>`);
+  const ta=$("#ctxTa"), prev=$("#ctxPrev"), apply=$("#ctxApply"); let parsed=null;
+  const check=()=>{ let j; try{ j=JSON.parse(ta.value); }catch(e){ prev.innerHTML='<span class="neg">JSON inválido.</span>'; apply.disabled=true; parsed=null; return; }
+    if(!Array.isArray(j)){ prev.innerHTML='<span class="neg">Debe ser una lista [ ].</span>'; apply.disabled=true; parsed=null; return; }
+    const r=ctxMatchPreview(j); parsed=j;
+    prev.innerHTML=`<b class="${r.m?'pos':'neg'}">${r.m}</b> de ${r.total} trades coinciden.`+(r.bad.length?` <span class="muted">Sin match: ${r.bad.slice(0,4).map(x=>String(x).replace(/</g,'&lt;')).join(" · ")}${r.bad.length>4?" …":""}</span>`:"");
+    apply.disabled=r.m===0;
+  };
+  $("#ctxCheck").onclick=check;
+  ta.oninput=()=>{ apply.disabled=true; };
+  apply.onclick=()=>{ if(!parsed)return; importContext(parsed); closeModal(); };
 }
 function readFile(f, acct){
   const rd=new FileReader();
@@ -1231,16 +1304,17 @@ function acctStats(id){
   else { buffer=(a.ddLimit||0)-curTrailDD; breached=worstTrail>=(a.ddLimit||0); ddLabel="Trailing"; }
   return {a,net,peak,curTrailDD,worstTrail,worstDay,nDays,perDay,toTarget,daysToTarget,buffer,breached,ddLabel,count:TR.length};
 }
-function addAccount(){ const nm=prompt("Nombre de la nueva cuenta:","Cuenta "+(Object.keys(DB.accounts).length+1)); if(nm===null)return; const n=nm.trim(); if(!n)return; const id=slug(n); if(!DB.accounts[id])DB.accounts[id]={name:n,target:3000,ddType:"trailing",ddLimit:2000,startBal:50000}; acctFilter=id; save(); buildAccounts(); renderAccounts(); }
+function addAccount(){ accountForm(null); }
+function firmFinance(firm){ if(!firm)return null; const ev=["Evaluación","Reset","Activación"]; let spent=0,earned=0; (DB.ledger||[]).forEach(e=>{ if((e.firm||"")===firm){ if(e.type==="income")earned+=e.amount; else if(ev.includes(e.category))spent+=e.amount; } }); return {spent,earned}; }
 function renderAccounts(){
   const host=$("#view-accounts"); const ids=Object.keys(DB.accounts); const unassigned=DB.trades.filter(t=>!t.acct).length;
   const reCard=unassigned?`<div class="card section"><p class="small wait" style="margin:0 0 8px">${unassigned} trades sin cuenta asignada.</p>${ids.length?`<div class="rowflex small">Asignar todos los sin-cuenta a <select id="reAcct">${ids.map(i=>`<option value="${i}">${DB.accounts[i].name}</option>`).join("")}</select> <button class="btn small" id="reApply">Asignar</button></div>`:'<span class="small muted">Crea una cuenta para poder asignarlos.</span>'}</div>`:'';
   if(!ids.length){ host.innerHTML=`<div class="card"><h2>Cuentas fondeadas</h2><p class="muted small">Al importar un CSV te pregunto a qué cuenta pertenece. También puedes crear una aquí y definir su target y límite de drawdown.</p><button class="btn calm" id="newAcct">＋ Nueva cuenta</button></div>${reCard}`;
     $("#newAcct").onclick=addAccount; return; }
   const showIds = (acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter])?[acctFilter]:ids;
-  const cards=showIds.map(id=>{ const st=acctStats(id), a=st.a; const prog=a.target>0?st.net/a.target*100:0;
+  const cards=showIds.map(id=>{ const st=acctStats(id), a=st.a; const prog=a.target>0?st.net/a.target*100:0; const ff=firmFinance(a.firm);
     return `<div class="card section">
-      <div class="rowflex" style="justify-content:space-between"><h2 style="margin:0">${a.name}</h2><span class="small muted">${st.count} trades · ${st.nDays} días</span></div>
+      <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${escA(a.name)}${a.firm?` <span class="tag" style="font-weight:600; background:var(--surface2); color:var(--muted)">${escA(a.firm)}</span>`:''}</h2><span class="small muted">${st.count} trades · ${st.nDays} días</span></div>
       <div class="grid kpis" style="margin-top:10px">
         ${kpi("Neto acumulado",money1(st.net),"desde el inicio",cls(st.net))}
         ${kpi("Progreso al target",Math.round(prog)+"%",money(st.net)+" / "+money(a.target))}
@@ -1248,20 +1322,18 @@ function renderAccounts(){
         ${kpi("Ritmo al target",st.daysToTarget==null?"—":st.daysToTarget+(st.daysToTarget===1?" día":" días"),st.net>=a.target?"¡target alcanzado!":"a este paso","calmc")}
       </div>
       ${bar(Math.max(0,Math.min(100,prog)),prog>=100)}
-      <div class="rowflex small muted" style="margin-top:12px; gap:8px; align-items:center">
-        Target $<input type="number" data-a="${id}" data-f="target" value="${a.target}" step="100" style="width:78px">
-        · DD <select data-a="${id}" data-f="ddType"><option value="trailing"${a.ddType==='trailing'?' selected':''}>Trailing</option><option value="static"${a.ddType==='static'?' selected':''}>Estático</option><option value="eod"${a.ddType==='eod'?' selected':''}>Diario</option></select>
-        límite $<input type="number" data-a="${id}" data-f="ddLimit" value="${a.ddLimit}" step="100" style="width:78px">
-        <button class="btn small" data-save="${id}">Guardar</button>
+      ${ff&&(ff.spent||ff.earned)?`<div class="small muted" style="margin-top:10px">💳 <b>${escA(a.firm)}</b> · Evals gastadas <b class="neg">${money(ff.spent)}</b> · Payouts <b class="pos">${money(ff.earned)}</b> · Neto negocio <b class="${cls(ff.earned-ff.spent)}">${money(ff.earned-ff.spent)}</b> <span class="faint">(de Finanzas)</span></div>`:''}
+      <div class="rowflex small muted" style="margin-top:12px; gap:8px; align-items:center; flex-wrap:wrap">
+        <span>Target ${money(a.target)} · DD ${st.ddLabel} ${money(a.ddLimit)} · Balance ${money(a.startBal||0)}</span>
+        <span style="flex:1; min-width:8px"></span>
+        <button class="btn small" data-edit="${id}">✏️ Editar</button>
         <button class="btn small ghost" data-del="${id}" title="Eliminar cuenta (no borra trades)">🗑</button>
       </div></div>`;
   }).join("");
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:4px"><h2 style="margin:0">Cuentas fondeadas</h2><button class="btn calm small" id="newAcct">＋ Nueva cuenta</button></div>
     <p class="small muted" style="margin:0 0 8px">Filtra por cuenta arriba (selector junto al periodo) para ver todo el journal de una sola cuenta.</p>${cards}${reCard}`;
   $("#newAcct").onclick=addAccount;
-  host.querySelectorAll("[data-save]").forEach(b=>b.onclick=()=>{ const id=b.dataset.save;
-    host.querySelectorAll('[data-a="'+id+'"]').forEach(inp=>{ const f=inp.dataset.f; DB.accounts[id][f]= f==='ddType'?inp.value:(+inp.value||0); });
-    save(); renderAccounts(); toast("Cuenta actualizada."); });
+  host.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>accountForm(b.dataset.edit));
   host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=b.dataset.del; if(confirm("¿Eliminar la cuenta "+DB.accounts[id].name+"? Los trades NO se borran, quedan sin cuenta.")){ DB.trades.forEach(t=>{if(t.acct===id)delete t.acct;}); delete DB.accounts[id]; if(acctFilter===id)acctFilter="ALL"; save(); buildAccounts(); renderAccounts(); } });
   const re=$("#reApply"); if(re)re.onclick=()=>{ const to=$("#reAcct").value; DB.trades.forEach(t=>{if(!t.acct)t.acct=to;}); save(); buildAccounts(); render(); toast("Trades asignados a "+DB.accounts[to].name+"."); };
 }
@@ -1389,7 +1461,7 @@ function ledStats(){
 }
 function renderFinance(){
   const host=$("#view-finance"); const S=ledStats(); const L=(DB.ledger||[]).slice().sort((a,b)=>a.date<b.date?1:-1);
-  const firms=[...new Set((DB.ledger||[]).map(e=>e.firm).filter(Boolean))];
+  const firms=allFirms();
   const roi=S.evalSpend>0?S.income/S.evalSpend:0;
   const firmRows=Object.keys(S.byFirm).sort((a,b)=>(S.byFirm[b].earned-S.byFirm[b].spent)-(S.byFirm[a].earned-S.byFirm[a].spent)).map(f=>{const o=S.byFirm[f],net=o.earned-o.spent;
     return `<tr><td>${f.replace(/</g,'&lt;')}</td><td class="mono neg">${money(o.spent)}</td><td class="mono pos">${money(o.earned)}</td><td class="mono ${cls(net)}">${money(net)}</td><td>${net>=0?'<span class="pass ok">se pagó</span>':'<span class="pass no">'+money(net)+'</span>'}</td></tr>`;}).join("");
@@ -1749,18 +1821,17 @@ function render(){
 // ---------- events ----------
 $("#importBtn").onclick=()=>$("#file").click();
 $("#drop").onclick=()=>$("#file").click();
-$("#file").addEventListener("change",e=>{ const files=Array.from(e.target.files); const hasCsv=files.some(f=>!/\.json$/i.test(f.name)); const acct=hasCsv?pickAccount():null; if(hasCsv&&acct===null){e.target.value="";return;} files.forEach(f=>readFile(f,acct)); e.target.value=""; });
+$("#file").addEventListener("change",async e=>{ const files=Array.from(e.target.files); e.target.value=""; if(!files.length)return; const hasCsv=files.some(f=>!/\.json$/i.test(f.name)); let acct=null; if(hasCsv){ acct=await pickAccountModal(); if(acct===null)return; } files.forEach(f=>readFile(f,acct)); });
 ["dragover","dragenter"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.add("over");}));
 ["dragleave","drop"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.remove("over");}));
-$("#drop").addEventListener("drop",e=>{ const files=Array.from(e.dataTransfer.files); const hasCsv=files.some(f=>!/\.json$/i.test(f.name)); const acct=hasCsv?pickAccount():null; if(hasCsv&&acct===null)return; files.forEach(f=>readFile(f,acct)); });
+$("#drop").addEventListener("drop",async e=>{ const files=Array.from(e.dataTransfer.files); if(!files.length)return; const hasCsv=files.some(f=>!/\.json$/i.test(f.name)); let acct=null; if(hasCsv){ acct=await pickAccountModal(); if(acct===null)return; } files.forEach(f=>readFile(f,acct)); });
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; const g=GROUPS.find(x=>x.lab===b.dataset.g); if(!g)return; tab=groupLast[g.lab]||g.subs[0]; render();});
 $("#subtabs").addEventListener("click",e=>{const b=e.target.closest("button"); if(!b)return; tab=b.dataset.t; render();});
 $("#periodSel").addEventListener("change",e=>{period=e.target.value; render();});
 $("#acctSel").addEventListener("change",e=>{acctFilter=e.target.value; render();});
 $("#backupBtn").onclick=exportBackup;
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
-$("#ctxBtn").onclick=()=>{ const s=prompt("Pega el JSON de contexto del Analyst (lista de {date,sym,entry,panel,align,setup,emo,wait,stop,note}):"); if(!s)return;
-  try{ const j=JSON.parse(s); if(Array.isArray(j)) importContext(j); else toast("Debe ser una lista [ ]."); }catch(e){ toast("JSON inválido."); } };
+$("#ctxBtn").onclick=showContextModal;
 $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
 $("#wipeBtn").onclick=()=>{ if(confirm("¿Borrar TODOS los trades y etiquetas guardados en este navegador?")){DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],routine:DB.routine||{},settings:DB.settings}; acctFilter="ALL"; noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast("Todo borrado.");} };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
@@ -1768,6 +1839,10 @@ window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._dr
 // ---------- auth / arranque en la nube ----------
 function showLogin(){ const g=$("#authGate"); g.classList.remove("hide"); g.classList.remove("resolving"); }
 function hideLogin(){ $("#authGate").classList.add("hide"); }
+let _modalOnClose=null;
+function openModal(html,onClose){ const m=$("#modal"); m.innerHTML=`<div class="authcard" style="max-width:470px; max-height:88vh; overflow:auto">${html}</div>`; m.classList.remove("hide"); _modalOnClose=(typeof onClose==="function")?onClose:null; m.onclick=(e)=>{ if(e.target===m) closeModal(); }; }
+function closeModal(){ const m=$("#modal"); if(m.classList.contains("hide"))return; m.classList.add("hide"); m.innerHTML=""; m.onclick=null; const c=_modalOnClose; _modalOnClose=null; if(c)c(); }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ const m=$("#modal"); if(m&&!m.classList.contains("hide")) closeModal(); } });
 function showOnboard(){
   const s=DB.settings, og=$("#onboard");
   const sessOpts=["Asia","NY","Break"].map(x=>`<option ${x===(s.session||"Asia")?'selected':''}>${x}</option>`).join("");
