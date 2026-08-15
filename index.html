@@ -9,6 +9,11 @@
 <meta property="og:description" content="Diario de trading + rutina diaria. Detecta tus fugas y opera con disciplina. Privado, sin costo.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0a0d11">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
 <style>
   :root{
@@ -258,6 +263,7 @@ function _aPut(k,v){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db
 function _aDel(k){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db.transaction("kv","readwrite"); tx.objectStore("kv").delete(k); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }catch(e){ res(); } })).catch(()=>{}); }
 const authStore={ getItem:(k)=>{ let lv=null; try{lv=localStorage.getItem(k);}catch(e){} if(lv!=null) return lv; return _aGet(k); }, setItem:(k,v)=>{ try{localStorage.setItem(k,v);}catch(e){} return _aPut(k,v); }, removeItem:(k)=>{ try{localStorage.removeItem(k);}catch(e){} return _aDel(k); } };
 const sb=supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:authStore}});
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
 let user=null, _cloudT=null, _syncStamp=null, _conflictShown=false, _remindedThisSession=false;
 // ---------- i18n (EN por defecto + ES) ----------
 const I18N={
