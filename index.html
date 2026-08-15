@@ -349,7 +349,9 @@ const I18N={
   "ob3.title":"How it works — 3 steps","ob3.s1":"<b>Import</b> your trades — a CSV from your broker (Tradovate / Zella).","ob3.s2":"<b>Tag</b> each trade: emotion, valid edge, setup, process.","ob3.s3":"<b>See</b> your leaks, discipline score and weekly progress.","ob3.noTrades":"No trades yet? Start with your <b>Daily Routine</b> — it works without any data.",
   "hdr.allAccounts":"All accounts","hdr.noAccountN":"(no account · {n})","hdr.allHistory":"All history","hdr.last7days":"Last 7 days with data",
   "card.weeklyTitle":"Weekly summary (shareable)","card.disc":"Discipline","card.win":"Win","card.bestWorst":"Best day {bd} · Worst {wd}","card.tagline":"Discipline over results.","card.savePng":"💾 Save image","card.copyImg":"📋 Copy","card.copied":"Image copied.","card.copyFail":"Couldn't copy the image.",
-  "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on — I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked — I'll remind you inside the app."
+  "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on — I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked — I'll remind you inside the app.",
+  "tilt.title":"Today's tilt risk","tilt.low":"LOW","tilt.med":"MEDIUM","tilt.high":"HIGH","tilt.recLow":"Neutral conditions — follow your plan.","tilt.recMed":"Careful — respect the circuit-breaker (stop at 2).","tilt.recHigh":"High risk — trade half size or stop after 1 loss.","tilt.rLastBroke":"you broke rules last session","tilt.rLastRed":"last session was red","tilt.rStreak":"{n} tough days in a row","tilt.rMood":"you arrive in “{m}”","tilt.why":"Why:","tilt.noData":"Import some trades to compute your tilt risk.",
+  "clean.title":"🎯 Clean days — your real scoreboard","clean.body":"A clean day = you followed all your rules, win or lose. That's the win you control. Chase clean days; the P&L follows.","clean.streak":"Clean streak","clean.rate":"Clean days"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -439,7 +441,9 @@ const I18N={
   "ob3.title":"Cómo funciona — 3 pasos","ob3.s1":"<b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).","ob3.s2":"<b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.","ob3.s3":"<b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.","ob3.noTrades":"¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato.",
   "hdr.allAccounts":"Todas las cuentas","hdr.noAccountN":"(sin cuenta · {n})","hdr.allHistory":"Todo el histórico","hdr.last7days":"Últimos 7 días con datos",
   "card.weeklyTitle":"Resumen semanal (compartible)","card.disc":"Disciplina","card.win":"Win","card.bestWorst":"Mejor día {bd} · Peor {wd}","card.tagline":"Disciplina antes que resultados.","card.savePng":"💾 Guardar imagen","card.copyImg":"📋 Copiar","card.copied":"Imagen copiada.","card.copyFail":"No se pudo copiar la imagen.",
-  "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado — te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas — te recordaré dentro de la app."
+  "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado — te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas — te recordaré dentro de la app.",
+  "tilt.title":"Riesgo de tilt hoy","tilt.low":"BAJO","tilt.med":"MEDIO","tilt.high":"ALTO","tilt.recLow":"Condiciones neutrales — sigue tu plan.","tilt.recMed":"Cuidado — respeta el circuit-breaker (para a las 2).","tilt.recHigh":"Riesgo alto — media posición o para tras 1 pérdida.","tilt.rLastBroke":"rompiste reglas la última sesión","tilt.rLastRed":"la última sesión fue roja","tilt.rStreak":"{n} días difíciles seguidos","tilt.rMood":"llegas en “{m}”","tilt.why":"Por qué:","tilt.noData":"Importa trades para calcular tu riesgo de tilt.",
+  "clean.title":"🎯 Días limpios — tu marcador real","clean.body":"Un día limpio = seguiste todas tus reglas, ganes o pierdas. Ese es el triunfo que controlas. Persigue días limpios; el P&L viene detrás.","clean.streak":"Racha limpia","clean.rate":"Días limpios"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -954,6 +958,12 @@ function renderOverview(){
       ${kpi(T("bestWorstDay"),money(bestD)+" / "+money(worstD),"")}
       ${kpi(T("maxDD"),money(-mdd),T("peakToValley"),mdd?"neg":"muted")}
     </div>
+    <div class="card section" style="border-color:var(--calm)"><h2>${T("clean.title")}</h2>
+      <div class="grid kpis" style="margin:4px 0 10px">
+        ${kpi(T("clean.streak"),streak+" 🔥",T("discLower"),streak>0?"calmc":"muted")}
+        ${kpi(T("clean.rate"),disc+"/"+days.length,days.length?Math.round(disc/days.length*100)+"%":"—","calmc")}
+      </div>
+      <div class="why small muted" style="font-size:13px">${T("clean.body")}</div></div>
     ${cfBest?`<div class="card section" style="border-color:var(--calm)"><h2>${T("leaksCostTitle")}</h2><div class="why" style="font-size:14px">${cfBody}</div></div>`:''}
     ${hi?`<div class="card section"><h2>${T("topInsight")}</h2><div class="why" style="font-size:13.5px">${mdb(hi.text)}</div></div>`:''}
     <div class="card section"><h2>${T("equityCurve")}</h2><div id="eqhost"></div></div>
@@ -1270,6 +1280,28 @@ function maybeRemindCheckin(){
   toast("🔔 "+T("rem.notifBody"));
   try{ if(window.Notification && Notification.permission==="granted") new Notification(T("rem.notifTitle"),{body:T("rem.notifBody")}); }catch(e){}
 }
+function tiltScore(mood){
+  const days=dayEval(scoped()); let pts=0; const reasons=[];
+  const last=days[days.length-1];
+  if(last){ if(!last.disciplined){pts+=2; reasons.push(T("tilt.rLastBroke"));} if(last.net<0){pts+=1; reasons.push(T("tilt.rLastRed"));} }
+  let consec=0; for(let i=days.length-1;i>=0;i--){ if(!days[i].disciplined)consec++; else break; }
+  if(consec>=2){pts+=2; reasons.push(fmt(T("tilt.rStreak"),{n:consec}));}
+  if(mood && ["FOMO","Revancha","DPT","Aburrido"].includes(mood)){pts+=2; reasons.push(fmt(T("tilt.rMood"),{m:vLabel("emo",mood)}));}
+  return {pts, level: pts>=4?"high":pts>=2?"med":"low", reasons};
+}
+function updateTilt(mood){
+  const box=$("#tiltBox"); if(!box) return;
+  if(!dayEval(scoped()).length){ box.innerHTML='<div class="card section"><p class="muted small" style="margin:0">'+T("tilt.noData")+'</p></div>'; return; }
+  const t=tiltScore(mood);
+  const col=t.level==="high"?"neg":(t.level==="med"?"wait":"pos");
+  const lab=t.level==="high"?T("tilt.high"):(t.level==="med"?T("tilt.med"):T("tilt.low"));
+  const rec=t.level==="high"?T("tilt.recHigh"):(t.level==="med"?T("tilt.recMed"):T("tilt.recLow"));
+  const pass=t.level==="high"?"no":(t.level==="med"?"na":"ok");
+  box.innerHTML=`<div class="card section"><div class="rowflex" style="justify-content:space-between; align-items:center">
+      <h2 style="margin:0">${T("tilt.title")}</h2><span class="pass ${pass}" style="font-size:13px">${lab}</span></div>
+     <div class="${col}" style="font-weight:700; font-size:15px; margin-top:8px">${rec}</div>
+     ${t.reasons.length?`<div class="small muted" style="margin-top:6px">${T("tilt.why")} ${t.reasons.join(" · ")}</div>`:''}</div>`;
+}
 function renderCheckin(){
   const host=$("#view-checkin");
   const evalDays=dayEval(scoped()); const netByDay={}; evalDays.forEach(d=>netByDay[d.date]=d);
@@ -1293,13 +1325,15 @@ function renderCheckin(){
       <button class="btn calm" id="ciSave">${T("ci.save")}</button>
       <label class="rowflex small muted" style="gap:7px; cursor:pointer; margin-top:12px; align-items:center"><input type="checkbox" id="ciRemind" ${DB.settings.remindCheckin?'checked':''}> <span>${T("rem.toggle")}</span></label>
     </div>
+    <div id="tiltBox"></div>
     ${corr?`<div class="card section"><h2>${T("ci.moodVsResult")}</h2><div class="cf">${corr}</div>
       <p class="small muted" style="margin-top:8px">${T("ci.moodNote")}</p></div>`:''}
     <div class="card section"><h2>${T("ci.history")}</h2>
       <table><thead><tr><th>${T("th.day")}</th><th>${T("ci.thMood")}</th><th>${T("ci.thPlan")}</th><th class="mono">${T("ci.thNetDay")}</th><th>${T("ci.thDisc")}</th></tr></thead>
       <tbody>${hist||'<tr><td colspan="5" class="muted">'+T("ci.none")+'</td></tr>'}</tbody></table></div>`;
   let selMood=cur.mood||"";
-  host.querySelectorAll('[data-ci="mood"]').forEach(b=>b.onclick=()=>{selMood=selMood===b.dataset.v?"":b.dataset.v; host.querySelectorAll('[data-ci="mood"]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.v===selMood));});
+  updateTilt(selMood);
+  host.querySelectorAll('[data-ci="mood"]').forEach(b=>b.onclick=()=>{selMood=selMood===b.dataset.v?"":b.dataset.v; host.querySelectorAll('[data-ci="mood"]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.v===selMood)); updateTilt(selMood);});
   $("#ciSave").onclick=()=>{ const d=$("#ciDate").value.trim()||latest;
     DB.checkins[d]={mood:selMood,plan:$("#ciPlan").value.trim(),rules:$("#ciRules").checked,ts:Date.now()};
     save(); toast(fmt(T("ci.saved"),{d})); renderCheckin(); };
