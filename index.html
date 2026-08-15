@@ -352,7 +352,8 @@ const I18N={
   "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on — I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked — I'll remind you inside the app.",
   "tilt.title":"Today's tilt risk","tilt.low":"LOW","tilt.med":"MEDIUM","tilt.high":"HIGH","tilt.recLow":"Neutral conditions — follow your plan.","tilt.recMed":"Careful — respect the circuit-breaker (stop at 2).","tilt.recHigh":"High risk — trade half size or stop after 1 loss.","tilt.rLastBroke":"you broke rules last session","tilt.rLastRed":"last session was red","tilt.rStreak":"{n} tough days in a row","tilt.rMood":"you arrive in “{m}”","tilt.why":"Why:","tilt.noData":"Import some trades to compute your tilt risk.",
   "clean.title":"🎯 Clean days — your real scoreboard","clean.body":"A clean day = you followed all your rules, win or lose. That's the win you control. Chase clean days; the P&L follows.","clean.streak":"Clean streak","clean.rate":"Clean days",
-  "rules.title":"🧠 Your rules (from your own data)","rules.intro":"Not generic rules — what YOUR history proves. Adopt the ones you trust.","rules.adopted":"Rule adopted.","rule.maxTrades":"Max 3 trades a day — your 4th+ trades average <b>{v}</b>.","rule.adoptMax":"Adopt","rule.noAgainst":"Never trade against the bias — {n} such trades net <b>{net}</b>.","rule.onlyEdge":"Only trade valid edges — no-man's-land ({n}) nets <b>{net}</b>.","rule.sideLeak":"Skip {side} unless it's a clear edge — they net <b>{net}</b>.","rule.avoidWorst":"Cut or avoid <b>{k}</b> — nets {net}.","rule.circuitBreak":"Stop after a loss — your next trade averages <b>{net}</b>."
+  "rules.title":"🧠 Your rules (from your own data)","rules.intro":"Not generic rules — what YOUR history proves. Adopt the ones you trust.","rules.adopted":"Rule adopted.","rule.maxTrades":"Max 3 trades a day — your 4th+ trades average <b>{v}</b>.","rule.adoptMax":"Adopt","rule.noAgainst":"Never trade against the bias — {n} such trades net <b>{net}</b>.","rule.onlyEdge":"Only trade valid edges — no-man's-land ({n}) nets <b>{net}</b>.","rule.sideLeak":"Skip {side} unless it's a clear edge — they net <b>{net}</b>.","rule.avoidWorst":"Cut or avoid <b>{k}</b> — nets {net}.","rule.circuitBreak":"Stop after a loss — your next trade averages <b>{net}</b>.",
+  "af.phase":"Account type","phase.eval":"Evaluation","phase.funded":"Funded","af.status":"Status","status.active":"Active","status.passed":"Passed","status.lost":"Lost","ac.markPassed":"✓ Passed","ac.markLost":"✗ Lost","ac.markActive":"↺ Reactivate"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -445,7 +446,8 @@ const I18N={
   "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado — te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas — te recordaré dentro de la app.",
   "tilt.title":"Riesgo de tilt hoy","tilt.low":"BAJO","tilt.med":"MEDIO","tilt.high":"ALTO","tilt.recLow":"Condiciones neutrales — sigue tu plan.","tilt.recMed":"Cuidado — respeta el circuit-breaker (para a las 2).","tilt.recHigh":"Riesgo alto — media posición o para tras 1 pérdida.","tilt.rLastBroke":"rompiste reglas la última sesión","tilt.rLastRed":"la última sesión fue roja","tilt.rStreak":"{n} días difíciles seguidos","tilt.rMood":"llegas en “{m}”","tilt.why":"Por qué:","tilt.noData":"Importa trades para calcular tu riesgo de tilt.",
   "clean.title":"🎯 Días limpios — tu marcador real","clean.body":"Un día limpio = seguiste todas tus reglas, ganes o pierdas. Ese es el triunfo que controlas. Persigue días limpios; el P&L viene detrás.","clean.streak":"Racha limpia","clean.rate":"Días limpios",
-  "rules.title":"🧠 Tus reglas (según tus propios datos)","rules.intro":"No son reglas genéricas — son lo que TU histórico demuestra. Adopta las que te convenzan.","rules.adopted":"Regla adoptada.","rule.maxTrades":"Máx 3 trades al día — del 4º en adelante promedias <b>{v}</b>.","rule.adoptMax":"Adoptar","rule.noAgainst":"Nunca operes contra el sesgo — {n} trades así suman <b>{net}</b>.","rule.onlyEdge":"Opera solo bordes válidos — tierra de nadie ({n}) suma <b>{net}</b>.","rule.sideLeak":"Evita {side} salvo borde claro — suman <b>{net}</b>.","rule.avoidWorst":"Recorta o evita <b>{k}</b> — suma {net}.","rule.circuitBreak":"Para tras una pérdida — tu siguiente trade promedia <b>{net}</b>."
+  "rules.title":"🧠 Tus reglas (según tus propios datos)","rules.intro":"No son reglas genéricas — son lo que TU histórico demuestra. Adopta las que te convenzan.","rules.adopted":"Regla adoptada.","rule.maxTrades":"Máx 3 trades al día — del 4º en adelante promedias <b>{v}</b>.","rule.adoptMax":"Adoptar","rule.noAgainst":"Nunca operes contra el sesgo — {n} trades así suman <b>{net}</b>.","rule.onlyEdge":"Opera solo bordes válidos — tierra de nadie ({n}) suma <b>{net}</b>.","rule.sideLeak":"Evita {side} salvo borde claro — suman <b>{net}</b>.","rule.avoidWorst":"Recorta o evita <b>{k}</b> — suma {net}.","rule.circuitBreak":"Para tras una pérdida — tu siguiente trade promedia <b>{net}</b>.",
+  "af.phase":"Tipo de cuenta","phase.eval":"Evaluación","phase.funded":"Fondeada","af.status":"Estado","status.active":"Activa","status.passed":"Pasada","status.lost":"Perdida","ac.markPassed":"✓ Pasada","ac.markLost":"✗ Perdida","ac.markActive":"↺ Reactivar"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -587,7 +589,7 @@ function allFirms(){ const s=new Set(); (DB.ledger||[]).forEach(e=>{if(e.firm)s.
 // Formulario modal de cuenta (crear/editar). onDone(id) al guardar, onDone(null) al cancelar.
 function accountForm(id, onDone){
   const editing=!!(id&&DB.accounts[id]);
-  const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000};
+  const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000,phase:"eval",status:"active"};
   const firms=allFirms();
   let done=false; const fin=(v)=>{ if(done)return; done=true; if(onDone)onDone(v); };
   openModal(`
@@ -607,6 +609,10 @@ function accountForm(id, onDone){
       <div style="flex:1"><label class="small muted">${T("af.ddType")}</label><select id="afDdType" style="width:100%; margin-top:4px; padding:9px 11px"><option value="trailing"${a.ddType==='trailing'?' selected':''}>${T("dd.trailing")}</option><option value="static"${a.ddType==='static'?' selected':''}>${T("dd.static")}</option><option value="eod"${a.ddType==='eod'?' selected':''}>${T("dd.eod")}</option></select></div>
       <div style="flex:1"><label class="small muted">${T("af.ddLimit")}</label><input type="number" id="afDdLimit" value="${a.ddLimit||0}" step="100" style="width:100%; margin-top:4px; padding:9px 11px"></div>
     </div>
+    <div class="rowflex" style="gap:10px; margin-top:12px">
+      <div style="flex:1"><label class="small muted">${T("af.phase")}</label><select id="afPhase" style="width:100%; margin-top:4px; padding:9px 11px"><option value="eval"${(a.phase||'eval')==='eval'?' selected':''}>${T("phase.eval")}</option><option value="funded"${a.phase==='funded'?' selected':''}>${T("phase.funded")}</option></select></div>
+      <div style="flex:1"><label class="small muted">${T("af.status")}</label><select id="afStatus" style="width:100%; margin-top:4px; padding:9px 11px"><option value="active"${(a.status||'active')==='active'?' selected':''}>${T("status.active")}</option><option value="passed"${a.status==='passed'?' selected':''}>${T("status.passed")}</option><option value="lost"${a.status==='lost'?' selected':''}>${T("status.lost")}</option></select></div>
+    </div>
     <div class="rowflex" style="gap:10px; margin-top:18px">
       <button class="btn calm" id="afSave" style="flex:1; justify-content:center; padding:11px">${editing?T("af.save"):T("af.create")}</button>
       <button class="btn ghost" id="afCancel" style="justify-content:center; padding:11px">${T("cancel")}</button>
@@ -614,7 +620,7 @@ function accountForm(id, onDone){
   $("#afCancel").onclick=closeModal;
   $("#afSave").onclick=()=>{
     const nm=($("#afName").value||"").trim(); if(!nm){toast(T("af.needName"));return;}
-    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0 };
+    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, phase:$("#afPhase").value, status:$("#afStatus").value };
     let newId=id;
     if(editing){ Object.assign(DB.accounts[id],data); }
     else { let base=slug(nm)||"cuenta", k=base, i=2; while(DB.accounts[k]){k=base+"-"+i;i++;} newId=k; DB.accounts[newId]=data; acctFilter=newId; }
@@ -1517,7 +1523,7 @@ function renderAccounts(){
   const showIds = (acctFilter!=="ALL"&&acctFilter!=="NONE"&&DB.accounts[acctFilter])?[acctFilter]:ids;
   const cards=showIds.map(id=>{ const st=acctStats(id), a=st.a; const prog=a.target>0?st.net/a.target*100:0; const ff=firmFinance(a.firm);
     return `<div class="card section">
-      <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${escA(a.name)}${a.firm?` <span class="tag" style="font-weight:600; background:var(--surface2); color:var(--muted)">${escA(a.firm)}</span>`:''}</h2><span class="small muted">${st.count} ${T("trades")} · ${st.nDays} ${T("dDays")}</span></div>
+      <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${escA(a.name)}${a.firm?` <span class="tag" style="font-weight:600; background:var(--surface2); color:var(--muted)">${escA(a.firm)}</span>`:''} <span class="tag" style="font-weight:600; background:var(--surface2); color:var(--muted)">${T("phase."+(a.phase||'eval'))}</span>${a.status&&a.status!=='active'?` <span class="tag ${a.status==='passed'?'S':'L'}">${T("status."+a.status)}</span>`:''}</h2><span class="small muted">${st.count} ${T("trades")} · ${st.nDays} ${T("dDays")}</span></div>
       <div class="grid kpis" style="margin-top:10px">
         ${kpi(T("ac.kNet"),money1(st.net),T("ac.sinceStart"),cls(st.net))}
         ${kpi(T("ac.kProgress"),Math.round(prog)+"%",money(st.net)+" / "+money(a.target))}
@@ -1529,6 +1535,9 @@ function renderAccounts(){
       <div class="rowflex small muted" style="margin-top:12px; gap:8px; align-items:center; flex-wrap:wrap">
         <span>Target ${money(a.target)} · DD ${st.ddLabel} ${money(a.ddLimit)} · Balance ${money(a.startBal||0)}</span>
         <span style="flex:1; min-width:8px"></span>
+        ${a.status!=='passed'?`<button class="btn small ghost" data-st="passed" data-id="${id}">${T("ac.markPassed")}</button>`:''}
+        ${a.status!=='lost'?`<button class="btn small ghost" data-st="lost" data-id="${id}">${T("ac.markLost")}</button>`:''}
+        ${a.status&&a.status!=='active'?`<button class="btn small ghost" data-st="active" data-id="${id}">${T("ac.markActive")}</button>`:''}
         <button class="btn small" data-edit="${id}">${T("ac.edit")}</button>
         <button class="btn small ghost" data-del="${id}" title="${T("ac.delTitle")}">🗑</button>
       </div></div>`;
@@ -1537,6 +1546,7 @@ function renderAccounts(){
     <p class="small muted" style="margin:0 0 8px">${T("ac.filterHint")}</p>${cards}${reCard}`;
   $("#newAcct").onclick=addAccount;
   host.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>accountForm(b.dataset.edit));
+  host.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{ const a=DB.accounts[b.dataset.id]; if(a){ a.status=b.dataset.st; save(); renderAccounts(); } });
   host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=b.dataset.del; if(confirm(fmt(T("ac.delConfirm"),{name:DB.accounts[id].name}))){ DB.trades.forEach(t=>{if(t.acct===id)delete t.acct;}); delete DB.accounts[id]; if(acctFilter===id)acctFilter="ALL"; save(); buildAccounts(); renderAccounts(); } });
   const re=$("#reApply"); if(re)re.onclick=()=>{ const to=$("#reAcct").value; DB.trades.forEach(t=>{if(!t.acct)t.acct=to;}); save(); buildAccounts(); render(); toast(fmt(T("ac.assigned"),{name:DB.accounts[to].name})); };
 }
