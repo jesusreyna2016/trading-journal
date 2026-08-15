@@ -258,7 +258,7 @@ function _aPut(k,v){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db
 function _aDel(k){ return _aIdb().then(db=>new Promise(res=>{ try{ const tx=db.transaction("kv","readwrite"); tx.objectStore("kv").delete(k); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }catch(e){ res(); } })).catch(()=>{}); }
 const authStore={ getItem:(k)=>{ let lv=null; try{lv=localStorage.getItem(k);}catch(e){} if(lv!=null) return lv; return _aGet(k); }, setItem:(k,v)=>{ try{localStorage.setItem(k,v);}catch(e){} return _aPut(k,v); }, removeItem:(k)=>{ try{localStorage.removeItem(k);}catch(e){} return _aDel(k); } };
 const sb=supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:authStore}});
-let user=null, _cloudT=null, _syncStamp=null, _conflictShown=false;
+let user=null, _cloudT=null, _syncStamp=null, _conflictShown=false, _remindedThisSession=false;
 // ---------- i18n (EN por defecto + ES) ----------
 const I18N={
  en:{
@@ -347,7 +347,9 @@ const I18N={
   "sync.saved":"✓ saved","sync.saving":"saving…","sync.err":"⚠ not saved","sync.conflict":"⚠ conflict","sync.offline":"Offline — using local copy",
   "conf.title":"Newer version on another device","conf.body":"This journal was updated more recently on another device (or tab). If you overwrite, you'll lose those changes.","conf.reload":"Reload the newer version","conf.overwrite":"Overwrite with what's here",
   "ob3.title":"How it works — 3 steps","ob3.s1":"<b>Import</b> your trades — a CSV from your broker (Tradovate / Zella).","ob3.s2":"<b>Tag</b> each trade: emotion, valid edge, setup, process.","ob3.s3":"<b>See</b> your leaks, discipline score and weekly progress.","ob3.noTrades":"No trades yet? Start with your <b>Daily Routine</b> — it works without any data.",
-  "hdr.allAccounts":"All accounts","hdr.noAccountN":"(no account · {n})","hdr.allHistory":"All history","hdr.last7days":"Last 7 days with data"
+  "hdr.allAccounts":"All accounts","hdr.noAccountN":"(no account · {n})","hdr.allHistory":"All history","hdr.last7days":"Last 7 days with data",
+  "card.weeklyTitle":"Weekly summary (shareable)","card.disc":"Discipline","card.win":"Win","card.bestWorst":"Best day {bd} · Worst {wd}","card.tagline":"Discipline over results.","card.savePng":"💾 Save image","card.copyImg":"📋 Copy","card.copied":"Image copied.","card.copyFail":"Couldn't copy the image.",
+  "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on — I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked — I'll remind you inside the app."
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -435,7 +437,9 @@ const I18N={
   "sync.saved":"✓ guardado","sync.saving":"guardando…","sync.err":"⚠ sin guardar","sync.conflict":"⚠ conflicto","sync.offline":"Sin conexión — usando copia local",
   "conf.title":"Versión más nueva en otro dispositivo","conf.body":"Este journal se actualizó más recientemente en otro dispositivo (o pestaña). Si sobrescribes, perderás esos cambios.","conf.reload":"Cargar la versión más nueva","conf.overwrite":"Sobrescribir con lo de aquí",
   "ob3.title":"Cómo funciona — 3 pasos","ob3.s1":"<b>Importa</b> tus trades — un CSV de tu broker (Tradovate / Zella).","ob3.s2":"<b>Etiqueta</b> cada trade: emoción, borde válido, setup, proceso.","ob3.s3":"<b>Descubre</b> tus fugas, tu score de disciplina y tu progreso semanal.","ob3.noTrades":"¿Aún sin trades? Empieza por tu <b>Rutina diaria</b> — funciona sin ningún dato.",
-  "hdr.allAccounts":"Todas las cuentas","hdr.noAccountN":"(sin cuenta · {n})","hdr.allHistory":"Todo el histórico","hdr.last7days":"Últimos 7 días con datos"
+  "hdr.allAccounts":"Todas las cuentas","hdr.noAccountN":"(sin cuenta · {n})","hdr.allHistory":"Todo el histórico","hdr.last7days":"Últimos 7 días con datos",
+  "card.weeklyTitle":"Resumen semanal (compartible)","card.disc":"Disciplina","card.win":"Win","card.bestWorst":"Mejor día {bd} · Peor {wd}","card.tagline":"Disciplina antes que resultados.","card.savePng":"💾 Guardar imagen","card.copyImg":"📋 Copiar","card.copied":"Imagen copiada.","card.copyFail":"No se pudo copiar la imagen.",
+  "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado — te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas — te recordaré dentro de la app."
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -870,6 +874,26 @@ function chartDaily(TR){
 function wrapCanvas(c){ c.style.height="0"; }
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function setup(c,H){ const w=c.parentElement.clientWidth||600; const dpr=window.devicePixelRatio||1; c.width=w*dpr; c.height=H*dpr; c.style.height=H+"px"; const x=c.getContext("2d"); x.scale(dpr,dpr); return {x,w,H};}
+function rrect(x,rx,ry,rw,rh,r){ x.beginPath(); x.moveTo(rx+r,ry); x.arcTo(rx+rw,ry,rx+rw,ry+rh,r); x.arcTo(rx+rw,ry+rh,rx,ry+rh,r); x.arcTo(rx,ry+rh,rx,ry,r); x.arcTo(rx,ry,rx+rw,ry,r); x.closePath(); }
+function drawSummaryCard(c,d){ const {x,w,H}=setup(c,300); const pad=22;
+  const bg=css('--surface'),ink=css('--ink'),muted=css('--muted'),faint=css('--faint'),hair=css('--hair'),s2=css('--surface2'),calm=css('--calm'),pos=css('--pos'),neg=css('--neg'),mono=css('--mono'),sans=css('--sans');
+  x.fillStyle=bg; rrect(x,0.5,0.5,w-1,H-1,12); x.fill(); x.strokeStyle=hair; x.lineWidth=1; x.stroke();
+  x.textBaseline="alphabetic";
+  x.fillStyle=calm; x.font="700 11px "+mono; x.textAlign="left"; x.fillText("TRADING JOURNAL",pad,pad+11);
+  x.fillStyle=faint; x.textAlign="right"; x.fillText(d.week,w-pad,pad+11); x.textAlign="left";
+  x.fillStyle=muted; x.font="700 10px "+mono; x.fillText(d.netLabel.toUpperCase(),pad,pad+40);
+  x.fillStyle=d.net>=0?pos:neg; x.font="800 38px "+mono; x.fillText(d.netStr,pad,pad+78);
+  const midX=Math.round(w*0.55);
+  x.fillStyle=muted; x.font="700 10px "+mono; x.fillText(d.discLabel.toUpperCase(),midX,pad+40);
+  x.fillStyle=d.discPct>=80?pos:calm; x.font="800 38px "+mono; x.fillText(d.discPct+"%",midX,pad+78);
+  const by=pad+94, bw=w-2*pad;
+  x.fillStyle=s2; rrect(x,pad,by,bw,8,4); x.fill();
+  x.fillStyle=d.discPct>=80?pos:calm; rrect(x,pad,by,Math.max(0,Math.min(1,d.discPct/100))*bw,8,4); x.fill();
+  const sy=by+42, cols=[[d.tradesLabel,d.trades],[d.winLabel,d.winRate+"%"],[d.streakLabel,d.streak+" 🔥"]], cw=bw/3;
+  cols.forEach((cc,i)=>{ const cx=pad+i*cw; x.fillStyle=faint; x.font="700 10px "+mono; x.fillText(String(cc[0]).toUpperCase(),cx,sy); x.fillStyle=ink; x.font="700 20px "+mono; x.fillText(String(cc[1]),cx,sy+25); });
+  x.fillStyle=muted; x.font="12px "+sans; x.fillText(d.bestWorst,pad,sy+58);
+  x.fillStyle=faint; x.font="italic 11px "+sans; x.fillText(d.tagline,pad,H-16);
+}
 function drawLine(c,pts,H){
   const {x,w}=setup(c,H); const pad=8, bottom=H-18;
   const ys=pts.map(p=>p.y); let mn=Math.min(0,...ys), mx=Math.max(0,...ys); if(mn===mx)mx=mn+1;
@@ -1238,6 +1262,14 @@ function procScore(id,tg){ tg=tg||DB.tags[id]||{};
 }
 
 // ---------- CHECK-IN (pre-session) ----------
+function maybeRemindCheckin(){
+  if(_remindedThisSession) return; if(!(DB.settings&&DB.settings.remindCheckin)) return;
+  const td=tradingDay({date:new Date().toISOString().slice(0,10),time:"18:00:00"});
+  if(DB.checkins&&DB.checkins[td]) return;
+  _remindedThisSession=true;
+  toast("🔔 "+T("rem.notifBody"));
+  try{ if(window.Notification && Notification.permission==="granted") new Notification(T("rem.notifTitle"),{body:T("rem.notifBody")}); }catch(e){}
+}
 function renderCheckin(){
   const host=$("#view-checkin");
   const evalDays=dayEval(scoped()); const netByDay={}; evalDays.forEach(d=>netByDay[d.date]=d);
@@ -1259,6 +1291,7 @@ function renderCheckin(){
       <div class="rowflex" style="margin-bottom:12px"><span class="small muted" style="min-width:64px">${T("ci.day")}</span><input type="text" id="ciDate" value="${latest}" style="width:120px"></div>
       <label class="rowflex small" style="gap:7px; cursor:pointer; margin-bottom:12px; align-items:flex-start"><input type="checkbox" id="ciRules" ${cur.rules?'checked':''} style="margin-top:3px"> <span>${T("ci.rules")}</span></label>
       <button class="btn calm" id="ciSave">${T("ci.save")}</button>
+      <label class="rowflex small muted" style="gap:7px; cursor:pointer; margin-top:12px; align-items:center"><input type="checkbox" id="ciRemind" ${DB.settings.remindCheckin?'checked':''}> <span>${T("rem.toggle")}</span></label>
     </div>
     ${corr?`<div class="card section"><h2>${T("ci.moodVsResult")}</h2><div class="cf">${corr}</div>
       <p class="small muted" style="margin-top:8px">${T("ci.moodNote")}</p></div>`:''}
@@ -1270,6 +1303,7 @@ function renderCheckin(){
   $("#ciSave").onclick=()=>{ const d=$("#ciDate").value.trim()||latest;
     DB.checkins[d]={mood:selMood,plan:$("#ciPlan").value.trim(),rules:$("#ciRules").checked,ts:Date.now()};
     save(); toast(fmt(T("ci.saved"),{d})); renderCheckin(); };
+  const cr=$("#ciRemind"); if(cr)cr.onchange=async e=>{ DB.settings.remindCheckin=e.target.checked; save(); if(e.target.checked && window.Notification){ try{ const p=await Notification.requestPermission(); toast(p==="granted"?T("rem.on"):T("rem.blocked")); }catch(err){} } };
 }
 
 // ---------- PROGRESS / GOALS ----------
@@ -1311,8 +1345,13 @@ function renderProgress(){
   const wd=allW.filter(d=>isoWeek(d.date)===curW).sort((a,b)=>a.date<b.date?-1:1);
   const scoreRow=r=>{ const rel=wd.filter(d=>d[r.k]!==null), ok=rel.filter(d=>d[r.k]).length, tot=rel.length; const st=tot===0?'na':(ok===tot?'ok':'no'), t=tot===0?'—':ok+'/'+tot+' '+T("dDays"); return `<div class="r"><span class="lab">${T("rule."+r.k)}</span><span class="pass ${st}">${t}</span></div>`; };
   const heat=wd.map(d=>`<div class="d ${d.disciplined?'g':'r'}" title="${d.date}: ${money(d.net)}${d.disciplined?' · '+T("w.disciplined"):' · '+failReasons(d)}">${d.date.slice(5)}<span class="n">${d.net>=0?'+':''}${Math.round(d.net)}</span></div>`).join("");
+  const TRw=scoped().filter(t=>isoWeek(t.tday||t.date)===curW); const Mw=metrics(TRw);
+  const wdNets=wd.map(d=>d.net); const bestD=wdNets.length?Math.max(...wdNets):0, worstD=wdNets.length?Math.min(...wdNets):0;
+  const cardD={ week:curW, netLabel:T("net"), net:last.net, netStr:money1(last.net), discLabel:T("card.disc"), discPct:Math.round(last.discPct), tradesLabel:T("th.Trades"), trades:Mw.n, winLabel:T("card.win"), winRate:Mw.winrate.toFixed(0), streakLabel:T("streak"), streak:streakDisc(allW), bestWorst:fmt(T("card.bestWorst"),{bd:money(bestD),wd:money(worstD)}), tagline:T("card.tagline") };
   host.innerHTML=`
-    <div class="grid kpis">
+    <div class="card"><h2>${T("card.weeklyTitle")}</h2><div id="sumCardHost"></div>
+      <div class="rowflex" style="gap:8px; margin-top:10px"><button class="btn small" id="sumSave">${T("card.savePng")}</button><button class="btn small ghost" id="sumCopy">${T("card.copyImg")}</button></div></div>
+    <div class="grid kpis section">
       ${kpi(T("pg.kDisc"),Math.round(last.discPct)+"%"+arrow(last.discPct,prev?prev.discPct:null),last.days+" "+T("dDays"),"calmc")}
       ${kpi(T("pg.kProc"),last.proc==null?"—":Math.round(last.proc)+"%",T("pg.procSub"))}
       ${kpi(T("pg.kNomans"),last.nomans+arrow(last.nomans,prev?prev.nomans:null,true),T("pg.tradesWk"),last.nomans<=g.nomans?"pos":"neg")}
@@ -1335,6 +1374,10 @@ function renderProgress(){
       <tbody>${S.slice().reverse().map(s=>`<tr><td class="mono small">${s.w}</td><td class="mono">${Math.round(s.discPct)}%</td><td class="mono">${s.proc==null?'—':Math.round(s.proc)+'%'}</td><td class="mono ${s.nomans?'neg':'pos'}">${s.nomans}</td><td class="mono ${s.against?'neg':'pos'}">${s.against}</td><td class="mono">${s.rr?s.rr.toFixed(2):'—'}</td><td class="mono ${cls(s.net)}">${money(s.net)}</td></tr>`).join("")}</tbody></table></div>`;
   const c=document.createElement("canvas"); wrapCanvas(c); $("#pghost").appendChild(c);
   requestAnimationFrame(()=>drawLinePct(c,pts,180)); c._draw=()=>drawLinePct(c,pts,180);
+  const sc=document.createElement("canvas"); wrapCanvas(sc); $("#sumCardHost").appendChild(sc);
+  requestAnimationFrame(()=>drawSummaryCard(sc,cardD)); sc._draw=()=>drawSummaryCard(sc,cardD);
+  $("#sumSave").onclick=()=>{ sc.toBlob(b=>{ if(!b)return; const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="week_"+curW+".png"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }); };
+  $("#sumCopy").onclick=()=>{ try{ sc.toBlob(async b=>{ try{ await navigator.clipboard.write([new ClipboardItem({"image/png":b})]); toast(T("card.copied")); }catch(e){ toast(T("card.copyFail")); } }); }catch(e){ toast(T("card.copyFail")); } };
   $("#gApply").onclick=()=>{g.disc=+$("#gDisc").value||80;g.proc=+$("#gProc").value||80;g.nomans=+$("#gNo").value||2;g.rr=+$("#gRr").value||1.5;save();renderProgress();};
 }
 
@@ -1946,6 +1989,7 @@ async function onSession(session){
   if(am) am.textContent="";
   const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
   if(!DB.settings.onboarded) showOnboard();
+  maybeRemindCheckin();
 }
 // Migración: mover viejos blobs del journal de localStorage → IndexedDB y liberar el cupo (para que quepa el token de sesión)
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
