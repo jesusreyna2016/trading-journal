@@ -299,7 +299,10 @@ const I18N={
   "cal.empty":"Import trades to see the calendar.","cal.monthNet":"Month net","cal.greenDays":"Green days","cal.avgDay":"Avg day","cal.bestWorst":"Best / worst","cal.ofMonth":"of the month","cal.thisMonth":"this month","cal.dows":"M,T,W,T,F,S,S","cal.legend":"Green/red = day P&L · dot = discipline (green kept / red broke). Hover for detail.","w.disciplined":"disciplined",
   "ci.title":"Session check-in — {d}","ci.lead":"Before trading: how do you arrive and what's the plan? It's saved and later cross-checked with the day's result.","ci.mood":"Mood","ci.plan":"Plan","ci.planPh":"E.g.: only valid edges with the bias; stop at 2 losses","ci.day":"Day","ci.rules":"I confirm my rules: fixed size · circuit-breaker at 2 losses · only valid edges with the bias · respect the DPT","ci.save":"Save check-in","ci.saved":"Check-in saved for {d}","ci.moodVsResult":"Your mood vs result (by day)","ci.moodNote":"The mood you arrive with predicts your day. The red above is your most expensive state: the day you arrive like that, trade less or don't trade.","ci.history":"Check-in history","ci.thMood":"Mood","ci.thPlan":"Plan","ci.thNetDay":"Net (day)","ci.thDisc":"Disc.","ci.none":"No check-ins yet. Save the first one above.",
   "pg.empty":"Import and tag trades to see your progress.","pg.kDisc":"Discipline (last wk)","pg.kProc":"Avg process","pg.procSub":"process grade","pg.kNomans":"No-man's-land","pg.tradesWk":"trades this wk","pg.kAgainst":"Against bias","pg.scorecard":"Week scorecard · {w}","pg.weekDays":"This week's days","pg.noDays":"No days.","pg.heatNote":"Green = disciplined day · Red = broke a rule (hover to see why).","pg.discByWeek":"Discipline by week","pg.discNote":"% of disciplined days each week. The line you want: rising and staying high.","pg.goals":"Goals","pg.goalDisc":"Weekly discipline ≥ {v}%","pg.goalProc":"Avg process ≥ {v}%","pg.goalNomans":"No-man's-land ≤ {v}/wk","pg.goalRr":"R:R ≥ {v}","pg.goalsLabel":"Goals:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"No-man/wk","pg.weekTrend":"Weekly trend","pg.thWeek":"Week","pg.thNomans":"No-man","pg.thAgainst":"Against",
-  "rule.r1":"Fixed size (no revenge-sizing)","rule.r2":"Circuit-breaker (stop at 2 losses)","rule.r3":"No over-trading","rule.r4":"Protect profits (no round-trip)","rule.r5":"Followed my plan (process ≥ 75%, if tagged)"
+  "rule.r1":"Fixed size (no revenge-sizing)","rule.r2":"Circuit-breaker (stop at 2 losses)","rule.r3":"No over-trading","rule.r4":"Protect profits (no round-trip)","rule.r5":"Followed my plan (process ≥ 75%, if tagged)",
+  "wd.short":"Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+  "j.intro":"One day per card: summary + trades to tag (emotion, setup, process, note). Click a day to expand/collapse.","j.signal":"Signal","j.stopBtn":"Stop","j.addNote":"Add note","j.notePrompt":"Trade note:","j.volume":"Volume","j.wl":"W / L","j.onTable":"On the table","j.peak":"peak","j.commissions":"Commissions","j.leftOnTable":"left {v} on the table","j.thTime":"Time","j.thTrade":"Trade","j.thEmotion":"Emotion","j.thBias":"Bias","j.thProcess":"Process",
+  "pos.fillsGrouped":"{n} fills grouped","pos.scaled":"Scaled","pos.scaledSub":"with >1 fill","pos.note":"Partial fills (scaling in/out) are grouped into the real position. Needs the Tradovate CSV timing — <b>re-import your CSV</b> to enrich already-loaded trades. Those without timing stay as one position each.","pos.thSymbol":"Symbol","pos.thSide":"Side","pos.thEntryExit":"Entry→Exit","pos.thDuration":"Duration"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -359,7 +362,10 @@ const I18N={
   "cal.empty":"Importa trades para ver el calendario.","cal.monthNet":"Neto del mes","cal.greenDays":"Días verdes","cal.avgDay":"Día medio","cal.bestWorst":"Mejor / peor","cal.ofMonth":"del mes","cal.thisMonth":"este mes","cal.dows":"L,M,X,J,V,S,D","cal.legend":"Verde/rojo = P&L del día · punto = disciplina (verde cumplió / rojo rompió). Pasa el cursor para el detalle.","w.disciplined":"disciplinado",
   "ci.title":"Check-in de sesión — {d}","ci.lead":"Antes de operar: ¿cómo llegas y cuál es el plan? Se guarda y luego se cruza con el resultado del día.","ci.mood":"Ánimo","ci.plan":"Plan","ci.planPh":"Ej: solo bordes válidos a favor del sesgo; parar a 2 pérdidas","ci.day":"Día","ci.rules":"Confirmo mis reglas: tamaño fijo · circuit-breaker a 2 pérdidas · solo bordes válidos a favor del sesgo · respetar el DPT","ci.save":"Guardar check-in","ci.saved":"Check-in guardado para {d}","ci.moodVsResult":"Tu ánimo vs resultado (por día)","ci.moodNote":"El ánimo con el que llegas predice tu día. El rojo de arriba es tu estado más caro: el día que llegues así, opera menos o no operes.","ci.history":"Historial de check-ins","ci.thMood":"Ánimo","ci.thPlan":"Plan","ci.thNetDay":"Neto del día","ci.thDisc":"Disc.","ci.none":"Aún no hay check-ins. Guarda el primero arriba.",
   "pg.empty":"Importa y etiqueta trades para ver tu progreso.","pg.kDisc":"Disciplina (última sem)","pg.kProc":"Proceso medio","pg.procSub":"grade del proceso","pg.kNomans":"Tierra de nadie","pg.tradesWk":"trades esta sem","pg.kAgainst":"Contra sesgo","pg.scorecard":"Scorecard de la semana · {w}","pg.weekDays":"Días de esta semana","pg.noDays":"Sin días.","pg.heatNote":"Verde = día disciplinado · Rojo = rompió alguna regla (pasa el cursor para ver por qué).","pg.discByWeek":"Disciplina por semana","pg.discNote":"% de días disciplinados cada semana. La línea que buscas: que suba y se quede arriba.","pg.goals":"Metas","pg.goalDisc":"Disciplina semanal ≥ {v}%","pg.goalProc":"Proceso medio ≥ {v}%","pg.goalNomans":"Tierra de nadie ≤ {v}/sem","pg.goalRr":"R:R ≥ {v}","pg.goalsLabel":"Metas:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"TierraN/sem","pg.weekTrend":"Tendencia por semana","pg.thWeek":"Semana","pg.thNomans":"TierraN","pg.thAgainst":"Contra",
-  "rule.r1":"Tamaño fijo (sin revenge-sizing)","rule.r2":"Circuit-breaker (parar a las 2 pérdidas)","rule.r3":"Sin sobreoperar","rule.r4":"Proteger beneficios (sin round-trip)","rule.r5":"Ejecuté mi plan (proceso ≥ 75%, si etiquetado)"
+  "rule.r1":"Tamaño fijo (sin revenge-sizing)","rule.r2":"Circuit-breaker (parar a las 2 pérdidas)","rule.r3":"Sin sobreoperar","rule.r4":"Proteger beneficios (sin round-trip)","rule.r5":"Ejecuté mi plan (proceso ≥ 75%, si etiquetado)",
+  "wd.short":"Dom,Lun,Mar,Mié,Jue,Vie,Sáb",
+  "j.intro":"Un día por tarjeta: resumen + trades para etiquetar (emoción, setup, proceso, nota). Pulsa el día para expandir/plegar.","j.signal":"Señal","j.stopBtn":"Stop","j.addNote":"Añadir nota","j.notePrompt":"Nota del trade:","j.volume":"Volumen","j.wl":"W / L","j.onTable":"Sobre la mesa","j.peak":"pico","j.commissions":"Comisiones","j.leftOnTable":"dejó {v} sobre la mesa","j.thTime":"Hora","j.thTrade":"Trade","j.thEmotion":"Emoción","j.thBias":"Sesgo","j.thProcess":"Proceso",
+  "pos.fillsGrouped":"{n} fills agrupados","pos.scaled":"Escaladas","pos.scaledSub":"con >1 fill","pos.note":"Los fills parciales (escalar dentro/fuera) se agrupan en la posición real. Necesita el timing del CSV de Tradovate — <b>reimporta tu CSV</b> para enriquecer los trades ya cargados. Los que no tienen timing quedan como 1 posición cada uno.","pos.thSymbol":"Símbolo","pos.thSide":"Lado","pos.thEntryExit":"Entrada→Salida","pos.thDuration":"Duración"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
@@ -922,10 +928,10 @@ function dayTradeRows(arr){
       <td><div class="chips">${alnChips}</div></td>
       <td><select class="setupSel" data-id="${id}"><option value="">—</option>${allSetups().map(s=>'<option'+(tg.setup===s?' selected':'')+'>'+s+'</option>').join("")}</select></td>
       <td><div class="chips">
-        <button class="chip w" data-id="${id}" data-k="wait" data-v="1" aria-pressed="${tg.wait?'true':'false'}">Señal</button>
-        <button class="chip calm" data-id="${id}" data-k="stop" data-v="1" aria-pressed="${tg.stop?'true':'false'}">Stop</button>
+        <button class="chip w" data-id="${id}" data-k="wait" data-v="1" aria-pressed="${tg.wait?'true':'false'}">${T("j.signal")}</button>
+        <button class="chip calm" data-id="${id}" data-k="stop" data-v="1" aria-pressed="${tg.stop?'true':'false'}">${T("j.stopBtn")}</button>
         ${isGraded(tg)?(pr=>`<span class="pass ${pr>=0.75?'ok':pr>=0.5?'na':'no'}">${Math.round(pr*100)}%</span>`)(procScore(id,tg).score):''}
-        <button class="btn small ghost" data-note="${id}" title="${(tg.note||'').replace(/"/g,'&quot;')||'Añadir nota'}" style="padding:2px 7px">📝${tg.note?' •':''}</button>
+        <button class="btn small ghost" data-note="${id}" title="${(tg.note||'').replace(/"/g,'&quot;')||T("j.addNote")}" style="padding:2px 7px">📝${tg.note?' •':''}</button>
       </div></td>
     </tr>`;}).join("");
 }
@@ -936,24 +942,24 @@ function dayCard(d,arrRaw){
   let cum=0,peak=0; arr.forEach(t=>{cum+=t.pnl; if(cum>peak)peak=cum;});
   const left=peak-M.net, vol=arr.reduce((s,t)=>s+t.qty,0), comm=arr.reduce((s,t)=>s+(t.comm||0),0), exp=d===jExpanded;
   const kp=`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:0 8px;margin:10px 0 4px">
-    ${kpiSmall("Trades",M.n)}${kpiSmall("Win rate",M.winrate.toFixed(0)+"%")}${kpiSmall("Neto",money1(M.net),cls(M.net))}${kpiSmall("Profit factor",isFinite(M.pf)?M.pf.toFixed(2):"∞")}${kpiSmall("Volumen",vol)}${kpiSmall("W / L",M.wins+" / "+M.losses)}${left>1?kpiSmall("Sobre la mesa",money(left),"wait","pico "+money(peak)):""}${comm?kpiSmall("Comisiones",money(comm)):""}</div>`;
-  const body=exp?kp+`<div data-curve="${d}" style="margin-bottom:8px"></div><div style="overflow-x:auto"><table><thead><tr><th>Hora</th><th>Trade</th><th class="mono">P&amp;L</th><th>Emoción</th><th>Panel</th><th>Sesgo</th><th>Setup</th><th>Proceso</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
+    ${kpiSmall(T("th.Trades"),M.n)}${kpiSmall(T("winRate"),M.winrate.toFixed(0)+"%")}${kpiSmall(T("net"),money1(M.net),cls(M.net))}${kpiSmall(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞")}${kpiSmall(T("j.volume"),vol)}${kpiSmall(T("j.wl"),M.wins+" / "+M.losses)}${left>1?kpiSmall(T("j.onTable"),money(left),"wait",T("j.peak")+" "+money(peak)):""}${comm?kpiSmall(T("j.commissions"),money(comm)):""}</div>`;
+  const body=exp?kp+`<div data-curve="${d}" style="margin-bottom:8px"></div><div style="overflow-x:auto"><table><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th>Panel</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
   return `<div class="card section" style="padding:14px 16px">
     <div class="rowflex" data-day="${d}" style="justify-content:space-between;cursor:pointer;align-items:center">
-      <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} trades${left>1?' · dejó '+money(left)+' sobre la mesa':''}</span></div>
+      <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} ${T("trades")}${left>1?' · '+fmt(T("j.leftOnTable"),{v:money(left)}):''}</span></div>
     </div>${body}</div>`;
 }
 function renderJournal(){
   const TR=activeTrades(); const host=$("#view-journal");
-  if(!TR.length){ host.innerHTML='<div class="card muted">Sin trades en este periodo.</div>'; return; }
+  if(!TR.length){ host.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
   const by=byKey(TR,t=>t.tday); const days=Object.keys(by).sort().reverse();
   if(jExpanded===null||!by[jExpanded]) jExpanded=days[0];
-  host.innerHTML='<p class="small muted" style="margin:0 0 6px">Un día por tarjeta: resumen + trades para etiquetar (emoción, setup, proceso, nota). Pulsa el día para expandir/plegar.</p>'+days.map(d=>dayCard(d,by[d])).join("");
+  host.innerHTML='<p class="small muted" style="margin:0 0 6px">'+T("j.intro")+'</p>'+days.map(d=>dayCard(d,by[d])).join("");
   const cv=host.querySelector('[data-curve="'+jExpanded+'"]'); if(cv) cv.appendChild(dayMiniCurve(by[jExpanded].slice().sort((a,b)=>a.time<b.time?-1:1)));
   host.onclick=e=>{
     const day=e.target.closest("[data-day]"); if(day){ jExpanded=jExpanded===day.dataset.day?null:day.dataset.day; renderJournal(); return; }
     const b=e.target.closest(".chip"); if(b){ const id=b.dataset.id,k=b.dataset.k,vv=b.dataset.v; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][k]=DB.tags[id][k]===vv?"":vv; save(); renderJournal(); return; }
-    const nb=e.target.closest("[data-note]"); if(nb){ const id=nb.dataset.note; DB.tags[id]=DB.tags[id]||{}; const v=prompt("Nota del trade:",DB.tags[id].note||""); if(v!==null){DB.tags[id].note=v.trim(); save(); renderJournal();} return; }
+    const nb=e.target.closest("[data-note]"); if(nb){ const id=nb.dataset.note; DB.tags[id]=DB.tags[id]||{}; const v=prompt(T("j.notePrompt"),DB.tags[id].note||""); if(v!==null){DB.tags[id].note=v.trim(); save(); renderJournal();} return; }
   };
   host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{}; DB.tags[id].setup=s.value; save(); };
 }
@@ -961,7 +967,7 @@ function periodLabel(){ return period==="ALL"?"todo el histórico":period==="7"?
 function mdb(s){ return s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); }
 function bucketStats(TR,fn,minN){ const by=byKey(TR,fn); return Object.keys(by).filter(k=>k!=="null"&&k!=="—").map(k=>({k,m:metrics(by[k])})).filter(r=>r.m.n>=(minN||3)); }
 const WD=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
-function weekdayOf(t){ const d=new Date((t.tday||t.date)+"T12:00:00Z"); return WD[d.getUTCDay()]; }
+function weekdayOf(t){ const d=new Date((t.tday||t.date)+"T12:00:00Z"); return T("wd.short").split(",")[d.getUTCDay()]; }
 // Data-driven insights — adapts to whatever the data shows, no strategy assumed.
 function generateInsights(TR){
   const out=[]; if(TR.length<4) return out; const M=metrics(TR);
@@ -1609,17 +1615,17 @@ function positions(TR){
 }
 function renderPositions(){
   const host=$("#view-positions"); const raw=activeTrades(); const P=positions(raw);
-  if(!P.length){ host.innerHTML='<div class="card muted">Sin trades en este periodo.</div>'; return; }
+  if(!P.length){ host.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
   const wins=P.filter(p=>p.pnl>0).length, net=P.reduce((s,p)=>s+p.pnl,0), scaled=P.filter(p=>p.fills>1).length;
   host.innerHTML=`
     <div class="grid kpis">
-      ${kpi("Posiciones",P.length,raw.length+" fills agrupados")}
-      ${kpi("Win rate",(wins/P.length*100).toFixed(0)+"%",wins+"W / "+(P.length-wins)+"L")}
-      ${kpi("Neto",money1(net),"",cls(net))}
-      ${kpi("Escaladas",scaled,"con >1 fill")}
+      ${kpi(T("tab.positions"),P.length,fmt(T("pos.fillsGrouped"),{n:raw.length}))}
+      ${kpi(T("winRate"),(wins/P.length*100).toFixed(0)+"%",wins+"W / "+(P.length-wins)+"L")}
+      ${kpi(T("net"),money1(net),"",cls(net))}
+      ${kpi(T("pos.scaled"),scaled,T("pos.scaledSub"))}
     </div>
-    <div class="card section"><p class="small muted" style="margin:0 0 8px">Los fills parciales (escalar dentro/fuera) se agrupan en la posición real. Necesita el timing del CSV de Tradovate — <b>reimporta tu CSV</b> para enriquecer los trades ya cargados. Los que no tienen timing quedan como 1 posición cada uno.</p>
-    <div style="overflow-x:auto"><table><thead><tr><th>Día</th><th>Hora</th><th>Símbolo</th><th>Lado</th><th class="mono">Qty</th><th class="mono">Entrada→Salida</th><th class="mono">P&amp;L</th><th class="mono">Fills</th><th>Duración</th></tr></thead><tbody>${
+    <div class="card section"><p class="small muted" style="margin:0 0 8px">${T("pos.note")}</p>
+    <div style="overflow-x:auto"><table><thead><tr><th>${T("th.day")}</th><th>${T("j.thTime")}</th><th>${T("pos.thSymbol")}</th><th>${T("pos.thSide")}</th><th class="mono">Qty</th><th class="mono">${T("pos.thEntryExit")}</th><th class="mono">P&amp;L</th><th class="mono">Fills</th><th>${T("pos.thDuration")}</th></tr></thead><tbody>${
       P.map(p=>`<tr><td class="mono small">${ctDisp(p).date}</td><td class="mono small">${ctDisp(p).hm}</td><td>${p.sym}</td><td><span class="tag ${p.side==='long'?'L':'S'}">${p.side==='long'?'LONG':'SHORT'}</span></td><td class="mono">${p.qty}</td><td class="mono small">${p.entry}→${p.exit}</td><td class="mono ${cls(p.pnl)}">${money1(p.pnl)}<br><span class="muted">${p.pts>0?'+':''}${p.pts}p · ${p.pts>0?'+':''}${ticksOf(p.pts,p.sym)}t</span></td><td class="mono ${p.fills>1?'wait':''}">${p.fills}${p.fills>1?' ⚡':''}</td><td class="small">${fmtDur(p.durMs)}</td></tr>`).join("")
     }</tbody></table></div></div>`;
 }
