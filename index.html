@@ -196,24 +196,24 @@
     </div>
     <div class="actions">
       <input type="file" id="file" accept=".csv,.json" multiple class="hide">
-      <button class="btn calm" id="importBtn" data-i18n="importCsv">Importar CSV</button>
-      <button class="btn ghost small" id="ctxBtn" data-i18n="context" title="Analyst context (JSON)">＋ Contexto</button>
-      <select id="acctSel" title="Account"></select>
-      <select id="periodSel" title="Period"></select>
-      <button class="btn ghost small" id="fbBtn" title="Feedback">💬</button>
-      <button class="btn ghost small hide" id="admBtn" title="Admin">🛠</button>
+      <button class="btn calm" id="importBtn" data-i18n="importCsv" data-i18n-title="tt.import">Importar CSV</button>
+      <button class="btn ghost small" id="ctxBtn" data-i18n="context" data-i18n-title="tt.context">＋ Contexto</button>
+      <select id="acctSel" data-i18n-title="tt.account"></select>
+      <select id="periodSel" data-i18n-title="tt.period"></select>
+      <button class="btn ghost small" id="fbBtn" data-i18n-title="tt.feedback">💬</button>
+      <button class="btn ghost small hide" id="admBtn" data-i18n-title="tt.admin">🛠</button>
       <div class="moremenu">
-        <button class="btn ghost small" id="moreBtn" title="More">⋯</button>
+        <button class="btn ghost small" id="moreBtn" data-i18n-title="tt.more">⋯</button>
         <div class="moremenu-pop hide" id="morePop">
-          <button class="btn ghost small" id="backupBtn" data-i18n="backup" title="Backup (JSON)">⬇ Backup</button>
-          <button class="btn ghost small" id="themeBtn" title="Theme">◐ Theme</button>
-          <button class="btn ghost small" id="wipeBtn" title="Erase all">🗑 Erase</button>
+          <button class="btn ghost small" id="backupBtn" data-i18n="backup" data-i18n-title="tt.backup">⬇ Backup</button>
+          <button class="btn ghost small" id="themeBtn" data-i18n-title="tt.theme">◐ Theme</button>
+          <button class="btn ghost small" id="wipeBtn" data-i18n-title="tt.erase">🗑 Erase</button>
         </div>
       </div>
-      <select id="langSelHead" class="langSel" title="Idioma / Language"><option value="en">EN</option><option value="es">ES</option></select>
-      <span id="syncBadge" title="Save status"></span>
-      <span id="userEmail" title="Session"></span>
-      <button class="btn ghost small" id="logoutBtn" data-i18n="logout" title="Sign out">Salir</button>
+      <select id="langSelHead" class="langSel" data-i18n-title="tt.lang"><option value="en">EN</option><option value="es">ES</option></select>
+      <span id="syncBadge" data-i18n-title="tt.saveStatus"></span>
+      <span id="userEmail" data-i18n-title="tt.session"></span>
+      <button class="btn ghost small" id="logoutBtn" data-i18n="logout" data-i18n-title="tt.signout">Salir</button>
     </div>
   </div>
 
@@ -375,7 +375,8 @@ const I18N={
   "fb.eyebrow":"Feedback","fb.title":"Report a bug or suggest something","fb.lead":"Found a bug? Want a feature or an improvement? Tell me — it helps everyone.","fb.type":"Type","fb.bug":"🐞 Bug","fb.feature":"✨ New feature","fb.improve":"🔧 Improvement","fb.other":"💬 Other","fb.msg":"Message","fb.msgPh":"Describe it as clearly as you can…","fb.send":"Send","fb.needMsg":"Write a message first.","fb.thanks":"Thanks! Sent. 🙏","fb.err":"Couldn't send — try again.","fb.thDate":"Date","fb.btn":"Feedback",
   "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?).",
   "io.jsonUnknown":"Unrecognized JSON (context or backup).","io.backupDown":"Backup downloaded ({n} trades, {img} images).","io.restoreConfirm":"Restore backup? It replaces ALL current data in this browser.","io.restored":"Backup restored ({n} trades).","io.wipeConfirm":"Erase ALL trades and tags saved in this browser?","io.wiped":"All cleared.","pb.delConfirm":"Delete play {n}? It won't delete trades or their tags.",
-  "fr.revenge":"revenge-sizing","fr.streak":"{n} losses in a row","fr.overtrade":"over-traded ({n})","fr.roundtrip":"round-trip","fr.plan":"didn't follow the plan (process <75%)"
+  "fr.revenge":"revenge-sizing","fr.streak":"{n} losses in a row","fr.overtrade":"over-traded ({n})","fr.roundtrip":"round-trip","fr.plan":"didn't follow the plan (process <75%)",
+  "tt.import":"Import CSV","tt.context":"Analyst context (JSON)","tt.account":"Account","tt.period":"Period","tt.feedback":"Send feedback","tt.admin":"Admin panel","tt.more":"More","tt.backup":"Backup (JSON)","tt.theme":"Theme","tt.erase":"Erase everything","tt.saveStatus":"Save status","tt.session":"Session","tt.signout":"Sign out","tt.lang":"Language"
  },
  es:{
   "importCsv":"Importar CSV","context":"＋ Contexto","backup":"⬇ Backup","logout":"Salir",
@@ -475,13 +476,14 @@ const I18N={
   "fb.eyebrow":"Feedback","fb.title":"Reporta un bug o sugiere algo","fb.lead":"¿Encontraste un bug? ¿Quieres una función o una mejora? Dímelo — ayuda a todos.","fb.type":"Tipo","fb.bug":"🐞 Bug","fb.feature":"✨ Nueva función","fb.improve":"🔧 Mejora","fb.other":"💬 Otro","fb.msg":"Mensaje","fb.msgPh":"Descríbelo lo más claro que puedas…","fb.send":"Enviar","fb.needMsg":"Escribe un mensaje primero.","fb.thanks":"¡Gracias! Enviado. 🙏","fb.err":"No se pudo enviar — reintenta.","fb.thDate":"Fecha","fb.btn":"Feedback",
   "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?).",
   "io.jsonUnknown":"JSON no reconocido (contexto o backup).","io.backupDown":"Backup descargado ({n} trades, {img} imágenes).","io.restoreConfirm":"¿Restaurar backup? Reemplaza TODOS los datos actuales de este navegador.","io.restored":"Backup restaurado ({n} trades).","io.wipeConfirm":"¿Borrar TODOS los trades y etiquetas guardados en este navegador?","io.wiped":"Todo borrado.","pb.delConfirm":"¿Eliminar la jugada {n}? No borra los trades ni su etiqueta.",
-  "fr.revenge":"revenge-sizing","fr.streak":"{n} pérdidas seguidas","fr.overtrade":"sobreoperó ({n})","fr.roundtrip":"round-trip","fr.plan":"no siguió el plan (proceso <75%)"
+  "fr.revenge":"revenge-sizing","fr.streak":"{n} pérdidas seguidas","fr.overtrade":"sobreoperó ({n})","fr.roundtrip":"round-trip","fr.plan":"no siguió el plan (proceso <75%)",
+  "tt.import":"Importar CSV","tt.context":"Contexto del Analyst (JSON)","tt.account":"Cuenta","tt.period":"Periodo","tt.feedback":"Enviar feedback","tt.admin":"Panel admin","tt.more":"Más","tt.backup":"Backup (JSON)","tt.theme":"Tema","tt.erase":"Borrar todo","tt.saveStatus":"Estado de guardado","tt.session":"Sesión","tt.signout":"Salir","tt.lang":"Idioma"
  }
 };
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
 function fmt(s,o){ return String(s).replace(/\{(\w+)\}/g,(_,k)=>o[k]!=null?o[k]:""); }
 function vLabel(p,v){ if(v==null||v==="")return v; const k=p+"."+v, r=T(k); return r===k?v:r; }
-function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); }
+function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); document.querySelectorAll('[data-i18n-title]').forEach(el=>{el.setAttribute('title',T(el.getAttribute('data-i18n-title')));}); }
 function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); const g=$("#greet"); if(g&&user) g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]); if(user){ buildAccounts(); buildPeriods(); render(); } }
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
 const TICKSZ={NQ:0.25,MNQ:0.25,ES:0.25,MES:0.25,RTY:0.1,M2K:0.1,YM:1,MYM:1,GC:0.1,MGC:0.1,CL:0.01,MCL:0.01};
