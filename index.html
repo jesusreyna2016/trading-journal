@@ -131,10 +131,11 @@
   .score .r{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 0; border-top:1px solid var(--hair)}
   .score .r:first-child{border-top:0}
   .score .lab{font-size:13.5px}
-  .pass{font-family:var(--mono); font-weight:700; font-size:12.5px; padding:3px 11px; border-radius:999px; white-space:nowrap}
-  .pass.ok{background:rgba(38,194,129,.16); color:var(--pos)}
-  .pass.no{background:rgba(242,73,92,.16); color:var(--neg)}
-  .pass.na{background:var(--surface2); color:var(--faint)}
+  .pass{font-family:var(--mono); font-weight:700; font-size:11.5px; letter-spacing:.03em; padding:4px 11px; border-radius:999px; white-space:nowrap; border:1px solid transparent}
+  .pass.ok{background:color-mix(in srgb,var(--pos) 15%,transparent); color:var(--pos); border-color:color-mix(in srgb,var(--pos) 30%,transparent)}
+  .pass.no{background:color-mix(in srgb,var(--neg) 15%,transparent); color:var(--neg); border-color:color-mix(in srgb,var(--neg) 30%,transparent)}
+  .pass.good{background:color-mix(in srgb,var(--wait) 15%,transparent); color:var(--wait); border-color:color-mix(in srgb,var(--wait) 30%,transparent)}
+  .pass.na{background:var(--surface2); color:var(--faint); border-color:var(--hair)}
   .heat{display:flex; gap:7px; flex-wrap:wrap}
   .heat .d{min-width:52px; padding:7px 4px; border-radius:9px; text-align:center; font-family:var(--mono); font-size:10px; font-weight:700; border:1px solid var(--hair); line-height:1.35}
   .heat .d .n{font-size:12px; display:block; margin-top:2px}
@@ -2197,7 +2198,7 @@ function renderScore(){
   const host=$("#view-score"); const TR=activeTrades();
   if(TR.length<2){ host.innerHTML='<div class="card muted">'+T("score.needMore")+'</div>'; return; }
   const S=scoreStats(TR), M=S.M;
-  const badge=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass" style="background:rgba(232,147,58,.18);color:var(--wait)">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
+  const badge=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass good">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
   const stat=(lab,val,sub,v)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><span class="lab">${lab}</span>${badge(v)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
   const wdOrder=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"], byWd={}; TR.forEach(t=>{const k=weekdayOf(t); byWd[k]=(byWd[k]||0)+t.pnl;});
   const wdRows=wdOrder.filter(k=>byWd[k]!==undefined).map(k=>({k,net:byWd[k]}));
