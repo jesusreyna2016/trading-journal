@@ -64,12 +64,14 @@
   .btn.small{padding:5px 10px; font-size:12px}
   .btn.ghost{background:transparent}
   .tabs{display:flex; gap:4px; border-bottom:1px solid var(--hair); margin-bottom:18px; overflow-x:auto}
-  .tabs button{font-family:var(--sans); font-size:14px; font-weight:600; color:var(--muted); background:transparent; border:0; border-bottom:2px solid transparent; padding:10px 14px; cursor:pointer; white-space:nowrap}
+  .tabs button{font-family:var(--sans); font-size:14px; font-weight:600; color:var(--muted); background:transparent; border:0; border-bottom:2px solid transparent; padding:10px 14px; cursor:pointer; white-space:nowrap; transition:color .15s ease, border-color .15s ease}
+  .tabs button:hover{color:var(--ink)}
   .tabs button.active{color:var(--ink); border-bottom-color:var(--calm)}
   #subtabs{border-bottom:0; gap:6px; margin:-8px 0 16px}
-  #subtabs button{font-size:12.5px; padding:5px 12px; border:1px solid var(--hair); border-radius:999px; color:var(--muted)}
+  #subtabs button{font-size:12.5px; padding:5px 12px; border:1px solid var(--hair); border-radius:999px; color:var(--muted); cursor:pointer; transition:color .15s ease, border-color .15s ease, background .15s ease}
+  #subtabs button:hover{border-color:color-mix(in srgb,var(--calm) 40%,var(--hair)); color:var(--ink)}
   #subtabs button.active{background:var(--surface2); border-color:var(--calm); color:var(--ink)}
-  .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px; box-shadow:var(--shadow)}
+  .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 4%,transparent), var(--shadow)}
   .qbar{display:flex; align-items:flex-start; gap:11px; margin:2px 0 16px; padding:11px 15px; border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:10px; background:color-mix(in srgb,var(--calm) 5%,var(--surface))}
   .qbar .qi{color:var(--calm); font:800 22px/1 Georgia,serif; flex:none; margin-top:-1px}
   .qbar .qt{color:var(--ink); font-style:italic; font-size:13.5px; line-height:1.5}
@@ -78,7 +80,8 @@
   #demoBar span{color:var(--ink)}
   .grid{display:grid; gap:12px}
   .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-  .kpi{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:15px 16px; position:relative; overflow:hidden}
+  .kpi{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:15px 16px; position:relative; overflow:hidden; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent); transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease}
+  .kpi:hover{ border-color:color-mix(in srgb,var(--calm) 30%,var(--hair)); transform:translateY(-2px); box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 6%,transparent), 0 12px 26px -16px rgba(0,0,0,.5) }
   .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--calm); opacity:.45}
   .kpi .lab{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
   .kpi .val{font-family:var(--mono); font-size:25px; font-weight:700; margin-top:7px; letter-spacing:-.02em}
