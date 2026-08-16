@@ -266,15 +266,19 @@
   /* ---- Showcase (rendered app panels in browser frames) ---- */
   .lshowcase{ padding:4px 22px 30px }
   .scwrap{ max-width:980px; margin:0 auto }
-  .scframe{ border:1px solid var(--hair); border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:0 30px 70px -34px rgba(0,0,0,.75) }
+  .scframe{ border:1px solid var(--hair); border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent), 0 30px 70px -34px rgba(0,0,0,.75); transition:transform .25s ease, box-shadow .25s ease }
+  .scspot .scframe:hover{ transform:translateY(-4px); box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 7%,transparent), 0 42px 88px -34px rgba(0,0,0,.85) }
   .scbar{ display:flex; align-items:center; gap:6px; padding:10px 13px; border-bottom:1px solid var(--hair); background:color-mix(in srgb,var(--surface2) 65%,var(--surface)) }
   .scbar i{ width:10px; height:10px; border-radius:50%; background:var(--hair) }
+  .scbar i:nth-child(1){ background:color-mix(in srgb,#e0574f 55%,var(--hair)) }
+  .scbar i:nth-child(2){ background:color-mix(in srgb,var(--wait) 55%,var(--hair)) }
+  .scbar i:nth-child(3){ background:color-mix(in srgb,var(--pos) 55%,var(--hair)) }
   .scbar b{ margin-left:8px; font:600 10.5px/1 var(--sans); color:var(--faint); letter-spacing:.07em }
   /* spotlight rows: real screenshot + text, alternating sides */
   .scspot{ display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:center; margin-top:34px }
   .scspot:nth-of-type(even) .scspot-media{ order:2 }
-  .scspot-txt .eb{ font:700 11px/1 var(--sans); letter-spacing:.09em; color:var(--calm); margin-bottom:12px }
-  .scspot-txt h3{ font:700 22px/1.2 var(--sans); color:var(--ink); letter-spacing:-.015em }
+  .scspot-txt .eb{ display:inline-flex; align-items:center; font:700 11px/1 var(--mono); letter-spacing:.14em; color:var(--calm); margin-bottom:14px; padding:6px 12px; border:1px solid color-mix(in srgb,var(--calm) 30%,var(--hair)); border-radius:999px; background:color-mix(in srgb,var(--calm) 8%,transparent); text-transform:uppercase }
+  .scspot-txt h3{ font:700 23px/1.2 'Space Grotesk',var(--sans); color:var(--ink); letter-spacing:-.02em }
   .scspot-txt p{ color:var(--muted); margin-top:11px; font-size:14px; line-height:1.62 }
   .scshot{ position:relative; max-height:400px; overflow:hidden }
   .scshot img{ display:block; width:100%; height:auto }
@@ -289,8 +293,9 @@
   .lsteps{ padding:20px 22px 56px; text-align:center }
   .lsteps h2{ font-size:30px; font-weight:800; margin-bottom:26px }
   .lstepgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; text-align:left }
-  .lstep{ background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:22px; position:relative }
-  .lstep .lstepn{ position:absolute; top:16px; right:18px; font-family:var(--mono); font-weight:800; font-size:30px; color:color-mix(in srgb,var(--calm) 30%,transparent); line-height:1 }
+  .lstep{ background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:22px; position:relative; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent); transition:transform .18s, border-color .18s, box-shadow .18s }
+  .lstep:hover{ border-color:color-mix(in srgb,var(--calm) 40%,var(--hair)); transform:translateY(-3px); box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 6%,transparent), 0 18px 38px -18px rgba(0,0,0,.55) }
+  .lstep .lstepn{ position:absolute; top:14px; right:18px; font-family:var(--mono); font-weight:800; font-size:40px; line-height:1; background:linear-gradient(180deg,color-mix(in srgb,var(--calm) 60%,transparent),color-mix(in srgb,var(--calm) 12%,transparent)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent }
   .lstep h3{ font-size:15px; margin:6px 0 5px; font-weight:700; color:var(--calm) }
   .lstep p{ color:var(--muted); font-size:13.5px; line-height:1.55 }
   .lget{ background:var(--surface); border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:58px 22px; text-align:center }
