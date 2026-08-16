@@ -2435,7 +2435,7 @@ window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._dr
 
 // ---------- auth / arranque en la nube ----------
 function showLogin(){ const g=$("#authGate"); g.classList.remove("hide"); g.classList.remove("resolving"); }
-function hideLogin(){ $("#authGate").classList.add("hide"); }
+function hideLogin(){ const g=$("#authGate"); g.classList.add("resolving"); g.classList.add("hide"); }
 function startDemo(){
   if(window.__demo) return; window.__demo=true;
   const mk=(date,time,side,dp,qty)=>{ const base=20000+Math.floor(Math.random()*500); const entry=base, exit=+(side==="long"?base+dp:base-dp).toFixed(2); const pnl=+(dp*20*qty).toFixed(2); const topen=Date.parse(date+"T"+time+"Z"); return {date,time,sym:"NQ",side,qty,status:pnl>=0?"Win":"Loss",entry,exit,pnl,pts:dp,comm:0,dur:"",topen,tclose:topen+60000*(2+Math.floor(Math.random()*20))}; };
