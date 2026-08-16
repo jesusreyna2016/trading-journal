@@ -57,7 +57,8 @@
   .moremenu-pop .acctrow input{flex:none; width:15px; height:15px; accent-color:var(--calm); cursor:pointer}
   .moremenu-pop .acsep{height:1px; background:var(--hair); margin:5px 2px}
   .moremenu-pop .aclbl{font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); font-weight:700; padding:4px 8px}
-  .btn{font-family:var(--sans); font-size:13px; font-weight:600; border-radius:8px; padding:8px 13px; cursor:pointer; border:1px solid var(--hair); background:var(--surface2); color:var(--ink)}
+  .btn{font-family:var(--sans); font-size:13px; font-weight:600; border-radius:8px; padding:8px 13px; cursor:pointer; border:1px solid var(--hair); background:var(--surface2); color:var(--ink); transition:border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease}
+  .btn:hover{border-color:color-mix(in srgb,var(--calm) 40%,var(--hair))}
   .btn:hover{border-color:var(--faint)}
   .btn.calm{background:var(--calm); border-color:var(--calm); color:var(--calmink)}
   .btn.small{padding:5px 10px; font-size:12px}
@@ -184,8 +185,9 @@
   @media (prefers-reduced-motion:reduce){ .lfade{ opacity:1; transform:none; transition:none } }
   .authbody h1,.authbody h2,.authbody h3,.llogo,.lstepn{ font-family:'Space Grotesk',var(--sans); text-transform:none; letter-spacing:-.02em; color:var(--ink); margin:0 }
   .authbody .btn.calm{ background:linear-gradient(180deg,color-mix(in srgb,var(--calm) 88%,#fff),var(--calm)); border-color:var(--calm); box-shadow:0 8px 22px color-mix(in srgb,var(--calm) 30%,transparent); font-weight:700 }
-  .authbody .btn.calm:hover{ transform:translateY(-1px) }
-  .lcenter-eb{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--calm); font-weight:700; text-transform:uppercase; margin-bottom:10px }
+  .authbody .btn.calm:hover{ transform:translateY(-2px); box-shadow:0 14px 32px color-mix(in srgb,var(--calm) 40%,transparent) }
+  .authbody .btn.ghost:hover{ border-color:color-mix(in srgb,var(--calm) 50%,var(--hair)); color:var(--ink) }
+  .lcenter-eb{ display:inline-flex; align-items:center; font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--calm); font-weight:700; text-transform:uppercase; padding:6px 12px; border:1px solid color-mix(in srgb,var(--calm) 30%,var(--hair)); border-radius:999px; background:color-mix(in srgb,var(--calm) 8%,transparent); margin-bottom:14px }
   .lwrap{ max-width:1080px; margin:0 auto; padding:0 22px }
   .lnav{ position:sticky; top:0; z-index:5; background:var(--ground); background:color-mix(in srgb,var(--ground) 88%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--hair) }
   .lnav-in{ display:flex; justify-content:space-between; align-items:center; padding:12px 0 }
@@ -193,7 +195,7 @@
   .lhero{ padding:70px 0 48px; position:relative; overflow:hidden }
   .lhero::before{ content:""; position:absolute; inset:-2px; background-image:radial-gradient(color-mix(in srgb,var(--ink) 10%,transparent) 1px, transparent 1px); background-size:24px 24px; -webkit-mask-image:radial-gradient(700px 440px at 26% 36%,#000,transparent 76%); mask-image:radial-gradient(700px 440px at 26% 36%,#000,transparent 76%); pointer-events:none }
   .lhero-in{ display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center; position:relative; z-index:1 }
-  .leyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--calm); font-weight:700 }
+  .leyebrow{ display:inline-flex; align-items:center; font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--calm); font-weight:700; padding:6px 12px; border:1px solid color-mix(in srgb,var(--calm) 32%,var(--hair)); border-radius:999px; background:color-mix(in srgb,var(--calm) 8%,transparent) }
   .ltitle{ font-size:60px; font-weight:700; line-height:1.02; margin-top:16px; letter-spacing:-.035em }
   .ltitle .accent{ background:linear-gradient(100deg,var(--calm),color-mix(in srgb,var(--calm) 42%,#fff)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:var(--calm) }
   .llead{ font-size:17px; color:var(--muted); line-height:1.6; margin:18px 0 26px; max-width:520px }
