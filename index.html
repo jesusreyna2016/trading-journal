@@ -205,6 +205,9 @@
   .lmock{ position:relative; background:linear-gradient(165deg, color-mix(in srgb,var(--surface2) 55%,var(--surface)), var(--surface) 70%); border:1px solid var(--hair); border-radius:18px; padding:18px; box-shadow:0 40px 90px -30px rgba(0,0,0,.7), inset 0 1px 0 color-mix(in srgb,#fff 6%,transparent) }
   .lmock-top{ display:flex; align-items:center; gap:6px; margin-bottom:15px }
   .lmock-dot{ width:9px; height:9px; border-radius:50%; background:var(--hair) }
+  .lmock-top .lmock-dot:nth-child(1){ background:color-mix(in srgb,#e0574f 55%,var(--hair)) }
+  .lmock-top .lmock-dot:nth-child(2){ background:color-mix(in srgb,var(--wait) 55%,var(--hair)) }
+  .lmock-top .lmock-dot:nth-child(3){ background:color-mix(in srgb,var(--pos) 55%,var(--hair)) }
   .lmock-brand{ margin-left:8px; font:700 11px/1 var(--sans); color:var(--faint); letter-spacing:.03em }
   .lmock-streak{ margin-left:auto; font:700 10px/1 var(--mono); color:var(--pos); background:color-mix(in srgb,var(--pos) 14%,transparent); border:1px solid color-mix(in srgb,var(--pos) 26%,transparent); padding:5px 10px; border-radius:999px }
   .lmock-kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px }
@@ -298,9 +301,9 @@
   .lstep .lstepn{ position:absolute; top:14px; right:18px; font-family:var(--mono); font-weight:800; font-size:40px; line-height:1; background:linear-gradient(180deg,color-mix(in srgb,var(--calm) 60%,transparent),color-mix(in srgb,var(--calm) 12%,transparent)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent }
   .lstep h3{ font-size:15px; margin:6px 0 5px; font-weight:700; color:var(--calm) }
   .lstep p{ color:var(--muted); font-size:13.5px; line-height:1.55 }
-  .lget{ background:var(--surface); border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:58px 22px; text-align:center }
+  .lget{ position:relative; overflow:hidden; background:radial-gradient(620px 240px at 50% -12%, color-mix(in srgb,var(--calm) 11%,transparent), transparent 66%), var(--surface); border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); padding:64px 22px; text-align:center }
   .lget h2{ font-size:30px; font-weight:800 }
-  .lget .lgetp{ color:var(--muted); margin-top:10px }
+  .lget .lgetp{ color:var(--muted); margin-top:12px; font-size:16px }
   .lform{ display:flex; gap:10px; max-width:470px; margin:20px auto 0 }
   .lform input{ flex:1; padding:12px 14px }
   .lform .btn{ padding:12px 18px; white-space:nowrap }
@@ -342,13 +345,13 @@
     </div></nav>
 
     <header class="lhero"><div class="lwrap lhero-in">
-      <div>
+      <div class="lfade">
         <div class="leyebrow" data-i18n="l2.eyebrow">FREE · PRIVATE · ALL-IN-ONE</div>
         <h1 class="ltitle" data-i18n-html="l2.title">Everything a trader needs, <span class="accent">in one free journal</span>.</h1>
         <p class="llead" data-i18n="l2.lead">Journal, analytics, daily routine, multi-account tracking and a discipline coach that spots your leaks. All in one place, free, forever.</p>
         <div class="lhero-cta"><a href="#get" class="btn calm" data-i18n="l2.cta1">Get started free →</a><button class="btn ghost demoBtn" type="button" data-i18n="l2.demoCta">Try the live demo</button><span class="small muted" data-i18n="l2.cta2">No card. No limits.</span></div>
       </div>
-      <div class="lmock">
+      <div class="lmock lfade">
         <div class="lmock-top"><span class="lmock-dot"></span><span class="lmock-dot"></span><span class="lmock-dot"></span><span class="lmock-brand">Trading Journal</span><span class="lmock-streak">🔥 7 clean</span></div>
         <div class="lmock-kpis">
           <div class="lmock-kpi"><div class="k-l">NET</div><div class="k-v pos">+$5.26K</div></div>
