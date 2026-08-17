@@ -316,6 +316,9 @@
   .lform input{ flex:1; padding:12px 14px }
   .lform .btn{ padding:12px 18px; white-space:nowrap }
   .lfoot{ padding:28px 22px 44px; text-align:center; color:var(--faint); font-size:12px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap }
+  .afoot{ margin-top:34px; padding:20px 16px 30px; border-top:1px solid var(--hair); text-align:center; color:var(--faint); font-size:12px; display:flex; gap:14px; justify-content:center; align-items:center; flex-wrap:wrap }
+  .afoot a.brand{ color:var(--calm); font-weight:600; text-decoration:none; transition:color .16s ease }
+  .afoot a.brand:hover{ color:var(--pos) }
   .lsec h2,.lfhead h2,.lsteps h2,.lget h2{ font-size:35px; font-weight:700; letter-spacing:-.025em }
   @media (max-width:760px){
     .lhero-in{ grid-template-columns:1fr; gap:28px }
@@ -527,6 +530,9 @@
     <div id="view-accounts" class="hide"></div>
     <div id="view-finance" class="hide"></div>
     <div id="view-report" class="hide"></div>
+    <footer class="afoot">
+      <span>Part of <a class="brand" href="https://tradedadlog.com/" target="_blank" rel="noopener">TradeDadLog</a></span>
+    </footer>
   </div>
 </div>
 <div class="toast" id="toast"></div>
