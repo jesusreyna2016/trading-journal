@@ -85,7 +85,7 @@
   #demoBar span{color:var(--ink)}
   .grid{display:grid; gap:12px}
   .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-  .kpi{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:15px 16px; position:relative; overflow:hidden; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent); transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease}
+  .kpi{background:linear-gradient(180deg, color-mix(in srgb,#fff 2.5%,var(--surface)), var(--surface)); border:1px solid var(--hair); border-radius:var(--r); padding:15px 16px; position:relative; overflow:hidden; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent); transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease}
   .kpi:hover{ border-color:color-mix(in srgb,var(--calm) 30%,var(--hair)); transform:translateY(-2px); box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 6%,transparent), 0 12px 26px -16px rgba(0,0,0,.5) }
   .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--calm); opacity:.45}
   .kpi .lab{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
@@ -175,7 +175,7 @@
   .rItem input{margin-top:1px; width:18px; height:18px; accent-color:var(--calm); flex:none; cursor:pointer}
   .rItem.done span{color:var(--faint); text-decoration:line-through; text-decoration-color:var(--faint)}
   .rbar{height:8px; border-radius:999px; background:var(--surface2); overflow:hidden}
-  .rbar > i{display:block; height:100%; background:var(--calm); transition:width .25s}
+  .rbar > i{display:block; height:100%; background:linear-gradient(90deg, color-mix(in srgb,var(--calm) 45%,transparent), var(--calm)); box-shadow:0 0 12px -3px var(--calm); transition:width .25s}
   .rnote{width:100%; min-height:120px; font-family:var(--sans); font-size:13.5px; color:var(--ink); background:var(--surface2); border:1px solid var(--hair); border-radius:10px; padding:12px; resize:vertical; line-height:1.55}
   .authgate{position:fixed; inset:0; background:var(--ground); display:flex; align-items:center; justify-content:center; padding:20px; z-index:50}
   .authgate.hide{display:none}
@@ -2156,7 +2156,7 @@ function weekSeries(){
     return {w,discPct:wd.length?disc/wd.length*100:0,net,nomans,against,proc,rr,days:wd.length};
   });
 }
-function bar(pct,met){ return `<div style="background:var(--surface2);border-radius:999px;height:8px;overflow:hidden;margin-top:6px"><div style="height:100%;width:${Math.max(0,Math.min(100,pct))}%;background:${met?'var(--pos)':'var(--wait)'};transition:width .3s"></div></div>`; }
+function bar(pct,met){ const c=met?'var(--pos)':'var(--wait)'; return `<div style="background:var(--surface2);border-radius:999px;height:8px;overflow:hidden;margin-top:6px;box-shadow:inset 0 1px 2px rgba(0,0,0,.35)"><div style="height:100%;width:${Math.max(0,Math.min(100,pct))}%;background:linear-gradient(90deg,color-mix(in srgb,${c} 45%,transparent),${c});box-shadow:0 0 12px -3px ${c};border-radius:999px;transition:width .4s cubic-bezier(.22,1,.36,1)"></div></div>`; }
 function goalRow(lab,valTxt,pct,met,tgtTxt){ return `<div style="padding:10px 0;border-top:1px solid var(--hair)"><div class="rowflex" style="justify-content:space-between"><span class="lab">${lab}</span><span class="num" style="font-weight:700">${valTxt} <span class="muted small">/ ${tgtTxt}</span> ${met?'<span class="pass ok">✓</span>':''}</span></div>${bar(pct,met)}</div>`; }
 function drawLinePct(c,pts,H){
   const {x,w}=setup(c,H); const pad=10, bottom=H-18;
