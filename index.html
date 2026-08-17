@@ -64,7 +64,8 @@
   .btn{font-family:var(--sans); font-size:13px; font-weight:600; border-radius:8px; padding:8px 13px; cursor:pointer; border:1px solid var(--hair); background:var(--surface2); color:var(--ink); transition:border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease}
   .btn:hover{border-color:color-mix(in srgb,var(--calm) 40%,var(--hair))}
   .btn:hover{border-color:var(--faint)}
-  .btn.calm{background:var(--calm); border-color:var(--calm); color:var(--calmink)}
+  .btn.calm{background:linear-gradient(180deg,color-mix(in srgb,var(--calm) 90%,#fff),var(--calm)); border-color:var(--calm); color:var(--calmink); font-weight:700; box-shadow:0 6px 18px -11px color-mix(in srgb,var(--calm) 70%,transparent)}
+  .btn.calm:hover{border-color:var(--calm); box-shadow:0 11px 26px -11px color-mix(in srgb,var(--calm) 70%,transparent); transform:translateY(-1px)}
   .btn.small{padding:5px 10px; font-size:12px}
   .btn.ghost{background:transparent}
   .tabs{display:flex; gap:4px; border-bottom:1px solid var(--hair); margin-bottom:18px; overflow-x:auto}
@@ -1448,12 +1449,14 @@ function drawLine(c,pts,H){
   // Colorea por región: verde arriba del cero, rojo debajo (recorte por bandas horizontales).
   [[pos,pad,zeroY],[neg,zeroY,bottom+4]].forEach(([col,y0,y1])=>{ if(y1-y0<=0.5) return;
     x.save(); x.beginPath(); x.rect(0,y0,w,y1-y0); x.clip();
-    areaPath(); x.fillStyle=col+"2e"; x.fill();
-    linePath(); x.strokeStyle=col; x.lineWidth=2; x.stroke();
+    const up=col===pos, grad=x.createLinearGradient(0,y0,0,y1);
+    grad.addColorStop(0, col+(up?"3a":"05")); grad.addColorStop(1, col+(up?"05":"3a"));
+    areaPath(); x.fillStyle=grad; x.fill();
+    linePath(); x.strokeStyle=col; x.lineWidth=2; x.lineJoin="round"; x.shadowColor=col; x.shadowBlur=7; x.stroke(); x.shadowBlur=0;
     x.restore();
   });
   const lx=X(pts.length-1),ly=Y(end), ecol=end>=0?pos:neg;
-  x.fillStyle=ecol; x.beginPath(); x.arc(lx,ly,3.5,0,7); x.fill();
+  x.save(); x.shadowColor=ecol; x.shadowBlur=10; x.fillStyle=ecol; x.beginPath(); x.arc(lx,ly,3.5,0,7); x.fill(); x.restore();
   x.fillStyle=css('--ink'); x.font="600 12px "+css('--mono'); x.textAlign="right";
   x.fillText((end<0?"−$":"$")+Math.abs(Math.round(end)), lx-6, ly-8);
 }
