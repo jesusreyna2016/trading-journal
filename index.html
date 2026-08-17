@@ -354,6 +354,29 @@
   .seqflag.add{ color:var(--wait); border-color:color-mix(in srgb,var(--wait) 40%,transparent); background:color-mix(in srgb,var(--wait) 12%,transparent) }
   .seqflag.off{ color:var(--a2); border-color:color-mix(in srgb,var(--a2) 40%,transparent); background:color-mix(in srgb,var(--a2) 12%,transparent) }
   .seqfoot{ margin-top:6px }
+  .scpage{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px; background:var(--ground) }
+  .sccard{ max-width:420px; width:100%; margin:0 auto; background:var(--surface); border:1px solid var(--hair); border-radius:16px; padding:22px 22px 20px; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 5%,transparent), 0 30px 70px -34px rgba(0,0,0,.6) }
+  .scbrand{ display:flex; align-items:center; gap:7px; font:700 12px/1 var(--mono); letter-spacing:.06em; color:var(--calm); text-transform:uppercase }
+  .scdot{ width:9px; height:9px; border-radius:50%; background:var(--calm) }
+  .schead{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin:14px 0 16px }
+  .scname{ font-size:15px; font-weight:700 }
+  .sctitle{ font-size:13px; color:var(--muted) }
+  .scperiod{ font-size:12px; color:var(--faint); margin-top:2px }
+  .scstreak{ text-align:right; flex:none }
+  .scflame{ font-size:16px } .scstreak-n{ font:800 22px/1 var(--mono); color:var(--calm); margin-left:2px }
+  .scstreak-l{ font-size:11px; color:var(--muted) } .scstreak-b{ font-size:10px; color:var(--faint) }
+  .schero{ text-align:center; padding:16px 0; border-radius:12px; background:var(--surface2); margin-bottom:14px }
+  .schero-v{ font:800 46px/1 var(--mono); color:var(--calm) }
+  .schero.grade-great .schero-v{ color:var(--pos) } .schero.grade-work .schero-v{ color:var(--wait) }
+  .schero-l{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:6px }
+  .scstats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(68px,1fr)); gap:8px; margin-bottom:14px }
+  .scstat{ text-align:center; background:var(--surface2); border-radius:9px; padding:9px 4px }
+  .scstat-v{ font:700 17px/1 var(--mono) } .scstat-l{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:4px }
+  .sceq{ margin:2px 0 14px } .sceq-l{ font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.06em; text-align:center; margin-top:4px }
+  .sctag{ text-align:center; font-size:13px; color:var(--muted); font-style:italic }
+  .sccta{ display:block; text-align:center; background:var(--calm); color:var(--calmink); font-weight:700; text-decoration:none; padding:12px; border-radius:10px; margin-top:14px }
+  .scfoot{ text-align:center; font-size:11px; color:var(--faint); margin-top:10px }
+  .scprev{ transform:scale(.9); transform-origin:top center; margin-bottom:-24px }
   .lsec h2,.lfhead h2,.lsteps h2,.lget h2{ font-size:35px; font-weight:700; letter-spacing:-.025em }
   @media (max-width:760px){
     .lhero-in{ grid-template-columns:1fr; gap:28px }
@@ -686,6 +709,7 @@ const I18N={
   "coach.title":"🧭 Coach's read","coach.disc":"You kept {clean}/{total} days clean ({pct}%).","coach.leak":"Biggest leak right now: {leak} ({metric}).","coach.leakNone":"No critical leak right now, keep protecting your discipline.","coach.worstInst":"{sym} drained {v} ({pct}% of your losses).","coach.mgmtCoach":"You held losers {x}× longer than winners.",
   "an.byInstrument":"P&L by instrument","an.byDirection":"P&L by direction","an.mgmt":"Winners vs losers · management","an.primary":"most traded","an.review":"review","an.long":"Long","an.short":"Short","an.holdWin":"Avg hold · winners","an.holdLoss":"Avg hold · losers","an.mgmtRead":"You held losers {x}× longer than winners: you cut the ones that work and give room to the ones that don't.","an.wl":"{w}W/{l}L","an.noTiming":"Hold-time needs the Tradovate CSV timing. Re-import to enable.","an.byHour":"P&L by hour (CT)",
   "seq.title":"Sequence of the day","seq.revenge":"revenge size","seq.addLoser":"added to loser","seq.reentry":"revenge re-entry","seq.offEdge":"off-edge","seq.legend":"Running P&L on the right. Flags mark tilt behaviors the moment they happened.",
+  "sc.share":"Share scorecard","sc.shareTitle":"Share your scorecard","sc.cardTitle":"Trading Scorecard","sc.discipline":"Discipline","sc.cleanDays":"clean days","sc.winRate":"Win rate","sc.pf":"Profit factor","sc.trades":"Trades","sc.days":"Days","sc.net":"Net","sc.equityShape":"Equity curve (shape)","sc.tagline":"Discipline over results.","sc.best":"best {m}","sc.cta":"Get your own free journal","sc.footNote":"Educational tool, not financial advice.","sc.inclMoney":"Include net P&L ($)","sc.copy":"Copy link","sc.copied":"Link copied.","sc.copyFail":"Couldn't copy.","sc.preview":"Open preview","sc.note":"A public snapshot link, no login and no account details. Nothing is stored on a server, the data travels inside the link itself.",
   "lk.disp.t":"Disposition effect (you hold losers longer)","lk.disp.w":"Your losing trades last {lossDur} on average vs {winDur} for winners. Holding losers and cutting winners is the classic leak, set your exit before you enter.","lk.eupho.t":"Euphoria, sizing up after a win","lk.eupho.w":"You sized up {n} time(s) right after a winning trade; those entries net {net}. Winning doesn't mean the next setup is better, keep size fixed.",
   "fb.eyebrow":"Feedback","fb.title":"Report a bug or suggest something","fb.lead":"Found a bug? Want a feature or an improvement? Tell me, it helps everyone.","fb.type":"Type","fb.bug":"🐞 Bug","fb.feature":"✨ New feature","fb.improve":"🔧 Improvement","fb.other":"💬 Other","fb.msg":"Message","fb.msgPh":"Describe it as clearly as you can…","fb.send":"Send","fb.needMsg":"Write a message first.","fb.thanks":"Thanks! Sent. 🙏","fb.err":"Couldn't send, try again.","fb.thDate":"Date","fb.btn":"Feedback",
   "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?).",
@@ -801,6 +825,7 @@ const I18N={
   "coach.title":"🧭 Lectura del coach","coach.disc":"Mantuviste {clean}/{total} días limpios ({pct}%).","coach.leak":"Tu mayor fuga ahora: {leak} ({metric}).","coach.leakNone":"Sin fuga crítica ahora, sigue protegiendo tu disciplina.","coach.worstInst":"{sym} te drenó {v} ({pct}% de la pérdida).","coach.mgmtCoach":"Aguantaste los perdedores {x}× más que los ganadores.",
   "an.byInstrument":"P&L por instrumento","an.byDirection":"P&L por dirección","an.mgmt":"Ganadores vs perdedores · gestión","an.primary":"más operado","an.review":"revisar","an.long":"Largos","an.short":"Cortos","an.holdWin":"Aguante medio · ganadores","an.holdLoss":"Aguante medio · perdedores","an.mgmtRead":"Aguantaste los perdedores {x}× más que los ganadores: cortas los que funcionan y le das cuerda a los que no.","an.wl":"{w}W/{l}L","an.noTiming":"El aguante necesita el timing del CSV de Tradovate. Reimporta para activarlo.","an.byHour":"P&L por hora (CT)",
   "seq.title":"Secuencia del día","seq.revenge":"tamaño revancha","seq.addLoser":"promedió a perdedor","seq.reentry":"reentrada revancha","seq.offEdge":"fuera de tu edge","seq.legend":"P&L acumulado a la derecha. Las etiquetas marcan las conductas de tilt en el momento en que pasaron.",
+  "sc.share":"Compartir scorecard","sc.shareTitle":"Comparte tu scorecard","sc.cardTitle":"Scorecard de trading","sc.discipline":"Disciplina","sc.cleanDays":"días limpios","sc.winRate":"Win rate","sc.pf":"Profit factor","sc.trades":"Trades","sc.days":"Días","sc.net":"Neto","sc.equityShape":"Curva de equity (forma)","sc.tagline":"Disciplina antes que resultados.","sc.best":"récord {m}","sc.cta":"Consigue tu journal gratis","sc.footNote":"Herramienta educativa, no es asesoría financiera.","sc.inclMoney":"Incluir P&L neto ($)","sc.copy":"Copiar enlace","sc.copied":"Enlace copiado.","sc.copyFail":"No se pudo copiar.","sc.preview":"Abrir vista previa","sc.note":"Un enlace público de instantánea, sin login ni datos de cuenta. Nada se guarda en servidor: los datos viajan dentro del propio enlace.",
   "lk.disp.t":"Efecto disposición (aguantas más los perdedores)","lk.disp.w":"Tus trades perdedores duran {lossDur} de media vs {winDur} los ganadores. Aguantar perdedores y cortar ganadores es la fuga clásica, define tu salida antes de entrar.","lk.eupho.t":"Euforia, subir tamaño tras ganar","lk.eupho.w":"Subiste tamaño {n} vez(es) justo después de un trade ganador; esas entradas suman {net}. Ganar no hace mejor el siguiente setup, mantén el tamaño fijo.",
   "fb.eyebrow":"Feedback","fb.title":"Reporta un bug o sugiere algo","fb.lead":"¿Encontraste un bug? ¿Quieres una función o una mejora? Dímelo, ayuda a todos.","fb.type":"Tipo","fb.bug":"🐞 Bug","fb.feature":"✨ Nueva función","fb.improve":"🔧 Mejora","fb.other":"💬 Otro","fb.msg":"Mensaje","fb.msgPh":"Descríbelo lo más claro que puedas…","fb.send":"Enviar","fb.needMsg":"Escribe un mensaje primero.","fb.thanks":"¡Gracias! Enviado. 🙏","fb.err":"No se pudo enviar, reintenta.","fb.thDate":"Fecha","fb.btn":"Feedback",
   "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?).",
@@ -1529,6 +1554,82 @@ function daySequence(arr){
   }).join("");
   return `<div class="seqwrap"><div class="seqhead">${T("seq.title")}</div>${rows}<div class="seqfoot muted small">${T("seq.legend")}</div></div>`;
 }
+// ---------- Shareable public scorecard (URL-encoded, no server, no sensitive data by default) ----------
+function scEqSvg(eq){
+  if(!eq||eq.length<2) return "";
+  const W=320,H=64,p=3;
+  const pts=eq.map((v,i)=>`${(p+i/(eq.length-1)*(W-2*p)).toFixed(1)},${(H-p-v*(H-2*p)).toFixed(1)}`);
+  const line=pts.join(" "), up=eq[eq.length-1]>=eq[0], col=up?'var(--pos)':'var(--neg)';
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="none" style="display:block"><polygon points="${p},${H-p} ${line} ${W-p},${H-p}" fill="${col}" fill-opacity=".10"/><polyline points="${line}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+function scorecardData(opts){
+  opts=opts||{};
+  const TR=activeTrades(), M=metrics(TR);
+  const ev=dayEval(TR), disc=ev.filter(d=>d.disciplined).length, ss=streakStats(ev);
+  const sorted=TR.slice().sort((a,b)=>{ const ak=(a.tday||a.date)+a.time, bk=(b.tday||b.date)+b.time; return ak<bk?-1:ak>bk?1:0; });
+  let cum=0; const raw=[0]; sorted.forEach(t=>{ cum+=t.pnl; raw.push(cum); });
+  const mn=Math.min(...raw), mx=Math.max(...raw), rng=(mx-mn)||1;
+  let eq=raw.map(v=>Math.round((v-mn)/rng*100)/100);
+  if(eq.length>44){ const out=[], step=(eq.length-1)/43; for(let i=0;i<44;i++) out.push(eq[Math.round(i*step)]); eq=out; }
+  const d={ v:1, name:String(opts.name!=null?opts.name:((DB.settings&&DB.settings.name)||"")).slice(0,24),
+    period:periodLabel(), disc:ev.length?Math.round(disc/ev.length*100):0, streak:ss.cur, best:ss.best,
+    win:Math.round(M.winrate), pf:isFinite(M.pf)?+M.pf.toFixed(2):null, trades:M.n, days:ev.length,
+    eq:eq, lang:(DB.settings&&DB.settings.lang)||'en' };
+  if(opts.money) d.net=Math.round(M.net);
+  return d;
+}
+function renderScorecardHTML(d, opts){
+  opts=opts||{};
+  const grade=d.disc>=80?'great':d.disc>=60?'good':'work';
+  const stat=(lab,val)=>`<div class="scstat"><div class="scstat-v">${val}</div><div class="scstat-l">${lab}</div></div>`;
+  const stats=[stat(T("sc.winRate"),d.win+"%"), stat(T("sc.pf"),d.pf==null?"∞":d.pf), stat(T("sc.trades"),d.trades), stat(T("sc.days"),d.days)];
+  if(d.net!=null) stats.push(stat(T("sc.net"),money(d.net)));
+  return `<div class="sccard">
+    <div class="scbrand"><span class="scdot"></span> TradeDadLog</div>
+    <div class="schead">
+      <div>${d.name?`<div class="scname">${escA(d.name)}</div>`:''}<div class="sctitle">${T("sc.cardTitle")}</div>${d.period?`<div class="scperiod">${escA(d.period)}</div>`:''}</div>
+      <div class="scstreak"><div><span class="scflame">🔥</span><span class="scstreak-n">${d.streak}</span></div><div class="scstreak-l">${T("clean.streak")}</div>${d.best>d.streak?`<div class="scstreak-b">${fmt(T("sc.best"),{m:d.best})}</div>`:''}</div>
+    </div>
+    <div class="schero grade-${grade}"><div class="schero-v">${d.disc}%</div><div class="schero-l">${T("sc.discipline")} · ${T("sc.cleanDays")}</div></div>
+    <div class="scstats">${stats.join("")}</div>
+    ${d.eq&&d.eq.length>1?`<div class="sceq">${scEqSvg(d.eq)}<div class="sceq-l">${T("sc.equityShape")}</div></div>`:''}
+    <div class="sctag">${T("sc.tagline")}</div>
+    ${opts.public?`<a class="sccta" href="${escA(opts.ctaHref||'./')}">${T("sc.cta")} →</a><div class="scfoot">${T("sc.footNote")}</div>`:''}
+  </div>`;
+}
+function scLegacyCopy(text){ try{ const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.focus(); ta.select(); const ok=document.execCommand("copy"); document.body.removeChild(ta); return ok; }catch(e){ return false; } }
+function shareScorecard(){
+  let money=false;
+  const draw=()=>{
+    const d=scorecardData({money});
+    const enc=encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(d)))));
+    const url=location.origin+location.pathname+"?card="+enc;
+    openModal(`<h1 style="margin:.1em 0 .5em;font-size:18px;font-weight:700">${T("sc.shareTitle")}</h1>
+      <div class="scprev">${renderScorecardHTML(d,{})}</div>
+      <label class="rowflex small" style="gap:8px;margin:12px 0;align-items:center;cursor:pointer"><input type="checkbox" id="scMoney" ${money?'checked':''}> ${T("sc.inclMoney")}</label>
+      <div class="rowflex" style="gap:8px"><button class="btn calm" id="scCopy" style="flex:1;justify-content:center;padding:11px">🔗 ${T("sc.copy")}</button><a class="btn ghost" href="${url}" target="_blank" rel="noopener" style="justify-content:center;padding:11px">${T("sc.preview")}</a></div>
+      <div class="small muted" style="margin-top:10px">${T("sc.note")}</div>`);
+    $("#scMoney").onchange=e=>{ money=e.target.checked; draw(); };
+    $("#scCopy").onclick=()=>{ const ok=()=>toast(T("sc.copied")), fail=()=>{ scLegacyCopy(url)?toast(T("sc.copied")):toast(T("sc.copyFail")); };
+      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok,fail); else fail(); };
+  };
+  draw();
+}
+// Boot interceptor: if ?card= is present, render ONLY the public scorecard (no login, no data fetch).
+function tryPublicCard(){
+  let enc; try{ enc=new URLSearchParams(location.search).get("card"); }catch(e){ return false; }
+  if(!enc) return false;
+  let d; try{ d=JSON.parse(decodeURIComponent(escape(atob(enc)))); }catch(e){ return false; }
+  if(!d||typeof d!=='object') return false;
+  DB.settings=DB.settings||{}; if(d.lang==='es'||d.lang==='en') DB.settings.lang=d.lang;
+  const ag=$("#authGate"); if(ag) ag.style.display="none";
+  const app=document.querySelector(".app"); if(app) app.style.display="none";
+  const host=document.createElement("div"); host.id="publicCard";
+  host.innerHTML=`<div class="scpage">${renderScorecardHTML(d,{public:true, ctaHref:location.origin+location.pathname})}</div>`;
+  document.body.appendChild(host);
+  document.title="TradeDadLog · "+T("sc.cardTitle");
+  return true;
+}
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
@@ -1580,6 +1681,7 @@ function renderOverview(){
   $("#eqhost").appendChild(chartEquity(TR));
   $("#dyhost").appendChild(chartDaily(TR));
   const we=$("#whyEdit"); if(we)we.onclick=showWhyEditor;
+  const scb=$("#shareCard"); if(scb)scb.onclick=shareScorecard;
   hydrateImgs(v);
 }
 function counterfactual(TR){
@@ -1837,7 +1939,7 @@ function cleanCard(ev){
   const prog=next
     ? `<div class="sprog"><i style="width:${pct}%"></i></div><div class="small muted" style="margin-top:6px">${fmt(T('clean.next'),{n:next-ss.cur,m:next})}</div>`
     : `<div class="sprog"><i style="width:100%"></i></div><div class="small calmc" style="margin-top:6px;font-weight:600">${T('clean.maxed')}</div>`;
-  return `<div class="card section streakcard" style="border-color:var(--calm)"><h2>${T("clean.title")}</h2>
+  return `<div class="card section streakcard" style="border-color:var(--calm)"><div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">${T("clean.title")}</h2><button class="btn small" id="shareCard">🔗 ${T("sc.share")}</button></div>
     <div class="streaktop">
       <div class="streakbig"><span class="sflame">🔥</span><span class="snum">${ss.cur}</span><span class="slbl">${T('clean.streak')}</span></div>
       <div class="streakmeta">
@@ -2769,6 +2871,7 @@ async function onSession(session){
 }
 // Migración: mover viejos blobs del journal de localStorage → IndexedDB y liberar el cupo (para que quepa el token de sesión)
 try{ Object.keys(localStorage).forEach(k=>{ if(k.indexOf(BASEKEY)===0){ var v=localStorage.getItem(k); if(v){ try{ idbPut("cache_"+k, v).catch(()=>{}); }catch(e){} } localStorage.removeItem(k); } }); }catch(e){ console.warn("[auth] LS migration err",e); }
+if(tryPublicCard()) return; // public scorecard mode: skip auth + app entirely
 let _authResolved=false;
 sb.auth.onAuthStateChange((ev,session)=>{ if(!_authResolved && !session) return; _authResolved=true; onSession(session); });
 function initLandingAnim(){
