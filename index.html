@@ -331,6 +331,15 @@
   .sbadges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px }
   .sbadge{ font:700 12px/1 var(--mono); padding:6px 10px; border-radius:999px; border:1px solid var(--hair); color:var(--faint); background:var(--surface2); opacity:.5; transition:all .16s ease }
   .sbadge.on{ color:var(--calm); border-color:color-mix(in srgb,var(--calm) 45%,transparent); background:color-mix(in srgb,var(--calm) 13%,transparent); opacity:1 }
+  .arow{ display:flex; align-items:center; gap:10px; margin:9px 0; font-size:13px; flex-wrap:wrap }
+  .aname{ width:120px; flex:none; display:flex; align-items:center; gap:6px }
+  .atrack{ flex:1; min-width:90px; height:20px; background:var(--surface2); border-radius:6px; overflow:hidden }
+  .afill{ height:100%; border-radius:6px; transition:width .45s ease }
+  .aamt{ width:92px; flex:none; text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums }
+  .asub{ width:70px; flex:none; text-align:right; font-size:11px }
+  .apill{ font-size:10px; padding:1px 7px; border-radius:999px; font-weight:700; text-transform:uppercase; letter-spacing:.04em }
+  .apill.prim{ background:color-mix(in srgb,var(--calm) 14%,transparent); color:var(--calm); border:1px solid color-mix(in srgb,var(--calm) 30%,transparent) }
+  .apill.warn{ background:color-mix(in srgb,var(--neg) 14%,transparent); color:var(--neg); border:1px solid color-mix(in srgb,var(--neg) 30%,transparent) }
   .lsec h2,.lfhead h2,.lsteps h2,.lget h2{ font-size:35px; font-weight:700; letter-spacing:-.025em }
   @media (max-width:760px){
     .lhero-in{ grid-template-columns:1fr; gap:28px }
@@ -660,7 +669,8 @@ const I18N={
   "clean.title":"🎯 Clean days, your real scoreboard","clean.body":"A clean day = you followed all your rules, win or lose. That's the win you control. Chase clean days; the P&L follows.","clean.streak":"Clean streak","clean.rate":"Clean days","clean.record":"Best streak","clean.next":"{n} to unlock 🔥{m}","clean.maxed":"All milestones unlocked. Legend. 👑","clean.earned":"Unlocked","clean.locked":"Reach {m} clean days","clean.newRecord":"🏆 New record!",
   "rules.title":"🧠 Your rules (from your own data)","rules.intro":"Not generic rules, what YOUR history proves. Adopt the ones you trust.","rules.adopted":"Rule adopted.","rule.maxTrades":"Max 3 trades a day, your 4th+ trades average <b>{v}</b>.","rule.adoptMax":"Adopt","rule.noAgainst":"Never trade against the bias, {n} such trades net <b>{net}</b>.","rule.onlyEdge":"Only trade valid edges, no-man's-land ({n}) nets <b>{net}</b>.","rule.sideLeak":"Skip {side} unless it's a clear edge, they net <b>{net}</b>.","rule.avoidWorst":"Cut or avoid <b>{k}</b>, nets {net}.","rule.circuitBreak":"Stop after a loss, your next trade averages <b>{net}</b>.",
   "af.phase":"Account type","phase.eval":"Evaluation","phase.funded":"Funded","af.status":"Status","status.active":"Active","status.passed":"Passed","status.lost":"Lost","ac.markPassed":"✓ Passed","ac.markLost":"✗ Lost","ac.markActive":"↺ Reactivate",
-  "coach.title":"🧭 Coach's read","coach.disc":"You kept {clean}/{total} days clean ({pct}%).","coach.leak":"Biggest leak right now: {leak} ({metric}).","coach.leakNone":"No critical leak right now, keep protecting your discipline.",
+  "coach.title":"🧭 Coach's read","coach.disc":"You kept {clean}/{total} days clean ({pct}%).","coach.leak":"Biggest leak right now: {leak} ({metric}).","coach.leakNone":"No critical leak right now, keep protecting your discipline.","coach.worstInst":"{sym} drained {v} ({pct}% of your losses).","coach.mgmtCoach":"You held losers {x}× longer than winners.",
+  "an.byInstrument":"P&L by instrument","an.byDirection":"P&L by direction","an.mgmt":"Winners vs losers · management","an.primary":"most traded","an.review":"review","an.long":"Long","an.short":"Short","an.holdWin":"Avg hold · winners","an.holdLoss":"Avg hold · losers","an.mgmtRead":"You held losers {x}× longer than winners: you cut the ones that work and give room to the ones that don't.","an.wl":"{w}W/{l}L","an.noTiming":"Hold-time needs the Tradovate CSV timing. Re-import to enable.",
   "lk.disp.t":"Disposition effect (you hold losers longer)","lk.disp.w":"Your losing trades last {lossDur} on average vs {winDur} for winners. Holding losers and cutting winners is the classic leak, set your exit before you enter.","lk.eupho.t":"Euphoria, sizing up after a win","lk.eupho.w":"You sized up {n} time(s) right after a winning trade; those entries net {net}. Winning doesn't mean the next setup is better, keep size fixed.",
   "fb.eyebrow":"Feedback","fb.title":"Report a bug or suggest something","fb.lead":"Found a bug? Want a feature or an improvement? Tell me, it helps everyone.","fb.type":"Type","fb.bug":"🐞 Bug","fb.feature":"✨ New feature","fb.improve":"🔧 Improvement","fb.other":"💬 Other","fb.msg":"Message","fb.msgPh":"Describe it as clearly as you can…","fb.send":"Send","fb.needMsg":"Write a message first.","fb.thanks":"Thanks! Sent. 🙏","fb.err":"Couldn't send, try again.","fb.thDate":"Date","fb.btn":"Feedback",
   "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?).",
@@ -773,7 +783,8 @@ const I18N={
   "clean.title":"🎯 Días limpios, tu marcador real","clean.body":"Un día limpio = seguiste todas tus reglas, ganes o pierdas. Ese es el triunfo que controlas. Persigue días limpios; el P&L viene detrás.","clean.streak":"Racha limpia","clean.rate":"Días limpios","clean.record":"Récord","clean.next":"faltan {n} para 🔥{m}","clean.maxed":"Todos los hitos desbloqueados. Leyenda. 👑","clean.earned":"Desbloqueado","clean.locked":"Llega a {m} días limpios","clean.newRecord":"🏆 ¡Nuevo récord!",
   "rules.title":"🧠 Tus reglas (según tus propios datos)","rules.intro":"No son reglas genéricas, son lo que TU histórico demuestra. Adopta las que te convenzan.","rules.adopted":"Regla adoptada.","rule.maxTrades":"Máx 3 trades al día, del 4º en adelante promedias <b>{v}</b>.","rule.adoptMax":"Adoptar","rule.noAgainst":"Nunca operes contra el sesgo, {n} trades así suman <b>{net}</b>.","rule.onlyEdge":"Opera solo bordes válidos, tierra de nadie ({n}) suma <b>{net}</b>.","rule.sideLeak":"Evita {side} salvo borde claro, suman <b>{net}</b>.","rule.avoidWorst":"Recorta o evita <b>{k}</b>, suma {net}.","rule.circuitBreak":"Para tras una pérdida, tu siguiente trade promedia <b>{net}</b>.",
   "af.phase":"Tipo de cuenta","phase.eval":"Evaluación","phase.funded":"Fondeada","af.status":"Estado","status.active":"Activa","status.passed":"Pasada","status.lost":"Perdida","ac.markPassed":"✓ Pasada","ac.markLost":"✗ Perdida","ac.markActive":"↺ Reactivar",
-  "coach.title":"🧭 Lectura del coach","coach.disc":"Mantuviste {clean}/{total} días limpios ({pct}%).","coach.leak":"Tu mayor fuga ahora: {leak} ({metric}).","coach.leakNone":"Sin fuga crítica ahora, sigue protegiendo tu disciplina.",
+  "coach.title":"🧭 Lectura del coach","coach.disc":"Mantuviste {clean}/{total} días limpios ({pct}%).","coach.leak":"Tu mayor fuga ahora: {leak} ({metric}).","coach.leakNone":"Sin fuga crítica ahora, sigue protegiendo tu disciplina.","coach.worstInst":"{sym} te drenó {v} ({pct}% de la pérdida).","coach.mgmtCoach":"Aguantaste los perdedores {x}× más que los ganadores.",
+  "an.byInstrument":"P&L por instrumento","an.byDirection":"P&L por dirección","an.mgmt":"Ganadores vs perdedores · gestión","an.primary":"más operado","an.review":"revisar","an.long":"Largos","an.short":"Cortos","an.holdWin":"Aguante medio · ganadores","an.holdLoss":"Aguante medio · perdedores","an.mgmtRead":"Aguantaste los perdedores {x}× más que los ganadores: cortas los que funcionan y le das cuerda a los que no.","an.wl":"{w}W/{l}L","an.noTiming":"El aguante necesita el timing del CSV de Tradovate. Reimporta para activarlo.",
   "lk.disp.t":"Efecto disposición (aguantas más los perdedores)","lk.disp.w":"Tus trades perdedores duran {lossDur} de media vs {winDur} los ganadores. Aguantar perdedores y cortar ganadores es la fuga clásica, define tu salida antes de entrar.","lk.eupho.t":"Euforia, subir tamaño tras ganar","lk.eupho.w":"Subiste tamaño {n} vez(es) justo después de un trade ganador; esas entradas suman {net}. Ganar no hace mejor el siguiente setup, mantén el tamaño fijo.",
   "fb.eyebrow":"Feedback","fb.title":"Reporta un bug o sugiere algo","fb.lead":"¿Encontraste un bug? ¿Quieres una función o una mejora? Dímelo, ayuda a todos.","fb.type":"Tipo","fb.bug":"🐞 Bug","fb.feature":"✨ Nueva función","fb.improve":"🔧 Mejora","fb.other":"💬 Otro","fb.msg":"Mensaje","fb.msgPh":"Descríbelo lo más claro que puedas…","fb.send":"Enviar","fb.needMsg":"Escribe un mensaje primero.","fb.thanks":"¡Gracias! Enviado. 🙏","fb.err":"No se pudo enviar, reintenta.","fb.thDate":"Fecha","fb.btn":"Feedback",
   "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?).",
@@ -1407,6 +1418,44 @@ function qbar(tab){
   return `<div class="qbar"><span class="qi">“</span><span class="qt">${txt}${q.by?` <span class="qa">– ${q.by}</span>`:''}</span></div>`;
 }
 
+// Breakdowns that show the "why" behind the P&L: by instrument, by direction, and winner/loser management.
+function analyticsCards(TR){
+  // Primary instrument = your most-traded across ALL your history (your edge), not just this view,
+  // so an off-edge day (overtrading another symbol) flags that symbol instead of crowning it.
+  const primary=(()=>{ const by=byKey(scoped(),t=>t.sym||"?"); let best=null; Object.keys(by).forEach(k=>{ if(!best||by[k].length>by[best].length) best=k; }); return best; })();
+  // by instrument (worst net first)
+  const bySym=byKey(TR,t=>t.sym||"?");
+  const symRows=Object.keys(bySym).map(k=>{ const m=metrics(bySym[k]); return {k,net:m.net,w:m.wins,l:m.losses}; }).sort((a,b)=>a.net-b.net);
+  const symMax=Math.max(1,...symRows.map(r=>Math.abs(r.net)));
+  const symBars=symRows.map(r=>{ const pct=Math.round(Math.abs(r.net)/symMax*100); const col=r.net>=0?'var(--pos)':'var(--neg)';
+    const flag=r.k===primary?`<span class="apill prim">${T("an.primary")}</span>`:(r.net<0?`<span class="apill warn">${T("an.review")}</span>`:'');
+    return `<div class="arow"><span class="aname"><b>${r.k}</b> ${flag}</span><div class="atrack"><div class="afill" style="width:${pct}%;background:${col}"></div></div><span class="aamt ${cls(r.net)}">${money1(r.net)}</span><span class="asub muted">${fmt(T("an.wl"),{w:r.w,l:r.l})}</span></div>`;
+  }).join("");
+  // by direction
+  const byDir=byKey(TR,t=>t.side==='long'?'long':'short');
+  const dirRows=['long','short'].filter(d=>byDir[d]).map(d=>{ const m=metrics(byDir[d]); return {d,net:m.net,wr:m.winrate,w:m.wins,l:m.losses}; });
+  const dirMax=Math.max(1,...dirRows.map(r=>Math.abs(r.net)));
+  const dirBars=dirRows.map(r=>{ const pct=Math.round(Math.abs(r.net)/dirMax*100); const col=r.net>=0?'var(--pos)':'var(--neg)';
+    return `<div class="arow"><span class="aname">${T(r.d==='long'?'an.long':'an.short')}</span><div class="atrack"><div class="afill" style="width:${pct}%;background:${col}"></div></div><span class="aamt ${cls(r.net)}">${money1(r.net)}</span><span class="asub muted">${Math.round(r.wr)}% · ${fmt(T("an.wl"),{w:r.w,l:r.l})}</span></div>`;
+  }).join("");
+  // management: winner vs loser hold time (needs per-trade timing)
+  const timed=TR.filter(t=>t.topen&&t.tclose&&t.tclose>t.topen);
+  let mgmt="";
+  const wins=timed.filter(t=>t.pnl>0), losses=timed.filter(t=>t.pnl<0);
+  if(timed.length>=Math.max(3,Math.ceil(TR.length*0.5)) && wins.length && losses.length){
+    const avg=a=>a.reduce((s,t)=>s+(t.tclose-t.topen),0)/a.length;
+    const aw=avg(wins), al=avg(losses), ratio=aw>0?al/aw:0;
+    mgmt=`<div class="card section"><h2>${T("an.mgmt")}</h2>
+      <div class="grid kpis" style="margin-bottom:6px">
+        ${kpi(T("an.holdWin"),fmtDur(aw),wins.length+" "+T("trades"),"calmc")}
+        ${kpi(T("an.holdLoss"),fmtDur(al),losses.length+" "+T("trades"),al>aw?"neg":"muted")}
+      </div>
+      ${al>aw*1.15?`<div class="why small muted" style="font-size:13px">${fmt(T("an.mgmtRead"),{x:ratio.toFixed(1)})}</div>`:''}</div>`;
+  }
+  return `<div class="card section"><h2>${T("an.byInstrument")}</h2>${symBars}</div>
+    <div class="card section"><h2>${T("an.byDirection")}</h2>${dirBars}</div>
+    ${mgmt}`;
+}
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
@@ -1421,6 +1470,9 @@ function renderOverview(){
   const cfBody=cfBest?T("leaksCostBody").replace("{act}",cfBest.l).replace("{v}",money1(cfBest.v)).replace("{a}",money1(cf.actual)).replace("{d}",money(cfBest.v-cf.actual)):"";
   const L=detectLeaks(TR); const topL=L.filter(l=>l.sev==="hi")[0]; const cleanPct=days.length?Math.round(disc/days.length*100):0;
   const coachParts=[fmt(T("coach.disc"),{clean:disc,total:days.length,pct:cleanPct}), topL?fmt(T("coach.leak"),{leak:topL.title,metric:topL.metric}):T("coach.leakNone")];
+  // Data-driven coach lines: worst instrument, and winner/loser management.
+  (()=>{ const bySym=byKey(TR,t=>t.sym||"?"); if(Object.keys(bySym).length>1){ const rows=Object.keys(bySym).map(k=>({k,net:metrics(bySym[k]).net})).sort((a,b)=>a.net-b.net); const w=rows[0]; const totLoss=Math.abs(TR.filter(t=>t.pnl<0).reduce((s,t)=>s+t.pnl,0))||1; if(w.net<0 && Math.abs(w.net)/totLoss>=0.4) coachParts.push(fmt(T("coach.worstInst"),{sym:w.k,v:money1(w.net),pct:Math.round(Math.abs(w.net)/totLoss*100)})); } })();
+  (()=>{ const timed=TR.filter(t=>t.topen&&t.tclose&&t.tclose>t.topen); const wn=timed.filter(t=>t.pnl>0), ls=timed.filter(t=>t.pnl<0); if(timed.length>=Math.max(3,Math.ceil(TR.length*0.5)) && wn.length && ls.length){ const avg=a=>a.reduce((s,t)=>s+(t.tclose-t.topen),0)/a.length; const aw=avg(wn), al=avg(ls); if(al>aw*1.3) coachParts.push(fmt(T("coach.mgmtCoach"),{x:(al/aw).toFixed(1)})); } })();
   const rl0=personalRules(TR)[0]; if(rl0) coachParts.push("👉 "+rl0.text.replace(/<\/?b>/g,""));
   const coachHtml=`<div class="card" style="border-color:var(--calm)"><h2>${T("coach.title")}</h2><div class="why" style="font-size:14px; line-height:1.65">${coachParts.join(" ")}</div></div>`;
   const W=DB.settings.why||{}; const wset=!!(W.text||W.img); const emphWhy=wset && days.length && (disc/days.length<0.5);
@@ -1447,6 +1499,7 @@ function renderOverview(){
       ${kpi(T("maxDD"),money(-mdd),T("peakToValley"),mdd?"neg":"muted")}
     </div>
     ${cleanCard(ev)}
+    ${analyticsCards(TR)}
     ${cfBest?`<div class="card section" style="border-color:var(--calm)"><h2>${T("leaksCostTitle")}</h2><div class="why" style="font-size:14px">${cfBody}</div></div>`:''}
     ${hi?`<div class="card section"><h2>${T("topInsight")}</h2><div class="why" style="font-size:13.5px">${mdb(hi.text)}</div></div>`:''}
     <div class="card section"><h2>${T("equityCurve")}</h2><div id="eqhost"></div></div>
