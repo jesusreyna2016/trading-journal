@@ -990,7 +990,14 @@ function parseTopstepX(lines){
   const iSym=idx("contractname"), iEnt=idx("enteredat"), iExt=idx("exitedat"), iEP=idx("entryprice"), iXP=idx("exitprice"),
         iFee=idx("fees"), iPnl=idx("pnl"), iSize=idx("size"), iType=idx("type"), iComm=idx("commissions");
   const stripSym=s=>String(s||"").trim().toUpperCase().replace(/[FGHJKMNQUVXZ]\d{1,2}$/,"");
-  const parseTs=s=>{ const m=String(s||"").trim().match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})(?:\.\d+)?\s*([+-]\d{2}):?(\d{2})?/); if(!m) return null; const off=(m[7][0]==="-"?-1:1)*(Math.abs(+m[7])*60+(+(m[8]||0))); return Date.UTC(+m[3],+m[1]-1,+m[2],+m[4],+m[5],+m[6]) - off*60000; };
+  const parseTs=s=>{ s=String(s||"").trim(); if(!s) return null;
+    let Y,Mo,D, mus=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/), iso=s.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if(mus){ Mo=+mus[1]; D=+mus[2]; Y=+mus[3]; } else if(iso){ Y=+iso[1]; Mo=+iso[2]; D=+iso[3]; } else return null;
+    const tm=s.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/); if(!tm) return null;
+    let ms=Date.UTC(Y,Mo-1,D,+tm[1],+tm[2],+(tm[3]||0));
+    const off=s.match(/([+-]\d{2}):?(\d{2})\s*$/); // trailing tz offset (ignore Z / none = treat as UTC)
+    if(off){ ms-=((off[1][0]==="-"?-1:1)*(Math.abs(+off[1])*60+(+off[2])))*60000; }
+    return ms; };
   const num=v=>parseFloat(String(v==null?"":v).replace(/[^0-9.\-]/g,""))||0;
   const out=[];
   for(let i=1;i<lines.length;i++){
