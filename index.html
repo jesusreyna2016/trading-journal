@@ -974,12 +974,46 @@ function parseTradovate(lines){
   }
   return out;
 }
+// Flexible date parser: ISO (YYYY-MM-DD[ T]HH:MM) or US M/D/Y[ HH:MM]. Returns {date:"YYYY-MM-DD", time:"HH:MM:SS"|""}.
+function gDate(s){
+  s=String(s||"").trim(); if(!s) return null;
+  let m=s.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}:\d{2}(?::\d{2})?))?/);
+  if(m) return {date:m[1]+"-"+m[2]+"-"+m[3], time:(m[3+1]||m[4]||"").trim()};
+  m=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ ,]+(\d{1,2}:\d{2}(?::\d{2})?))?/);
+  if(m){ let y=m[3]; if(y.length===2) y="20"+y; return {date:y+"-"+String(m[1]).padStart(2,"0")+"-"+String(m[2]).padStart(2,"0"), time:(m[4]||"").trim()}; }
+  return null;
+}
+// TopstepX "trades_export" → normalized. Per-trade, timestamps carry a tz offset (e.g. -05:00 = CT).
+function parseTopstepX(lines){
+  const H=lines[0].split(",").map(s=>s.trim().toLowerCase());
+  const idx=n=>H.indexOf(n);
+  const iSym=idx("contractname"), iEnt=idx("enteredat"), iExt=idx("exitedat"), iEP=idx("entryprice"), iXP=idx("exitprice"),
+        iFee=idx("fees"), iPnl=idx("pnl"), iSize=idx("size"), iType=idx("type"), iComm=idx("commissions");
+  const stripSym=s=>String(s||"").trim().toUpperCase().replace(/[FGHJKMNQUVXZ]\d{1,2}$/,"");
+  const parseTs=s=>{ const m=String(s||"").trim().match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})(?:\.\d+)?\s*([+-]\d{2}):?(\d{2})?/); if(!m) return null; const off=(m[7][0]==="-"?-1:1)*(Math.abs(+m[7])*60+(+(m[8]||0))); return Date.UTC(+m[3],+m[1]-1,+m[2],+m[4],+m[5],+m[6]) - off*60000; };
+  const num=v=>parseFloat(String(v==null?"":v).replace(/[^0-9.\-]/g,""))||0;
+  const out=[];
+  for(let i=1;i<lines.length;i++){
+    const c=lines[i].split(","); if(c.length<8) continue;
+    const sym=stripSym(c[iSym]); if(!sym) continue;
+    const topen=parseTs(c[iEnt]); if(topen==null) continue;
+    const tclose=parseTs(c[iExt]); const dO=new Date(topen);
+    const side=String(c[iType]||"").trim().toLowerCase().startsWith("s")?"short":"long";
+    const entry=num(c[iEP]), exit=num(c[iXP]), pnl=iPnl>=0?(parseFloat(c[iPnl])||0):0;
+    out.push({ date:dO.toISOString().slice(0,10), time:dO.toISOString().slice(11,19), sym, side,
+      qty:num(c[iSize])||1, status:pnl>0?"Win":"Loss", entry, exit, pnl:+pnl.toFixed(2),
+      pts:+((side==="long"?exit-entry:entry-exit)).toFixed(2), comm:iFee>=0?num(c[iFee]):(iComm>=0?num(c[iComm]):0),
+      dur:(tclose!=null?fmtDur(tclose-topen):""), topen, tclose:tclose==null?topen:tclose });
+  }
+  return out;
+}
 function parseCSV(txt){
   const lines=txt.replace(/\r/g,"").split("\n").filter(l=>l.trim().length);
   if(!lines.length) return [];
   const H=lines[0].split(",").map(s=>s.trim().toLowerCase());
   if(H.includes("boughttimestamp") && H.includes("soldtimestamp")) return parseTradovate(lines);
-  if(!(H.includes("open date")&&H.includes("net p&l")) && (H.includes("direction") || (H.includes("entry")&&H.includes("exit")) || (H.includes("profit")&&!H.includes("net p&l")))) return parseGeneric(lines,H);
+  if(H.includes("enteredat") && H.includes("exitedat")) return parseTopstepX(lines);
+  if(!(H.includes("open date")&&H.includes("net p&l"))) return parseGeneric(lines,H);
   const idx=n=>H.indexOf(n);
   const iDate=idx("open date"), iTime=idx("open time"), iSym=idx("symbol"), iSide=idx("side"),
         iQty=idx("quantity"), iStat=idx("status"), iEntry=idx("entry price"), iExit=idx("exit price"),
@@ -1005,26 +1039,33 @@ function parseCSV(txt){
 // Parser CSV genérico/flexible (TradingView simple, exports genéricos): date, symbol/asset, direction/side, entry, exit, size/qty, pnl/profit.
 function parseGeneric(lines,H){
   const gi=(...names)=>{ for(const n of names){ const i=H.indexOf(n); if(i>=0) return i; } return -1; };
-  const iDate=gi("date","open date","date/time","datetime"), iTime=gi("time","open time"),
-        iSym=gi("symbol","asset","ticker","instrument"), iSide=gi("direction","side","type"),
-        iEntry=gi("entry","entry price","open price","avg entry price","buy price"),
-        iExit=gi("exit","exit price","close price","avg exit price","sell price"),
-        iQty=gi("size","qty","quantity","contracts","volume"),
-        iPnl=gi("pnl","p&l","profit","net p&l","profit usd","realized p&l"),
-        iComm=gi("commission","fees","comm","commissions");
+  const iDate=gi("date","open date","date/time","datetime","entry time","time opened","date opened","opened","entry date"),
+        iTime=gi("time","open time","entry time"),
+        iSym=gi("symbol","asset","ticker","instrument","contract","contractname","market","product"),
+        iSide=gi("direction","side","type","market pos.","market position","pos","action","b/s","buy/sell","order side","l/s"),
+        iEntry=gi("entry","entry price","entryprice","open price","avg entry price","avg. entry price","buy price","fill price"),
+        iExit=gi("exit","exit price","exitprice","close price","avg exit price","avg. exit price","sell price"),
+        iQty=gi("size","qty","quantity","contracts","volume","filled qty"),
+        iPnl=gi("pnl","p&l","p/l","profit","net p&l","net p/l","net pnl","gross p/l","gross pnl","profit usd","realized p&l","realized pnl","realized p/l","profit/loss"),
+        iComm=gi("commission","commissions","comm","fees","fee"),
+        iEntTime=gi("entry time","enteredat","opened","open time"), iExtTime=gi("exit time","exitedat","closed","close time");
   const num=v=>parseFloat(String(v==null?"":v).replace(/[^0-9.\-]/g,""))||0;
+  const toMs=s=>{ s=String(s||"").trim(); if(!s) return null; const g=gDate(s); if(!g) return null; const t=(g.time||"00:00:00").split(":").map(Number); const D=g.date.split("-").map(Number); let ms=Date.UTC(D[0],D[1]-1,D[2],t[0]||0,t[1]||0,t[2]||0); const off=s.match(/([+-]\d{2}):?(\d{2})\s*$/); if(off){ const o=(off[1][0]==="-"?-1:1)*(Math.abs(+off[1])*60+(+off[2])); ms-=o*60000; } return ms; };
   const out=[];
   for(let i=1;i<lines.length;i++){
-    const c=lines[i].split(","); let dt=(c[iDate]||"").trim(); if(!dt) continue;
-    const date=dt.slice(0,10);
+    const c=lines[i].split(","); const g=gDate(c[iDate]||""); if(!g) continue;
     const sideRaw=(c[iSide]||"").trim().toLowerCase();
     const side=(sideRaw.startsWith("s")||sideRaw.includes("short")||sideRaw.includes("sell"))?"short":"long";
     const entry=num(c[iEntry]), exit=num(c[iExit]), qty=num(c[iQty])||1, comm=iComm>=0?num(c[iComm]):0;
-    let praw=(iPnl>=0?(c[iPnl]||""):"").trim(); const neg=/^\(.*\)$/.test(praw)||praw.startsWith("-");
+    let praw=(iPnl>=0?(c[iPnl]||""):"").trim(); const neg=/^\(.*\)$/.test(praw)||praw.trim().startsWith("-");
     const pnl=(neg?-1:1)*Math.abs(num(praw));
     const pts=+((side==="long"?(exit-entry):(entry-exit))).toFixed(2);
-    let time=iTime>=0?(c[iTime]||"").replace("UTC","").trim():""; if(!time){ const m=dt.match(/[T ](\d{2}:\d{2}(:\d{2})?)/); time=m?m[1]:"12:00:00"; }
-    out.push({ date, time, sym:(c[iSym]||"").trim().toUpperCase(), side, qty, status:pnl>=0?"Win":"Loss", entry, exit, pnl:+pnl.toFixed(2), pts, comm });
+    let time=iTime>=0?(c[iTime]||"").replace("UTC","").trim():""; if(time&&/\//.test(time)){ const gt=gDate(time); time=gt&&gt.time?gt.time:""; } if(!time) time=g.time||"12:00:00";
+    if(time.length===5) time+=":00";
+    const rec={ date:g.date, time, sym:(c[iSym]||"").trim().toUpperCase(), side, qty, status:pnl>=0?"Win":"Loss", entry, exit, pnl:+pnl.toFixed(2), pts, comm };
+    const to=iEntTime>=0?toMs(c[iEntTime]):null, tc=iExtTime>=0?toMs(c[iExtTime]):null;
+    if(to!=null){ rec.topen=to; rec.tclose=tc!=null?tc:to; if(tc!=null) rec.dur=fmtDur(tc-to); }
+    out.push(rec);
   }
   return out;
 }
