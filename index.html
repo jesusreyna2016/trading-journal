@@ -340,6 +340,20 @@
   .apill{ font-size:10px; padding:1px 7px; border-radius:999px; font-weight:700; text-transform:uppercase; letter-spacing:.04em }
   .apill.prim{ background:color-mix(in srgb,var(--calm) 14%,transparent); color:var(--calm); border:1px solid color-mix(in srgb,var(--calm) 30%,transparent) }
   .apill.warn{ background:color-mix(in srgb,var(--neg) 14%,transparent); color:var(--neg); border:1px solid color-mix(in srgb,var(--neg) 30%,transparent) }
+  .seqwrap{ border:1px solid var(--hair); border-radius:10px; padding:10px 12px; margin:2px 0 12px; background:var(--surface2) }
+  .seqhead{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:4px }
+  .seqrow{ display:grid; grid-template-columns:50px 10px 1fr auto auto; gap:9px; align-items:center; padding:7px 0; border-top:1px solid var(--hair); font-size:13px }
+  .seqrow:first-of-type{ border-top:0 }
+  .seqt{ font-family:var(--mono); font-size:12px; color:var(--muted) }
+  .seqmark{ width:8px; height:8px; border-radius:50% }
+  .seqmark.pos{ background:var(--pos) } .seqmark.neg{ background:var(--neg) }
+  .seqmain{ display:flex; align-items:center; gap:6px; flex-wrap:wrap }
+  .seqpnl{ text-align:right; min-width:74px } .seqcum{ text-align:right; min-width:74px; opacity:.7 }
+  .seqflag{ font-size:10px; padding:1px 6px; border-radius:999px; font-weight:700; border:1px solid }
+  .seqflag.rev,.seqflag.re{ color:var(--neg); border-color:color-mix(in srgb,var(--neg) 40%,transparent); background:color-mix(in srgb,var(--neg) 12%,transparent) }
+  .seqflag.add{ color:var(--wait); border-color:color-mix(in srgb,var(--wait) 40%,transparent); background:color-mix(in srgb,var(--wait) 12%,transparent) }
+  .seqflag.off{ color:var(--a2); border-color:color-mix(in srgb,var(--a2) 40%,transparent); background:color-mix(in srgb,var(--a2) 12%,transparent) }
+  .seqfoot{ margin-top:6px }
   .lsec h2,.lfhead h2,.lsteps h2,.lget h2{ font-size:35px; font-weight:700; letter-spacing:-.025em }
   @media (max-width:760px){
     .lhero-in{ grid-template-columns:1fr; gap:28px }
@@ -670,7 +684,8 @@ const I18N={
   "rules.title":"🧠 Your rules (from your own data)","rules.intro":"Not generic rules, what YOUR history proves. Adopt the ones you trust.","rules.adopted":"Rule adopted.","rule.maxTrades":"Max 3 trades a day, your 4th+ trades average <b>{v}</b>.","rule.adoptMax":"Adopt","rule.noAgainst":"Never trade against the bias, {n} such trades net <b>{net}</b>.","rule.onlyEdge":"Only trade valid edges, no-man's-land ({n}) nets <b>{net}</b>.","rule.sideLeak":"Skip {side} unless it's a clear edge, they net <b>{net}</b>.","rule.avoidWorst":"Cut or avoid <b>{k}</b>, nets {net}.","rule.circuitBreak":"Stop after a loss, your next trade averages <b>{net}</b>.",
   "af.phase":"Account type","phase.eval":"Evaluation","phase.funded":"Funded","af.status":"Status","status.active":"Active","status.passed":"Passed","status.lost":"Lost","ac.markPassed":"✓ Passed","ac.markLost":"✗ Lost","ac.markActive":"↺ Reactivate",
   "coach.title":"🧭 Coach's read","coach.disc":"You kept {clean}/{total} days clean ({pct}%).","coach.leak":"Biggest leak right now: {leak} ({metric}).","coach.leakNone":"No critical leak right now, keep protecting your discipline.","coach.worstInst":"{sym} drained {v} ({pct}% of your losses).","coach.mgmtCoach":"You held losers {x}× longer than winners.",
-  "an.byInstrument":"P&L by instrument","an.byDirection":"P&L by direction","an.mgmt":"Winners vs losers · management","an.primary":"most traded","an.review":"review","an.long":"Long","an.short":"Short","an.holdWin":"Avg hold · winners","an.holdLoss":"Avg hold · losers","an.mgmtRead":"You held losers {x}× longer than winners: you cut the ones that work and give room to the ones that don't.","an.wl":"{w}W/{l}L","an.noTiming":"Hold-time needs the Tradovate CSV timing. Re-import to enable.",
+  "an.byInstrument":"P&L by instrument","an.byDirection":"P&L by direction","an.mgmt":"Winners vs losers · management","an.primary":"most traded","an.review":"review","an.long":"Long","an.short":"Short","an.holdWin":"Avg hold · winners","an.holdLoss":"Avg hold · losers","an.mgmtRead":"You held losers {x}× longer than winners: you cut the ones that work and give room to the ones that don't.","an.wl":"{w}W/{l}L","an.noTiming":"Hold-time needs the Tradovate CSV timing. Re-import to enable.","an.byHour":"P&L by hour (CT)",
+  "seq.title":"Sequence of the day","seq.revenge":"revenge size","seq.addLoser":"added to loser","seq.reentry":"revenge re-entry","seq.offEdge":"off-edge","seq.legend":"Running P&L on the right. Flags mark tilt behaviors the moment they happened.",
   "lk.disp.t":"Disposition effect (you hold losers longer)","lk.disp.w":"Your losing trades last {lossDur} on average vs {winDur} for winners. Holding losers and cutting winners is the classic leak, set your exit before you enter.","lk.eupho.t":"Euphoria, sizing up after a win","lk.eupho.w":"You sized up {n} time(s) right after a winning trade; those entries net {net}. Winning doesn't mean the next setup is better, keep size fixed.",
   "fb.eyebrow":"Feedback","fb.title":"Report a bug or suggest something","fb.lead":"Found a bug? Want a feature or an improvement? Tell me, it helps everyone.","fb.type":"Type","fb.bug":"🐞 Bug","fb.feature":"✨ New feature","fb.improve":"🔧 Improvement","fb.other":"💬 Other","fb.msg":"Message","fb.msgPh":"Describe it as clearly as you can…","fb.send":"Send","fb.needMsg":"Write a message first.","fb.thanks":"Thanks! Sent. 🙏","fb.err":"Couldn't send, try again.","fb.thDate":"Date","fb.btn":"Feedback",
   "adm.title":"Admin panel","adm.loading":"Loading…","adm.users":"Registered users","adm.fbNew":"New reports","adm.fbTotal":"Total reports","adm.noFb":"No feedback yet.","adm.markDone":"Mark done","adm.err":"Couldn't load (did you run the SQL in Supabase?).",
@@ -784,7 +799,8 @@ const I18N={
   "rules.title":"🧠 Tus reglas (según tus propios datos)","rules.intro":"No son reglas genéricas, son lo que TU histórico demuestra. Adopta las que te convenzan.","rules.adopted":"Regla adoptada.","rule.maxTrades":"Máx 3 trades al día, del 4º en adelante promedias <b>{v}</b>.","rule.adoptMax":"Adoptar","rule.noAgainst":"Nunca operes contra el sesgo, {n} trades así suman <b>{net}</b>.","rule.onlyEdge":"Opera solo bordes válidos, tierra de nadie ({n}) suma <b>{net}</b>.","rule.sideLeak":"Evita {side} salvo borde claro, suman <b>{net}</b>.","rule.avoidWorst":"Recorta o evita <b>{k}</b>, suma {net}.","rule.circuitBreak":"Para tras una pérdida, tu siguiente trade promedia <b>{net}</b>.",
   "af.phase":"Tipo de cuenta","phase.eval":"Evaluación","phase.funded":"Fondeada","af.status":"Estado","status.active":"Activa","status.passed":"Pasada","status.lost":"Perdida","ac.markPassed":"✓ Pasada","ac.markLost":"✗ Perdida","ac.markActive":"↺ Reactivar",
   "coach.title":"🧭 Lectura del coach","coach.disc":"Mantuviste {clean}/{total} días limpios ({pct}%).","coach.leak":"Tu mayor fuga ahora: {leak} ({metric}).","coach.leakNone":"Sin fuga crítica ahora, sigue protegiendo tu disciplina.","coach.worstInst":"{sym} te drenó {v} ({pct}% de la pérdida).","coach.mgmtCoach":"Aguantaste los perdedores {x}× más que los ganadores.",
-  "an.byInstrument":"P&L por instrumento","an.byDirection":"P&L por dirección","an.mgmt":"Ganadores vs perdedores · gestión","an.primary":"más operado","an.review":"revisar","an.long":"Largos","an.short":"Cortos","an.holdWin":"Aguante medio · ganadores","an.holdLoss":"Aguante medio · perdedores","an.mgmtRead":"Aguantaste los perdedores {x}× más que los ganadores: cortas los que funcionan y le das cuerda a los que no.","an.wl":"{w}W/{l}L","an.noTiming":"El aguante necesita el timing del CSV de Tradovate. Reimporta para activarlo.",
+  "an.byInstrument":"P&L por instrumento","an.byDirection":"P&L por dirección","an.mgmt":"Ganadores vs perdedores · gestión","an.primary":"más operado","an.review":"revisar","an.long":"Largos","an.short":"Cortos","an.holdWin":"Aguante medio · ganadores","an.holdLoss":"Aguante medio · perdedores","an.mgmtRead":"Aguantaste los perdedores {x}× más que los ganadores: cortas los que funcionan y le das cuerda a los que no.","an.wl":"{w}W/{l}L","an.noTiming":"El aguante necesita el timing del CSV de Tradovate. Reimporta para activarlo.","an.byHour":"P&L por hora (CT)",
+  "seq.title":"Secuencia del día","seq.revenge":"tamaño revancha","seq.addLoser":"promedió a perdedor","seq.reentry":"reentrada revancha","seq.offEdge":"fuera de tu edge","seq.legend":"P&L acumulado a la derecha. Las etiquetas marcan las conductas de tilt en el momento en que pasaron.",
   "lk.disp.t":"Efecto disposición (aguantas más los perdedores)","lk.disp.w":"Tus trades perdedores duran {lossDur} de media vs {winDur} los ganadores. Aguantar perdedores y cortar ganadores es la fuga clásica, define tu salida antes de entrar.","lk.eupho.t":"Euforia, subir tamaño tras ganar","lk.eupho.w":"Subiste tamaño {n} vez(es) justo después de un trade ganador; esas entradas suman {net}. Ganar no hace mejor el siguiente setup, mantén el tamaño fijo.",
   "fb.eyebrow":"Feedback","fb.title":"Reporta un bug o sugiere algo","fb.lead":"¿Encontraste un bug? ¿Quieres una función o una mejora? Dímelo, ayuda a todos.","fb.type":"Tipo","fb.bug":"🐞 Bug","fb.feature":"✨ Nueva función","fb.improve":"🔧 Mejora","fb.other":"💬 Otro","fb.msg":"Mensaje","fb.msgPh":"Descríbelo lo más claro que puedas…","fb.send":"Enviar","fb.needMsg":"Escribe un mensaje primero.","fb.thanks":"¡Gracias! Enviado. 🙏","fb.err":"No se pudo enviar, reintenta.","fb.thDate":"Fecha","fb.btn":"Feedback",
   "adm.title":"Panel admin","adm.loading":"Cargando…","adm.users":"Usuarios registrados","adm.fbNew":"Reportes nuevos","adm.fbTotal":"Reportes totales","adm.noFb":"Aún no hay feedback.","adm.markDone":"Marcar hecho","adm.err":"No se pudo cargar (¿corriste el SQL en Supabase?).",
@@ -1418,11 +1434,11 @@ function qbar(tab){
   return `<div class="qbar"><span class="qi">“</span><span class="qt">${txt}${q.by?` <span class="qa">– ${q.by}</span>`:''}</span></div>`;
 }
 
-// Breakdowns that show the "why" behind the P&L: by instrument, by direction, and winner/loser management.
+// Your most-traded symbol across ALL history (your edge), so an off-edge day flags that symbol instead of crowning it.
+function primarySym(){ const by=byKey(scoped(),t=>t.sym||"?"); let best=null; Object.keys(by).forEach(k=>{ if(!best||by[k].length>by[best].length) best=k; }); return best; }
+// Breakdowns that show the "why" behind the P&L: by instrument, by direction, management, and by hour.
 function analyticsCards(TR){
-  // Primary instrument = your most-traded across ALL your history (your edge), not just this view,
-  // so an off-edge day (overtrading another symbol) flags that symbol instead of crowning it.
-  const primary=(()=>{ const by=byKey(scoped(),t=>t.sym||"?"); let best=null; Object.keys(by).forEach(k=>{ if(!best||by[k].length>by[best].length) best=k; }); return best; })();
+  const primary=primarySym();
   // by instrument (worst net first)
   const bySym=byKey(TR,t=>t.sym||"?");
   const symRows=Object.keys(bySym).map(k=>{ const m=metrics(bySym[k]); return {k,net:m.net,w:m.wins,l:m.losses}; }).sort((a,b)=>a.net-b.net);
@@ -1452,9 +1468,46 @@ function analyticsCards(TR){
       </div>
       ${al>aw*1.15?`<div class="why small muted" style="font-size:13px">${fmt(T("an.mgmtRead"),{x:ratio.toFixed(1)})}</div>`:''}</div>`;
   }
+  // by hour of the session (CT)
+  const byHr=byKey(TR.filter(t=>ctMinutes(t)!==null),t=>String(Math.floor(ctMinutes(t)/60)).padStart(2,"0"));
+  const hrKeys=Object.keys(byHr).sort();
+  let hourCard="";
+  if(hrKeys.length>=2){
+    const hrRows=hrKeys.map(h=>({h,m:metrics(byHr[h])}));
+    const hrMax=Math.max(1,...hrRows.map(r=>Math.abs(r.m.net)));
+    const hrBars=hrRows.map(r=>{ const pct=Math.round(Math.abs(r.m.net)/hrMax*100); const col=r.m.net>=0?'var(--pos)':'var(--neg)';
+      return `<div class="arow"><span class="aname">${r.h}:00</span><div class="atrack"><div class="afill" style="width:${pct}%;background:${col}"></div></div><span class="aamt ${cls(r.m.net)}">${money1(r.m.net)}</span><span class="asub muted">${r.m.n} ${T("trades")}</span></div>`;
+    }).join("");
+    hourCard=`<div class="card section"><h2>${T("an.byHour")}</h2>${hrBars}</div>`;
+  }
   return `<div class="card section"><h2>${T("an.byInstrument")}</h2>${symBars}</div>
     <div class="card section"><h2>${T("an.byDirection")}</h2>${dirBars}</div>
-    ${mgmt}`;
+    ${mgmt}
+    ${hourCard}`;
+}
+// Per-day tilt timeline: chronological trades with running P&L and behavioral flags (revenge, averaging into a loser, quick re-entry, off-edge).
+function daySequence(arr){
+  if(!arr||arr.length<2) return "";
+  const seq=arr.slice().sort((a,b)=>{ const ax=a.topen!=null?a.topen:0, bx=b.topen!=null?b.topen:0; return ax-bx || (a.time<b.time?-1:1); });
+  const prim=primarySym();
+  let cum=0;
+  const rows=seq.map((t,i)=>{
+    const prev=i>0?seq[i-1]:null, cumBefore=cum; cum+=t.pnl;
+    const flags=[];
+    if(prev && prev.pnl<0 && normSize(t)>normSize(prev)+1e-9 && cumBefore<0) flags.push(["rev",T("seq.revenge")]);
+    if(prev && prev.pnl<0 && t.sym===prev.sym && t.side===prev.side && cumBefore<0) flags.push(["add",T("seq.addLoser")]);
+    if(prev && prev.pnl<0 && t.sym===prev.sym && t.topen!=null && prev.tclose!=null && (t.topen-prev.tclose)>=0 && (t.topen-prev.tclose)<=120000) flags.push(["re",T("seq.reentry")]);
+    if(prim && t.sym!==prim && t.pnl<0) flags.push(["off",T("seq.offEdge")]);
+    const chips=flags.map(f=>`<span class="seqflag ${f[0]}">${f[1]}</span>`).join(" ");
+    return `<div class="seqrow">
+      <span class="seqt">${ctDisp(t).hm}</span>
+      <span class="seqmark ${t.pnl>=0?'pos':'neg'}"></span>
+      <span class="seqmain"><span class="tag ${t.side==='long'?'L':'S'}">${t.side==='long'?'L':'S'}</span> <b>${t.sym}</b> <span class="muted">×${t.qty}${t.dur?' · '+t.dur:''}</span> ${chips}</span>
+      <span class="seqpnl mono ${cls(t.pnl)}">${money1(t.pnl)}</span>
+      <span class="seqcum mono ${cls(cum)}">${money(cum)}</span>
+    </div>`;
+  }).join("");
+  return `<div class="seqwrap"><div class="seqhead">${T("seq.title")}</div>${rows}<div class="seqfoot muted small">${T("seq.legend")}</div></div>`;
 }
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
@@ -1575,7 +1628,7 @@ function dayCard(d,arrRaw){
   const left=peak-M.net, vol=arr.reduce((s,t)=>s+t.qty,0), comm=arr.reduce((s,t)=>s+(t.comm||0),0), exp=d===jExpanded;
   const kp=`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:0 8px;margin:10px 0 4px">
     ${kpiSmall(T("th.Trades"),M.n)}${kpiSmall(T("winRate"),M.winrate.toFixed(0)+"%")}${kpiSmall(T("net"),money1(M.net),cls(M.net))}${kpiSmall(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞")}${kpiSmall(T("j.volume"),vol)}${kpiSmall(T("j.wl"),M.wins+" / "+M.losses)}${left>1?kpiSmall(T("j.onTable"),money(left),"wait",T("j.peak")+" "+money(peak)):""}${comm?kpiSmall(T("j.commissions"),money(comm)):""}</div>`;
-  const body=exp?kp+`<div data-curve="${d}" style="margin-bottom:8px"></div><div style="overflow-x:auto"><table><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th>Panel</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
+  const body=exp?kp+`<div data-curve="${d}" style="margin-bottom:8px"></div>${daySequence(arr)}<div style="overflow-x:auto"><table><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th>Panel</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
   return `<div class="card section" style="padding:14px 16px">
     <div class="rowflex" data-day="${d}" style="justify-content:space-between;cursor:pointer;align-items:center">
       <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} ${T("trades")}${left>1?' · '+fmt(T("j.leftOnTable"),{v:money(left)}):''}</span></div>
