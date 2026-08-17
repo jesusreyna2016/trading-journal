@@ -360,6 +360,12 @@
   .pxseg{ display:inline-flex; width:42px; height:5px; border-radius:3px; overflow:hidden; background:var(--neg); flex:none }
   .pxseg i{ display:block; height:100%; background:var(--pos) }
   @media(max-width:640px){ .pxrow{ grid-template-columns:88px 1fr 92px; gap:9px } .pxname{ font-size:12px } .pxamt{ font-size:13px } .pxseg{ width:30px } }
+  /* diverging (center-spine) variant, used when a section mixes gains and losses */
+  .dvspine{ position:relative; height:26px }
+  .dvspine::before{ content:""; position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:color-mix(in srgb,var(--hair) 85%,#fff) }
+  .dvbar{ position:absolute; top:3px; bottom:3px; border-radius:7px }
+  .dvbar.neg{ right:50%; background:linear-gradient(270deg, color-mix(in srgb,var(--neg) 20%,transparent), var(--neg)); box-shadow:0 0 18px -6px var(--neg), inset 0 1px 0 color-mix(in srgb,#fff 20%,transparent) }
+  .dvbar.pos{ left:50%; background:linear-gradient(90deg, color-mix(in srgb,var(--pos) 20%,transparent), var(--pos)); box-shadow:0 0 18px -6px var(--pos), inset 0 1px 0 color-mix(in srgb,#fff 20%,transparent) }
   .seqwrap{ border:1px solid var(--hair); border-radius:10px; padding:10px 12px; margin:2px 0 12px; background:var(--surface2) }
   .seqhead{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:4px }
   .seqrow{ display:grid; grid-template-columns:50px 10px 1fr auto auto; gap:9px; align-items:center; padding:7px 0; border-top:1px solid var(--hair); font-size:13px }
@@ -1554,19 +1560,26 @@ function primarySym(){ const by=byKey(scoped(),t=>t.sym||"?"); let best=null; Ob
 // Breakdowns that show the "why" behind the P&L: by instrument, by direction, management, and by hour.
 function analyticsCards(TR){
   const primary=primarySym();
-  const pxRow=(name,pill,pct,sign,amt,sub)=>`<div class="pxrow"><div class="pxname"><span class="pxdot" style="background:${sign>=0?'var(--pos)':'var(--neg)'}"></span><span class="nm">${name}</span>${pill||''}</div><div class="pxtrack"><div class="pxfill ${sign>=0?'pos':'neg'}" style="width:${Math.max(2,Math.min(100,Math.round(pct)))}%"></div></div><div class="pxval"><span class="pxamt ${sign>=0?'pos':'neg'}">${amt}</span>${sub||''}</div></div>`;
   const wl=(w,l,pre)=>{ const tot=w+l, gp=tot?Math.round(w/tot*100):0; return `<span class="pxsub"><span class="pxseg"><i style="width:${gp}%"></i></span>${pre?' '+pre:''}</span>`; };
-  const pxCard=(eyebrow,net,rows)=>`<div class="card section"><div class="pxhead"><div class="eyebrow">${eyebrow}</div><div class="pxnet ${net>=0?'pos':'neg'}">${money1(net)}</div></div>${rows}</div>`;
+  // Section builder: anchored gradient bars, or center-spine diverging bars when the data mixes gains and losses.
+  const section=(eyebrow,items)=>{
+    if(!items.length) return "";
+    const net=items.reduce((s,i)=>s+i.net,0), maxAbs=Math.max(1,...items.map(i=>Math.abs(i.net)));
+    const mixed=items.some(i=>i.net>0)&&items.some(i=>i.net<0);
+    const rows=items.map(i=>{ const sgn=i.net>=0?'pos':'neg', dot=`<span class="pxdot" style="background:var(--${sgn})"></span>`;
+      const mid = mixed
+        ? `<div class="dvspine"><div class="dvbar ${sgn}" style="width:${Math.max(1,Math.abs(i.net)/maxAbs*50)}%"></div></div>`
+        : `<div class="pxtrack"><div class="pxfill ${sgn}" style="width:${Math.max(2,Math.min(100,Math.round(Math.abs(i.net)/maxAbs*100)))}%"></div></div>`;
+      return `<div class="pxrow"><div class="pxname">${dot}<span class="nm">${i.name}</span>${i.pill||''}</div>${mid}<div class="pxval"><span class="pxamt ${sgn}">${money1(i.net)}</span>${i.sub||''}</div></div>`;
+    }).join("");
+    return `<div class="card section"><div class="pxhead"><div class="eyebrow">${eyebrow}</div><div class="pxnet ${net>=0?'pos':'neg'}">${money1(net)}</div></div>${rows}</div>`;
+  };
   // by instrument (worst net first)
   const bySym=byKey(TR,t=>t.sym||"?");
-  const symRows=Object.keys(bySym).map(k=>{ const m=metrics(bySym[k]); return {k,net:m.net,w:m.wins,l:m.losses}; }).sort((a,b)=>a.net-b.net);
-  const symMax=Math.max(1,...symRows.map(r=>Math.abs(r.net))), symNet=symRows.reduce((s,r)=>s+r.net,0);
-  const symBars=symRows.map(r=>{ const pill=r.k===primary?`<span class="pxpill">${T("an.primary")}</span>`:(r.net<0?`<span class="pxpill warn">${T("an.review")}</span>`:''); return pxRow(r.k,pill,Math.abs(r.net)/symMax*100,r.net,money1(r.net),wl(r.w,r.l,fmt(T("an.wl"),{w:r.w,l:r.l}))); }).join("");
+  const symItems=Object.keys(bySym).map(k=>{ const m=metrics(bySym[k]); const pill=k===primary?`<span class="pxpill">${T("an.primary")}</span>`:(m.net<0?`<span class="pxpill warn">${T("an.review")}</span>`:''); return {name:k,pill,net:m.net,sub:wl(m.wins,m.losses,fmt(T("an.wl"),{w:m.wins,l:m.losses}))}; }).sort((a,b)=>a.net-b.net);
   // by direction
   const byDir=byKey(TR,t=>t.side==='long'?'long':'short');
-  const dirRows=['long','short'].filter(d=>byDir[d]).map(d=>{ const m=metrics(byDir[d]); return {d,net:m.net,wr:m.winrate,w:m.wins,l:m.losses}; });
-  const dirMax=Math.max(1,...dirRows.map(r=>Math.abs(r.net))), dirNet=dirRows.reduce((s,r)=>s+r.net,0);
-  const dirBars=dirRows.map(r=>pxRow(T(r.d==='long'?'an.long':'an.short'),'',Math.abs(r.net)/dirMax*100,r.net,money1(r.net),wl(r.w,r.l,Math.round(r.wr)+"% · "+fmt(T("an.wl"),{w:r.w,l:r.l})))).join("");
+  const dirItems=['long','short'].filter(d=>byDir[d]).map(d=>{ const m=metrics(byDir[d]); return {name:T(d==='long'?'an.long':'an.short'),net:m.net,sub:wl(m.wins,m.losses,Math.round(m.winrate)+"% · "+fmt(T("an.wl"),{w:m.wins,l:m.losses}))}; });
   // management: winner vs loser hold time (needs per-trade timing)
   const timed=TR.filter(t=>t.topen&&t.tclose&&t.tclose>t.topen);
   let mgmt="";
@@ -1587,12 +1600,11 @@ function analyticsCards(TR){
   let hourCard="";
   if(hrKeys.length>=2){
     const hrRows=hrKeys.map(h=>({h,m:metrics(byHr[h])}));
-    const hrMax=Math.max(1,...hrRows.map(r=>Math.abs(r.m.net))), hrNet=hrRows.reduce((s,r)=>s+r.m.net,0);
     const worst=hrRows.reduce((a,b)=>b.m.net<a.m.net?b:a,hrRows[0]);
-    const hrBars=hrRows.map(r=>pxRow(r.h+":00"+(r===worst&&r.m.net<0?' <span style="color:var(--neg);font-size:10px">'+T("an.worst")+'</span>':''),'',Math.abs(r.m.net)/hrMax*100,r.m.net,money1(r.m.net),`<span class="pxsub">${r.m.n} ${T("trades")}</span>`)).join("");
-    hourCard=pxCard(T("an.byHour"),hrNet,hrBars);
+    const hrItems=hrRows.map(r=>({name:r.h+":00"+(r===worst&&r.m.net<0?' <span style="color:var(--neg);font-size:10px">'+T("an.worst")+'</span>':''),net:r.m.net,sub:`<span class="pxsub">${r.m.n} ${T("trades")}</span>`}));
+    hourCard=section(T("an.byHour"),hrItems);
   }
-  return pxCard(T("an.byInstrument"),symNet,symBars)+pxCard(T("an.byDirection"),dirNet,dirBars)+mgmt+hourCard;
+  return section(T("an.byInstrument"),symItems)+section(T("an.byDirection"),dirItems)+mgmt+hourCard;
 }
 // Per-day tilt timeline: chronological trades with running P&L and behavioral flags (revenge, averaging into a loser, quick re-entry, off-edge).
 function daySequence(arr){
@@ -2585,14 +2597,17 @@ function drawRadar(c,vals,labels,H){
   for(let i=0;i<N;i++){ const px=cx+Math.cos(ang(i))*R, py=cy+Math.sin(ang(i))*R; x.strokeStyle=css('--hair'); x.beginPath(); x.moveTo(cx,cy); x.lineTo(px,py); x.stroke();
     x.textAlign="center"; x.fillText(labels[i], cx+Math.cos(ang(i))*(R+16), cy+Math.sin(ang(i))*(R+12)+3); }
   x.beginPath(); for(let i=0;i<N;i++){const r=Math.max(0,Math.min(1,vals[i]/100)); const px=cx+Math.cos(ang(i))*R*r, py=cy+Math.sin(ang(i))*R*r; i?x.lineTo(px,py):x.moveTo(px,py);} x.closePath();
-  x.fillStyle=css('--calm')+"55"; x.fill(); x.strokeStyle=css('--calm'); x.lineWidth=2; x.stroke();
+  const rgrad=x.createRadialGradient(cx,cy,0,cx,cy,R); rgrad.addColorStop(0,css('--calm')+"5c"); rgrad.addColorStop(1,css('--calm')+"12");
+  x.fillStyle=rgrad; x.fill();
+  x.strokeStyle=css('--calm'); x.lineWidth=2; x.lineJoin="round"; x.shadowColor=css('--calm'); x.shadowBlur=9; x.stroke(); x.shadowBlur=0;
+  x.fillStyle=css('--calm'); for(let i=0;i<N;i++){ const r=Math.max(0,Math.min(1,vals[i]/100)), px=cx+Math.cos(ang(i))*R*r, py=cy+Math.sin(ang(i))*R*r; x.beginPath(); x.arc(px,py,2.6,0,7); x.fill(); }
 }
 function drawCatBars(c,rows,H){
   const {x,w}=setup(c,H); const pad=8, bottom=H-22; if(!rows.length)return;
   const mx=Math.max(1,...rows.map(r=>Math.abs(r.net))), slot=(w-2*pad)/rows.length, bw=Math.min(48,Math.max(6,slot-12)), zeroY=pad+(bottom-pad)/2;
   x.strokeStyle=css('--hair'); x.beginPath(); x.moveTo(pad,zeroY); x.lineTo(w-pad,zeroY); x.stroke();
-  rows.forEach((r,i)=>{ const cxp=pad+slot*(i+0.5), px=cxp-bw/2, h=(Math.abs(r.net)/mx)*((bottom-pad)/2-2);
-    x.fillStyle=r.net>=0?css('--pos'):css('--neg'); if(r.net>=0)x.fillRect(px,zeroY-h,bw,h); else x.fillRect(px,zeroY,bw,h);
+  rows.forEach((r,i)=>{ const cxp=pad+slot*(i+0.5), px=cxp-bw/2, h=(Math.abs(r.net)/mx)*((bottom-pad)/2-2), c2=r.net>=0?css('--pos'):css('--neg');
+    x.save(); x.shadowColor=c2; x.shadowBlur=8; x.fillStyle=c2; if(r.net>=0)x.fillRect(px,zeroY-h,bw,h); else x.fillRect(px,zeroY,bw,h); x.restore();
     x.fillStyle=css('--faint'); x.font="9px "+css('--mono'); x.textAlign="center"; x.fillText(r.k,cxp,H-6); });
 }
 function renderScore(){
