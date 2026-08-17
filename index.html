@@ -95,10 +95,10 @@
   .section{margin-top:16px}
   canvas{width:100%; display:block}
   table{width:100%; border-collapse:collapse; font-size:13px}
-  th{text-align:right; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); font-weight:600; padding:0 10px 8px}
-  th:first-child, td:first-child{text-align:left}
+  th{text-align:left; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); font-weight:600; padding:0 10px 8px}
   td{padding:7px 10px; border-top:1px solid var(--hair)}
   td.mono, th.mono{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right}
+  th:first-child, td:first-child{text-align:left}
   .tag{display:inline-block; font-size:11px; font-weight:700; border-radius:999px; padding:2px 9px}
   .tag.L{background:rgba(242,73,92,.16); color:var(--neg)} .tag.S{background:rgba(47,182,164,.16); color:var(--calm)}
   .leak{display:flex; gap:14px; padding:14px 0; border-top:1px solid var(--hair)}
@@ -2308,7 +2308,7 @@ function renderPositions(){
     </div>
     <div class="card section"><p class="small muted" style="margin:0 0 8px">${T("pos.note")}</p>
     <div style="overflow-x:auto"><table><thead><tr><th>${T("th.day")}</th><th>${T("j.thTime")}</th><th>${T("pos.thSymbol")}</th><th>${T("pos.thSide")}</th><th class="mono">Qty</th><th class="mono">${T("pos.thEntryExit")}</th><th class="mono">P&amp;L</th><th class="mono">Fills</th><th>${T("pos.thDuration")}</th></tr></thead><tbody>${
-      P.map(p=>`<tr><td class="mono small">${ctDisp(p).date}</td><td class="mono small">${ctDisp(p).hm}</td><td>${p.sym}</td><td><span class="tag ${p.side==='long'?'L':'S'}">${p.side==='long'?'LONG':'SHORT'}</span></td><td class="mono">${p.qty}</td><td class="mono small">${p.entry}→${p.exit}</td><td class="mono ${cls(p.pnl)}">${money1(p.pnl)}<br><span class="muted">${p.pts>0?'+':''}${p.pts}p · ${p.pts>0?'+':''}${ticksOf(p.pts,p.sym)}t</span></td><td class="mono ${p.fills>1?'wait':''}">${p.fills}${p.fills>1?' ⚡':''}</td><td class="small">${fmtDur(p.durMs)}</td></tr>`).join("")
+      P.map(p=>`<tr><td class="mono small">${ctDisp(p).date}</td><td class="mono small" style="text-align:left">${ctDisp(p).hm}</td><td>${p.sym}</td><td><span class="tag ${p.side==='long'?'L':'S'}">${p.side==='long'?'LONG':'SHORT'}</span></td><td class="mono">${p.qty}</td><td class="mono small">${p.entry}→${p.exit}</td><td class="mono ${cls(p.pnl)}">${money1(p.pnl)}<br><span class="muted">${p.pts>0?'+':''}${p.pts}p · ${p.pts>0?'+':''}${ticksOf(p.pts,p.sym)}t</span></td><td class="mono ${p.fills>1?'wait':''}">${p.fills}${p.fills>1?' ⚡':''}</td><td class="small">${fmtDur(p.durMs)}</td></tr>`).join("")
     }</tbody></table></div></div>`;
 }
 
