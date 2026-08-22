@@ -641,6 +641,7 @@
     <div id="view-journal" class="hide"></div>
     <div id="view-positions" class="hide"></div>
     <div id="view-notes" class="hide"></div>
+    <div id="view-lessons" class="hide"></div>
     <div id="view-progress" class="hide"></div>
     <div id="view-calendar" class="hide"></div>
     <div id="view-risk" class="hide"></div>
@@ -726,7 +727,8 @@ const I18N={
   "pb.rulesLabel":"Play rules (one per line):","pb.rulesPh":"E.g.:&#10;Bullish bias&#10;Price at VAH&#10;Rejection candle&#10;Wait for ▲ signal","pb.saveRules":"Save rules","pb.empty":"No plays yet. Tag your trades' setup in the Journal, or create a new play.",
   "pb.promptName":"Play name:","pb.created":"Play created. You can now tag it in the Journal.","pb.saved":"Rules saved.",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
-  "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.progress":"Progress","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report",
+  "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.lessons":"Lessons","tab.progress":"Progress",
+  "les.title":"Lessons library","les.lead":"Everything you've written to yourself, in one place: daily reviews, trade notes and your honest 'why'. Your own words are the best coach you have, reread them before the next session.","les.search":"Search your lessons…","les.empty":"Nothing here yet. Your daily reviews (Check-in) and trade notes land here automatically as you write them.","les.noMatch":"No lessons match your search.","les.review":"Daily review","les.note":"Trade note","les.why":"Why I traded","les.count":"{n} entries","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report",
   "cal.empty":"Import your trades and your month fills in right here, green and red days, with a dot for the days you kept your rules.","cal.monthNet":"Month net","cal.greenDays":"Green days","cal.avgDay":"Avg day","cal.bestWorst":"Best / worst","cal.ofMonth":"of the month","cal.thisMonth":"this month","cal.dows":"M,T,W,T,F,S,S","cal.legend":"Green/red = day P&L · dot = discipline (green kept / red broke). Hover for detail.","w.disciplined":"disciplined",
   "ci.title":"Session check-in, {d}","ci.lead":"Before trading: how do you arrive and what's the plan? It's saved and later cross-checked with the day's result.","ci.mood":"Mood","ci.plan":"Plan","ci.planPh":"E.g.: only valid edges with the bias; stop at 2 losses","ci.day":"Day","ci.rules":"I confirm my rules: fixed size · circuit-breaker at 2 losses · only valid edges with the bias · respect the DPT","ci.save":"Save check-in","ci.saved":"Check-in saved for {d}","ci.moodVsResult":"Your mood vs result (by day)","ci.moodNote":"The mood you arrive with predicts your day. The red above is your most expensive state: the day you arrive like that, trade less or don't trade.","ci.history":"Check-in history","ci.thMood":"Mood","ci.thPlan":"Plan","ci.thNetDay":"Net (day)","ci.thDisc":"Disc.","ci.none":"No check-ins yet. Save the first one above.",
   "pg.empty":"Import and tag a few trades and this becomes your progress story, week over week. Not just a number, a direction.","pg.kDisc":"Discipline (last wk)","pg.kProc":"Avg process","pg.procSub":"process grade","pg.kNomans":"No-man's-land","pg.tradesWk":"trades this wk","pg.kAgainst":"Against bias","pg.scorecard":"Week scorecard · {w}","pg.weekDays":"This week's days","pg.noDays":"No days.","pg.heatNote":"Green = disciplined day · Red = broke a rule (hover to see why).","pg.discByWeek":"Discipline by week","pg.discNote":"% of disciplined days each week. The line you want: rising and staying high.","pg.goals":"Goals","pg.goalDisc":"Weekly discipline ≥ {v}%","pg.goalProc":"Avg process ≥ {v}%","pg.goalNomans":"No-man's-land ≤ {v}/wk","pg.goalRr":"R:R ≥ {v}","pg.goalsLabel":"Goals:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"No-man/wk","pg.weekTrend":"Weekly trend","pg.thWeek":"Week","pg.thNomans":"No-man","pg.thAgainst":"Against",
@@ -845,7 +847,8 @@ const I18N={
   "pb.rulesLabel":"Reglas de la jugada (una por línea):","pb.rulesPh":"Ej:&#10;Sesgo alcista (nube verde)&#10;Precio en VAH&#10;Vela de rechazo&#10;Esperar señal ▲","pb.saveRules":"Guardar reglas","pb.empty":"Aún no hay jugadas. Etiqueta el setup de tus trades en el Diario, o crea una jugada nueva.",
   "pb.promptName":"Nombre de la jugada:","pb.created":"Jugada creada. Ya puedes etiquetarla en el Diario.","pb.saved":"Reglas guardadas.",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
-  "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.progress":"Progreso","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe",
+  "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.lessons":"Lecciones","tab.progress":"Progreso",
+  "les.title":"Biblioteca de lecciones","les.lead":"Todo lo que te has escrito a ti mismo, en un solo lugar: revisiones diarias, notas de trade y tu 'por qué' honesto. Tus propias palabras son el mejor coach que tienes, reléelas antes de la próxima sesión.","les.search":"Busca en tus lecciones…","les.empty":"Aún no hay nada. Tus revisiones diarias (Check-in) y notas de trade aparecen aquí solas conforme las escribes.","les.noMatch":"Ninguna lección coincide con tu búsqueda.","les.review":"Revisión diaria","les.note":"Nota de trade","les.why":"Por qué operé","les.count":"{n} entradas","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe",
   "cal.empty":"Importa tus trades y tu mes se llena aquí mismo, días verdes y rojos, con un punto por los días que cumpliste tus reglas.","cal.monthNet":"Neto del mes","cal.greenDays":"Días verdes","cal.avgDay":"Día medio","cal.bestWorst":"Mejor / peor","cal.ofMonth":"del mes","cal.thisMonth":"este mes","cal.dows":"L,M,X,J,V,S,D","cal.legend":"Verde/rojo = P&L del día · punto = disciplina (verde cumplió / rojo rompió). Pasa el cursor para el detalle.","w.disciplined":"disciplinado",
   "ci.title":"Check-in de sesión, {d}","ci.lead":"Antes de operar: ¿cómo llegas y cuál es el plan? Se guarda y luego se cruza con el resultado del día.","ci.mood":"Ánimo","ci.plan":"Plan","ci.planPh":"Ej: solo bordes válidos a favor del sesgo; parar a 2 pérdidas","ci.day":"Día","ci.rules":"Confirmo mis reglas: tamaño fijo · circuit-breaker a 2 pérdidas · solo bordes válidos a favor del sesgo · respetar el DPT","ci.save":"Guardar check-in","ci.saved":"Check-in guardado para {d}","ci.moodVsResult":"Tu ánimo vs resultado (por día)","ci.moodNote":"El ánimo con el que llegas predice tu día. El rojo de arriba es tu estado más caro: el día que llegues así, opera menos o no operes.","ci.history":"Historial de check-ins","ci.thMood":"Ánimo","ci.thPlan":"Plan","ci.thNetDay":"Neto del día","ci.thDisc":"Disc.","ci.none":"Aún no hay check-ins. Guarda el primero arriba.",
   "pg.empty":"Importa y etiqueta unos trades y esto se vuelve tu historia de progreso, semana a semana. No solo un número, una dirección.","pg.kDisc":"Disciplina (última sem)","pg.kProc":"Proceso medio","pg.procSub":"grade del proceso","pg.kNomans":"Tierra de nadie","pg.tradesWk":"trades esta sem","pg.kAgainst":"Contra sesgo","pg.scorecard":"Scorecard de la semana · {w}","pg.weekDays":"Días de esta semana","pg.noDays":"Sin días.","pg.heatNote":"Verde = día disciplinado · Rojo = rompió alguna regla (pasa el cursor para ver por qué).","pg.discByWeek":"Disciplina por semana","pg.discNote":"% de días disciplinados cada semana. La línea que buscas: que suba y se quede arriba.","pg.goals":"Metas","pg.goalDisc":"Disciplina semanal ≥ {v}%","pg.goalProc":"Proceso medio ≥ {v}%","pg.goalNomans":"Tierra de nadie ≤ {v}/sem","pg.goalRr":"R:R ≥ {v}","pg.goalsLabel":"Metas:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"TierraN/sem","pg.weekTrend":"Tendencia por semana","pg.thWeek":"Semana","pg.thNomans":"TierraN","pg.thAgainst":"Contra",
@@ -925,10 +928,10 @@ const ALIGN=["Con sesgo","Contra","Neutro"];
 const SETUPS=[];  // ya no hay setups por defecto; el usuario añade los suyos (DB.settings.setups)
 const MISTAKES=["revenge","oversize","overwin","fighting","earlyexit","onemore","pressure","fomo","moved_sl","noplan","early","noconfirm","tightsl","chase"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
-let period="ALL", tab="overview", monthSel=null, acctSel=new Set(), noteSel=null, jExpanded=null, routineSel=null, jFilter={};
+let period="ALL", tab="overview", monthSel=null, acctSel=new Set(), noteSel=null, jExpanded=null, routineSel=null, jFilter={}, lessonQ="";
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
 function scoped(){ if(!acctSel.size)return DB.trades; return DB.trades.filter(t=>acctSel.has(t.acct||"__none")); }
-const GROUPS=[{lab:"grp.summary",subs:["overview"]},{lab:"grp.routine",subs:["routine"]},{lab:"grp.diary",subs:["journal","positions","checkin","notes"]},{lab:"grp.discipline",subs:["leaks","risk","score"]},{lab:"grp.analysis",subs:["report","playbooks"]},{lab:"grp.progress",subs:["progress","calendar"]},{lab:"grp.business",subs:["accounts","finance"]}];
+const GROUPS=[{lab:"grp.summary",subs:["overview"]},{lab:"grp.routine",subs:["routine"]},{lab:"grp.diary",subs:["journal","positions","checkin","notes","lessons"]},{lab:"grp.discipline",subs:["leaks","risk","score"]},{lab:"grp.analysis",subs:["report","playbooks"]},{lab:"grp.progress",subs:["progress","calendar"]},{lab:"grp.business",subs:["accounts","finance"]}];
 let groupLast={};
 function groupOf(t){ return GROUPS.find(g=>g.subs.includes(t))||GROUPS[0]; }
 function buildTabs(){
@@ -2021,6 +2024,38 @@ function renderJournal(){
     if(s.value==="__add"){ promptModal(T("setup.addPrompt")).then(nm=>{ if(nm){ DB.settings.setups=DB.settings.setups||[]; if(!allSetups().includes(nm)) DB.settings.setups.push(nm); DB.tags[id].setup=nm; save(); } renderJournal(); }); return; }
     DB.tags[id].setup=s.value; save(); };
 }
+function lessonItems(){
+  const items=[];
+  Object.keys(DB.checkins||{}).forEach(d=>{ const c=DB.checkins[d]||{}; const r=c.review||{};
+    const parts=[[T('dr.worst'),r.worst],[T('dr.knew'),r.knew],[T('dr.self'),r.self],[T('dr.tomorrow'),r.tomorrow]].filter(x=>x[1]&&String(x[1]).trim());
+    if(parts.length) items.push({date:d, kind:'review', parts});
+    if(c.whyTrading&&String(c.whyTrading).trim()) items.push({date:d, kind:'why', text:c.whyTrading});
+  });
+  DB.trades.forEach(t=>{ const g=DB.tags[tid(t)]; if(!g)return; const note=(g.note||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(); if(note) items.push({date:t.tday||t.date, kind:'note', sym:t.sym, pnl:t.pnl, text:note}); });
+  items.sort((a,b)=> a.date<b.date?1:a.date>b.date?-1:0);
+  return items;
+}
+function renderLessons(){
+  const host=$("#view-lessons"); const all=lessonItems();
+  if(!all.length){ host.innerHTML=`<div class="card"><h2 style="margin:0 0 6px">${T('les.title')}</h2><p class="small muted" style="margin:0">${T('les.empty')}</p></div>`; return; }
+  const q=lessonQ.trim().toLowerCase();
+  const hay=it=> (it.kind==='review'?it.parts.map(p=>p[1]).join(' '):(it.text||''))+' '+(it.sym||'');
+  const fil=q?all.filter(it=>hay(it).toLowerCase().includes(q)):all;
+  const esc=s=>String(s||'').replace(/</g,'&lt;');
+  const icon={review:'📝',note:'💬',why:'🎯'};
+  const rows=fil.map(it=>{
+    let body='';
+    if(it.kind==='review') body=it.parts.map(p=>`<div style="margin-top:7px"><div class="small" style="color:var(--calm);font-weight:600">${p[0]}</div><div class="small" style="color:var(--ink);line-height:1.5">${esc(p[1])}</div></div>`).join('');
+    else body=`<div class="small" style="color:var(--ink);line-height:1.5;margin-top:5px">${esc(it.text)}</div>`;
+    const tag=it.kind==='note'?`<span class="tag ${it.pnl>=0?'S':'L'}" style="margin-left:8px">${esc(it.sym)} ${money1(it.pnl)}</span>`:'';
+    return `<div class="card section" style="padding:13px 15px"><div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px"><div class="small" style="font-weight:700">${icon[it.kind]||'•'} ${T('les.'+it.kind)}${tag}</div><span class="mono small muted">${esc(it.date)}</span></div>${body}</div>`;
+  }).join('');
+  host.innerHTML=`<div class="card" style="margin-bottom:12px"><h2 style="margin:0 0 6px">${T('les.title')}</h2><p class="small muted" style="margin:0">${T('les.lead')}</p></div>`
+    +`<div class="card jfbar" style="margin-bottom:12px;padding:12px"><input type="text" id="lesSearch" placeholder="${T('les.search')}" value="${lessonQ.replace(/"/g,'&quot;')}" style="width:100%"></div>`
+    +`<div class="small muted" style="margin:0 0 8px">${fmt(T('les.count'),{n:fil.length})}</div>`
+    +(rows||`<div class="card muted">${T('les.noMatch')}</div>`);
+  const s=$("#lesSearch"); if(s) s.oninput=()=>{ const cur=s.selectionStart; lessonQ=s.value; renderLessons(); const s2=$("#lesSearch"); if(s2){ s2.focus(); try{s2.setSelectionRange(cur,cur);}catch(e){} } };
+}
 function periodLabel(){ return period==="ALL"?T("pl.all"):period==="7"?T("pl.last7"):period.slice(2); }
 function mdb(s){ return s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); }
 function bucketStats(TR,fn,minN){ const by=byKey(TR,fn); return Object.keys(by).filter(k=>k!=="null"&&k!=="–").map(k=>({k,m:metrics(by[k])})).filter(r=>r.m.n>=(minN||3)); }
@@ -3016,6 +3051,7 @@ function render(){
   else if(tab==="journal")renderJournal();
   else if(tab==="positions")renderPositions();
   else if(tab==="notes")renderNotes();
+  else if(tab==="lessons")renderLessons();
   else if(tab==="progress")renderProgress();
   else if(tab==="calendar")renderCalendar();
   else if(tab==="risk")renderRisk();
