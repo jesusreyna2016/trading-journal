@@ -1794,6 +1794,19 @@ function verdictCard(){
     <span class="pass ${m.p}" style="font-size:12px;flex:none">${m.lab}</span>
   </div></div>`;
 }
+// Subtle count-up on simple numeric KPI values (skips compound values and reduced-motion users).
+function animateCounts(root){
+  try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches) return; }catch(e){}
+  root.querySelectorAll('.kpi .val').forEach(el=>{
+    const raw=el.textContent.trim();
+    const m=raw.match(/^(-?)(\$?)([\d,]+(?:\.\d+)?)(%?)$/); if(!m) return;
+    const target=parseFloat(m[3].replace(/,/g,'')); if(!isFinite(target)) return;
+    const sign=m[1], pre=m[2], suf=m[4], dec=(m[3].split('.')[1]||'').length, t0=performance.now(), dur=520;
+    const fmtN=v=>{ let s=pre==='$'?Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}):(dec?v.toFixed(dec):Math.round(v).toString()); return sign+pre+s+suf; };
+    function step(now){ const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3); if(p<1){ el.textContent=fmtN(target*e); requestAnimationFrame(step); } else el.textContent=raw; }
+    requestAnimationFrame(step);
+  });
+}
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
@@ -1848,6 +1861,7 @@ function renderOverview(){
   const we=$("#whyEdit"); if(we)we.onclick=showWhyEditor;
   const scb=$("#shareCard"); if(scb)scb.onclick=shareScorecard;
   const vc=$("#vdCheckin"); if(vc)vc.onclick=()=>{ tab="checkin"; groupLast[groupOf("checkin").lab]="checkin"; render(); };
+  animateCounts(v);
   hydrateImgs(v);
 }
 function counterfactual(TR){
