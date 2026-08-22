@@ -1792,6 +1792,7 @@ function tryPublicCard(){
   document.title="TradeDadLog · "+T("sc.cardTitle");
   return true;
 }
+function emptyCard(msg, icon){ return `<div class="card" style="text-align:center;padding:34px 22px"><div style="font-size:32px;line-height:1;opacity:.85">${icon||'📭'}</div><p class="muted" style="max-width:440px;margin:13px auto 0;line-height:1.55">${msg}</p></div>`; }
 // "Should I trade today?" verdict: a traffic light read from recent discipline + today's check-in.
 function verdictCard(){
   const days=dayEval(scoped()); if(!days.length) return '';
@@ -1827,7 +1828,7 @@ function animateCounts(root){
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
-  if(!TR.length){ v.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
+  if(!TR.length){ v.innerHTML=emptyCard(T("noTrades")); return; }
   const days=dayStats(TR), ev=dayEval(TR), disc=ev.filter(d=>d.disciplined).length, streak=streakDisc(ev);
   const bestD=Math.max(...days.map(d=>d.net)), worstD=Math.min(...days.map(d=>d.net));
   let cum=0,peak=0,mdd=0; days.forEach(d=>{cum+=d.net; if(cum>peak)peak=cum; if(peak-cum>mdd)mdd=peak-cum;});
@@ -2037,7 +2038,7 @@ function jDaysHtml(TR){
 function jAttachCurve(TR){ const dh=$("#jDays"); if(!dh)return; const by=byKey(jFilterApply(TR),t=>t.tday); const cv=dh.querySelector('[data-curve="'+jExpanded+'"]'); if(cv&&by[jExpanded]) cv.appendChild(dayMiniCurve(by[jExpanded].slice().sort((a,b)=>a.time<b.time?-1:1))); }
 function renderJournal(){
   const TR=activeTrades(); const host=$("#view-journal");
-  if(!TR.length){ host.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
+  if(!TR.length){ host.innerHTML=emptyCard(T("noTrades")); return; }
   host.innerHTML='<p class="small muted" style="margin:0 0 8px">'+T("j.intro")+'</p>'+jFilterBar()+'<div id="jDays">'+jDaysHtml(TR)+'</div>';
   jAttachCurve(TR);
   const rerender=()=>{ const dh=$("#jDays"); if(dh){ dh.innerHTML=jDaysHtml(TR); jAttachCurve(TR); } const cb=$("#jfClear"); if(cb){ cb.disabled=!jFilterActive(); cb.style.opacity=jFilterActive()?'':'.45'; } };
@@ -2158,7 +2159,7 @@ function personalRules(TR){
 }
 function renderReport(){
   const TR=activeTrades(), M=metrics(TR);
-  if(!TR.length){ $("#view-report").innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
+  if(!TR.length){ $("#view-report").innerHTML=emptyCard(T("noTrades")); return; }
   const days=dayStats(TR); const L=detectLeaks(TR); const top=L.filter(l=>l.sev==="hi");
   const best=days.slice().sort((a,b)=>b.net-a.net)[0], worst=days.slice().sort((a,b)=>a.net-b.net)[0];
   const ins=generateInsights(TR); const icon={dim:"📊",decay:"⏱",tilt:"🎯",conc:"⚖",cons:"📆"};
@@ -2902,7 +2903,7 @@ function positions(TR){
 }
 function renderPositions(){
   const host=$("#view-positions"); const raw=activeTrades(); const P=positions(raw);
-  if(!P.length){ host.innerHTML='<div class="card muted">'+T("noTrades")+'</div>'; return; }
+  if(!P.length){ host.innerHTML=emptyCard(T("noTrades")); return; }
   const wins=P.filter(p=>p.pnl>0).length, net=P.reduce((s,p)=>s+p.pnl,0), scaled=P.filter(p=>p.fills>1).length;
   host.innerHTML=`
     <div class="grid kpis">
