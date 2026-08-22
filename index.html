@@ -88,6 +88,12 @@
   #subtabs button.active{background:var(--surface2); border-color:var(--calm); color:var(--ink)}
   .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 4%,transparent), var(--shadow); transition:border-color .18s ease, box-shadow .18s ease}
   .card:hover{ border-color:color-mix(in srgb,var(--calm) 20%,var(--hair)) }
+  .vdcard{position:relative; overflow:hidden; border-left-width:3px}
+  .vdcard.vd-low{border-left:3px solid var(--pos); background:linear-gradient(120deg,color-mix(in srgb,var(--pos) 7%,var(--surface)),var(--surface) 62%)}
+  .vdcard.vd-med{border-left:3px solid var(--wait); background:linear-gradient(120deg,color-mix(in srgb,var(--wait) 8%,var(--surface)),var(--surface) 62%)}
+  .vdcard.vd-high{border-left:3px solid var(--neg); background:linear-gradient(120deg,color-mix(in srgb,var(--neg) 9%,var(--surface)),var(--surface) 60%)}
+  .vdhead{font-family:'Space Grotesk',var(--sans); font-weight:700; font-size:24px; letter-spacing:-.02em; margin-top:4px}
+  @media(max-width:640px){ .vdhead{font-size:20px} }
   .qbar{display:flex; align-items:flex-start; gap:11px; margin:2px 0 16px; padding:11px 15px; border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:10px; background:color-mix(in srgb,var(--calm) 5%,var(--surface))}
   .qbar .qi{color:var(--calm); font:800 22px/1 Georgia,serif; flex:none; margin-top:-1px}
   .qbar .qt{color:var(--ink); font-style:italic; font-size:13.5px; line-height:1.5}
@@ -756,6 +762,7 @@ const I18N={
   "card.weeklyTitle":"Weekly summary (shareable)","card.monthTitle":"📅 Monthly report (shareable)","card.disc":"Discipline","card.win":"Win","card.bestWorst":"Best day {bd} · Worst {wd}","card.tagline":"Discipline over results.","card.savePng":"💾 Save image","card.copyImg":"📋 Copy","card.copied":"Image copied.","card.copyFail":"Couldn't copy the image.",
   "rem.toggle":"🔔 Daily check-in reminder","rem.on":"Reminder on, I'll nudge you when you open the app without a check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"Did you do your check-in? Set your intention before trading.","rem.blocked":"Notifications blocked, I'll remind you inside the app.",
   "tilt.title":"Today's tilt risk","tilt.low":"LOW","tilt.med":"MEDIUM","tilt.high":"HIGH","tilt.recLow":"Conditions look neutral today, no red flags in how you're arriving. That's not a cue for autopilot, it's your green light to just run the plan cleanly. Good days start exactly here.","tilt.recMed":"Something's a little off today, so give yourself a shorter leash. Respect the circuit-breaker without negotiating: two losses in a row and you're done for the day, no 'one more' to win it back.","tilt.recHigh":"Today has the fingerprints of a blow-up day, you're arriving loaded. If you trade at all, cut your size in half and stop after a single loss. No setup is worth more than protecting the account when you're in this state.","tilt.rLastBroke":"you broke rules last session","tilt.rLastRed":"last session was red","tilt.rStreak":"{n} tough days in a row","tilt.rMood":"you arrive in “{m}”","tilt.why":"Why:","tilt.noData":"Import a few trades and I'll read your tilt risk from how your recent sessions actually went, not from a guess.",
+  "vd.title":"Should I trade today?","vd.go":"Trade your plan","vd.goSub":"Nothing red in how you're arriving. Run the plan clean, this is where good days start.","vd.caution":"Half size, short leash","vd.cautionSub":"Something's a little off today. Respect the circuit-breaker without negotiating, two losses and you're done.","vd.nogo":"Today, better not","vd.nogoSub":"This has the fingerprints of a blow-up day. If you trade at all, half size and stop after a single loss.","vd.checkinCta":"Do your check-in first","vd.noData":"Import a few sessions and I'll give you a straight read on whether today's a day to trade.",
   "clean.title":"🎯 Clean days, your real scoreboard","clean.body":"A clean day isn't a green day. It's a day you followed your own rules from open to close, whether the trade paid or not. It's the only part of this game you fully control, and over a few months it's the part that quietly pays the bills. Stop chasing green, stack clean days, and let the account catch up to your process.","clean.streak":"Clean streak","clean.rate":"Clean days","clean.record":"Best streak","clean.next":"{n} to unlock 🔥{m}","clean.maxed":"All milestones unlocked. Legend. 👑","clean.earned":"Unlocked","clean.locked":"Reach {m} clean days","clean.newRecord":"🏆 New record!",
   "rules.title":"🧠 Your rules (from your own data)","rules.intro":"These aren't generic trading rules, they're the ones your own trades have earned. Each one comes straight from a pattern in your history. Adopt the ones you trust and they join your daily check.","rules.adopted":"Rule adopted.","rule.maxTrades":"Max 3 trades a day, your 4th+ trades average <b>{v}</b>.","rule.adoptMax":"Adopt","rule.noAgainst":"Never trade against the bias, {n} such trades net <b>{net}</b>.","rule.onlyEdge":"Only trade valid edges, no-man's-land ({n}) nets <b>{net}</b>.","rule.sideLeak":"Skip {side} unless it's a clear edge, they net <b>{net}</b>.","rule.avoidWorst":"Cut or avoid <b>{k}</b>, nets {net}.","rule.circuitBreak":"Stop after a loss, your next trade averages <b>{net}</b>.",
   "af.phase":"Account type","phase.eval":"Evaluation","phase.funded":"Funded","af.status":"Status","status.active":"Active","status.passed":"Passed","status.lost":"Lost","ac.markPassed":"✓ Passed","ac.markLost":"✗ Lost","ac.markActive":"↺ Reactivate",
@@ -872,6 +879,7 @@ const I18N={
   "card.weeklyTitle":"Resumen semanal (compartible)","card.monthTitle":"📅 Reporte mensual (compartible)","card.disc":"Disciplina","card.win":"Win","card.bestWorst":"Mejor día {bd} · Peor {wd}","card.tagline":"Disciplina antes que resultados.","card.savePng":"💾 Guardar imagen","card.copyImg":"📋 Copiar","card.copied":"Imagen copiada.","card.copyFail":"No se pudo copiar la imagen.",
   "rem.toggle":"🔔 Recordatorio diario de check-in","rem.on":"Recordatorio activado, te avisaré al abrir la app sin check-in.","rem.notifTitle":"Trading Journal","rem.notifBody":"¿Hiciste tu check-in? Fija tu intención antes de operar.","rem.blocked":"Notificaciones bloqueadas, te recordaré dentro de la app.",
   "tilt.title":"Riesgo de tilt hoy","tilt.low":"BAJO","tilt.med":"MEDIO","tilt.high":"ALTO","tilt.recLow":"Hoy las condiciones se ven neutrales, sin banderas rojas en cómo llegas. Eso no es señal de piloto automático, es tu luz verde para correr el plan limpio. Los buenos días empiezan justo aquí.","tilt.recMed":"Hoy algo está un poco fuera, así que dale correa corta. Respeta el circuit-breaker sin negociar: dos pérdidas seguidas y terminaste por hoy, sin 'una más' para recuperarlo.","tilt.recHigh":"Hoy tiene las huellas de un día de blow-up, llegas cargado. Si operas, corta el tamaño a la mitad y para tras una sola pérdida. Ningún setup vale más que proteger la cuenta cuando estás en este estado.","tilt.rLastBroke":"rompiste reglas la última sesión","tilt.rLastRed":"la última sesión fue roja","tilt.rStreak":"{n} días difíciles seguidos","tilt.rMood":"llegas en “{m}”","tilt.why":"Por qué:","tilt.noData":"Importa unos trades y leo tu riesgo de tilt desde cómo fueron de verdad tus sesiones recientes, no desde una adivinanza.",
+  "vd.title":"¿Opero hoy?","vd.go":"Opera tu plan","vd.goSub":"Nada en rojo en cómo llegas. Ejecuta el plan limpio, aquí es donde empiezan los buenos días.","vd.caution":"Media size, correa corta","vd.cautionSub":"Algo no está del todo bien hoy. Respeta el circuit-breaker sin negociar, dos pérdidas y cierras.","vd.nogo":"Hoy, mejor no","vd.nogoSub":"Esto tiene huella de día de blow-up. Si operas, media size y paras a la primera pérdida.","vd.checkinCta":"Haz tu check-in primero","vd.noData":"Importa unas sesiones y te doy una lectura directa de si hoy es día de operar.",
   "clean.title":"🎯 Días limpios, tu marcador real","clean.body":"Un día limpio no es un día verde. Es un día en que seguiste tus propias reglas de apertura a cierre, pagara el trade o no. Es la única parte de este juego que controlas del todo, y en unos meses es la parte que calladamente paga las cuentas. Deja de perseguir el verde, acumula días limpios, y deja que la cuenta alcance a tu proceso.","clean.streak":"Racha limpia","clean.rate":"Días limpios","clean.record":"Récord","clean.next":"faltan {n} para 🔥{m}","clean.maxed":"Todos los hitos desbloqueados. Leyenda. 👑","clean.earned":"Desbloqueado","clean.locked":"Llega a {m} días limpios","clean.newRecord":"🏆 ¡Nuevo récord!",
   "rules.title":"🧠 Tus reglas (según tus propios datos)","rules.intro":"No son reglas genéricas, son las que tus propios trades se ganaron. Cada una sale directo de un patrón en tu histórico. Adopta las que te convenzan y se suman a tu chequeo diario.","rules.adopted":"Regla adoptada.","rule.maxTrades":"Máx 3 trades al día, del 4º en adelante promedias <b>{v}</b>.","rule.adoptMax":"Adoptar","rule.noAgainst":"Nunca operes contra el sesgo, {n} trades así suman <b>{net}</b>.","rule.onlyEdge":"Opera solo bordes válidos, tierra de nadie ({n}) suma <b>{net}</b>.","rule.sideLeak":"Evita {side} salvo borde claro, suman <b>{net}</b>.","rule.avoidWorst":"Recorta o evita <b>{k}</b>, suma {net}.","rule.circuitBreak":"Para tras una pérdida, tu siguiente trade promedia <b>{net}</b>.",
   "af.phase":"Tipo de cuenta","phase.eval":"Evaluación","phase.funded":"Fondeada","af.status":"Estado","status.active":"Activa","status.passed":"Pasada","status.lost":"Perdida","ac.markPassed":"✓ Pasada","ac.markLost":"✗ Perdida","ac.markActive":"↺ Reactivar",
@@ -1758,6 +1766,25 @@ function tryPublicCard(){
   document.title="TradeDadLog · "+T("sc.cardTitle");
   return true;
 }
+// "Should I trade today?" verdict: a traffic light read from recent discipline + today's check-in.
+function verdictCard(){
+  const days=dayEval(scoped()); if(!days.length) return '';
+  const today=tradingDay({date:new Date().toISOString().slice(0,10),time:"18:00:00"});
+  const ci=(DB.checkins&&DB.checkins[today])||{};
+  const t=tiltScore(ci.mood||"", +ci.pressure||0);
+  const map={low:{e:'🟢',c:'pos',t:T('vd.go'),s:T('vd.goSub'),p:'ok',lab:T('tilt.low')},
+             med:{e:'🟡',c:'wait',t:T('vd.caution'),s:T('vd.cautionSub'),p:'good',lab:T('tilt.med')},
+             high:{e:'🔴',c:'neg',t:T('vd.nogo'),s:T('vd.nogoSub'),p:'no',lab:T('tilt.high')}};
+  const m=map[t.level];
+  const reasons=t.reasons.length?`<div class="small muted" style="margin-top:8px">${T('tilt.why')} ${t.reasons.join(' · ')}</div>`:'';
+  const cta=!DB.checkins[today]?`<button class="btn small" id="vdCheckin" style="margin-top:11px">${T('vd.checkinCta')}</button>`:'';
+  return `<div class="card vdcard vd-${t.level}"><div class="rowflex" style="justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="min-width:0"><div class="eyebrow" style="color:var(--${m.c})">${T('vd.title')}</div>
+      <div class="vdhead ${m.c}">${m.e} ${m.t}</div>
+      <div class="small" style="color:var(--muted);margin-top:5px;max-width:540px;line-height:1.5">${m.s}</div>${reasons}${cta}</div>
+    <span class="pass ${m.p}" style="font-size:12px;flex:none">${m.lab}</span>
+  </div></div>`;
+}
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
@@ -1784,6 +1811,7 @@ function renderOverview(){
         ${emphWhy?`<div class="small wait" style="margin-top:10px">💡 ${T("why.reminder")}</div>`:''}</div>`
     : `<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><span class="small muted">${T("why.prompt")}</span><button class="btn small" id="whyEdit">${T("why.set")}</button></div></div>`;
   v.innerHTML=`
+    ${verdictCard()}
     ${whyHtml}
     ${coachHtml}
     <div class="grid kpis section">
@@ -1810,6 +1838,7 @@ function renderOverview(){
   $("#dyhost").appendChild(chartDaily(TR));
   const we=$("#whyEdit"); if(we)we.onclick=showWhyEditor;
   const scb=$("#shareCard"); if(scb)scb.onclick=shareScorecard;
+  const vc=$("#vdCheckin"); if(vc)vc.onclick=()=>{ tab="checkin"; groupLast[groupOf("checkin").lab]="checkin"; render(); };
   hydrateImgs(v);
 }
 function counterfactual(TR){
