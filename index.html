@@ -70,7 +70,13 @@
   .btn.calm:hover{border-color:var(--calm); box-shadow:0 11px 26px -11px color-mix(in srgb,var(--calm) 70%,transparent); transform:translateY(-1px)}
   .btn.small{padding:5px 10px; font-size:12px}
   .btn.ghost{background:transparent}
-  .tabs{display:flex; gap:4px; border-bottom:1px solid var(--hair); margin-bottom:18px; overflow-x:auto}
+  .tabs{display:flex; gap:4px; border-bottom:1px solid var(--hair); margin-bottom:18px; overflow-x:auto; scrollbar-width:none;
+    background:
+      linear-gradient(to right, var(--ground) 22%, transparent) left center/30px 100% no-repeat local,
+      linear-gradient(to left, var(--ground) 22%, transparent) right center/30px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, color-mix(in srgb,var(--calm) 30%,transparent), transparent) left center/18px 86% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, color-mix(in srgb,var(--calm) 30%,transparent), transparent) right center/18px 86% no-repeat scroll}
+  .tabs::-webkit-scrollbar{height:0}
   .tabs button{font-family:var(--sans); font-size:14px; font-weight:600; color:var(--muted); background:transparent; border:0; border-bottom:2px solid transparent; padding:10px 14px; cursor:pointer; white-space:nowrap; transition:color .15s ease, border-color .15s ease}
   .tabs button:hover{color:var(--ink)}
   .tabs button.active{color:var(--ink); border-bottom-color:var(--calm)}
@@ -132,6 +138,7 @@
   .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--calm); color:var(--calmink); font-weight:600; font-size:13px; padding:9px 16px; border-radius:8px; opacity:0; transition:.25s; pointer-events:none}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
   .hide{display:none}
+  .mobonly{display:none}
   :focus-visible{outline:2px solid var(--calm); outline-offset:2px}
   .score{display:flex; flex-direction:column}
   .score .r{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 0; border-top:1px solid var(--hair)}
@@ -417,14 +424,22 @@
     .app{padding:14px 12px 72px}
     h1{font-size:20px}
     .head{gap:10px} .head .actions{gap:6px}
-    .btn{padding:7px 11px; font-size:12.5px} .btn.small{padding:5px 9px}
+    .btn{padding:10px 13px; font-size:12.5px} .btn.small{padding:9px 11px}
     #userEmail{display:none}
+    /* declutter header: secondary controls move into the ⋯ menu */
+    #ctxBtn, #fbBtn, #langSelHead, #logoutBtn{display:none}
+    .mobonly{display:flex; align-items:center}
+    select.mobonly{display:block; width:100%}
+    #morePop .btn{justify-content:flex-start}
     .card{padding:14px}
     .authcard{padding:22px 18px}
     .kpi{padding:12px 13px} .kpi .val{font-size:21px}
     .kpis{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}
-    .tabs button{padding:9px 11px; font-size:13px}
-    table{font-size:12.5px} th,td{padding:6px 7px}
+    .tabs button{padding:11px 13px; font-size:13px}
+    .app select{min-height:38px}
+    .chip{padding:7px 13px}
+    .rItem input, .moremenu-pop .acctrow input{width:20px; height:20px}
+    table{font-size:12.5px} th,td{padding:8px 8px}
   }
 </style>
 </head>
@@ -566,10 +581,15 @@
         <button class="btn ghost small" id="moreBtn" data-i18n-title="tt.more">⋯</button>
         <span id="clDot" style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--calm);box-shadow:0 0 8px var(--calm);display:none;pointer-events:none"></span>
         <div class="moremenu-pop hide" id="morePop">
+          <button class="btn ghost small mobonly" id="mCtxBtn"><span data-i18n="context">Context</span></button>
+          <button class="btn ghost small mobonly" id="mFbBtn">💬 <span data-i18n="fb.btn">Feedback</span></button>
           <button class="btn ghost small" id="whatsnewBtn">✨ <span data-i18n="cl.menu">What's new</span></button>
           <button class="btn ghost small" id="backupBtn" data-i18n="backup" data-i18n-title="tt.backup">⬇ Backup</button>
           <button class="btn ghost small" id="themeBtn" data-i18n-title="tt.theme">◐ Theme</button>
           <button class="btn ghost small" id="wipeBtn" data-i18n-title="tt.erase">🗑 Erase</button>
+          <div class="acsep mobonly"></div>
+          <select class="langSel mobonly" id="langSelMenu" data-i18n-title="tt.lang"><option value="en">EN</option><option value="es">ES</option></select>
+          <button class="btn ghost small mobonly" id="mLogoutBtn" data-i18n="logout">Sign out</button>
         </div>
       </div>
       <select id="langSelHead" class="langSel" data-i18n-title="tt.lang"><option value="en">EN</option><option value="es">ES</option></select>
@@ -2906,6 +2926,10 @@ $("#morePop").addEventListener("click",()=>$("#morePop").classList.add("hide"));
 document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classList.contains("hide") && !e.target.closest(".moremenu")) p.classList.add("hide"); });
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
 $("#ctxBtn").onclick=showContextModal;
+// mobile menu proxies (header declutters on small screens; these live in the ⋯ menu)
+{ const mc=$("#mCtxBtn"); if(mc) mc.onclick=()=>{ $("#morePop").classList.add("hide"); showContextModal(); }; }
+{ const mf=$("#mFbBtn"); if(mf) mf.onclick=()=>{ $("#morePop").classList.add("hide"); showFeedback(); }; }
+{ const ml=$("#mLogoutBtn"); if(ml) ml.onclick=()=>$("#logoutBtn").click(); }
 $("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
 $("#wipeBtn").onclick=()=>{ confirmModal(T("io.wipeConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],acctEvents:[],routine:DB.routine||{},settings:DB.settings}; acctSel=new Set(); noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped")); }); };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
