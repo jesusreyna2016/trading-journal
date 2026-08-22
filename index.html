@@ -733,6 +733,7 @@ const I18N={
   "rule.r1":"Fixed size (no revenge-sizing)","rule.r2":"Circuit-breaker (stop at 2 losses)","rule.r3":"No over-trading","rule.r4":"Protect profits (no round-trip)","rule.r5":"Followed my plan (process ≥ 75%, if tagged)",
   "wd.short":"Sun,Mon,Tue,Wed,Thu,Fri,Sat",
   "jf.search":"Search notes / symbol…","jf.allEmo":"Any emotion","jf.allSetup":"Any setup","jf.allSide":"Long & short","jf.long":"Longs","jf.short":"Shorts","jf.allResult":"Wins & losses","jf.win":"Wins only","jf.loss":"Losses only","jf.allMist":"Any mistake","jf.clear":"Clear","jf.count":"{n} of {t} trades","jf.noneMatch":"No trades match this filter. Clear it to see them all.","jf.filterTitle":"Filter",
+  "shot.btn":"Screenshot","shot.title":"Trade screenshot","shot.add":"Upload screenshot","shot.replace":"Replace","shot.remove":"Remove","shot.none":"No screenshot yet. Add your chart of this trade.","shot.hint":"Attach your chart of this trade for visual review later. Stored privately, like your notes.",
   "j.intro":"One card per day: the story of that session plus every trade, ready to tag with the emotion, setup and process behind it. Tap a day to open it, this is where the honest review actually happens.","j.signal":"Signal","j.stopBtn":"Stop","j.addNote":"Add note","j.notePrompt":"Trade note:","j.volume":"Volume","j.wl":"W / L","j.onTable":"On the table","j.peak":"peak","j.commissions":"Commissions","j.leftOnTable":"left {v} on the table","j.thTime":"Time","j.thTrade":"Trade","j.thEmotion":"Emotion","j.thBias":"Bias","j.thProcess":"Process",
   "pos.fillsGrouped":"{n} fills grouped","pos.scaled":"Scaled","pos.scaledSub":"with >1 fill","pos.note":"Partial fills (scaling in/out) are grouped into the real position. Needs the Tradovate CSV timing, <b>re-import your CSV</b> to enrich already-loaded trades. Those without timing stay as one position each.","pos.thSymbol":"Symbol","pos.thSide":"Side","pos.thEntryExit":"Entry→Exit","pos.thDuration":"Duration",
   "dd.trailing":"Trailing","dd.static":"Static","dd.eod":"Daily (EOD)",
@@ -851,6 +852,7 @@ const I18N={
   "rule.r1":"Tamaño fijo (sin revenge-sizing)","rule.r2":"Circuit-breaker (parar a las 2 pérdidas)","rule.r3":"Sin sobreoperar","rule.r4":"Proteger beneficios (sin round-trip)","rule.r5":"Ejecuté mi plan (proceso ≥ 75%, si etiquetado)",
   "wd.short":"Dom,Lun,Mar,Mié,Jue,Vie,Sáb",
   "jf.search":"Buscar notas / símbolo…","jf.allEmo":"Cualquier emoción","jf.allSetup":"Cualquier setup","jf.allSide":"Largos y cortos","jf.long":"Largos","jf.short":"Cortos","jf.allResult":"Ganados y perdidos","jf.win":"Solo ganados","jf.loss":"Solo perdidos","jf.allMist":"Cualquier error","jf.clear":"Limpiar","jf.count":"{n} de {t} trades","jf.noneMatch":"Ningún trade coincide con el filtro. Límpialo para verlos todos.","jf.filterTitle":"Filtro",
+  "shot.btn":"Captura","shot.title":"Captura del trade","shot.add":"Subir captura","shot.replace":"Reemplazar","shot.remove":"Quitar","shot.none":"Aún sin captura. Añade el chart de este trade.","shot.hint":"Adjunta el chart de este trade para revisarlo visualmente después. Se guarda privado, como tus notas.",
   "j.intro":"Una tarjeta por día: la historia de esa sesión y cada trade, listos para etiquetar con la emoción, el setup y el proceso detrás. Pulsa un día para abrirlo, aquí es donde ocurre la revisión honesta de verdad.","j.signal":"Señal","j.stopBtn":"Stop","j.addNote":"Añadir nota","j.notePrompt":"Nota del trade:","j.volume":"Volumen","j.wl":"W / L","j.onTable":"Sobre la mesa","j.peak":"pico","j.commissions":"Comisiones","j.leftOnTable":"dejó {v} sobre la mesa","j.thTime":"Hora","j.thTrade":"Trade","j.thEmotion":"Emoción","j.thBias":"Sesgo","j.thProcess":"Proceso",
   "pos.fillsGrouped":"{n} fills agrupados","pos.scaled":"Escaladas","pos.scaledSub":"con >1 fill","pos.note":"Los fills parciales (escalar dentro/fuera) se agrupan en la posición real. Necesita el timing del CSV de Tradovate, <b>reimporta tu CSV</b> para enriquecer los trades ya cargados. Los que no tienen timing quedan como 1 posición cada uno.","pos.thSymbol":"Símbolo","pos.thSide":"Lado","pos.thEntryExit":"Entrada→Salida","pos.thDuration":"Duración",
   "dd.trailing":"Trailing","dd.static":"Estático","dd.eod":"Diario (EOD)",
@@ -1879,6 +1881,27 @@ function renderLeaks(){
   <div class="card section small muted">${fmt(T("leaks.thresholds"),{ot:'<input type="number" id="otIn" value="'+DB.settings.overtrade+'" style="width:56px" min="2">',dpt:'<input type="number" id="dptIn" value="'+DB.settings.dpt+'" style="width:74px" step="50">'})} <button class="btn small" id="thApply">${T("apply")}</button></div>`;
   $("#thApply").onclick=()=>{DB.settings.overtrade=+$("#otIn").value||8; DB.settings.dpt=+$("#dptIn").value||900; save(); renderLeaks();};
 }
+function showTradeShot(id){
+  const render=()=>{
+    const tg=DB.tags[id]||{};
+    const inner=`<div class="rowflex" style="justify-content:space-between;align-items:center;margin-bottom:12px"><h2 style="margin:0">${T('shot.title')}</h2><button class="btn small ghost" id="shotClose">${T('cancel')}</button></div>
+      <div style="text-align:center">${tg.shot?`<img data-imgkey="${tg.shot}" id="shotImg" style="max-width:100%;max-height:56vh;border-radius:10px;border:1px solid var(--hair);cursor:zoom-in">`:`<div class="drop" style="cursor:default;padding:26px">${T('shot.none')}</div>`}</div>
+      <div class="rowflex" style="gap:8px;margin-top:14px;justify-content:center">
+        <button class="btn calm small" id="shotUp">${tg.shot?T('shot.replace'):T('shot.add')}</button>
+        ${tg.shot?`<button class="btn small ghost" id="shotRm">🗑 ${T('shot.remove')}</button>`:''}
+      </div>
+      <input type="file" id="shotFile" accept="image/*" class="hide">
+      <p class="small muted" style="margin-top:12px;text-align:center">${T('shot.hint')}</p>`;
+    openModal(inner);
+    hydrateImgs($("#modal"));
+    $("#shotClose").onclick=closeModal;
+    $("#shotUp").onclick=()=>$("#shotFile").click();
+    $("#shotFile").onchange=e=>{ const f=e.target.files&&e.target.files[0]; if(!f)return; const key="shot"+Date.now().toString(36)+Math.floor(Math.random()*1e4); idbPut(key,f).then(()=>{ stUpload(key,f); DB.tags[id]=DB.tags[id]||{}; const old=DB.tags[id].shot; DB.tags[id].shot=key; if(old&&old!==key){ idbDel(old); stRemove(old); } save(); render(); renderJournal(); }); };
+    const rm=$("#shotRm"); if(rm) rm.onclick=()=>{ const k=DB.tags[id]&&DB.tags[id].shot; if(k){ idbDel(k); stRemove(k); } if(DB.tags[id])delete DB.tags[id].shot; save(); render(); renderJournal(); };
+    const im=$("#shotImg"); if(im) im.onclick=()=>{ try{ window.open(im.src,'_blank'); }catch(e){} };
+  };
+  render();
+}
 function dayTradeRows(arr){
   return arr.map(t=>{ const id=tid(t), tg=DB.tags[id]||{}, cd=ctDisp(t);
     const emoChips=EMO.map(e=>`<button class="chip ${e==='Calma'?'calm':''}" data-id="${id}" data-k="emo" data-v="${e}" aria-pressed="${tg.emo===e}">${vLabel("emo",e)}</button>`).join("");
@@ -1898,6 +1921,7 @@ function dayTradeRows(arr){
         ${isGraded(tg)?(pr=>`<span class="pass ${pr>=0.75?'ok':pr>=0.5?'na':'no'}">${Math.round(pr*100)}%</span>`)(procScore(id,tg).score):''}
         <button class="btn small ghost" data-note="${id}" title="${(tg.note||'').replace(/<[^>]+>/g,' ').replace(/"/g,'&quot;').trim()||T("j.addNote")}" style="padding:2px 7px">📝${tg.note?' •':''}</button>
         <button class="btn small ghost" data-mist="${id}" title="${T("mist.btn")}" style="padding:2px 7px">⚠${(tg.mistakes&&tg.mistakes.length)?' '+tg.mistakes.length:''}</button>
+        <button class="btn small ghost" data-shot="${id}" title="${T("shot.btn")}" style="padding:2px 7px">📷${tg.shot?' •':''}</button>
         <button class="btn small ghost" data-deltrade="${escA(tradeSig(t))}" title="${T("del.trade")}" style="padding:2px 7px">🗑</button>
       </div></td>
     </tr>`;}).join("");
@@ -1990,6 +2014,7 @@ function renderJournal(){
     const b=e.target.closest(".chip"); if(b){ const id=b.dataset.id,k=b.dataset.k,vv=b.dataset.v; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][k]=DB.tags[id][k]===vv?"":vv; save(); renderJournal(); return; }
     const nb=e.target.closest("[data-note]"); if(nb){ showNoteEditor(nb.dataset.note); return; }
     const mb=e.target.closest("[data-mist]"); if(mb){ showMistakes(mb.dataset.mist); return; }
+    const sh=e.target.closest("[data-shot]"); if(sh){ showTradeShot(sh.dataset.shot); return; }
     const tb=e.target.closest("[data-deltrade]"); if(tb){ const sig=tb.dataset.deltrade; const t=DB.trades.find(x=>tradeSig(x)===sig); if(t){ confirmModal(fmt(T("del.tradeConfirm"),{sym:t.sym+" "+(t.side==='long'?'L':'S'),pnl:money1(t.pnl)}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(ok && deleteTradeBySig(sig)) toast(T("del.tradeDone")); }); } return; }
   };
   host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{};
