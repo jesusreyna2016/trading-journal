@@ -1064,7 +1064,7 @@ function parseTopstepX(lines){
   return out;
 }
 function parseCSV(txt){
-  const lines=txt.replace(/\r/g,"").split("\n").filter(l=>l.trim().length);
+  const lines=txt.replace(/^﻿/,"").replace(/\r\n?/g,"\n").split("\n").filter(l=>l.trim().length);
   if(!lines.length) return [];
   const H=lines[0].split(",").map(s=>s.trim().toLowerCase());
   if(H.includes("boughttimestamp") && H.includes("soldtimestamp")) return parseTradovate(lines);
