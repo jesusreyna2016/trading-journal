@@ -46,6 +46,8 @@
   .app{max-width:1080px; margin:0 auto; padding:20px 18px 70px}
   .num{font-family:var(--mono); font-variant-numeric:tabular-nums}
   .eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--calm); font-weight:700}
+  .eyebrow.greet-why{font-family:var(--sans); text-transform:none; letter-spacing:0; font-size:12px; color:var(--wait); font-style:italic; max-width:min(72vw,540px); display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom}
+  .eyebrow.greet-why:hover{color:var(--calm)}
   h1{font-size:23px; font-weight:800; margin:.1em 0 0; letter-spacing:-.02em}
   .head{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px}
   .head .actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
@@ -424,7 +426,7 @@
     .app{padding:14px 12px 72px}
     h1{font-size:20px}
     .head{gap:10px} .head .actions{gap:6px}
-    .btn{padding:10px 13px; font-size:12.5px} .btn.small{padding:9px 11px}
+    .btn{padding:11px 14px; font-size:12.5px} .btn.small{padding:10px 12px}
     #userEmail{display:none}
     /* declutter header: secondary controls move into the ⋯ menu */
     #ctxBtn, #fbBtn, #langSelHead, #logoutBtn{display:none}
@@ -435,9 +437,10 @@
     .authcard{padding:22px 18px}
     .kpi{padding:12px 13px} .kpi .val{font-size:21px}
     .kpis{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}
-    .tabs button{padding:11px 13px; font-size:13px}
-    .app select{min-height:38px}
-    .chip{padding:7px 13px}
+    .tabs button{padding:12px 14px; font-size:13px}
+    #subtabs button{padding:9px 15px}
+    .app select{min-height:40px}
+    .chip{padding:9px 14px}
     .rItem input, .moremenu-pop .acctrow input{width:20px; height:20px}
     table{font-size:12.5px} th,td{padding:8px 8px}
   }
@@ -900,7 +903,7 @@ function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L
 function fmt(s,o){ return String(s).replace(/\{(\w+)\}/g,(_,k)=>o[k]!=null?o[k]:""); }
 function vLabel(p,v){ if(v==null||v==="")return v; const k=p+"."+v, r=T(k); return r===k?v:r; }
 function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); document.querySelectorAll('[data-i18n-title]').forEach(el=>{el.setAttribute('title',T(el.getAttribute('data-i18n-title')));}); }
-function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); const g=$("#greet"); if(g&&user) g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]); if(user){ buildAccounts(); buildPeriods(); render(); } }
+function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); setGreet(); if(user){ buildAccounts(); buildPeriods(); render(); } }
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
 const TICKSZ={NQ:0.25,MNQ:0.25,ES:0.25,MES:0.25,RTY:0.1,M2K:0.1,YM:1,MYM:1,GC:0.1,MGC:0.1,CL:0.01,MCL:0.01};
 const ticksOf=(pts,sym)=>Math.round(pts/(TICKSZ[sym]!==undefined?TICKSZ[sym]:0.25));
@@ -2877,8 +2880,29 @@ function renderRoutineEditor(host, def){
   $("#rResetDef").onclick=()=>{ confirmModal(T("rt.restoreConfirm")).then(ok=>{ if(!ok)return; DB.routineDef=[]; DB.settings.routineCustomized=false; routineEdit=false; save(); renderRoutine(); }); };
 }
 
+// Contextual greeting: after a session where you broke your rules, the header opens with your Why instead of a neutral hello.
+function whyRough(){
+  try{ const days=dayEval(scoped()); if(!days.length) return false; const last=days[days.length-1]; return !!(last && !last.disciplined); }catch(e){ return false; }
+}
+function setGreet(){
+  const g=$("#greet"); if(!g) return;
+  if(!user && !window.__demo){ g.className='eyebrow'; g.style.cursor=''; g.onclick=null; g.removeAttribute('title'); g.textContent=T("greetDefault"); return; }
+  const nm=(DB.settings&&DB.settings.name)||(user&&(user.email||"").split("@")[0])||"";
+  const W=(DB.settings&&DB.settings.why)||{};
+  if(W.text && whyRough()){
+    const full=String(W.text).replace(/\s+/g,' ').trim();
+    g.className='eyebrow greet-why';
+    g.textContent='🎯 '+(full.length>92?full.slice(0,90)+'…':full);
+    g.title=full; g.style.cursor='pointer';
+    g.onclick=()=>{ try{ showWhyEditor(); }catch(e){} };
+    return;
+  }
+  g.className='eyebrow'; g.style.cursor=''; g.onclick=null; g.removeAttribute('title');
+  g.textContent=T("hi")+" 👋 "+nm;
+}
 function render(){
   const has=DB.trades.length>0;
+  setGreet();
   const showViews=has||tab==="routine";
   $("#empty").classList.toggle("hide",showViews);
   $("#views").classList.toggle("hide",!showViews);
@@ -2952,7 +2976,7 @@ function startDemo(){
   document.querySelectorAll('.langSel').forEach(s=>s.value=(DB.settings.lang||'en'));
   hideLogin();
   const ue=$("#userEmail"); if(ue) ue.textContent="Demo";
-  const g=$("#greet"); if(g) g.textContent=T("hi")+" 👋 Demo";
+  setGreet();
   showDemoBanner(); window.scrollTo(0,0);
 }
 function showDemoBanner(){
@@ -3035,7 +3059,7 @@ function showOnboard(){
     DB.settings.overtrade=+$("#obOt").value||8;
     DB.settings.onboarded=true; save();
     og.classList.add("hide");
-    const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+(DB.settings.name||(user.email||"").split("@")[0]);
+    setGreet();
     render();
   };
   $("#obSkip").onclick=(e)=>{ e.preventDefault(); DB.settings.onboarded=true; save(); og.classList.add("hide"); };
@@ -3051,7 +3075,7 @@ async function onSession(session){
   applyI18n(); document.querySelectorAll('.langSel').forEach(s=>s.value=(DB.settings.lang||'en'));
   hideLogin();
   if(am) am.textContent="";
-  const g=$("#greet"); if(g)g.textContent=T("hi")+" 👋 "+((DB.settings&&DB.settings.name)||(user.email||"").split("@")[0]);
+  setGreet();
   if(!DB.settings.onboarded) showOnboard();
   maybeRemindCheckin();
   updateChangelogDot();
