@@ -468,7 +468,7 @@
     .btn{padding:11px 14px; font-size:12.5px} .btn.small{padding:10px 12px}
     #userEmail{display:none}
     /* declutter header: secondary controls move into the ⋯ menu */
-    #ctxBtn, #fbBtn, #langSelHead, #logoutBtn{display:none}
+    #fbBtn, #langSelHead, #logoutBtn{display:none}
     .mobonly{display:flex; align-items:center}
     select.mobonly{display:block; width:100%}
     #morePop .btn{justify-content:flex-start}
@@ -658,7 +658,6 @@
     <div class="actions">
       <input type="file" id="file" accept=".csv,.json" multiple class="hide">
       <button class="btn calm" id="importBtn" data-i18n="importCsv" data-i18n-title="tt.import">Importar CSV</button>
-      <button class="btn ghost small" id="ctxBtn" data-i18n="context" data-i18n-title="tt.context">＋ Contexto</button>
       <div class="moremenu" id="acctMenu"><button class="btn ghost small" id="acctBtn" data-i18n-title="tt.account">…</button><div class="moremenu-pop hide" id="acctPop" style="min-width:236px; max-height:62vh; overflow:auto"></div></div>
       <select id="periodSel" data-i18n-title="tt.period"></select>
       <button class="btn ghost small" id="fbBtn" data-i18n-title="tt.feedback">💬</button>
@@ -667,7 +666,7 @@
         <button class="btn ghost small" id="moreBtn" data-i18n-title="tt.more">⋯</button>
         <span id="clDot" style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--calm);box-shadow:0 0 8px var(--calm);display:none;pointer-events:none"></span>
         <div class="moremenu-pop hide" id="morePop">
-          <button class="btn ghost small mobonly" id="mCtxBtn"><span data-i18n="context">Context</span></button>
+          <button class="btn ghost small" id="mCtxBtn" data-i18n="context">＋ Context</button>
           <button class="btn ghost small mobonly" id="mFbBtn">💬 <span data-i18n="fb.btn">Feedback</span></button>
           <button class="btn ghost small" id="whatsnewBtn">✨ <span data-i18n="cl.menu">What's new</span></button>
           <button class="btn ghost small" id="backupBtn" data-i18n="backup" data-i18n-title="tt.backup">⬇ Backup</button>
@@ -3223,8 +3222,7 @@ $("#moreBtn").onclick=(e)=>{ e.stopPropagation(); $("#morePop").classList.toggle
 $("#morePop").addEventListener("click",()=>$("#morePop").classList.add("hide"));
 document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classList.contains("hide") && !e.target.closest(".moremenu")) p.classList.add("hide"); });
 { const _sr=$("#startRoutine"); if(_sr) _sr.onclick=()=>{ tab="routine"; render(); }; }
-$("#ctxBtn").onclick=showContextModal;
-// mobile menu proxies (header declutters on small screens; these live in the ⋯ menu)
+// Context lives in the ⋯ menu at every breakpoint (kept out of new-user's first-view real estate)
 { const mc=$("#mCtxBtn"); if(mc) mc.onclick=()=>{ $("#morePop").classList.add("hide"); showContextModal(); }; }
 { const mf=$("#mFbBtn"); if(mf) mf.onclick=()=>{ $("#morePop").classList.add("hide"); showFeedback(); }; }
 { const ml=$("#mLogoutBtn"); if(ml) ml.onclick=()=>$("#logoutBtn").click(); }
