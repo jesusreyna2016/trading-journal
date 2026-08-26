@@ -1854,14 +1854,15 @@ function daySequence(arr){
   if(!arr||arr.length<2) return "";
   const seq=arr.slice().sort((a,b)=>{ const ax=a.topen!=null?a.topen:0, bx=b.topen!=null?b.topen:0; return ax-bx || (a.time<b.time?-1:1); });
   const prim=primarySym();
-  let cum=0;
+  let cum=0; const lastBySym={};
   const rows=seq.map((t,i)=>{
-    const prev=i>0?seq[i-1]:null, cumBefore=cum; cum+=t.pnl;
+    const prev=i>0?seq[i-1]:null, prevSame=lastBySym[t.sym]||null, cumBefore=cum; cum+=t.pnl;
     const flags=[];
     if(prev && prev.pnl<0 && normSize(t)>normSize(prev)+1e-9 && cumBefore<0) flags.push(["rev",T("seq.revenge")]);
-    if(prev && prev.pnl<0 && t.sym===prev.sym && t.side===prev.side && cumBefore<0) flags.push(["add",T("seq.addLoser")]);
-    if(prev && prev.pnl<0 && t.sym===prev.sym && t.topen!=null && prev.tclose!=null && (t.topen-prev.tclose)>=0 && (t.topen-prev.tclose)<=120000) flags.push(["re",T("seq.reentry")]);
+    if(prevSame && prevSame.pnl<0 && t.side===prevSame.side && cumBefore<0) flags.push(["add",T("seq.addLoser")]);
+    if(prevSame && prevSame.pnl<0 && t.topen!=null && prevSame.tclose!=null && (t.topen-prevSame.tclose)>=0 && (t.topen-prevSame.tclose)<=120000) flags.push(["re",T("seq.reentry")]);
     if(prim && t.sym!==prim && t.pnl<0) flags.push(["off",T("seq.offEdge")]);
+    lastBySym[t.sym]=t;
     const chips=flags.map(f=>`<span class="seqflag ${f[0]}">${f[1]}</span>`).join(" ");
     return `<div class="seqrow">
       <span class="seqt">${ctDisp(t).hm}</span>
