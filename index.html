@@ -102,9 +102,9 @@
   .vdcard.vd-low{border-left:3px solid var(--pos); background:linear-gradient(120deg,color-mix(in srgb,var(--pos) 7%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-med{border-left:3px solid var(--wait); background:linear-gradient(120deg,color-mix(in srgb,var(--wait) 8%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-high{border-left:3px solid var(--neg); background:linear-gradient(120deg,color-mix(in srgb,var(--neg) 9%,var(--surface)),var(--surface) 60%)}
-  .vdhead{font-family:'Space Grotesk',var(--sans); font-weight:700; font-size:24px; letter-spacing:-.02em; margin-top:4px; display:flex; align-items:center; gap:8px}
-  .vdhead .vd-dot{font-size:14px; flex:none}
-  @media(max-width:640px){ .vdhead{font-size:20px} .vdhead .vd-dot{font-size:12px} }
+  .vdhead{font-family:'Space Grotesk',var(--sans); font-weight:700; font-size:19px; letter-spacing:-.02em; margin-top:2px; display:flex; align-items:center; gap:7px}
+  .vdhead .vd-dot{font-size:12px; flex:none}
+  @media(max-width:640px){ .vdhead{font-size:16.5px} .vdhead .vd-dot{font-size:11px} }
   .qbar{display:flex; align-items:flex-start; gap:11px; margin:2px 0 16px; padding:11px 15px; border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:10px; background:color-mix(in srgb,var(--calm) 5%,var(--surface))}
   .qbar .qi{color:var(--calm); font:800 22px/1 Georgia,serif; flex:none; margin-top:-1px}
   .qbar .qt{color:var(--ink); font-style:italic; font-size:13.5px; line-height:1.5}
@@ -1935,7 +1935,7 @@ function renderOverview(){
   const W=DB.settings.why||{}; const wset=!!(W.text||W.img); const emphWhy=wset && days.length && (disc/days.length<0.5);
   const whyHtml = wset
     ? `<div class="card" style="border-color:var(--calm);${emphWhy?' box-shadow:0 0 0 2px var(--calm);':''}"><div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${T("why.title")}</h2><button class="btn small ghost" id="whyEdit">${T("why.edit")}</button></div>
-        <div class="rowflex" style="gap:14px; margin-top:10px; align-items:center; flex-wrap:wrap">${W.img?`<img data-imgkey="${W.img}" style="width:92px;height:92px;object-fit:cover;border-radius:10px;flex:none">`:''}<div style="flex:1; min-width:180px; font-size:16px; font-weight:600; line-height:1.5; color:var(--ink)">${(W.text||'').replace(/</g,'&lt;')}</div></div>
+        <div class="rowflex" style="gap:10px; margin-top:8px; align-items:center; flex-wrap:wrap">${W.img?`<img data-imgkey="${W.img}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;flex:none">`:''}<div style="flex:1; min-width:180px; font-size:14px; font-weight:600; line-height:1.4; color:var(--ink)">${(W.text||'').replace(/</g,'&lt;')}</div></div>
         ${emphWhy?`<div class="small wait" style="margin-top:10px">💡 ${T("why.reminder")}</div>`:''}</div>`
     : `<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><span class="small muted">${T("why.prompt")}</span><button class="btn small" id="whyEdit">${T("why.set")}</button></div></div>`;
   v.innerHTML=`
