@@ -128,7 +128,7 @@
   .hterm summary:hover .hicon{color:var(--ink); border-color:var(--calm)}
   .hterm[open] .hicon{color:var(--calm); border-color:var(--calm)}
   .hterm .hpop-body{text-transform:none; letter-spacing:normal; font-weight:400; font-size:12px; color:var(--muted); line-height:1.45; margin-top:5px; max-width:320px}
-  h2 .hterm, .eyebrow .hterm{display:inline-flex}
+  h2 .hterm, .eyebrow .hterm, .kpi .sub .hterm{display:inline-flex; vertical-align:middle}
   .hero{display:flex; justify-content:space-between; align-items:center; gap:24px 40px; flex-wrap:wrap; padding:24px 26px; background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 120%); position:relative; overflow:hidden}
   .hero::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--calm)}
   .hero .eyebrow{display:block; margin-bottom:4px; color:var(--calm); font-size:10.5px; letter-spacing:.24em}
@@ -786,6 +786,7 @@ const I18N={
   "help.expectancy":"The average $ you make or lose per trade, once wins and losses even out. Positive means your edge pays over time, even if single trades lose.","help.pf":"Total money won ÷ total money lost. Above 1.0 means you're net profitable; below 1.0 means your losses outweigh your wins.","help.maxDD":"The biggest drop your account took from a peak before recovering. A gauge of the worst pain you'd have sat through.","help.discDays":"A day counts as disciplined when you followed your own rules, no matter if it was a win or a loss. This is the number that matters more than P&L.",
   "help.leaks":"Patterns that repeat and quietly drain money, like overtrading or revenge sizing, not one unlucky trade. Fixing a leak pays off every week, not just once.","help.nomans":"Trades taken outside the setups you've marked as your validated edge, essentially entries without a real plan behind them.","help.score":"One number blending your process and discipline, not just your P&L. You can have a green day and a low score if you broke your rules to get there.",
   "help.sharpe":"Return per unit of risk taken. Higher means smoother, more consistent gains rather than a few lucky spikes.","help.sortino":"Like Sharpe, but only counts downside swings, so it doesn't punish you for upside volatility.","help.recovery":"Net profit divided by your worst drawdown. Higher means you make back losses faster.",
+  "help.acBuffer":"How much more you can lose before you breach this account's drawdown rule (Trailing/Static/Daily). Hits $0 and the account is done, so treat it as your real stop, not the P&L.","help.acPace":"Days to target at your current daily average. Just a projection from your pace so far, not a promise, a rough day speeds it up or a bad one pushes it back.","help.roi":"What you got back for every $1 you spent on evals, resets and activations. Below 1× means the evals are eating more than the payouts give back.",
   "equityCurve":"Equity curve","pnlByDay":"P&L by day","topInsight":"Top insight",
   "intro.eyebrow":"Your dashboard, in 10 seconds","intro.title":"Two boxes to check every day. Everything else can wait.","intro.body":"\"Should I trade today?\" is your pre-session gut check, read it before you click buy or sell. \"My Why\" is there to remind you what you're actually protecting when a trade gets emotional. The rest, Discipline, Analysis, the deep stats, is for when you want to dig in, not something to master today.","intro.cta":"Got it, let's go",
   "ov.analytics":"Period analysis","ov.analyticsHint":"Stats, charts and coaching",
@@ -914,6 +915,7 @@ const I18N={
   "help.expectancy":"El $ promedio que ganas o pierdes por trade, una vez que ganadores y perdedores se compensan. Positivo significa que tu edge paga con el tiempo, aunque trades individuales pierdan.","help.pf":"Dinero total ganado ÷ dinero total perdido. Arriba de 1.0 eres rentable en neto; abajo de 1.0 tus pérdidas pesan más que tus ganancias.","help.maxDD":"La caída más grande que tuvo tu cuenta desde un pico antes de recuperarse. Mide el peor dolor que habrías aguantado.","help.discDays":"Un día cuenta como disciplinado si seguiste tus propias reglas, sin importar si fue ganador o perdedor. Este número importa más que el P&L.",
   "help.leaks":"Patrones que se repiten y drenan dinero en silencio, como sobreoperar o aumentar tamaño por venganza, no un trade de mala suerte aislado. Arreglar una fuga paga cada semana, no solo una vez.","help.nomans":"Trades tomados fuera de los setups que marcaste como tu edge validado, básicamente entradas sin un plan real detrás.","help.score":"Un solo número que mezcla tu proceso y disciplina, no solo tu P&L. Puedes tener un día verde y un score bajo si rompiste tus reglas para lograrlo.",
   "help.sharpe":"Retorno por unidad de riesgo tomado. Más alto significa ganancias más consistentes en vez de picos de suerte.","help.sortino":"Como Sharpe, pero solo cuenta las caídas, así que no te castiga por volatilidad al alza.","help.recovery":"Ganancia neta dividida entre tu peor drawdown. Más alto significa que recuperas pérdidas más rápido.",
+  "help.acBuffer":"Cuánto más puedes perder antes de romper la regla de drawdown de esta cuenta (Trailing/Estático/Diario). Llega a $0 y la cuenta se acabó, trátalo como tu verdadero stop, no el P&L.","help.acPace":"Días al target a tu ritmo diario actual. Es solo una proyección de tu paso hasta ahora, no una promesa, un día bueno lo adelanta y uno malo lo atrasa.","help.roi":"Lo que recuperaste por cada $1 que gastaste en evals, resets y activaciones. Debajo de 1× significa que las evals se están comiendo más de lo que los payouts devuelven.",
   "equityCurve":"Curva de equity","pnlByDay":"P&L por día","topInsight":"Insight destacado",
   "intro.eyebrow":"Tu dashboard, en 10 segundos","intro.title":"Dos tarjetas para revisar cada día. Lo demás puede esperar.","intro.body":"\"Should I trade today?\" es tu chequeo previo a la sesión, léelo antes de dar clic en comprar o vender. \"My Why\" está ahí para recordarte qué estás protegiendo en realidad cuando un trade se pone emocional. Lo demás, Disciplina, Análisis, las estadísticas a fondo, es para cuando quieras profundizar, no algo que tengas que dominar hoy.","intro.cta":"Entendido, vamos",
   "ov.analytics":"Análisis del periodo","ov.analyticsHint":"Stats, gráficas y coach",
@@ -2712,8 +2714,8 @@ function renderAccounts(){
       <div class="grid kpis" style="margin-top:10px">
         ${kpi(T("ac.kNet"),money1(st.net),T("ac.sinceStart"),cls(st.net))}
         ${kpi(T("ac.kProgress"),Math.round(prog)+"%",money(st.net)+" / "+money(a.target))}
-        ${kpi(T("ac.kBuffer"),money(st.buffer),st.ddLabel+(st.breached?T("ac.broken"):""),st.breached?"neg":st.buffer<(a.ddLimit||1)*0.3?"wait":"pos")}
-        ${kpi(T("ac.kPace"),st.daysToTarget==null?"–":st.daysToTarget+" "+(st.daysToTarget===1?T("dDay"):T("dDays")),st.net>=a.target?T("ac.targetReached"):T("ac.atThisPace"),"calmc")}
+        ${kpi(hterm(T("ac.kBuffer"),T("help.acBuffer")),money(st.buffer),st.ddLabel+(st.breached?T("ac.broken"):""),st.breached?"neg":st.buffer<(a.ddLimit||1)*0.3?"wait":"pos")}
+        ${kpi(hterm(T("ac.kPace"),T("help.acPace")),st.daysToTarget==null?"–":st.daysToTarget+" "+(st.daysToTarget===1?T("dDay"):T("dDays")),st.net>=a.target?T("ac.targetReached"):T("ac.atThisPace"),"calmc")}
       </div>
       ${bar(Math.max(0,Math.min(100,prog)),prog>=100)}
       ${ff&&(ff.spent||ff.earned)?`<div class="small muted" style="margin-top:10px">💳 <b>${escA(a.firm)}</b> · ${T("ac.evalsSpent")} <b class="neg">${money(ff.spent)}</b> · ${T("ac.payouts")} <b class="pos">${money(ff.earned)}</b> · ${T("ac.bizNet")} <b class="${cls(ff.earned-ff.spent)}">${money(ff.earned-ff.spent)}</b> <span class="faint">${T("ac.fromFinance")}</span></div>`:''}
@@ -2739,7 +2741,7 @@ function renderAccounts(){
       ${kpi(T("ps.funded"), P.ev.funded.passed+" ✓ / "+P.ev.funded.lost+" ✗", fmt(T("ps.activeN"),{n:P.acc.fundedActive}))}
       ${kpi(T("ps.spent"), money1(P.spent), T("ps.spentSub"), "neg")}
       ${kpi(T("ps.withdrawn"), money1(P.withdrawn), "", "pos")}
-      ${kpi(T("ps.net"), money1(P.net), T("ps.roi")+" "+(P.roi?P.roi.toFixed(2)+"×":"–"), cls(P.net))}
+      ${kpi(T("ps.net"), money1(P.net), hterm(T("ps.roi"),T("help.roi"))+" "+(P.roi?P.roi.toFixed(2)+"×":"–"), cls(P.net))}
     </div></div>`:'';
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:4px"><h2 style="margin:0">${T("ac.title")}</h2><button class="btn calm small" id="newAcct">${T("ac.new")}</button></div>
     <p class="small muted" style="margin:0 0 8px">${T("ac.filterHint")}</p>${psCard}${cards}${reCard}`;
