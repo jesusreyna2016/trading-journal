@@ -102,8 +102,9 @@
   .vdcard.vd-low{border-left:3px solid var(--pos); background:linear-gradient(120deg,color-mix(in srgb,var(--pos) 7%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-med{border-left:3px solid var(--wait); background:linear-gradient(120deg,color-mix(in srgb,var(--wait) 8%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-high{border-left:3px solid var(--neg); background:linear-gradient(120deg,color-mix(in srgb,var(--neg) 9%,var(--surface)),var(--surface) 60%)}
-  .vdhead{font-family:'Space Grotesk',var(--sans); font-weight:700; font-size:24px; letter-spacing:-.02em; margin-top:4px}
-  @media(max-width:640px){ .vdhead{font-size:20px} }
+  .vdhead{font-family:'Space Grotesk',var(--sans); font-weight:700; font-size:24px; letter-spacing:-.02em; margin-top:4px; display:flex; align-items:center; gap:8px}
+  .vdhead .vd-dot{font-size:14px; flex:none}
+  @media(max-width:640px){ .vdhead{font-size:20px} .vdhead .vd-dot{font-size:12px} }
   .qbar{display:flex; align-items:flex-start; gap:11px; margin:2px 0 16px; padding:11px 15px; border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:10px; background:color-mix(in srgb,var(--calm) 5%,var(--surface))}
   .qbar .qi{color:var(--calm); font:800 22px/1 Georgia,serif; flex:none; margin-top:-1px}
   .qbar .qt{color:var(--ink); font-style:italic; font-size:13.5px; line-height:1.5}
@@ -1585,22 +1586,23 @@ function attachTip(c, kind){
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function setup(c,H){ const w=c.parentElement.clientWidth||600; const dpr=window.devicePixelRatio||1; c.width=w*dpr; c.height=H*dpr; c.style.height=H+"px"; const x=c.getContext("2d"); x.scale(dpr,dpr); return {x,w,H};}
 function rrect(x,rx,ry,rw,rh,r){ x.beginPath(); x.moveTo(rx+r,ry); x.arcTo(rx+rw,ry,rx+rw,ry+rh,r); x.arcTo(rx+rw,ry+rh,rx,ry+rh,r); x.arcTo(rx,ry+rh,rx,ry,r); x.arcTo(rx,ry,rx+rw,ry,r); x.closePath(); }
+function fitFont(x,text,maxW,maxPx,minPx,weight,family){ let px=maxPx; x.font=weight+" "+px+"px "+family; while(px>minPx && x.measureText(text).width>maxW){ px-=1; x.font=weight+" "+px+"px "+family; } return px; }
 function drawSummaryCard(c,d){ const {x,w,H}=setup(c,300); const pad=22;
   const bg=css('--surface'),ink=css('--ink'),muted=css('--muted'),faint=css('--faint'),hair=css('--hair'),s2=css('--surface2'),calm=css('--calm'),pos=css('--pos'),neg=css('--neg'),mono=css('--mono'),sans=css('--sans');
   x.fillStyle=bg; rrect(x,0.5,0.5,w-1,H-1,12); x.fill(); x.strokeStyle=hair; x.lineWidth=1; x.stroke();
   x.textBaseline="alphabetic";
   x.fillStyle=calm; x.font="700 11px "+mono; x.textAlign="left"; x.fillText("TRADING JOURNAL",pad,pad+11);
   x.fillStyle=faint; x.textAlign="right"; x.fillText(d.week,w-pad,pad+11); x.textAlign="left";
+  const midX=Math.round(w*0.55), gap=12, leftW=midX-pad-gap, rightW=(w-pad)-midX;
   x.fillStyle=muted; x.font="700 10px "+mono; x.fillText(d.netLabel.toUpperCase(),pad,pad+40);
-  x.fillStyle=d.net>=0?pos:neg; x.font="800 38px "+mono; x.fillText(d.netStr,pad,pad+78);
-  const midX=Math.round(w*0.55);
+  x.fillStyle=d.net>=0?pos:neg; const netPx=fitFont(x,d.netStr,leftW,38,17,"800",mono); x.font="800 "+netPx+"px "+mono; x.fillText(d.netStr,pad,pad+78);
   x.fillStyle=muted; x.font="700 10px "+mono; x.fillText(d.discLabel.toUpperCase(),midX,pad+40);
-  x.fillStyle=d.discPct>=80?pos:calm; x.font="800 38px "+mono; x.fillText(d.discPct+"%",midX,pad+78);
+  const discStr=d.discPct+"%"; x.fillStyle=d.discPct>=80?pos:calm; const discPx=fitFont(x,discStr,rightW,38,17,"800",mono); x.font="800 "+discPx+"px "+mono; x.fillText(discStr,midX,pad+78);
   const by=pad+94, bw=w-2*pad;
   x.fillStyle=s2; rrect(x,pad,by,bw,8,4); x.fill();
   x.fillStyle=d.discPct>=80?pos:calm; rrect(x,pad,by,Math.max(0,Math.min(1,d.discPct/100))*bw,8,4); x.fill();
   const sy=by+42, cols=[[d.tradesLabel,d.trades],[d.winLabel,d.winRate+"%"],[d.streakLabel,d.streak+" 🔥"]], cw=bw/3;
-  cols.forEach((cc,i)=>{ const cx=pad+i*cw; x.fillStyle=faint; x.font="700 10px "+mono; x.fillText(String(cc[0]).toUpperCase(),cx,sy); x.fillStyle=ink; x.font="700 20px "+mono; x.fillText(String(cc[1]),cx,sy+25); });
+  cols.forEach((cc,i)=>{ const cx=pad+i*cw; x.fillStyle=faint; x.font="700 10px "+mono; x.fillText(String(cc[0]).toUpperCase(),cx,sy); x.fillStyle=ink; const vPx=fitFont(x,String(cc[1]),cw-6,20,12,"700",mono); x.font="700 "+vPx+"px "+mono; x.fillText(String(cc[1]),cx,sy+25); });
   x.fillStyle=muted; x.font="12px "+sans; x.fillText(d.bestWorst,pad,sy+58);
   x.fillStyle=faint; x.font="italic 11px "+sans; x.fillText(d.tagline,pad,H-16);
 }
@@ -1887,7 +1889,7 @@ function verdictCard(){
   const cta=!DB.checkins[today]?`<button class="btn small" id="vdCheckin" style="margin-top:11px">${T('vd.checkinCta')}</button>`:'';
   return `<div class="card vdcard vd-${t.level}"><div class="rowflex" style="justify-content:space-between;align-items:flex-start;gap:12px">
     <div style="min-width:0"><div class="eyebrow" style="color:var(--${m.c})">${T('vd.title')}</div>
-      <div class="vdhead ${m.c}">${m.e} ${m.t}</div>
+      <div class="vdhead ${m.c}"><span class="vd-dot">${m.e}</span>${m.t}</div>
       <div class="small" style="color:var(--muted);margin-top:5px;max-width:540px;line-height:1.5">${m.s}</div>${reasons}${cta}</div>
     <span class="pass ${m.p}" style="font-size:12px;flex:none">${m.lab}</span>
   </div></div>`;
