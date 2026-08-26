@@ -119,6 +119,15 @@
   .kpi .lab{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
   .kpi .val{font-family:var(--mono); font-size:25px; font-weight:700; margin-top:7px; letter-spacing:-.02em}
   .kpi .sub{font-size:12px; color:var(--faint); margin-top:2px}
+  .hterm{display:block}
+  .hterm summary{display:inline-flex; align-items:center; gap:5px; cursor:pointer; list-style:none}
+  .hterm summary::-webkit-details-marker{display:none}
+  .hterm summary::marker{content:""}
+  .hterm .hicon{width:13px; height:13px; border-radius:50%; border:1px solid var(--hair); color:var(--faint); font:700 9px var(--sans); display:inline-flex; align-items:center; justify-content:center; flex:none}
+  .hterm summary:hover .hicon{color:var(--ink); border-color:var(--calm)}
+  .hterm[open] .hicon{color:var(--calm); border-color:var(--calm)}
+  .hterm .hpop-body{text-transform:none; letter-spacing:normal; font-weight:400; font-size:12px; color:var(--muted); line-height:1.45; margin-top:5px; max-width:320px}
+  h2 .hterm, .eyebrow .hterm{display:inline-flex}
   .hero{display:flex; justify-content:space-between; align-items:center; gap:24px 40px; flex-wrap:wrap; padding:24px 26px; background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 120%); position:relative; overflow:hidden}
   .hero::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--calm)}
   .hero .eyebrow{display:block; margin-bottom:4px; color:var(--calm); font-size:10.5px; letter-spacing:.24em}
@@ -773,6 +782,9 @@ const I18N={
   "noTrades":"Nothing here yet for this period. Import a CSV or pick a different range up top, and your numbers will fill in.","trades":"trades",
   "net":"Net","winRate":"Win rate","pf":"Profit factor","expectancy":"Expectancy","perTrade":"per trade","avgWinLoss":"Avg win / loss","ratioSuffix":"ratio",
   "daysTraded":"Days traded","tradesPerDayS":"trades/day","discDays":"Disciplined days","streak":"Streak","dDay":"day","dDays":"days","discLower":"disciplined","bestWorstDay":"Best / worst day","maxDD":"Max drawdown","peakToValley":"peak to valley",
+  "help.expectancy":"The average $ you make or lose per trade, once wins and losses even out. Positive means your edge pays over time, even if single trades lose.","help.pf":"Total money won ÷ total money lost. Above 1.0 means you're net profitable; below 1.0 means your losses outweigh your wins.","help.maxDD":"The biggest drop your account took from a peak before recovering. A gauge of the worst pain you'd have sat through.","help.discDays":"A day counts as disciplined when you followed your own rules, no matter if it was a win or a loss. This is the number that matters more than P&L.",
+  "help.leaks":"Patterns that repeat and quietly drain money, like overtrading or revenge sizing, not one unlucky trade. Fixing a leak pays off every week, not just once.","help.nomans":"Trades taken outside the setups you've marked as your validated edge, essentially entries without a real plan behind them.","help.score":"One number blending your process and discipline, not just your P&L. You can have a green day and a low score if you broke your rules to get there.",
+  "help.sharpe":"Return per unit of risk taken. Higher means smoother, more consistent gains rather than a few lucky spikes.","help.sortino":"Like Sharpe, but only counts downside swings, so it doesn't punish you for upside volatility.","help.recovery":"Net profit divided by your worst drawdown. Higher means you make back losses faster.",
   "equityCurve":"Equity curve","pnlByDay":"P&L by day","topInsight":"Top insight",
   "ov.analytics":"Period analysis","ov.analyticsHint":"Stats, charts and coaching",
   "leaksCostTitle":"💸 What your leaks cost you","leaksCostBody":"Here's the honest math: if you had simply <b>{act}</b>, your net would read <b class='pos'>{v}</b> instead of {a}. That gap, <b class='pos'>+{d}</b>, wasn't taken by the market, you handed it back through one avoidable habit. <span class='muted'>The full breakdown is in Discipline → Leaks.</span>",
@@ -897,6 +909,9 @@ const I18N={
   "noTrades":"Aún no hay nada aquí para este periodo. Importa un CSV o elige otro rango arriba, y tus números aparecerán.","trades":"trades",
   "net":"Neto","winRate":"Win rate","pf":"Profit factor","expectancy":"Expectancy","perTrade":"por trade","avgWinLoss":"Avg win / loss","ratioSuffix":"ratio",
   "daysTraded":"Días operados","tradesPerDayS":"trades/día","discDays":"Días disciplinados","streak":"Racha","dDay":"día","dDays":"días","discLower":"disciplinados","bestWorstDay":"Mejor / peor día","maxDD":"Máx drawdown","peakToValley":"pico a valle",
+  "help.expectancy":"El $ promedio que ganas o pierdes por trade, una vez que ganadores y perdedores se compensan. Positivo significa que tu edge paga con el tiempo, aunque trades individuales pierdan.","help.pf":"Dinero total ganado ÷ dinero total perdido. Arriba de 1.0 eres rentable en neto; abajo de 1.0 tus pérdidas pesan más que tus ganancias.","help.maxDD":"La caída más grande que tuvo tu cuenta desde un pico antes de recuperarse. Mide el peor dolor que habrías aguantado.","help.discDays":"Un día cuenta como disciplinado si seguiste tus propias reglas, sin importar si fue ganador o perdedor. Este número importa más que el P&L.",
+  "help.leaks":"Patrones que se repiten y drenan dinero en silencio, como sobreoperar o aumentar tamaño por venganza, no un trade de mala suerte aislado. Arreglar una fuga paga cada semana, no solo una vez.","help.nomans":"Trades tomados fuera de los setups que marcaste como tu edge validado, básicamente entradas sin un plan real detrás.","help.score":"Un solo número que mezcla tu proceso y disciplina, no solo tu P&L. Puedes tener un día verde y un score bajo si rompiste tus reglas para lograrlo.",
+  "help.sharpe":"Retorno por unidad de riesgo tomado. Más alto significa ganancias más consistentes en vez de picos de suerte.","help.sortino":"Como Sharpe, pero solo cuenta las caídas, así que no te castiga por volatilidad al alza.","help.recovery":"Ganancia neta dividida entre tu peor drawdown. Más alto significa que recuperas pérdidas más rápido.",
   "equityCurve":"Curva de equity","pnlByDay":"P&L por día","topInsight":"Insight destacado",
   "ov.analytics":"Análisis del periodo","ov.analyticsHint":"Stats, gráficas y coach",
   "leaksCostTitle":"💸 El costo de tus fugas","leaksCostBody":"La cuenta honesta: si simplemente hubieras <b>{act}</b>, tu neto diría <b class='pos'>{v}</b> en vez de {a}. Esa diferencia, <b class='pos'>+{d}</b>, no te la quitó el mercado, la devolviste tú por un hábito evitable. <span class='muted'>El desglose completo está en Disciplina → Fugas.</span>",
@@ -1646,6 +1661,8 @@ function drawBars(c,days,H){
 
 // ---------- RENDER ----------
 function kpi(lab,val,sub,klass){ return `<div class="kpi"><div class="lab">${lab}</div><div class="val ${klass||''}">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`; }
+// Inline plain-language explainer for jargon labels: tap the "?" to reveal, native <details> so it's keyboard/touch friendly with no positioning logic.
+function hterm(label,tip){ return `<details class="hterm"><summary><span>${label}</span><span class="hicon" aria-hidden="true">?</span></summary><div class="hpop-body">${tip}</div></details>`; }
 function showWhyEditor(){
   const w=DB.settings.why||(DB.settings.why={});
   openModal(`<div class="eyebrow">🎯</div><h1 style="margin:.1em 0 .5em; font-size:20px">${T("why.editTitle")}</h1>
@@ -1949,8 +1966,8 @@ function renderOverview(){
       </div>
       <div class="hero-side">
         <div class="hero-stat"><span class="hs-lab">${T("winRate")}</span><span class="hs-val">${M.winrate.toFixed(1)}%</span></div>
-        <div class="hero-stat"><span class="hs-lab">${T("pf")}</span><span class="hs-val">${isFinite(M.pf)?M.pf.toFixed(2):"∞"}</span></div>
-        <div class="hero-stat"><span class="hs-lab">${T("discDays")}</span><span class="hs-val calmc">${disc}/${days.length}</span></div>
+        <div class="hero-stat"><div class="hs-lab">${hterm(T("pf"),T("help.pf"))}</div><span class="hs-val">${isFinite(M.pf)?M.pf.toFixed(2):"∞"}</span></div>
+        <div class="hero-stat"><div class="hs-lab">${hterm(T("discDays"),T("help.discDays"))}</div><span class="hs-val calmc">${disc}/${days.length}</span></div>
         <div class="hero-stat"><span class="hs-lab">${T("streak")}</span><span class="hs-val ${streak>0?'calmc':'muted'}">${streak} ${streak===1?T("dDay"):T("dDays")}</span></div>
       </div>
     </div>
@@ -1959,11 +1976,11 @@ function renderOverview(){
       <div class="fold-body">
     ${coachHtml}
     <div class="grid kpis section">
-      ${kpi(T("expectancy"),money1(M.expectancy),T("perTrade"),cls(M.expectancy))}
+      ${kpi(hterm(T("expectancy"),T("help.expectancy")),money1(M.expectancy),T("perTrade"),cls(M.expectancy))}
       ${kpi(T("avgWinLoss"),money(M.avgW)+" / "+money(-M.avgL),(M.avgL?(M.avgW/M.avgL).toFixed(2):"–")+" "+T("ratioSuffix"))}
       ${kpi(T("daysTraded"),days.length,(days.length?(M.n/days.length).toFixed(1):"0")+" "+T("tradesPerDayS"))}
       ${kpi(T("bestWorstDay"),money(bestD)+" / "+money(worstD),"")}
-      ${kpi(T("maxDD"),money(-mdd),T("peakToValley"),mdd?"neg":"muted")}
+      ${kpi(hterm(T("maxDD"),T("help.maxDD")),money(-mdd),T("peakToValley"),mdd?"neg":"muted")}
     </div>
     ${cleanCard(ev)}
     ${analyticsCards(TR)}
@@ -1995,19 +2012,19 @@ function counterfactual(TR){
   const against=TR.filter(t=>{const g=DB.tags[tid(t)]; return g&&g.align==="Contra";});
   return {actual, stopNet, noOtNet, nomans, noNomansNet:actual-nomans.reduce((s,t)=>s+t.pnl,0), against, noAgainstNet:actual-against.reduce((s,t)=>s+t.pnl,0)};
 }
-function cfRow(lab,val,actual){ const d=val-actual; return `<div class="r"><span class="lab">${lab}</span><span><span class="v ${cls(val)}">${money1(val)}</span><span class="delta ${cls(d)}">${d>=0?'+':''}${money(d)}</span></span></div>`; }
+function cfRow(lab,val,actual){ const d=val-actual; return `<div class="r"><div class="lab">${lab}</div><span><span class="v ${cls(val)}">${money1(val)}</span><span class="delta ${cls(d)}">${d>=0?'+':''}${money(d)}</span></span></div>`; }
 function renderLeaks(){
   const TR=activeTrades(); const L=detectLeaks(TR); const CF=counterfactual(TR);
   const cfDeltas=[[T("cf.stop"),CF.stopNet],[T("cf.noOt"),CF.noOtNet],CF.nomans.length?[T("cf.noNomans"),CF.noNomansNet]:null,CF.against.length?[T("cf.noAgainst"),CF.noAgainstNet]:null].filter(Boolean).map(x=>({l:x[0],d:x[1]-CF.actual})).filter(o=>o.d>0).sort((a,b)=>b.d-a.d);
   const cfBest=cfDeltas[0];
-  const cfCard=`<div class="card"><h2>${T("leaksCard.title")}</h2>
+  const cfCard=`<div class="card"><h2>${hterm(T("leaksCard.title"),T("help.leaks"))}</h2>
     ${cfBest?`<div class="why" style="font-size:14px;margin:0 0 10px;padding:10px 12px;background:var(--surface2);border-radius:8px">${fmt(T("leaksCard.startHere"),{act:cfBest.l,d:money(cfBest.d)})}</div>`:''}
     <p class="small muted" style="margin:0 0 8px">${T("leaksCard.sub")}</p>
     <div class="cf">
       ${cfRow(T("cf.rowActual"),CF.actual,CF.actual)}
       ${cfRow(T("cf.rowStop"),CF.stopNet,CF.actual)}
       ${cfRow(fmt(T("cf.rowNoOt"),{ot:(DB.settings.overtrade||8)}),CF.noOtNet,CF.actual)}
-      ${CF.nomans.length?cfRow(fmt(T("cf.rowNoNomans"),{n:CF.nomans.length}),CF.noNomansNet,CF.actual):""}
+      ${CF.nomans.length?cfRow(hterm(fmt(T("cf.rowNoNomans"),{n:CF.nomans.length}),T("help.nomans")),CF.noNomansNet,CF.actual):""}
       ${CF.against.length?cfRow(fmt(T("cf.rowNoAgainst"),{n:CF.against.length}),CF.noAgainstNet,CF.actual):""}
     </div>
     ${(!CF.nomans.length&&!CF.against.length)?'<p class="small muted" style="margin-top:8px">'+T("leaksCard.tagHint")+'</p>':''}
@@ -2947,7 +2964,7 @@ function renderScore(){
   if(TR.length<2){ host.innerHTML='<div class="card muted">'+T("score.needMore")+'</div>'; return; }
   const S=scoreStats(TR), M=S.M;
   const badge=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass good">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
-  const stat=(lab,val,sub,v)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><span class="lab">${lab}</span>${badge(v)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
+  const stat=(lab,val,sub,v)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><div class="lab">${lab}</div>${badge(v)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
   const wdOrder=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"], byWd={}; TR.forEach(t=>{const k=weekdayOf(t); byWd[k]=(byWd[k]||0)+t.pnl;});
   const wdRows=wdOrder.filter(k=>byWd[k]!==undefined).map(k=>({k,net:byWd[k]}));
   const byHr={}; TR.forEach(t=>{const m=ctMinutes(t); if(m===null)return; const k=String(Math.floor(m/60)).padStart(2,"0"); byHr[k]=(byHr[k]||0)+t.pnl;});
@@ -2957,7 +2974,7 @@ function renderScore(){
   const weakest=axes.slice().sort((a,b)=>S.sc[a.k]-S.sc[b.k])[0];
   host.innerHTML=`
     <div class="card"><div class="rowflex" style="justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center">
-      <div><h2 style="margin:0 0 2px">${T("score.yourScore")}</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
+      <div><h2 style="margin:0 0 2px">${hterm(T("score.yourScore"),T("help.score"))}</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
       <div id="radarhost" style="flex:1 1 300px;max-width:440px"></div></div></div>
     <div class="card section" style="border-color:var(--wait)"><h2>${T("score.weakest")}</h2><div class="why" style="font-size:14px">${fmt(T("score.weakestBody"),{l:weakest.l,v:Math.round(S.sc[weakest.k]),tip:weakest.tip})}</div></div>
     <div class="grid kpis section">
@@ -2965,12 +2982,12 @@ function renderScore(){
       ${stat(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞","",S.sc.pf)}
       ${stat(T("ax.ratio.l"),S.ratio?S.ratio.toFixed(2):"–",T("score.ratioSub"),S.sc.ratio)}
       ${stat(T("maxDD"),money(-S.mdd),T("peakToValley"),S.sc.dd)}
-      ${stat(T("score.recovery"),isFinite(S.recovery)?S.recovery.toFixed(2):"∞",T("score.recSub"),S.sc.rec)}
+      ${stat(hterm(T("score.recovery"),T("help.recovery")),isFinite(S.recovery)?S.recovery.toFixed(2):"∞",T("score.recSub"),S.sc.rec)}
       ${stat(T("score.consistency"),Math.round(S.consist*100)+"%",fmt(T("score.greenDays"),{g:S.posDays,t:S.days.length}),S.sc.consist)}
     </div>
     <div class="grid kpis section">
-      ${kpi("Sharpe",S.sharpe==null?"N/A":S.sharpe.toFixed(2),T("score.annualized"))}
-      ${kpi("Sortino",S.sortino==null?"N/A":S.sortino.toFixed(2),T("score.annualized"))}
+      ${kpi(hterm("Sharpe",T("help.sharpe")),S.sharpe==null?"N/A":S.sharpe.toFixed(2),T("score.annualized"))}
+      ${kpi(hterm("Sortino",T("help.sortino")),S.sortino==null?"N/A":S.sortino.toFixed(2),T("score.annualized"))}
       ${kpi(T("expectancy"),money1(M.expectancy),T("perTrade"),cls(M.expectancy))}
       ${kpi(T("score.avgWin"),money(M.avgW),"","pos")}
       ${kpi(T("score.avgLoss"),money(-M.avgL),"","neg")}
