@@ -786,6 +786,7 @@ const I18N={
   "help.leaks":"Patterns that repeat and quietly drain money, like overtrading or revenge sizing, not one unlucky trade. Fixing a leak pays off every week, not just once.","help.nomans":"Trades taken outside the setups you've marked as your validated edge, essentially entries without a real plan behind them.","help.score":"One number blending your process and discipline, not just your P&L. You can have a green day and a low score if you broke your rules to get there.",
   "help.sharpe":"Return per unit of risk taken. Higher means smoother, more consistent gains rather than a few lucky spikes.","help.sortino":"Like Sharpe, but only counts downside swings, so it doesn't punish you for upside volatility.","help.recovery":"Net profit divided by your worst drawdown. Higher means you make back losses faster.",
   "equityCurve":"Equity curve","pnlByDay":"P&L by day","topInsight":"Top insight",
+  "intro.eyebrow":"Your dashboard, in 10 seconds","intro.title":"Two boxes to check every day. Everything else can wait.","intro.body":"\"Should I trade today?\" is your pre-session gut check, read it before you click buy or sell. \"My Why\" is there to remind you what you're actually protecting when a trade gets emotional. The rest, Discipline, Analysis, the deep stats, is for when you want to dig in, not something to master today.","intro.cta":"Got it, let's go",
   "ov.analytics":"Period analysis","ov.analyticsHint":"Stats, charts and coaching",
   "leaksCostTitle":"💸 What your leaks cost you","leaksCostBody":"Here's the honest math: if you had simply <b>{act}</b>, your net would read <b class='pos'>{v}</b> instead of {a}. That gap, <b class='pos'>+{d}</b>, wasn't taken by the market, you handed it back through one avoidable habit. <span class='muted'>The full breakdown is in Discipline → Leaks.</span>",
   "cf.stop":"stopped at 2 losses in a row","cf.noOt":"avoided over-trading days","cf.noNomans":"not traded in no-man's-land","cf.noAgainst":"not traded against the bias",
@@ -913,6 +914,7 @@ const I18N={
   "help.leaks":"Patrones que se repiten y drenan dinero en silencio, como sobreoperar o aumentar tamaño por venganza, no un trade de mala suerte aislado. Arreglar una fuga paga cada semana, no solo una vez.","help.nomans":"Trades tomados fuera de los setups que marcaste como tu edge validado, básicamente entradas sin un plan real detrás.","help.score":"Un solo número que mezcla tu proceso y disciplina, no solo tu P&L. Puedes tener un día verde y un score bajo si rompiste tus reglas para lograrlo.",
   "help.sharpe":"Retorno por unidad de riesgo tomado. Más alto significa ganancias más consistentes en vez de picos de suerte.","help.sortino":"Como Sharpe, pero solo cuenta las caídas, así que no te castiga por volatilidad al alza.","help.recovery":"Ganancia neta dividida entre tu peor drawdown. Más alto significa que recuperas pérdidas más rápido.",
   "equityCurve":"Curva de equity","pnlByDay":"P&L por día","topInsight":"Insight destacado",
+  "intro.eyebrow":"Tu dashboard, en 10 segundos","intro.title":"Dos tarjetas para revisar cada día. Lo demás puede esperar.","intro.body":"\"Should I trade today?\" es tu chequeo previo a la sesión, léelo antes de dar clic en comprar o vender. \"My Why\" está ahí para recordarte qué estás protegiendo en realidad cuando un trade se pone emocional. Lo demás, Disciplina, Análisis, las estadísticas a fondo, es para cuando quieras profundizar, no algo que tengas que dominar hoy.","intro.cta":"Entendido, vamos",
   "ov.analytics":"Análisis del periodo","ov.analyticsHint":"Stats, gráficas y coach",
   "leaksCostTitle":"💸 El costo de tus fugas","leaksCostBody":"La cuenta honesta: si simplemente hubieras <b>{act}</b>, tu neto diría <b class='pos'>{v}</b> en vez de {a}. Esa diferencia, <b class='pos'>+{d}</b>, no te la quitó el mercado, la devolviste tú por un hábito evitable. <span class='muted'>El desglose completo está en Disciplina → Fugas.</span>",
   "cf.stop":"parar a las 2 pérdidas seguidas","cf.noOt":"evitar los días de sobreoperar","cf.noNomans":"no operar en tierra de nadie","cf.noAgainst":"no operar contra el sesgo",
@@ -1929,6 +1931,17 @@ function commitmentCard(){
   if(c.week===wk && c.text) return `<div class="card" style="border-left:3px solid var(--a2);display:flex;justify-content:space-between;align-items:center;gap:10px"><div style="min-width:0"><div class="eyebrow" style="color:var(--a2)">${T('cm2.title')}</div><div style="font-weight:600;font-size:15px;margin-top:3px;color:var(--ink);line-height:1.4">🤝 ${esc(c.text)}</div></div><button class="btn small ghost" id="cmEdit" style="flex:none">${T('why.edit')}</button></div>`;
   return `<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="small muted">${T('cm2.prompt')}</span><button class="btn small" id="cmEdit">🤝 ${T('cm2.set')}</button></div>`;
 }
+// One-time bridge shown the first time real data lands on the dashboard: orients to the daily loop (verdict + why)
+// before the deep stats below, without blocking anything. Dismiss sets a flag so it never shows again.
+function dashIntroCard(){
+  if(DB.settings.dashIntroSeen) return '';
+  return `<div class="card" id="dashIntro" style="border-color:var(--calm);background:linear-gradient(120deg,color-mix(in srgb,var(--calm) 6%,var(--surface)),var(--surface) 65%)">
+    <div class="eyebrow" style="color:var(--calm)">${T('intro.eyebrow')}</div>
+    <div style="font-weight:700;font-size:15px;margin-top:4px;color:var(--ink)">${T('intro.title')}</div>
+    <div class="small muted" style="margin-top:6px;line-height:1.55;max-width:640px">${T('intro.body')}</div>
+    <button class="btn small calm" id="introDismiss" style="margin-top:11px">${T('intro.cta')}</button>
+  </div>`;
+}
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
@@ -1955,6 +1968,7 @@ function renderOverview(){
         ${emphWhy?`<div class="small wait" style="margin-top:10px">💡 ${T("why.reminder")}</div>`:''}</div>`
     : `<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><span class="small muted">${T("why.prompt")}</span><button class="btn small" id="whyEdit">${T("why.set")}</button></div></div>`;
   v.innerHTML=`
+    ${dashIntroCard()}
     ${verdictCard()}
     ${whyHtml}
     ${commitmentCard()}
@@ -1997,6 +2011,7 @@ function renderOverview(){
   const scb=$("#shareCard"); if(scb)scb.onclick=shareScorecard;
   const vc=$("#vdCheckin"); if(vc)vc.onclick=()=>{ tab="checkin"; groupLast[groupOf("checkin").lab]="checkin"; render(); };
   const ce=$("#cmEdit"); if(ce)ce.onclick=()=>{ const wk=isoWeek(new Date().toISOString().slice(0,10)); const cm=(DB.settings.commitment||{}); const cur=cm.week===wk?cm.text:''; promptModal(T('cm2.ask'),{value:cur||'',placeholder:T('cm2.ph')}).then(vv=>{ if(vv==null)return; DB.settings.commitment=vv?{week:wk,text:vv}:{}; save(); if(vv)toast(T('cm2.saved')); renderOverview(); }); };
+  const idi=$("#introDismiss"); if(idi)idi.onclick=()=>{ DB.settings.dashIntroSeen=true; save(); renderOverview(); };
   animateCounts(v);
   hydrateImgs(v);
 }
