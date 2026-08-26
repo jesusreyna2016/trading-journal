@@ -228,7 +228,7 @@
   .cf .lab{font-size:13.5px}
   .cf .v{font-family:var(--mono); font-weight:700; font-size:14px}
   .cf .delta{font-family:var(--mono); font-size:11.5px; margin-left:8px; padding:2px 7px; border-radius:6px; background:var(--surface2)}
-  .setupSel{padding:5px 7px; font-size:12px}
+  .setupSel, .tagSel{padding:5px 7px; font-size:12px; min-width:88px}
   .rblock{margin-top:15px}
   .rblock .bl{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:700; margin:0 0 4px}
   .rItem{display:flex; align-items:flex-start; gap:11px; padding:8px 2px; border-top:1px solid var(--hair); cursor:pointer; font-size:14px; user-select:none}
@@ -2174,17 +2174,15 @@ function showTradeShot(id){
   render();
 }
 function dayTradeRows(arr){
+  const tagSel=(id,k,label,vals,cur,vp)=>`<select class="tagSel" data-id="${id}" data-k="${k}" aria-label="${label}"><option value="">–</option>${vals.map(v=>'<option value="'+escA(v)+'"'+(cur===v?' selected':'')+'>'+vLabel(vp,v)+'</option>').join("")}</select>`;
   return arr.map(t=>{ const id=tid(t), tg=DB.tags[id]||{}, cd=ctDisp(t);
-    const emoChips=EMO.map(e=>{const cl=e==='Calma'?'calm':(e==='FOMO'||e==='Revancha'||e==='DPT')?'leak':'';return `<button class="chip ${cl}" data-id="${id}" data-k="emo" data-v="${e}" aria-pressed="${tg.emo===e}">${vLabel("emo",e)}</button>`;}).join("");
-    const panChips=PANEL.map(p=>`<button class="chip ${p==='VALID'?'v':p==='WAIT'?'w':'c'}" data-id="${id}" data-k="panel" data-v="${p}" aria-pressed="${tg.panel===p}">${vLabel("pan",p)}</button>`).join("");
-    const alnChips=ALIGN.map(a=>`<button class="chip ${a==='Con sesgo'?'calm':a==='Contra'?'leak':''}" data-id="${id}" data-k="align" data-v="${a}" aria-pressed="${tg.align===a}">${vLabel("aln",a)}</button>`).join("");
     return `<tr>
       <td class="mono small" data-label="${T('j.thTime')}">${cd.hm}</td>
       <td data-label="${T('j.thTrade')}"><span class="tag ${t.side==='long'?'L':'S'}">${t.side==='long'?'L':'S'}</span> <span class="mono small">${t.sym} ×${t.qty}</span><br><span class="muted small">${t.entry}→${t.exit}${t.dur?' · '+t.dur:''}</span></td>
       <td class="mono ${cls(t.pnl)}" data-label="P&amp;L">${money1(t.pnl)}<br><span class="muted">${t.pts>0?'+':''}${t.pts}p · ${t.pts>0?'+':''}${ticksOf(t.pts,t.sym)}t</span></td>
-      <td data-label="${T('j.thEmotion')}"><div class="chips">${emoChips}</div></td>
-      <td data-label="Panel"><div class="chips">${panChips}</div></td>
-      <td data-label="${T('j.thBias')}"><div class="chips">${alnChips}</div></td>
+      <td data-label="${T('j.thEmotion')}">${tagSel(id,"emo",T('j.thEmotion'),EMO,tg.emo,"emo")}</td>
+      <td data-label="Panel">${tagSel(id,"panel","Panel",PANEL,tg.panel,"pan")}</td>
+      <td data-label="${T('j.thBias')}">${tagSel(id,"align",T('j.thBias'),ALIGN,tg.align,"aln")}</td>
       <td data-label="Setup"><select class="setupSel" data-id="${id}" aria-label="Setup"><option value="">–</option>${allSetups().map(s=>'<option value="'+escA(s)+'"'+(tg.setup===s?' selected':'')+'>'+vLabel("setup",s)+'</option>').join("")}<option value="__add">${T("setup.add")}</option></select></td>
       <td><div class="chips">
         <button class="chip w" data-id="${id}" data-k="wait" data-v="1" aria-pressed="${tg.wait?'true':'false'}">${T("j.signal")}</button>
@@ -2288,7 +2286,9 @@ function renderJournal(){
     const sh=e.target.closest("[data-shot]"); if(sh){ showTradeShot(sh.dataset.shot); return; }
     const tb=e.target.closest("[data-deltrade]"); if(tb){ const sig=tb.dataset.deltrade; const t=DB.trades.find(x=>tradeSig(x)===sig); if(t){ confirmModal(fmt(T("del.tradeConfirm"),{sym:t.sym+" "+(t.side==='long'?'L':'S'),pnl:money1(t.pnl)}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(ok && deleteTradeBySig(sig)) toast(T("del.tradeDone")); }); } return; }
   };
-  host.onchange=e=>{ const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{};
+  host.onchange=e=>{
+    const t=e.target.closest(".tagSel"); if(t){ const id=t.dataset.id; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][t.dataset.k]=t.value; save(); return; }
+    const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{};
     if(s.value==="__add"){ promptModal(T("setup.addPrompt")).then(nm=>{ if(nm){ DB.settings.setups=DB.settings.setups||[]; if(!allSetups().includes(nm)) DB.settings.setups.push(nm); DB.tags[id].setup=nm; save(); } renderJournal(); }); return; }
     DB.tags[id].setup=s.value; save(); };
 }
