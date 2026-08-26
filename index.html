@@ -92,6 +92,7 @@
   .tabs button{font-family:var(--sans); font-size:14px; font-weight:600; color:var(--muted); background:transparent; border:0; border-bottom:2px solid transparent; padding:10px 14px; min-height:44px; display:inline-flex; align-items:center; cursor:pointer; white-space:nowrap; transition:color .15s ease, border-color .15s ease}
   .tabs button:hover{color:var(--ink)}
   .tabs button.active{color:var(--ink); border-bottom-color:var(--calm)}
+  .tabcaret{font-size:9px; opacity:.5; margin-left:4px}
   #subtabs{border-bottom:0; gap:8px; margin:-4px 0 16px}
   #subtabs button{font-size:12.5px; padding:5px 14px; min-height:40px; display:inline-flex; align-items:center; border:1px solid var(--hair); border-radius:999px; color:var(--muted); cursor:pointer; transition:color .15s ease, border-color .15s ease, background .15s ease}
   #subtabs button:hover{border-color:color-mix(in srgb,var(--calm) 40%,var(--hair)); color:var(--ink)}
@@ -1019,7 +1020,7 @@ const I18N={
 function T(k){ const L=(DB&&DB.settings&&DB.settings.lang)||'en'; const d=I18N[L]||I18N.en; return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k); }
 function fmt(s,o){ return String(s).replace(/\{(\w+)\}/g,(_,k)=>o[k]!=null?o[k]:""); }
 function vLabel(p,v){ if(v==null||v==="")return v; const k=p+"."+v, r=T(k); return r===k?v:r; }
-function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); document.querySelectorAll('[data-i18n-title]').forEach(el=>{el.setAttribute('title',T(el.getAttribute('data-i18n-title')));}); }
+function applyI18n(){ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.getAttribute('data-i18n'));}); document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=T(el.getAttribute('data-i18n-html'));}); document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',T(el.getAttribute('data-i18n-ph')));}); document.querySelectorAll('[data-i18n-title]').forEach(el=>{const v=T(el.getAttribute('data-i18n-title')); el.setAttribute('title',v); el.setAttribute('aria-label',v);}); }
 function setLang(v){ DB.settings.lang=v; save(); applyI18n(); document.querySelectorAll('.langSel').forEach(s=>{s.value=v;}); setGreet(); if(user){ try{ sb.from('email_prefs').update({lang:v}).eq('user_id',user.id); }catch(e){} buildAccounts(); buildPeriods(); render(); } }
 const SYMMULT={NQ:1, MNQ:0.1, ES:1, MES:0.1, RTY:1, M2K:0.1, YM:1, MYM:0.1, GC:1, MGC:0.1, CL:1, MCL:0.1};
 const TICKSZ={NQ:0.25,MNQ:0.25,ES:0.25,MES:0.25,RTY:0.1,M2K:0.1,YM:1,MYM:1,GC:0.1,MGC:0.1,CL:0.01,MCL:0.01};
@@ -1038,7 +1039,7 @@ let groupLast={};
 function groupOf(t){ return GROUPS.find(g=>g.subs.includes(t))||GROUPS[0]; }
 function buildTabs(){
   const g=groupOf(tab);
-  $("#tabs").innerHTML=GROUPS.map(gr=>`<button data-g="${gr.lab}" class="${gr===g?'active':''}">${T(gr.lab)}</button>`).join("");
+  $("#tabs").innerHTML=GROUPS.map(gr=>`<button data-g="${gr.lab}" class="${gr===g?'active':''}">${T(gr.lab)}${gr.subs.length>1?'<span class="tabcaret" aria-hidden="true">▾</span>':''}</button>`).join("");
   const sub=$("#subtabs");
   if(g.subs.length>1){ sub.style.display="flex"; sub.innerHTML=g.subs.map(s=>`<button data-t="${s}" class="${s===tab?'active':''}">${T("tab."+s)}</button>`).join(""); }
   else { sub.style.display="none"; sub.innerHTML=""; }
@@ -1907,7 +1908,7 @@ function verdictCard(){
   const cta=!DB.checkins[today]?`<button class="btn small" id="vdCheckin" style="margin-top:11px">${T('vd.checkinCta')}</button>`:'';
   return `<div class="card vdcard vd-${t.level}"><div class="rowflex" style="justify-content:space-between;align-items:flex-start;gap:12px">
     <div style="min-width:0"><div class="eyebrow" style="color:var(--${m.c})">${T('vd.title')}</div>
-      <div class="vdhead ${m.c}"><span class="vd-dot">${m.e}</span>${m.t}</div>
+      <div class="vdhead ${m.c}"><span class="vd-dot" aria-hidden="true">${m.e}</span>${m.t}</div>
       <div class="small" style="color:var(--muted);margin-top:5px;max-width:540px;line-height:1.5">${m.s}</div>${reasons}${cta}</div>
     <span class="pass ${m.p}" style="font-size:12px;flex:none">${m.lab}</span>
   </div></div>`;
