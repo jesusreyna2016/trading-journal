@@ -2014,7 +2014,7 @@ function reframeCard(TR){
 }
 function showReframeEditor(mk){
   const cur=(DB.reframes||{})[mk]||{};
-  openModal(`<div class="eyebrow">🧠</div><h1 style="margin:.1em 0 .3em; font-size:20px">${T('rf.editTitle')}</h1>
+  openModal(`<div class="eyebrow">🧠</div><h1 style="margin:.1em 0 .3em; font-size:20px">${fmt(T('rf.editTitle'),{m:T('m.'+mk)})}</h1>
     <p class="small muted" style="margin:0 0 14px">${fmt(T('rf.editLead'),{m:T('m.'+mk)})}</p>
     <label class="small muted">${T('rf.beliefLabel')}</label>
     <textarea id="rfBelief" placeholder="${T('rf.beliefPh')}" style="width:100%; height:70px; margin:4px 0 12px; padding:9px 11px; border:1px solid var(--hair); border-radius:8px; background:var(--surface2); color:var(--ink); font-size:14px">${(cur.belief||'').replace(/</g,'&lt;')}</textarea>
