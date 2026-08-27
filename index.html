@@ -1586,7 +1586,7 @@ function detectLeaks(TR){
       why:fmt(T("lk.side.w"),{ln:longs.length,lnet:money(lnet),lwr:lwr.toFixed(0),sn:shorts.length,snet:money(snet),swr:swr.toFixed(0),tail:lnet<0?T("lk.side.bad"):T("lk.side.ok")})});
   }
   let rev=0, revLoss=0;
-  days.forEach(d=>{ const a=d.arr; let cum=0; for(let i=0;i<a.length;i++){ if(i>0 && a[i-1].status==="Loss" && normSize(a[i])>normSize(a[i-1])+1e-9 && cum<0){ rev++; revLoss+=Math.min(0,a[i].pnl); } cum+=a[i].pnl; } });
+  days.forEach(d=>{ sequenceFlags(d.arr).forEach(t=>{ if(t.flags.some(f=>f[0]==='rev')){ rev++; revLoss+=Math.min(0,t.pnl); } }); });
   if(rev>0) L.push({sev:rev>=3?"hi":"md", metric:rev+"×", title:T("lk.rev.t"),
       why:fmt(T("lk.rev.w"),{rev:rev,revLoss:money(revLoss)})});
   const ot=days.filter(d=>d.count>=DB.settings.overtrade);
@@ -1859,18 +1859,26 @@ function analyticsCards(TR){
 // Per-day tilt timeline: chronological trades with running P&L and behavioral flags (revenge, averaging into a loser, quick re-entry, off-edge).
 // Shared by daySequence (visual timeline) and dayNarrative (coach paragraph): walks trades in time order,
 // tracking the last trade seen PER SYMBOL so behavior flags survive interleaved instruments (NQ, ES, NQ...).
+// Behavior flags are scoped PER ACCOUNT (revenge sizing, added-to-loser, re-entry all compare
+// against that same account's previous trade and that account's own running total), not the raw
+// chronological stream. Two unrelated accounts trading in parallel would otherwise get treated as
+// one continuous emotional sequence. `cum`/`cumBefore` stay global, they're just the displayed
+// running P&L for the day, not what gates a flag.
 function sequenceFlags(arr){
   const seq=arr.slice().sort((a,b)=>{ const ax=a.topen!=null?a.topen:0, bx=b.topen!=null?b.topen:0; return ax-bx || (a.time<b.time?-1:1); });
   const prim=primarySym();
-  let cum=0; const lastBySym={};
+  let cum=0; const cumByAcct={}, lastByAcct={}, lastByAcctSym={};
   return seq.map((t,i)=>{
-    const prev=i>0?seq[i-1]:null, prevSame=lastBySym[t.sym]||null, cumBefore=cum; cum+=t.pnl;
+    const ak=t.acct||"";
+    const prevAcct=lastByAcct[ak]||null, prevSame=lastByAcctSym[ak+"|"+t.sym]||null;
+    const cumBefore=cum, acctCumBefore=cumByAcct[ak]||0;
+    cum+=t.pnl; cumByAcct[ak]=acctCumBefore+t.pnl;
     const flags=[];
-    if(prev && prev.pnl<0 && normSize(t)>normSize(prev)+1e-9 && cumBefore<0) flags.push(["rev",T("seq.revenge")]);
-    if(prevSame && prevSame.pnl<0 && t.side===prevSame.side && cumBefore<0) flags.push(["add",T("seq.addLoser")]);
+    if(prevAcct && prevAcct.pnl<0 && normSize(t)>normSize(prevAcct)+1e-9 && acctCumBefore<0) flags.push(["rev",T("seq.revenge")]);
+    if(prevSame && prevSame.pnl<0 && t.side===prevSame.side && acctCumBefore<0) flags.push(["add",T("seq.addLoser")]);
     if(prevSame && prevSame.pnl<0 && t.topen!=null && prevSame.tclose!=null && (t.topen-prevSame.tclose)>=0 && (t.topen-prevSame.tclose)<=120000) flags.push(["re",T("seq.reentry")]);
     if(prim && t.sym!==prim && t.pnl<0) flags.push(["off",T("seq.offEdge")]);
-    lastBySym[t.sym]=t;
+    lastByAcct[ak]=t; lastByAcctSym[ak+"|"+t.sym]=t;
     return Object.assign({}, t, {flags, cum, cumBefore, prevSame});
   });
 }
@@ -2472,11 +2480,16 @@ function renderReport(){
 }
 // ---------- WEEKLY / discipline ----------
 function isoWeek(ds){ const d=new Date(ds+"T00:00:00Z"); const day=(d.getUTCDay()+6)%7; d.setUTCDate(d.getUTCDate()-day+3); const ft=new Date(Date.UTC(d.getUTCFullYear(),0,4)); const wk=1+Math.round(((d-ft)/86400000-3+((ft.getUTCDay()+6)%7))/7); return d.getUTCFullYear()+"-W"+String(wk).padStart(2,"0"); }
+// Evaluates the discipline rules PER ACCOUNT per day, then combines up to one row per day.
+// Necessary because behavior checks (revenge sizing, circuit-breaker, overtrade) are per-account
+// decisions: interleaving two unrelated accounts' trades into one chronological stream would make
+// a loss on account A followed by a loss on account B look like "2 losses in a row" when viewing
+// "All accounts", or inflate the day's trade count past the overtrade threshold artificially.
 function dayEval(TR){
-  const by=byKey(TR,t=>t.tday); const dates=Object.keys(by).sort();
   const dpt=DB.settings.dpt||900, ot=DB.settings.overtrade||8;
-  return dates.map(d=>{
-    const arr=by[d].slice().sort((a,b)=>a.time<b.time?-1:1);
+  const byDayAcct=byKey(TR,t=>t.tday+"|"+(t.acct||""));
+  const perAcct=Object.keys(byDayAcct).map(k=>{
+    const arr=byDayAcct[k].slice().sort((a,b)=>a.time<b.time?-1:1);
     let cum=0,peak=0,consec=0,maxC=0,revenge=0;
     arr.forEach((t,i)=>{
       if(i>0 && arr[i-1].status==="Loss" && normSize(t)>normSize(arr[i-1])+1e-9 && cum<0) revenge++;
@@ -2487,7 +2500,23 @@ function dayEval(TR){
     const r1=revenge===0, r2=maxC<=2, r3=arr.length<ot, r4=!(peak>=50 && cum<peak*0.5);
     const r5=procFrac===null?null:procFrac>=0.75;
     const disciplined=r1&&r2&&r3&&r4&&(r5!==false);
-    return {date:d,count:arr.length,net:cum,peak,maxC,revenge,r1,r2,r3,r4,r5,disciplined};
+    return {date:arr[0].tday,count:arr.length,net:cum,peak,maxC,revenge,r1,r2,r3,r4,r5,disciplined};
+  });
+  const byDay={}; perAcct.forEach(row=>{ (byDay[row.date]=byDay[row.date]||[]).push(row); });
+  return Object.keys(byDay).sort().map(d=>{
+    const rows=byDay[d];
+    const graded5=rows.filter(r=>r.r5!==null);
+    return {
+      date:d,
+      count:rows.reduce((s,r)=>s+r.count,0),
+      net:rows.reduce((s,r)=>s+r.net,0),
+      peak:Math.max(...rows.map(r=>r.peak)),
+      maxC:Math.max(...rows.map(r=>r.maxC)),
+      revenge:rows.reduce((s,r)=>s+r.revenge,0),
+      r1:rows.every(r=>r.r1), r2:rows.every(r=>r.r2), r3:rows.every(r=>r.r3), r4:rows.every(r=>r.r4),
+      r5:graded5.length?graded5.every(r=>r.r5):null,
+      disciplined:rows.every(r=>r.disciplined)
+    };
   });
 }
 function streakDisc(days){ let s=0; for(let i=days.length-1;i>=0;i--){ if(days[i].disciplined)s++; else break; } return s; }
