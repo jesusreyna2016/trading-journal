@@ -2523,7 +2523,10 @@ function dayEval(TR){
       revenge:rows.reduce((s,r)=>s+r.revenge,0),
       r1:rows.every(r=>r.r1), r2:rows.every(r=>r.r2), r3:rows.every(r=>r.r3), r4:rows.every(r=>r.r4),
       r5:graded5.length?graded5.every(r=>r.r5):null,
-      disciplined:rows.every(r=>r.disciplined)
+      // Each account judged on its own, then averaged: a day is clean when at least half of that
+      // day's active accounts were individually disciplined, not only when every single one was.
+      acctCleanPct:Math.round(rows.filter(r=>r.disciplined).length/rows.length*100),
+      disciplined:(rows.filter(r=>r.disciplined).length/rows.length)>=0.5
     };
   });
 }
