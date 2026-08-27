@@ -100,6 +100,11 @@
   .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 4%,transparent), var(--shadow); transition:border-color .18s ease, box-shadow .18s ease}
   .card:hover{ border-color:color-mix(in srgb,var(--calm) 20%,var(--hair)) }
   .vdcard{position:relative; overflow:hidden; border-left-width:3px}
+  .vdfold>summary{display:flex; list-style:none; cursor:pointer}
+  .vdfold>summary::-webkit-details-marker{display:none}
+  .vdfold>summary::marker{content:""}
+  .vdcaret{display:inline-block; margin-right:6px; font-size:11px; transition:transform .15s}
+  .vdfold[open] .vdcaret{transform:rotate(90deg)}
   .vdcard.vd-low{border-left:3px solid var(--pos); background:linear-gradient(120deg,color-mix(in srgb,var(--pos) 7%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-med{border-left:3px solid var(--wait); background:linear-gradient(120deg,color-mix(in srgb,var(--wait) 8%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-high{border-left:3px solid var(--neg); background:linear-gradient(120deg,color-mix(in srgb,var(--neg) 9%,var(--surface)),var(--surface) 60%)}
@@ -1995,12 +2000,13 @@ function verdictCard(){
   const reasons=t.reasons.length?`<div class="small muted" style="margin-top:8px">${T('tilt.why')} ${t.reasons.join(' · ')}</div>`:'';
   const truth=t.level!=="low"?`<div class="small" style="margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--surface2);color:var(--ink);line-height:1.5"><b style="color:var(--calm)">${T('d5.lab')}</b> ${douglasTruth(t.flags)}</div>`:'';
   const cta=!DB.checkins[today]?`<button class="btn small" id="vdCheckin" style="margin-top:11px">${T('vd.checkinCta')}</button>`:'';
-  return `<div class="card vdcard vd-${t.level}"><div class="rowflex" style="justify-content:space-between;align-items:flex-start;gap:12px">
-    <div style="min-width:0"><div class="eyebrow" style="color:var(--${m.c})">${T('vd.title')}</div>
-      <div class="vdhead ${m.c}"><span class="vd-dot" aria-hidden="true">${m.e}</span>${m.t}</div>
-      <div class="small" style="color:var(--muted);margin-top:5px;max-width:540px;line-height:1.5">${m.s}</div>${reasons}${truth}${cta}</div>
+  return `<details class="card vdcard vd-${t.level} vdfold" open><summary style="justify-content:space-between;align-items:flex-start;gap:12px">
+    <div style="min-width:0"><div class="eyebrow" style="color:var(--${m.c})"><span class="vdcaret">▸</span>${T('vd.title')}</div>
+      <div class="vdhead ${m.c}"><span class="vd-dot" aria-hidden="true">${m.e}</span>${m.t}</div></div>
     <span class="pass ${m.p}" style="font-size:12px;flex:none">${m.lab}</span>
-  </div></div>`;
+  </summary>
+  <div class="small" style="color:var(--muted);margin-top:5px;max-width:540px;line-height:1.5">${m.s}</div>${reasons}${truth}${cta}
+  </details>`;
 }
 // Subtle count-up on simple numeric KPI values (skips compound values and reduced-motion users).
 function animateCounts(root){
