@@ -56,8 +56,6 @@
   .app{max-width:1080px; margin:0 auto; padding:20px 18px 70px}
   .num{font-family:var(--mono); font-variant-numeric:tabular-nums}
   .eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--calm); font-weight:700}
-  .eyebrow.greet-why{font-family:var(--sans); text-transform:none; letter-spacing:0; font-size:12px; color:var(--wait); font-style:italic; max-width:min(72vw,540px); display:inline-block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom}
-  .eyebrow.greet-why:hover{color:var(--calm)}
   h1{font-size:23px; font-weight:800; margin:.1em 0 0; letter-spacing:-.02em}
   .head{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px}
   .head .actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
@@ -3375,23 +3373,10 @@ function renderRoutineEditor(host, def){
   $("#rResetDef").onclick=()=>{ confirmModal(T("rt.restoreConfirm")).then(ok=>{ if(!ok)return; DB.routineDef=[]; DB.settings.routineCustomized=false; routineEdit=false; save(); renderRoutine(); }); };
 }
 
-// Contextual greeting: after a session where you broke your rules, the header opens with your Why instead of a neutral hello.
-function whyRough(){
-  try{ const days=dayEval(scoped()); if(!days.length) return false; const last=days[days.length-1]; return !!(last && !last.disciplined); }catch(e){ return false; }
-}
 function setGreet(){
   const g=$("#greet"); if(!g) return;
   if(!user && !window.__demo){ g.className='eyebrow'; g.style.cursor=''; g.onclick=null; g.removeAttribute('title'); g.textContent=T("greetDefault"); return; }
   const nm=(DB.settings&&DB.settings.name)||(user&&(user.email||"").split("@")[0])||"";
-  const W=(DB.settings&&DB.settings.why)||{};
-  if(W.text && whyRough()){
-    const full=String(W.text).replace(/\s+/g,' ').trim();
-    g.className='eyebrow greet-why';
-    g.textContent='🎯 '+(full.length>92?full.slice(0,90)+'…':full);
-    g.title=full; g.style.cursor='pointer';
-    g.onclick=()=>{ try{ showWhyEditor(); }catch(e){} };
-    return;
-  }
   g.className='eyebrow'; g.style.cursor=''; g.onclick=null; g.removeAttribute('title');
   g.textContent=T("hi")+" 👋 "+nm;
 }
