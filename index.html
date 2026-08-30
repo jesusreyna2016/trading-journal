@@ -1505,7 +1505,7 @@ function maybeAskHideFromList(id,prevStatus,newStatus){
 function pickAccountModal(){
   return new Promise(resolve=>{
     if(acctSel.size===1){ const k=[...acctSel][0]; if(DB.accounts[k]) return resolve(k); }
-    const ids=Object.keys(DB.accounts);
+    const ids=Object.keys(DB.accounts).filter(id=>!DB.accounts[id].hidden);
     let done=false, toCreate=false; const fin=(v)=>{ if(done)return; done=true; resolve(v); };
     const openCreate=()=>{ toCreate=true; closeModal(); accountForm(null,(nid)=>fin(nid||null)); };
     const body=`<div class="eyebrow">${T("pk.title")}</div><h1 style="margin:.1em 0 .5em; font-size:21px">${T("pk.which")}</h1>`+
@@ -3328,7 +3328,8 @@ function addWithdrawalModal(id){
 }
 function renderAccounts(){
   const host=$("#view-accounts"); const ids=Object.keys(DB.accounts); const unassigned=DB.trades.filter(t=>!t.acct).length;
-  const reCard=unassigned?`<div class="card section"><p class="small wait" style="margin:0 0 8px">${fmt(T("ac.unassigned"),{n:unassigned})}</p>${ids.length?`<div class="rowflex small">${T("ac.assignAllTo")} <select id="reAcct">${ids.map(i=>`<option value="${i}">${escA(DB.accounts[i].name)}</option>`).join("")}</select> <button class="btn small" id="reApply">${T("ac.assign")}</button></div>`:'<span class="small muted">'+T("ac.createToAssign")+'</span>'}</div>`:'';
+  const assignableIds=ids.filter(id=>!DB.accounts[id].hidden);
+  const reCard=unassigned?`<div class="card section"><p class="small wait" style="margin:0 0 8px">${fmt(T("ac.unassigned"),{n:unassigned})}</p>${assignableIds.length?`<div class="rowflex small">${T("ac.assignAllTo")} <select id="reAcct">${assignableIds.map(i=>`<option value="${i}">${escA(DB.accounts[i].name)}</option>`).join("")}</select> <button class="btn small" id="reApply">${T("ac.assign")}</button></div>`:'<span class="small muted">'+T("ac.createToAssign")+'</span>'}</div>`:'';
   if(!ids.length){ host.innerHTML=`<div class="card"><h2>${T("ac.title")}</h2><p class="muted small">${T("ac.emptyLead")}</p><button class="btn calm" id="newAcct">${T("ac.new")}</button></div>${reCard}`;
     $("#newAcct").onclick=addAccount; return; }
   const selReal=[...acctSel].filter(k=>DB.accounts[k]);
