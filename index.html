@@ -772,6 +772,7 @@
     <div id="view-progress" class="hide"></div>
     <div id="view-calendar" class="hide"></div>
     <div id="view-risk" class="hide"></div>
+    <div id="view-customrules" class="hide"></div>
     <div id="view-accounts" class="hide"></div>
     <div id="view-finance" class="hide"></div>
     <div id="view-report" class="hide"></div>
@@ -846,6 +847,7 @@ const I18N={
   "leaks.autoTitle":"Your leaks, automatic detection","leaks.thresholds":"Thresholds: over-trading ≥ {ot} trades/day · daily loss limit ${dpt}.","apply":"Apply",
   "risk.compliance":"Compliance","risk.daysOverDpt":"Days over your daily limit","risk.hitDpt":"hit −${d}","risk.rrAvg":"Avg R:R","risk.avgWL2":"avg win / avg loss","risk.inWindow":"In window {sess}","risk.worstDD":"Worst day DD","risk.worstDDSub":"lowest you dropped",
   "risk.setCap":"Daily loss cap $","risk.setWindow":"Window","risk.setOver":"Over-trading ≥","risk.setComm":"Commission per contract (round-turn) $ {v}","risk.commHint":"Only used when your CSV doesn't already carry commission per trade (Tradovate's own export doesn't). Set it once and every future import estimates the real fee automatically. Trades that DO carry their own commission (TopstepX, TradingView, most generic exports) ignore this and use the real number instead.","risk.commSaved":"Saved. New imports will estimate commission at this rate.",
+  "cr.title":"🧩 My rules","cr.lead":"Define your own trigger, in plain terms, no AI needed. The moment a trade matches it, it counts against you here, so you can see exactly how much that pattern is costing you.","cr.new":"New rule","cr.empty":"No custom rules yet. Create one for a pattern you keep catching yourself doing that isn't already covered elsewhere.","cr.paused":"paused","cr.resume":"▶ Resume","cr.pause":"⏸ Pause","cr.hitCount":"Triggered {n} time(s), net","cr.delConfirm":"Delete this rule? This can't be undone.","cr.newTitle":"New rule","cr.nameLabel":"Name (optional)","cr.namePh":"e.g. Revenge trade","cr.triggerLabel":"Watch for…","cr.created":"Rule created.","cr.t.reentry_min":"Re-entering too soon after a loss","cr.t.size_mult":"Sizing up after a loss","cr.t.after_time":"Trading past a certain time","cr.t.max_trades_day":"More trades than your daily cap","cr.d.reentry_min":"Flags any trade opened within {v} min of a loss.","cr.d.size_mult":"Flags a trade sized {v}× or more of your last one, right after a loss.","cr.d.after_time":"Flags any trade opened at or after {v} (CT).","cr.d.max_trades_day":"Flags every trade past the first {v} of the day.","cr.p.reentry_min":"Minutes after a loss","cr.p.size_mult":"Size multiplier","cr.p.after_time":"Time (CT)","cr.p.max_trades_day":"Max trades per day",
   "risk.byDay":"Risk by day","th.day":"Day","th.net":"Net","th.worstDD":"Worst (DD)","th.maxLoss":"Max losses in a row","th.inWindow":"In window","th.dpt":"Daily limit","th.compl":"Compl.","risk.broke":"broke","risk.ok":"ok","risk.noDays":"No days in this period.",
   "risk.complNote":"Compliance is how many of your 4 daily risk rules you kept: no more than 2 losses in a row, don't touch your daily loss cap, don't over-trade, and only trade inside your window. Keep all four and the day was under control, whatever the P&L did. DD is the deepest you were underwater during the day.",
   "risk.streakTitle":"Losing streaks (per day)","risk.noStreak":"No losses in a row","risk.inRow":"in a row","risk.day":"day","risk.days":"days",
@@ -865,7 +867,7 @@ const I18N={
   "pb.promptName":"Play name:","pb.created":"Play created. You can now tag it in the Journal.","pb.saved":"Rules saved.",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.lessons":"Lessons","tab.progress":"Progress",
-  "les.title":"Lessons library","les.lead":"Everything you've written to yourself, in one place: daily reviews, trade notes and your honest 'why'. Your own words are the best coach you have, reread them before the next session.","les.search":"Search your lessons…","les.empty":"Nothing here yet. Your daily reviews (Check-in) and trade notes land here automatically as you write them.","les.noMatch":"No lessons match your search.","les.review":"Daily review","les.note":"Trade note","les.why":"Why I traded","les.count":"{n} entries","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report",
+  "les.title":"Lessons library","les.lead":"Everything you've written to yourself, in one place: daily reviews, trade notes and your honest 'why'. Your own words are the best coach you have, reread them before the next session.","les.search":"Search your lessons…","les.empty":"Nothing here yet. Your daily reviews (Check-in) and trade notes land here automatically as you write them.","les.noMatch":"No lessons match your search.","les.review":"Daily review","les.note":"Trade note","les.why":"Why I traded","les.count":"{n} entries","tab.calendar":"Calendar","tab.risk":"Risk","tab.customrules":"My Rules","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report",
   "cal.empty":"Import your trades and your month fills in right here, green and red days, with a dot for the days you kept your rules.","cal.monthNet":"Month net","cal.greenDays":"Green days","cal.avgDay":"Avg day","cal.bestWorst":"Best / worst","cal.ofMonth":"of the month","cal.thisMonth":"this month","cal.dows":"M,T,W,T,F,S,S","cal.legend":"Green/red = day P&L · dot = discipline (green kept / red broke) · 🔥 = tilt (bigger bets after a loss, or 3+ losses in a row). Hover for detail.","w.disciplined":"disciplined",
   "ci.title":"Session check-in, {d}","ci.lead":"Before trading: how do you arrive and what's the plan? It's saved and later cross-checked with the day's result.","ci.mood":"Mood","ci.plan":"Plan","ci.planPh":"E.g.: only valid edges with the bias; stop at 2 losses","ci.day":"Day","ci.rules":"I confirm my rules: fixed size · stop after 2 losses · only valid edges with the bias · respect my daily loss limit","ci.save":"Save check-in","ci.saved":"Check-in saved for {d}","ci.moodVsResult":"Your mood vs result (by day)","ci.moodNote":"The mood you arrive with predicts your day. The red above is your most expensive state: the day you arrive like that, trade less or don't trade.","ci.history":"Check-in history","ci.thMood":"Mood","ci.thPlan":"Plan","ci.thNetDay":"Net (day)","ci.thDisc":"Disc.","ci.none":"No check-ins yet. Save the first one above.",
   "pg.empty":"Import and tag a few trades and this becomes your progress story, week over week. Not just a number, a direction.","pg.kDisc":"Discipline (last wk)","pg.kProc":"Avg process","pg.procSub":"process grade","pg.kNomans":"Outside your edge","pg.tradesWk":"trades this wk","pg.kAgainst":"Against bias","pg.scorecard":"Week scorecard · {w}","pg.weekDays":"This week's days","pg.noDays":"No days.","pg.heatNote":"Green = disciplined day · Red = broke a rule (hover to see why).","pg.discByWeek":"Discipline by week","pg.discNote":"% of disciplined days each week. The line you want: rising and staying high.","pg.goals":"Goals","pg.goalDisc":"Weekly discipline ≥ {v}%","pg.goalProc":"Avg process ≥ {v}%","pg.goalNomans":"Trades outside your edge ≤ {v}/wk","pg.goalRr":"Avg win/loss ≥ {v}","pg.avgWL":"Avg win/loss","pg.goalsLabel":"Goals:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"Off-edge/wk","pg.weekTrend":"Weekly trend","pg.thWeek":"Week","pg.thNomans":"Off-edge","pg.thAgainst":"Against",
@@ -989,6 +991,7 @@ const I18N={
   "leaks.autoTitle":"Tus fugas, detección automática","leaks.thresholds":"Umbrales: sobreoperar ≥ {ot} trades/día · límite de pérdida diaria ${dpt}.","apply":"Aplicar",
   "risk.compliance":"Cumplimiento","risk.daysOverDpt":"Días sobre tu límite diario","risk.hitDpt":"tocaron −${d}","risk.rrAvg":"R:R medio","risk.avgWL2":"avg win / avg loss","risk.inWindow":"En ventana {sess}","risk.worstDD":"Peor DD del día","risk.worstDDSub":"lo más abajo que caíste",
   "risk.setCap":"Límite de pérdida diaria $","risk.setWindow":"Ventana","risk.setOver":"Sobreoperar ≥","risk.setComm":"Comisión por contrato (ida y vuelta) $ {v}","risk.commHint":"Solo se usa cuando tu CSV no trae comisión por trade (el export propio de Tradovate no la trae). Configúralo una vez y cada import futuro estima la comisión real automáticamente. Los trades que SÍ traen su propia comisión (TopstepX, TradingView, la mayoría de exports genéricos) ignoran esto y usan el número real.","risk.commSaved":"Guardado. Los próximos imports estimarán la comisión a esta tasa.",
+  "cr.title":"🧩 Mis reglas","cr.lead":"Define tu propio disparador, en términos simples, sin necesidad de IA. En el momento en que un trade lo cumple, cuenta aquí en tu contra, así ves exactamente cuánto te cuesta ese patrón.","cr.new":"Nueva regla","cr.empty":"Aún no tienes reglas personalizadas. Crea una para un patrón que sabes que repites y que no está cubierto en otro lado.","cr.paused":"pausada","cr.resume":"▶ Reanudar","cr.pause":"⏸ Pausar","cr.hitCount":"Se activó {n} vez(ces), neto","cr.delConfirm":"¿Borrar esta regla? No se puede deshacer.","cr.newTitle":"Nueva regla","cr.nameLabel":"Nombre (opcional)","cr.namePh":"ej. Trade por venganza","cr.triggerLabel":"Vigilar…","cr.created":"Regla creada.","cr.t.reentry_min":"Reentrar muy rápido tras una pérdida","cr.t.size_mult":"Subir el tamaño tras una pérdida","cr.t.after_time":"Operar después de cierta hora","cr.t.max_trades_day":"Más trades que tu tope diario","cr.d.reentry_min":"Marca cualquier trade abierto a menos de {v} min de una pérdida.","cr.d.size_mult":"Marca un trade con tamaño {v}× o más que el anterior, justo tras una pérdida.","cr.d.after_time":"Marca cualquier trade abierto a las {v} (CT) o después.","cr.d.max_trades_day":"Marca cada trade después del número {v} del día.","cr.p.reentry_min":"Minutos tras una pérdida","cr.p.size_mult":"Multiplicador de tamaño","cr.p.after_time":"Hora (CT)","cr.p.max_trades_day":"Máx trades por día",
   "risk.byDay":"Riesgo por día","th.day":"Día","th.net":"Neto","th.worstDD":"Peor (DD)","th.maxLoss":"Máx pérd. seg.","th.inWindow":"En ventana","th.dpt":"Límite diario","th.compl":"Cumpl.","risk.broke":"rompió","risk.ok":"ok","risk.noDays":"Sin días en este periodo.",
   "risk.complNote":"El cumplimiento es cuántas de tus 4 reglas de riesgo del día mantuviste: no más de 2 pérdidas seguidas, no tocar tu tope de pérdida diaria, no sobreoperar, y operar solo dentro de tu ventana. Cumple las cuatro y el día estuvo bajo control, hiciera lo que hiciera el P&L. El DD es lo más abajo que estuviste en el día.",
   "risk.streakTitle":"Rachas de pérdidas seguidas (por día)","risk.noStreak":"Sin pérdidas seguidas","risk.inRow":"seguidas","risk.day":"día","risk.days":"días",
@@ -1008,7 +1011,7 @@ const I18N={
   "pb.promptName":"Nombre de la jugada:","pb.created":"Jugada creada. Ya puedes etiquetarla en el Diario.","pb.saved":"Reglas guardadas.",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.lessons":"Lecciones","tab.progress":"Progreso",
-  "les.title":"Biblioteca de lecciones","les.lead":"Todo lo que te has escrito a ti mismo, en un solo lugar: revisiones diarias, notas de trade y tu 'por qué' honesto. Tus propias palabras son el mejor coach que tienes, reléelas antes de la próxima sesión.","les.search":"Busca en tus lecciones…","les.empty":"Aún no hay nada. Tus revisiones diarias (Check-in) y notas de trade aparecen aquí solas conforme las escribes.","les.noMatch":"Ninguna lección coincide con tu búsqueda.","les.review":"Revisión diaria","les.note":"Nota de trade","les.why":"Por qué operé","les.count":"{n} entradas","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe",
+  "les.title":"Biblioteca de lecciones","les.lead":"Todo lo que te has escrito a ti mismo, en un solo lugar: revisiones diarias, notas de trade y tu 'por qué' honesto. Tus propias palabras son el mejor coach que tienes, reléelas antes de la próxima sesión.","les.search":"Busca en tus lecciones…","les.empty":"Aún no hay nada. Tus revisiones diarias (Check-in) y notas de trade aparecen aquí solas conforme las escribes.","les.noMatch":"Ninguna lección coincide con tu búsqueda.","les.review":"Revisión diaria","les.note":"Nota de trade","les.why":"Por qué operé","les.count":"{n} entradas","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.customrules":"Mis reglas","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe",
   "cal.empty":"Importa tus trades y tu mes se llena aquí mismo, días verdes y rojos, con un punto por los días que cumpliste tus reglas.","cal.monthNet":"Neto del mes","cal.greenDays":"Días verdes","cal.avgDay":"Día medio","cal.bestWorst":"Mejor / peor","cal.ofMonth":"del mes","cal.thisMonth":"este mes","cal.dows":"L,M,X,J,V,S,D","cal.legend":"Verde/rojo = P&L del día · punto = disciplina (verde cumplió / rojo rompió) · 🔥 = tilt (apuestas más grandes tras perder, o 3+ pérdidas seguidas). Pasa el cursor para el detalle.","w.disciplined":"disciplinado",
   "ci.title":"Check-in de sesión, {d}","ci.lead":"Antes de operar: ¿cómo llegas y cuál es el plan? Se guarda y luego se cruza con el resultado del día.","ci.mood":"Ánimo","ci.plan":"Plan","ci.planPh":"Ej: solo bordes válidos a favor del sesgo; parar a 2 pérdidas","ci.day":"Día","ci.rules":"Confirmo mis reglas: tamaño fijo · parar tras 2 pérdidas · solo bordes válidos a favor del sesgo · respetar mi límite de pérdida diaria","ci.save":"Guardar check-in","ci.saved":"Check-in guardado para {d}","ci.moodVsResult":"Tu ánimo vs resultado (por día)","ci.moodNote":"El ánimo con el que llegas predice tu día. El rojo de arriba es tu estado más caro: el día que llegues así, opera menos o no operes.","ci.history":"Historial de check-ins","ci.thMood":"Ánimo","ci.thPlan":"Plan","ci.thNetDay":"Neto del día","ci.thDisc":"Disc.","ci.none":"Aún no hay check-ins. Guarda el primero arriba.",
   "pg.empty":"Importa y etiqueta unos trades y esto se vuelve tu historia de progreso, semana a semana. No solo un número, una dirección.","pg.kDisc":"Disciplina (última sem)","pg.kProc":"Proceso medio","pg.procSub":"grade del proceso","pg.kNomans":"Fuera de tu ventaja","pg.tradesWk":"trades esta sem","pg.kAgainst":"Contra sesgo","pg.scorecard":"Scorecard de la semana · {w}","pg.weekDays":"Días de esta semana","pg.noDays":"Sin días.","pg.heatNote":"Verde = día disciplinado · Rojo = rompió alguna regla (pasa el cursor para ver por qué).","pg.discByWeek":"Disciplina por semana","pg.discNote":"% de días disciplinados cada semana. La línea que buscas: que suba y se quede arriba.","pg.goals":"Metas","pg.goalDisc":"Disciplina semanal ≥ {v}%","pg.goalProc":"Proceso medio ≥ {v}%","pg.goalNomans":"Trades fuera de tu ventaja ≤ {v}/sem","pg.goalRr":"Ganancia/pérdida media ≥ {v}","pg.avgWL":"Ganancia/pérdida media","pg.goalsLabel":"Metas:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"FueraV/sem","pg.weekTrend":"Tendencia por semana","pg.thWeek":"Semana","pg.thNomans":"FueraV","pg.thAgainst":"Contra",
@@ -1106,7 +1109,7 @@ try{ document.documentElement.dataset.theme=(DB.settings&&DB.settings.theme)||'d
 let period="ALL", tab="overview", monthSel=null, acctSel=new Set(), noteSel=null, jExpanded=null, routineSel=null, jFilter={}, lessonQ="";
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
 function scoped(){ if(!acctSel.size)return DB.trades; return DB.trades.filter(t=>acctSel.has(t.acct||"__none")); }
-const GROUPS=[{lab:"grp.summary",subs:["overview"]},{lab:"grp.routine",subs:["routine"]},{lab:"grp.diary",subs:["journal","positions","checkin","notes","lessons"]},{lab:"grp.discipline",subs:["leaks","risk","score"]},{lab:"grp.analysis",subs:["report","playbooks"]},{lab:"grp.progress",subs:["progress","calendar"]},{lab:"grp.business",subs:["accounts","finance"]}];
+const GROUPS=[{lab:"grp.summary",subs:["overview"]},{lab:"grp.routine",subs:["routine"]},{lab:"grp.diary",subs:["journal","positions","checkin","notes","lessons"]},{lab:"grp.discipline",subs:["leaks","risk","customrules","score"]},{lab:"grp.analysis",subs:["report","playbooks"]},{lab:"grp.progress",subs:["progress","calendar"]},{lab:"grp.business",subs:["accounts","finance"]}];
 let groupLast={};
 function groupOf(t){ return GROUPS.find(g=>g.subs.includes(t))||GROUPS[0]; }
 function buildTabs(){
@@ -1138,6 +1141,7 @@ function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
   s.settings=Object.assign({dpt:900, overtrade:8, session:"Asia", lang:"en", theme:"dark", commPerContract:0}, s.settings||{});
+  s.settings.customRules=Array.isArray(s.settings.customRules)?s.settings.customRules:[];
   s.settings.goals=Object.assign({disc:80, proc:80, nomans:2, rr:1.5}, s.settings.goals||{});
   migrateCommissions(s);
   return s;
@@ -3180,6 +3184,98 @@ function renderRisk(){
   $("#rCommApply").onclick=()=>{DB.settings.commPerContract=+$("#rComm").value||0; save(); toast(T("risk.commSaved")); renderRisk();};
 }
 
+// ---------- CUSTOM RULES: user-defined triggers, no AI. Pick a condition + a threshold in a form, and every
+// trade gets checked against it from then on. Same spirit as Zella AI's "describe a rule" agent, but as a
+// plain condition→threshold picker instead of parsing natural language, so it costs nothing to run and never
+// needs a backend. ----------
+const CUSTOM_TRIGGERS=["reentry_min","size_mult","after_time","max_trades_day"];
+function customRuleMatches(rule, TR){
+  const byDayAcct=byKey(TR, t=>(t.tday||t.date)+"|"+(t.acct||""));
+  const hits=[];
+  Object.values(byDayAcct).forEach(dayArr=>{
+    const arr=dayArr.slice().sort((a,b)=>a.time<b.time?-1:1);
+    if(rule.trigger==="max_trades_day"){
+      const n=+rule.param||8;
+      if(arr.length>n) hits.push(...arr.slice(n));
+      return;
+    }
+    arr.forEach((t,i)=>{
+      const prev=arr[i-1];
+      if(rule.trigger==="reentry_min"){
+        if(!prev || prev.pnl>=0 || t.topen==null || prev.tclose==null) return;
+        const mins=(t.topen-prev.tclose)/60000;
+        if(mins>=0 && mins<=(+rule.param||5)) hits.push(t);
+      } else if(rule.trigger==="size_mult"){
+        if(!prev || prev.pnl>=0) return;
+        if(normSize(t)>=normSize(prev)*(+rule.param||1.5)-1e-9) hits.push(t);
+      } else if(rule.trigger==="after_time"){
+        const m=ctMinutes(t); if(m==null) return;
+        const parts=String(rule.param||"14:00").split(":"); const lim=(+parts[0]||0)*60+(+parts[1]||0);
+        if(m>=lim) hits.push(t);
+      }
+    });
+  });
+  return hits;
+}
+function customRuleDesc(rule){ return fmt(T("cr.d."+rule.trigger)||"", {v:rule.param}); }
+function renderCustomRules(){
+  const host=$("#view-customrules"); const TR=activeTrades();
+  const rules=DB.settings.customRules||[];
+  const rows=rules.map(r=>{
+    const hits=r.active===false?[]:customRuleMatches(r,TR);
+    const cost=hits.reduce((s,t)=>s+t.pnl,0);
+    return `<div class="card section">
+      <div class="rowflex" style="justify-content:space-between;align-items:flex-start;gap:10px">
+        <div style="min-width:0">
+          <div style="font-weight:700;font-size:15px">${escA(r.name)}${r.active===false?` <span class="tag" style="font-weight:600;background:var(--surface2);color:var(--muted)">${T('cr.paused')}</span>`:''}</div>
+          <div class="small muted" style="margin-top:2px">${customRuleDesc(r)}</div>
+        </div>
+        <div class="rowflex" style="gap:6px;flex:none">
+          <button class="btn small ghost" data-crtoggle="${r.id}">${r.active===false?T('cr.resume'):T('cr.pause')}</button>
+          <button class="btn small ghost" data-crdel="${r.id}" title="${T('cm.delete')}">🗑</button>
+        </div>
+      </div>
+      <div class="small" style="margin-top:10px">${fmt(T('cr.hitCount'),{n:hits.length})} <span class="${cls(cost)}" style="font-weight:700">${money1(cost)}</span></div>
+    </div>`;
+  }).join("");
+  host.innerHTML = `<div class="card" style="border-color:var(--calm)"><h2 style="margin:0 0 6px">${T('cr.title')}</h2><p class="small muted" style="margin:0">${T('cr.lead')}</p></div>
+    <button class="btn calm" id="crNewBtn" style="margin:12px 0">＋ ${T('cr.new')}</button>
+    ${rows || emptyCard(T('cr.empty'))}`;
+  $("#crNewBtn").onclick=showCustomRuleForm;
+  host.querySelectorAll("[data-crtoggle]").forEach(b=>b.onclick=()=>{ const r=rules.find(x=>x.id===b.dataset.crtoggle); if(!r)return; r.active=r.active===false?true:false; save(); renderCustomRules(); });
+  host.querySelectorAll("[data-crdel]").forEach(b=>b.onclick=()=>{ confirmModal(T('cr.delConfirm'),{danger:true,ok:T('cm.delete')}).then(ok=>{ if(!ok)return; DB.settings.customRules=(DB.settings.customRules||[]).filter(x=>x.id!==b.dataset.crdel); save(); renderCustomRules(); }); });
+}
+function showCustomRuleForm(){
+  const opts=CUSTOM_TRIGGERS.map(t=>`<option value="${t}">${T('cr.t.'+t)}</option>`).join("");
+  openModal(`<div class="eyebrow">＋</div><h1 style="margin:.1em 0 .5em;font-size:20px">${T('cr.newTitle')}</h1>
+    <label class="small muted">${T('cr.nameLabel')}</label>
+    <input type="text" id="crName" placeholder="${T('cr.namePh')}" style="width:100%;margin:4px 0 12px; padding:9px 11px; border:1px solid var(--hair); border-radius:8px; background:var(--surface2); color:var(--ink); font-size:14px">
+    <label class="small muted">${T('cr.triggerLabel')}</label>
+    <select id="crTrigger" style="width:100%;margin:4px 0 12px">${opts}</select>
+    <div id="crParamHost"></div>
+    <div class="rowflex" style="gap:10px;margin-top:6px"><button class="btn calm" id="crSave" style="flex:1;justify-content:center;padding:11px">${T('af.save')}</button><button class="btn ghost" id="crCancel" style="justify-content:center;padding:11px">${T('cancel')}</button></div>`);
+  const paramHost=$("#crParamHost");
+  const renderParam=()=>{
+    const trig=$("#crTrigger").value;
+    if(trig==="after_time"){
+      paramHost.innerHTML=`<label class="small muted">${T('cr.p.after_time')}</label><input type="time" id="crParam" value="14:00" style="width:100%;margin:4px 0 12px; padding:9px 11px">`;
+    } else {
+      const ph = trig==="reentry_min"?5:trig==="size_mult"?1.5:8;
+      paramHost.innerHTML=`<label class="small muted">${T('cr.p.'+trig)}</label><input type="number" id="crParam" value="${ph}" step="${trig==='size_mult'?'0.1':'1'}" min="0" style="width:100%;margin:4px 0 12px; padding:9px 11px">`;
+    }
+  };
+  renderParam();
+  $("#crTrigger").onchange=renderParam;
+  $("#crCancel").onclick=closeModal;
+  $("#crSave").onclick=()=>{
+    const trig=$("#crTrigger").value, param=$("#crParam").value;
+    const name=($("#crName").value||"").trim() || T('cr.t.'+trig);
+    DB.settings.customRules=DB.settings.customRules||[];
+    DB.settings.customRules.push({id:'cr'+Date.now(), name, trigger:trig, param, active:true});
+    save(); closeModal(); toast(T('cr.created')); renderCustomRules();
+  };
+}
+
 // ---------- ACCOUNTS (funded tracker) ----------
 function acctStats(id){
   const a=DB.accounts[id];
@@ -3778,6 +3874,7 @@ function render(){
   else if(tab==="progress")renderProgress();
   else if(tab==="calendar")renderCalendar();
   else if(tab==="risk")renderRisk();
+  else if(tab==="customrules")renderCustomRules();
   else if(tab==="accounts")renderAccounts();
   else if(tab==="finance")renderFinance();
   else if(tab==="report")renderReport();
