@@ -218,6 +218,7 @@
   .cal .cell.gneg{background:rgba(242,73,92,.12)} .cal .cell.gneg .dv{color:var(--neg)}
   .cal .cell .dot{position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%}
   .cal .cell .dot.ok{background:var(--pos)} .cal .cell .dot.no{background:var(--neg)}
+  .cal .cell .tiltmark{position:absolute; top:5px; left:6px; font-size:9px; line-height:1}
   .cal .cell{min-height:64px}
   .cal .cell .cst{font-size:9px; color:var(--muted); font-family:var(--mono)}
   .calwrap{display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap}
@@ -851,6 +852,8 @@ const I18N={
   "risk.cbNote":"Your circuit-breaker says stop at <b>2</b>. <b class='neg'>{n} day(s)</b> you reached 3+, that's where most is lost.","risk.cbOk":"Your circuit-breaker says stop at <b>2</b>. No day went past 2. 🟢",
   "th.Trades":"Trades",
   "score.needMore":"Import a few more trades and I'll grade your process. One or two isn't enough to say anything honest yet.","score.yourScore":"Your Score","score.weakest":"Your weakest point","score.weakestBody":"<b>{l}</b> at {v}/100 is the single thing dragging your score down the most right now. It's also your biggest opportunity, move this one number and everything above it lifts with it. The fix: {tip}.",
+  "pkeep.title":"🤝 Promise-keeping rate","pkeep.bodyGood":"You kept your pre-session plan on {kept} of your last {n} check-ins ({pct}%). That's the habit compounding underneath every other number here.","pkeep.bodyMid":"You kept your pre-session plan on {kept} of your last {n} check-ins ({pct}%). Room to close that gap, the plan only works on the days you actually follow it.","pkeep.bodyLow":"You kept your pre-session plan on {kept} of your last {n} check-ins ({pct}%). Worth asking honestly: is the plan wrong, or is it discipline? Either way, this number moving is what moves everything else.",
+  "cal.tiltDay":"Tilt-chain that day: revenge-sizing or 3+ losses in a row.",
   "score.sampleSize":"🎲 Only {n} trades so far. Even a real edge produces a random mix of wins and losses, most traders don't get an honest read until 20-30 trades. Treat this score as a rough draft, not a verdict, and keep judging your process, not this number.",
   "ax.win.l":"Win rate","ax.win.tip":"win more often or improve trade selection","ax.pf.l":"Profit factor","ax.pf.tip":"your wins must outweigh your losses","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"let winners run and cut losers sooner","ax.dd.l":"Max drawdown","ax.dd.tip":"control the streaks, respect the circuit-breaker","ax.rec.l":"Recovery","ax.rec.tip":"you recover slowly from drawdown; shrink your losses","ax.consist.l":"Consistency","ax.consist.tip":"fewer red days, more regularity",
   "score.ratioSub":"win ÷ loss","score.recovery":"Recovery factor","score.recSub":"net ÷ max DD","score.consistency":"Consistency","score.greenDays":"{g}/{t} green days","score.annualized":"annualized","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Performance by weekday","score.byHour":"Performance by hour (CT)",
@@ -863,7 +866,7 @@ const I18N={
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Journal","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Summary","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.lessons":"Lessons","tab.progress":"Progress",
   "les.title":"Lessons library","les.lead":"Everything you've written to yourself, in one place: daily reviews, trade notes and your honest 'why'. Your own words are the best coach you have, reread them before the next session.","les.search":"Search your lessons…","les.empty":"Nothing here yet. Your daily reviews (Check-in) and trade notes land here automatically as you write them.","les.noMatch":"No lessons match your search.","les.review":"Daily review","les.note":"Trade note","les.why":"Why I traded","les.count":"{n} entries","tab.calendar":"Calendar","tab.risk":"Risk","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report",
-  "cal.empty":"Import your trades and your month fills in right here, green and red days, with a dot for the days you kept your rules.","cal.monthNet":"Month net","cal.greenDays":"Green days","cal.avgDay":"Avg day","cal.bestWorst":"Best / worst","cal.ofMonth":"of the month","cal.thisMonth":"this month","cal.dows":"M,T,W,T,F,S,S","cal.legend":"Green/red = day P&L · dot = discipline (green kept / red broke). Hover for detail.","w.disciplined":"disciplined",
+  "cal.empty":"Import your trades and your month fills in right here, green and red days, with a dot for the days you kept your rules.","cal.monthNet":"Month net","cal.greenDays":"Green days","cal.avgDay":"Avg day","cal.bestWorst":"Best / worst","cal.ofMonth":"of the month","cal.thisMonth":"this month","cal.dows":"M,T,W,T,F,S,S","cal.legend":"Green/red = day P&L · dot = discipline (green kept / red broke) · 🔥 = tilt-chain (revenge-sizing or 3+ losses in a row). Hover for detail.","w.disciplined":"disciplined",
   "ci.title":"Session check-in, {d}","ci.lead":"Before trading: how do you arrive and what's the plan? It's saved and later cross-checked with the day's result.","ci.mood":"Mood","ci.plan":"Plan","ci.planPh":"E.g.: only valid edges with the bias; stop at 2 losses","ci.day":"Day","ci.rules":"I confirm my rules: fixed size · circuit-breaker at 2 losses · only valid edges with the bias · respect the DPT","ci.save":"Save check-in","ci.saved":"Check-in saved for {d}","ci.moodVsResult":"Your mood vs result (by day)","ci.moodNote":"The mood you arrive with predicts your day. The red above is your most expensive state: the day you arrive like that, trade less or don't trade.","ci.history":"Check-in history","ci.thMood":"Mood","ci.thPlan":"Plan","ci.thNetDay":"Net (day)","ci.thDisc":"Disc.","ci.none":"No check-ins yet. Save the first one above.",
   "pg.empty":"Import and tag a few trades and this becomes your progress story, week over week. Not just a number, a direction.","pg.kDisc":"Discipline (last wk)","pg.kProc":"Avg process","pg.procSub":"process grade","pg.kNomans":"No-man's-land","pg.tradesWk":"trades this wk","pg.kAgainst":"Against bias","pg.scorecard":"Week scorecard · {w}","pg.weekDays":"This week's days","pg.noDays":"No days.","pg.heatNote":"Green = disciplined day · Red = broke a rule (hover to see why).","pg.discByWeek":"Discipline by week","pg.discNote":"% of disciplined days each week. The line you want: rising and staying high.","pg.goals":"Goals","pg.goalDisc":"Weekly discipline ≥ {v}%","pg.goalProc":"Avg process ≥ {v}%","pg.goalNomans":"No-man's-land ≤ {v}/wk","pg.goalRr":"R:R ≥ {v}","pg.goalsLabel":"Goals:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"No-man/wk","pg.weekTrend":"Weekly trend","pg.thWeek":"Week","pg.thNomans":"No-man","pg.thAgainst":"Against",
   "rule.r1":"Fixed size (no revenge-sizing)","rule.r2":"Circuit-breaker (stop at 2 losses)","rule.r3":"No over-trading","rule.r4":"Protect profits (no round-trip)","rule.r5":"Followed my plan (process ≥ 75%, if tagged)",
@@ -992,6 +995,8 @@ const I18N={
   "risk.cbNote":"Tu circuit-breaker dice parar a las <b>2</b>. <b class='neg'>{n} día(s)</b> llegaste a 3+, ahí es donde más se pierde.","risk.cbOk":"Tu circuit-breaker dice parar a las <b>2</b>. Ningún día pasaste de 2. 🟢",
   "th.Trades":"Trades",
   "score.needMore":"Importa unos trades más y califico tu proceso. Con uno o dos todavía no se puede decir nada honesto.","score.yourScore":"Tu Score","score.weakest":"Tu punto más débil","score.weakestBody":"<b>{l}</b> con {v}/100 es lo único que más te baja el score ahora mismo. También es tu mayor oportunidad: mueve este número y todo lo demás sube con él. El arreglo: {tip}.",
+  "pkeep.title":"🤝 Promesas cumplidas","pkeep.bodyGood":"Cumpliste tu plan de pre-sesión en {kept} de tus últimos {n} check-ins ({pct}%). Ese es el hábito que sostiene todo lo demás aquí.","pkeep.bodyMid":"Cumpliste tu plan de pre-sesión en {kept} de tus últimos {n} check-ins ({pct}%). Hay espacio para cerrar esa brecha, el plan solo funciona los días que realmente lo sigues.","pkeep.bodyLow":"Cumpliste tu plan de pre-sesión en {kept} de tus últimos {n} check-ins ({pct}%). Vale la pena preguntarte con honestidad: ¿es el plan o es disciplina? De cualquier forma, mover este número es lo que mueve todo lo demás.",
+  "cal.tiltDay":"Cadena de tilt ese día: revenge-sizing o 3+ pérdidas seguidas.",
   "score.sampleSize":"🎲 Solo {n} trades hasta ahora. Hasta un edge real produce una mezcla al azar de ganadores y perdedores, la mayoría no tiene una lectura honesta antes de 20-30 trades. Trata este score como un borrador, no un veredicto, y sigue juzgando tu proceso, no este número.",
   "ax.win.l":"Win rate","ax.win.tip":"gana más seguido o mejora la selección de trades","ax.pf.l":"Profit factor","ax.pf.tip":"tus ganancias deben pesar más que tus pérdidas","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"deja correr los ganadores y corta los perdedores antes","ax.dd.l":"Max drawdown","ax.dd.tip":"controla las rachas, respeta el circuit-breaker","ax.rec.l":"Recovery","ax.rec.tip":"recuperas lento del drawdown; reduce el tamaño de las pérdidas","ax.consist.l":"Consistencia","ax.consist.tip":"menos días rojos, más regularidad",
   "score.ratioSub":"ganancia÷pérdida","score.recovery":"Recovery factor","score.recSub":"neto÷max DD","score.consistency":"Consistencia","score.greenDays":"{g}/{t} días verdes","score.annualized":"anualizado","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Rendimiento por día de la semana","score.byHour":"Rendimiento por hora (CT)",
@@ -1004,7 +1009,7 @@ const I18N={
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Diario","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Resumen","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.lessons":"Lecciones","tab.progress":"Progreso",
   "les.title":"Biblioteca de lecciones","les.lead":"Todo lo que te has escrito a ti mismo, en un solo lugar: revisiones diarias, notas de trade y tu 'por qué' honesto. Tus propias palabras son el mejor coach que tienes, reléelas antes de la próxima sesión.","les.search":"Busca en tus lecciones…","les.empty":"Aún no hay nada. Tus revisiones diarias (Check-in) y notas de trade aparecen aquí solas conforme las escribes.","les.noMatch":"Ninguna lección coincide con tu búsqueda.","les.review":"Revisión diaria","les.note":"Nota de trade","les.why":"Por qué operé","les.count":"{n} entradas","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe",
-  "cal.empty":"Importa tus trades y tu mes se llena aquí mismo, días verdes y rojos, con un punto por los días que cumpliste tus reglas.","cal.monthNet":"Neto del mes","cal.greenDays":"Días verdes","cal.avgDay":"Día medio","cal.bestWorst":"Mejor / peor","cal.ofMonth":"del mes","cal.thisMonth":"este mes","cal.dows":"L,M,X,J,V,S,D","cal.legend":"Verde/rojo = P&L del día · punto = disciplina (verde cumplió / rojo rompió). Pasa el cursor para el detalle.","w.disciplined":"disciplinado",
+  "cal.empty":"Importa tus trades y tu mes se llena aquí mismo, días verdes y rojos, con un punto por los días que cumpliste tus reglas.","cal.monthNet":"Neto del mes","cal.greenDays":"Días verdes","cal.avgDay":"Día medio","cal.bestWorst":"Mejor / peor","cal.ofMonth":"del mes","cal.thisMonth":"este mes","cal.dows":"L,M,X,J,V,S,D","cal.legend":"Verde/rojo = P&L del día · punto = disciplina (verde cumplió / rojo rompió) · 🔥 = cadena de tilt (revenge-sizing o 3+ pérdidas seguidas). Pasa el cursor para el detalle.","w.disciplined":"disciplinado",
   "ci.title":"Check-in de sesión, {d}","ci.lead":"Antes de operar: ¿cómo llegas y cuál es el plan? Se guarda y luego se cruza con el resultado del día.","ci.mood":"Ánimo","ci.plan":"Plan","ci.planPh":"Ej: solo bordes válidos a favor del sesgo; parar a 2 pérdidas","ci.day":"Día","ci.rules":"Confirmo mis reglas: tamaño fijo · circuit-breaker a 2 pérdidas · solo bordes válidos a favor del sesgo · respetar el DPT","ci.save":"Guardar check-in","ci.saved":"Check-in guardado para {d}","ci.moodVsResult":"Tu ánimo vs resultado (por día)","ci.moodNote":"El ánimo con el que llegas predice tu día. El rojo de arriba es tu estado más caro: el día que llegues así, opera menos o no operes.","ci.history":"Historial de check-ins","ci.thMood":"Ánimo","ci.thPlan":"Plan","ci.thNetDay":"Neto del día","ci.thDisc":"Disc.","ci.none":"Aún no hay check-ins. Guarda el primero arriba.",
   "pg.empty":"Importa y etiqueta unos trades y esto se vuelve tu historia de progreso, semana a semana. No solo un número, una dirección.","pg.kDisc":"Disciplina (última sem)","pg.kProc":"Proceso medio","pg.procSub":"grade del proceso","pg.kNomans":"Tierra de nadie","pg.tradesWk":"trades esta sem","pg.kAgainst":"Contra sesgo","pg.scorecard":"Scorecard de la semana · {w}","pg.weekDays":"Días de esta semana","pg.noDays":"Sin días.","pg.heatNote":"Verde = día disciplinado · Rojo = rompió alguna regla (pasa el cursor para ver por qué).","pg.discByWeek":"Disciplina por semana","pg.discNote":"% de días disciplinados cada semana. La línea que buscas: que suba y se quede arriba.","pg.goals":"Metas","pg.goalDisc":"Disciplina semanal ≥ {v}%","pg.goalProc":"Proceso medio ≥ {v}%","pg.goalNomans":"Tierra de nadie ≤ {v}/sem","pg.goalRr":"R:R ≥ {v}","pg.goalsLabel":"Metas:","pg.gDisc":"Disc%","pg.gProc":"Proc%","pg.gNomans":"TierraN/sem","pg.weekTrend":"Tendencia por semana","pg.thWeek":"Semana","pg.thNomans":"TierraN","pg.thAgainst":"Contra",
   "rule.r1":"Tamaño fijo (sin revenge-sizing)","rule.r2":"Circuit-breaker (parar a las 2 pérdidas)","rule.r3":"Sin sobreoperar","rule.r4":"Proteger beneficios (sin round-trip)","rule.r5":"Ejecuté mi plan (proceso ≥ 75%, si etiquetado)",
@@ -1097,6 +1102,7 @@ const ALIGN=["Con sesgo","Contra","Neutro"];
 const SETUPS=[];  // ya no hay setups por defecto; el usuario añade los suyos (DB.settings.setups)
 const MISTAKES=["revenge","oversize","overwin","fighting","earlyexit","onemore","pressure","fomo","moved_sl","noplan","early","noconfirm","tightsl","chase"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
+try{ document.documentElement.dataset.theme=(DB.settings&&DB.settings.theme)||'dark'; }catch(e){} // paint the right theme before the first render()
 let period="ALL", tab="overview", monthSel=null, acctSel=new Set(), noteSel=null, jExpanded=null, routineSel=null, jFilter={}, lessonQ="";
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
 function scoped(){ if(!acctSel.size)return DB.trades; return DB.trades.filter(t=>acctSel.has(t.acct||"__none")); }
@@ -1121,7 +1127,7 @@ const RULES=[
 function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
-  s.settings=Object.assign({dpt:900, overtrade:8, session:"Asia", lang:"en"}, s.settings||{});
+  s.settings=Object.assign({dpt:900, overtrade:8, session:"Asia", lang:"en", theme:"dark"}, s.settings||{});
   s.settings.goals=Object.assign({disc:80, proc:80, nomans:2, rr:1.5}, s.settings.goals||{});
   return s;
 }
@@ -1517,7 +1523,12 @@ function importText(txt, acct){
   // a tilt-chain (revenge-sizing or a 3+ loss streak) when present, that's the pattern worth seeing first.
   try{ if(addedRows.length){ const addedDays=new Set(addedRows.map(r=>r.tday||r.date)); const broke=dayEval(scoped()).filter(d=>addedDays.has(d.date)&&!d.disciplined).sort((a,b)=>a.net-b.net);
     if(broke.length){ const tilt=broke.filter(d=>!d.r1||!d.r2).sort((a,b)=>a.net-b.net);
-      if(tilt.length){ const wt=tilt[0]; setTimeout(()=>toast(fmt(T("imp.tiltChain"),{n:tilt.length,day:wt.date,why:failReasons(wt)}),5000),2100); }
+      if(tilt.length){ const wt=tilt[0]; const msg=fmt(T("imp.tiltChain"),{n:tilt.length,day:wt.date,why:failReasons(wt)});
+        setTimeout(()=>toast(msg,5000),2100);
+        // If notifications are already on (from the check-in reminder), a tilt-chain also gets a real system
+        // notification, not just an in-page toast, so it reaches you even if this tab isn't the one you're looking at.
+        try{ if(window.Notification && Notification.permission==="granted") new Notification("TradeDadLog", {body:msg, icon:"icon.svg"}); }catch(e){}
+      }
       else { const worst=broke[0]; setTimeout(()=>toast(fmt(T("imp.brokeRules"),{n:broke.length,day:worst.date,why:failReasons(worst)}),5000),2100); } } } }catch(e){}
 }
 function importContext(arr){
@@ -2849,7 +2860,9 @@ function renderCalendar(){
   for(let i=0;i<startDow;i++) cells+='<div class="cell empty"></div>';
   for(let dd=1;dd<=dim;dd++){ const ds=monthSel+"-"+String(dd).padStart(2,"0"); const d=map[ds]; const wi=Math.floor((startDow+dd-1)/7); weeks[wi]=weeks[wi]||{net:0,days:0};
     if(d){ weeks[wi].net+=d.net; weeks[wi].days++; const st=tstats[ds]||{n:0,w:0}; const wr=st.n?Math.round(st.w/st.n*100):0;
-      cells+=`<div class="cell ${d.net>=0?'gpos':'gneg'}" title="${ds}: ${money(d.net)}${d.disciplined?' · '+T("w.disciplined"):' · '+failReasons(d)}"><span class="dn">${dd}</span><span class="dv">${d.net>=0?'+':''}${Math.round(d.net)}</span><span class="cst">${st.n}t · ${wr}%</span><span class="dot ${d.disciplined?'ok':'no'}"></span></div>`;
+      const tilt=!tiltFreeOf(d);
+      const title=`${ds}: ${money(d.net)}${d.disciplined?' · '+T("w.disciplined"):' · '+failReasons(d)}${tilt?' · '+T("cal.tiltDay"):''}`;
+      cells+=`<div class="cell ${d.net>=0?'gpos':'gneg'}" title="${title}"><span class="dn">${dd}</span><span class="dv">${d.net>=0?'+':''}${Math.round(d.net)}</span><span class="cst">${st.n}t · ${wr}%</span><span class="dot ${d.disciplined?'ok':'no'}"></span>${tilt?`<span class="tiltmark" title="${T('cal.tiltDay')}">🔥</span>`:''}</div>`;
     } else cells+=`<div class="cell"><span class="dn">${dd}</span></div>`; }
   const opts=months.slice().reverse().map(m=>`<option value="${m}" ${m===monthSel?'selected':''}>${m}</option>`).join("");
   const wkCol=weeks.map((wk,i)=>`<div class="wkbox"><div class="lbl">${fmt(T("cal.week"),{n:i+1})}</div><div class="num ${cls(wk.net)}" style="font-weight:700; font-size:17px; margin-top:2px">${money1(wk.net)}</div><div class="small muted">${wk.days} ${T("dDays")}</div></div>`).join("");
@@ -3441,10 +3454,21 @@ function drawCatBars(c,rows,H){
     x.save(); x.shadowColor=c2; x.shadowBlur=8; x.fillStyle=c2; if(r.net>=0)x.fillRect(px,zeroY-h,bw,h); else x.fillRect(px,zeroY,bw,h); x.restore();
     x.fillStyle=css('--faint'); x.font="9px "+css('--mono'); x.textAlign="center"; x.fillText(r.k,cxp,H-6); });
 }
+// Aggregates the day-by-day "what you said vs. what happened" check into one trend: of the days you actually
+// committed to a plan, how many did you keep? A single day proves nothing; this is the pattern worth tracking.
+function promiseKeepingStats(TR){
+  const evByDate={}; dayEval(TR).forEach(d=>evByDate[d.date]=d);
+  const rows=Object.keys(DB.checkins||{})
+    .filter(d=>{ const c=DB.checkins[d]; return c && String(c.plan||'').trim() && evByDate[d]; })
+    .map(d=>({date:d, kept:evByDate[d].disciplined}));
+  const kept=rows.filter(r=>r.kept).length;
+  return {n:rows.length, kept, pct:rows.length?Math.round(kept/rows.length*100):null};
+}
 function renderScore(){
   const host=$("#view-score"); const TR=activeTrades();
   if(TR.length<2){ host.innerHTML='<div class="card muted">'+T("score.needMore")+'</div>'; return; }
   const S=scoreStats(TR), M=S.M;
+  const pk=promiseKeepingStats(TR);
   const badge=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass good">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
   const stat=(lab,val,sub,v)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><div class="lab">${lab}</div>${badge(v)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
   const wdOrder=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"], byWd={}; TR.forEach(t=>{const k=weekdayOf(t); byWd[k]=(byWd[k]||0)+t.pnl;});
@@ -3459,6 +3483,7 @@ function renderScore(){
       <div><h2 style="margin:0 0 2px">${hterm(T("score.yourScore"),T("help.score"))}</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
       <div id="radarhost" style="flex:1 1 300px;max-width:440px"></div></div></div>
     ${TR.length<20?`<div class="card section" style="border-color:var(--calm)"><div class="small" style="color:var(--muted);line-height:1.55">${fmt(T("score.sampleSize"),{n:TR.length})}</div></div>`:''}
+    ${pk.n>=1?`<div class="card section" style="border-color:var(--calm)"><h2>${T('pkeep.title')}</h2><div class="why" style="font-size:14px">${fmt(pk.pct>=80?T('pkeep.bodyGood'):pk.pct>=50?T('pkeep.bodyMid'):T('pkeep.bodyLow'),{kept:pk.kept,n:pk.n,pct:pk.pct})}</div></div>`:''}
     <div class="card section" style="border-color:var(--wait)"><h2>${T("score.weakest")}</h2><div class="why" style="font-size:14px">${fmt(T("score.weakestBody"),{l:weakest.l,v:Math.round(S.sc[weakest.k]),tip:weakest.tip})}</div></div>
     <div class="grid kpis section">
       ${stat(T("winRate"),M.winrate.toFixed(1)+"%","",S.sc.win)}
@@ -3659,7 +3684,9 @@ function setGreet(){
   g.className='eyebrow'; g.style.cursor=''; g.onclick=null; g.removeAttribute('title');
   g.textContent=T("hi")+" 👋 "+nm;
 }
+function applyTheme(){ document.documentElement.dataset.theme=(DB.settings&&DB.settings.theme)||'dark'; }
 function render(){
+  applyTheme();
   const has=DB.trades.length>0;
   setGreet();
   const showViews=has||tab==="routine";
@@ -3713,7 +3740,7 @@ document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classLi
 { const mc=$("#mCtxBtn"); if(mc) mc.onclick=()=>{ $("#morePop").classList.add("hide"); showContextModal(); }; }
 { const mf=$("#mFbBtn"); if(mf) mf.onclick=()=>{ $("#morePop").classList.add("hide"); showFeedback(); }; }
 { const ml=$("#mLogoutBtn"); if(ml) ml.onclick=()=>$("#logoutBtn").click(); }
-$("#themeBtn").onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==="dark"?"light":"dark"; render();};
+$("#themeBtn").onclick=()=>{ DB.settings=DB.settings||{}; DB.settings.theme=((DB.settings.theme||document.documentElement.dataset.theme)==="dark")?"light":"dark"; save(); render(); };
 $("#wipeBtn").onclick=()=>{ confirmModal(T("io.wipeConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],acctEvents:[],routine:DB.routine||{},settings:DB.settings}; acctSel=new Set(); noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped")); }); };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
 
