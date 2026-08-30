@@ -1302,13 +1302,14 @@ function csvSplitQ(line){
   out.push(cur);
   return out;
 }
+// TradingView's chart clock defaults to exchange time for futures, i.e. America/Chicago (CT). Shared by every
+// TradingView-sourced parser (Strategy Tester, Paper Trading balance) since neither export carries a tz offset.
+const _ctTzOff=inst=>{const dtf=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});const p={};dtf.formatToParts(inst).forEach(x=>{if(x.type!=='literal')p[x.type]=x.value;});return Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute,p.second)-inst.getTime();};
+function ctWallToUTC(g){ if(!g) return null; const t=(g.time||"00:00:00").split(":").map(Number); const D=g.date.split("-").map(Number); const wallMs=Date.UTC(D[0],D[1]-1,D[2],t[0]||0,t[1]||0,t[2]||0); return wallMs-_ctTzOff(new Date(wallMs)); }
 // TradingView Strategy Tester "List of trades" export → paired Entry/Exit rows sharing the same "Trade #".
 // Columns: Trade #, Type (Entry long/Exit long/…), Date/Time, Price, Contracts, Profit. No symbol column, so it's asked once via prompt.
 function parseTradingView(lines, symHint){
-  // TradingView's chart clock defaults to exchange time for futures, i.e. America/Chicago (CT), same assumption as the Tradovate parser above.
-  const tz="America/Chicago";
-  const tzOff=inst=>{const dtf=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});const p={};dtf.formatToParts(inst).forEach(x=>{if(x.type!=='literal')p[x.type]=x.value;});return Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute,p.second)-inst.getTime();};
-  const wallToUTC=g=>{ if(!g) return null; const t=(g.time||"00:00:00").split(":").map(Number); const D=g.date.split("-").map(Number); const wallMs=Date.UTC(D[0],D[1]-1,D[2],t[0]||0,t[1]||0,t[2]||0); return wallMs-tzOff(new Date(wallMs)); };
+  const wallToUTC=ctWallToUTC;
   const H=csvSplitQ(lines[0]).map(s=>s.trim().toLowerCase());
   const idx=n=>H.indexOf(n);
   const iNum=idx("trade #"), iType=idx("type"), iDt=idx("date/time"), iPrice=idx("price"), iQty=idx("contracts"), iProfit=idx("profit");
@@ -1343,6 +1344,7 @@ function parseTradingView(lines, symHint){
 }
 // TradingView Paper Trading "Balance history" export → one row per closed position; TradingView already computed its realized PnL and avg entry
 // price in the "Action" text, so no FIFO reconstruction is needed. No entry timestamp is exposed (only the close time), so each trade is a single point (no duration).
+// Like the Strategy Tester export, the "Time" column is exchange time (CT), no tz offset in the file, so it needs the same wall-clock -> UTC conversion.
 function parseTVPaperBalance(lines){
   const H=csvSplitQ(lines[0]).map(s=>s.trim().toLowerCase());
   const iTime=H.indexOf("time"), iPnl=H.indexOf("realized pnl (value)"), iAction=H.indexOf("action");
@@ -1368,11 +1370,13 @@ function parseTVPaperBalance(lines){
     const exitP=num(m[3]), qty=num(m[4]), entryP=num(m[5]);
     const pnl=num(c[iPnl]);
     const g=gDate((c[iTime]||"").trim()); if(!g) continue;
-    let time=g.time||"00:00:00"; if(time.length===5) time+=":00";
+    if(g.time && g.time.length===5) g.time+=":00";
+    const utcMs=ctWallToUTC(g); if(utcMs==null) continue;
+    const utc=new Date(utcMs);
     const comm=commMap[(c[iTime]||"").trim()+"|"+m[3]+"|"+m[4]]||0;
     const pts=+((side==="long"?exitP-entryP:entryP-exitP)).toFixed(2);
-    out.push({date:g.date, time, sym, side, qty, status:pnl>=0?"Win":"Loss",
-      entry:entryP, exit:exitP, pnl:+pnl.toFixed(2), pts, comm:+comm.toFixed(2)});
+    out.push({date:utc.toISOString().slice(0,10), time:utc.toISOString().slice(11,19), sym, side, qty, status:pnl>=0?"Win":"Loss",
+      entry:entryP, exit:exitP, pnl:+pnl.toFixed(2), pts, comm:+comm.toFixed(2), topen:utcMs, tclose:utcMs});
   }
   out.reverse(); // export is newest-first
   return out;
@@ -2101,7 +2105,7 @@ function sequenceFlags(arr){
     cum+=t.pnl; cumByAcct[ak]=acctCumBefore+t.pnl;
     const flags=[];
     if(prevAcct && prevAcct.pnl<0 && normSize(t)>normSize(prevAcct)+1e-9 && acctCumBefore<0) flags.push(["rev",T("seq.revenge")]);
-    if(prevSame && prevSame.pnl<0 && t.side===prevSame.side && acctCumBefore<0) flags.push(["add",T("seq.addLoser")]);
+    if(prevSame && prevSame.pnl<0 && t.side===prevSame.side && t.pnl<0 && acctCumBefore<0) flags.push(["add",T("seq.addLoser")]);
     if(prevSame && prevSame.pnl<0 && t.topen!=null && prevSame.tclose!=null && (t.topen-prevSame.tclose)>=0 && (t.topen-prevSame.tclose)<=120000) flags.push(["re",T("seq.reentry")]);
     if(prim && t.sym!==prim && t.pnl<0) flags.push(["off",T("seq.offEdge")]);
     lastByAcct[ak]=t; lastByAcctSym[ak+"|"+t.sym]=t;
