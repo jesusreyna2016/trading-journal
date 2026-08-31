@@ -855,7 +855,7 @@ const I18N={
   "cf.rowActual":"Current net","cf.rowStop":"If you stop at 2 losses in a row","cf.rowNoOt":"Without over-trading days (≥{ot})","cf.rowNoNomans":"Without trades outside your edge ({n} trades)","cf.rowNoAgainst":"Without trading against the bias ({n})","leaksCard.tagHint":"Tag the context in the Journal to see the cost of trading outside your edge / against the bias.",
   "leaks.autoTitle":"Your leaks, automatic detection","leaks.thresholds":"Thresholds: over-trading ≥ {ot} trades/day · daily loss limit ${dpt}.","apply":"Apply",
   "risk.compliance":"Compliance","risk.daysOverDpt":"Days over your daily limit","risk.hitDpt":"hit −${d}","risk.rrAvg":"Avg R:R","risk.avgWL2":"avg win / avg loss","risk.inWindow":"In window {sess}","risk.worstDD":"Worst day DD","risk.worstDDSub":"lowest you dropped",
-  "risk.setCap":"Daily loss cap $","risk.setWindow":"Window","risk.setOver":"Over-trading ≥","risk.setComm":"Commission per contract (round-turn) $ {v}","risk.commHint":"Only used when your CSV doesn't already carry commission per trade (Tradovate's own export doesn't). Set it once and every future import estimates the real fee automatically. Trades that DO carry their own commission (TopstepX, TradingView, most generic exports) ignore this and use the real number instead.","risk.commSaved":"Saved. New imports will estimate commission at this rate.",
+  "risk.setCap":"Daily loss cap $","risk.setWindow":"Window","risk.setOver":"Over-trading ≥","risk.setComm":"Commission per contract (round-turn) $ {v}","risk.commHint":"Only used when your CSV doesn't already carry commission per trade (Tradovate's own export doesn't). Set it once and every future import estimates the real fee automatically. Trades that DO carry their own commission (TopstepX, TradingView, most generic exports) ignore this and use the real number instead.","risk.commSaved":"Saved. New imports will estimate commission at this rate.","risk.commByFirmTitle":"Commission by prop firm","risk.commByFirmHint":"Different prop firms often charge different fees, and within one firm every instrument usually does too. Set a default per firm below, plus per-symbol overrides when needed. Checked in this order: symbol rate for that account's firm → that firm's default → the flat rate above.","risk.commByFirmNone":"No prop firm set on any account yet. Add one below, or set the firm on each account (Business → Accounts) to use this.","risk.default":"Default","risk.addSymbolRate":"+ Add symbol rate","risk.addFirmPh":"Firm name (e.g. MFF, Apex)","risk.addFirm":"Add firm","risk.delFirmConfirm":"Remove all commission rates for {firm}?","risk.symPh":"Symbol",
   "cr.title":"🧩 My rules","cr.lead":"Define your own trigger, in plain terms, no AI needed. The moment a trade matches it, it counts against you here, so you can see exactly how much that pattern is costing you.","cr.new":"New rule","cr.empty":"No custom rules yet. Create one for a pattern you keep catching yourself doing that isn't already covered elsewhere.","cr.paused":"paused","cr.resume":"▶ Resume","cr.pause":"⏸ Pause","cr.hitCount":"Triggered {n} time(s), net","cr.delConfirm":"Delete this rule? This can't be undone.","cr.newTitle":"New rule","cr.nameLabel":"Name (optional)","cr.namePh":"e.g. Revenge trade","cr.triggerLabel":"Watch for…","cr.created":"Rule created.","cr.t.reentry_min":"Re-entering too soon after a loss","cr.t.size_mult":"Sizing up after a loss","cr.t.after_time":"Trading past a certain time","cr.t.max_trades_day":"More trades than your daily cap","cr.d.reentry_min":"Flags any trade opened within {v} min of a loss.","cr.d.size_mult":"Flags a trade sized {v}× or more of your last one, right after a loss.","cr.d.after_time":"Flags any trade opened at or after {v} (CT).","cr.d.max_trades_day":"Flags every trade past the first {v} of the day.","cr.p.reentry_min":"Minutes after a loss","cr.p.size_mult":"Size multiplier","cr.p.after_time":"Time (CT)","cr.p.max_trades_day":"Max trades per day",
   "risk.byDay":"Risk by day","th.day":"Day","th.net":"Net","th.worstDD":"Worst (DD)","th.maxLoss":"Max losses in a row","th.inWindow":"In window","th.dpt":"Daily limit","th.compl":"Compl.","risk.broke":"broke","risk.ok":"ok","risk.noDays":"No days in this period.",
   "risk.complNote":"Compliance is how many of your 4 daily risk rules you kept: no more than 2 losses in a row, don't touch your daily loss cap, don't over-trade, and only trade inside your window. Keep all four and the day was under control, whatever the P&L did. DD is the deepest you were underwater during the day.",
@@ -887,7 +887,7 @@ const I18N={
   "j.intro":"One card per day: the story of that session plus every trade, ready to tag with the emotion, setup and process behind it. Tap a day to open it, this is where the honest review actually happens.","j.signal":"Signal","j.stopBtn":"Stop","j.addNote":"Add note","j.notePrompt":"Trade note:","j.volume":"Volume","j.wl":"W / L","j.onTable":"On the table","j.peak":"peak","j.commissions":"Commissions","j.leftOnTable":"left {v} on the table","j.thTime":"Time","j.thTrade":"Trade","j.thEmotion":"Emotion","j.thBias":"Bias","j.thProcess":"Process",
   "pos.fillsGrouped":"{n} fills grouped","pos.scaled":"Scaled","pos.scaledSub":"with >1 fill","pos.note":"Partial fills (scaling in/out) are grouped into the real position. Needs the Tradovate CSV timing, <b>re-import your CSV</b> to enrich already-loaded trades. Those without timing stay as one position each.","pos.thSymbol":"Symbol","pos.thSide":"Side","pos.thEntryExit":"Entry→Exit","pos.thDuration":"Duration",
   "dd.trailing":"Trailing","dd.static":"Static","dd.eod":"Daily (EOD)",
-  "af.editTitle":"Edit account","af.newTitle":"New funded account","af.accountWord":"Account","af.name":"Name","af.namePh":"E.g. Apex 50K #1","af.firm":"Prop firm","af.firmPh":"E.g. Apex, TopStep, Tradeify…","af.firmHint":"Links this account with the Finance tab (same prop firm name).","af.startBal":"Starting balance $","af.target":"Profit target $","af.ddType":"Drawdown type","af.ddLimit":"Drawdown limit $","af.save":"Save","af.create":"Create account","cancel":"Cancel","af.needName":"Give the account a name.","af.updated":"Account updated.","af.created":"Account created.",
+  "af.editTitle":"Edit account","af.newTitle":"New funded account","af.accountWord":"Account","af.name":"Name","af.namePh":"E.g. Apex 50K #1","af.firm":"Prop firm","af.firmPh":"E.g. Apex, TopStep, Tradeify…","af.firmHint":"Links this account with the Finance tab (same prop firm name).","af.firmSizes":"Typical account sizes: {sizes}","af.startBal":"Starting balance $","af.target":"Profit target $","af.ddType":"Drawdown type","af.ddLimit":"Drawdown limit $","af.save":"Save","af.create":"Create account","cancel":"Cancel","af.needName":"Give the account a name.","af.updated":"Account updated.","af.created":"Account created.",
   "pk.title":"Import trades","pk.which":"Which account do they belong to?","pk.none":"(No account)","pk.createNew":"＋ Create new account…","pk.continue":"Continue","pk.noneYet":"You don't have accounts yet. Create one to track your funding, or import without an account.","pk.createBtn":"＋ Create account","pk.withoutAcct":"Without account",
   "ctx.eyebrow":"Analyst context","ctx.title":"Import context (advanced)","ctx.lead":"Paste a JSON <code>[{date,sym,entry,panel,align,setup,emo,wait,stop,note}]</code> to bulk-fill context for several trades. <b>The normal path</b> is to tag each trade in the Journal; this is a bulk shortcut (e.g. for backfill).","ctx.preview":"Preview","ctx.invalid":"Invalid JSON.","ctx.mustList":"Must be a list [ ].","ctx.matchOf":"of {total} trades match.","ctx.noMatch":"No match:","ctx.enriched":"{n} trades enriched with Analyst context.",
   "ac.title":"Funded accounts","ac.emptyLead":"When you import a CSV I ask which account it belongs to. You can also create one here and set its target and drawdown limit.","ac.new":"＋ New account","ac.unassigned":"{n} trades without an assigned account.","ac.assignAllTo":"Assign all unassigned to","ac.assign":"Assign","ac.createToAssign":"Create an account to assign them.","ac.filterHint":"Filter by account above (selector next to the period) to see the whole journal for one account.","ac.closedHidden":"{n} closed account(s) (passed or lost) hidden. Their trades stay in your journal either way.","ac.closedShown":"Showing {n} closed account(s) (passed or lost).","ac.showClosed":"Show closed","ac.hideClosed":"Hide closed","ac.hideFromListQ":"Also remove {name} from the main account list (next to Import CSV)? It's already out of Business either way, and you can bring it back anytime from here.","ac.hideFromListYes":"Yes, remove it","ac.hiddenFromList":"{name} removed from the main list.","ac.shownInList":"{name} is back in the main list.","ac.showInList":"👁 Show in main list","ac.hideInList":"🙈 Hide from main list","ac.hiddenTag":"hidden from list","ac.kNet":"Net accumulated","ac.sinceStart":"since the start","ac.kProgress":"Progress to target","ac.kBuffer":"Drawdown buffer","ac.broken":" · ⚠ BROKEN","ac.kPace":"Pace to target","ac.dailyUsed":"Today's loss used","ac.targetReached":"target reached!","ac.atThisPace":"at this pace","ac.evalsSpent":"Evals spent","ac.payouts":"Payouts","ac.bizNet":"Business net","ac.fromFinance":"(from Finance)","ac.edit":"✏️ Edit","ac.delTitle":"Delete account","ac.delConfirm":"Delete account {name}? Trades are NOT deleted, they become unassigned.","ac.assigned":"Trades assigned to {name}.","ac.delTrades":"Delete trades","ac.delTradesTitle":"Delete this account's trades","ac.delTradesConfirm":"Delete all {n} trades of {name}? The account stays. This can't be undone.","ac.delTradesDone":"{n} trades deleted.","ac.delAcctTitle":"Delete {name}?","ac.delAcctBody":"This account has {n} trades. What should happen to them?","ac.delWithTrades":"Delete account + its {n} trades","ac.delKeepTrades":"Delete account, keep trades (unassigned)","del.trade":"Delete trade","del.tradeConfirm":"Delete this trade? {sym} {pnl}. This can't be undone.","del.tradeDone":"Trade deleted.","ac.addWithdrawal":"+ Withdrawal","ac.withdrawalTitle":"Add withdrawal","ac.wAmount":"Amount","ac.wDate":"Date","ac.wNote":"Note (optional)","ac.wDone":"Withdrawal added.","ac.withdrawnThis":"Withdrawn (this account)","ps.title":"💼 Prop firm business","ps.evals":"Evals (passed/lost)","ps.funded":"Funded (passed/lost)","ps.passRate":"pass rate","ps.activeN":"{n} active now","ps.spent":"Spent on evals","ps.spentSub":"evals + resets + activations","ps.withdrawn":"Withdrawn","ps.net":"Business net","ps.roi":"ROI",
@@ -999,7 +999,7 @@ const I18N={
   "cf.rowActual":"Neto actual","cf.rowStop":"Si paras a las 2 pérdidas seguidas","cf.rowNoOt":"Sin días de sobreoperar (≥{ot})","cf.rowNoNomans":"Sin trades fuera de tu ventaja ({n} trades)","cf.rowNoAgainst":"Sin operar contra el sesgo ({n})","leaksCard.tagHint":"Etiqueta el contexto en el Diario para ver el costo de operar fuera de tu ventaja / contra el sesgo.",
   "leaks.autoTitle":"Tus fugas, detección automática","leaks.thresholds":"Umbrales: sobreoperar ≥ {ot} trades/día · límite de pérdida diaria ${dpt}.","apply":"Aplicar",
   "risk.compliance":"Cumplimiento","risk.daysOverDpt":"Días sobre tu límite diario","risk.hitDpt":"tocaron −${d}","risk.rrAvg":"R:R medio","risk.avgWL2":"avg win / avg loss","risk.inWindow":"En ventana {sess}","risk.worstDD":"Peor DD del día","risk.worstDDSub":"lo más abajo que caíste",
-  "risk.setCap":"Límite de pérdida diaria $","risk.setWindow":"Ventana","risk.setOver":"Sobreoperar ≥","risk.setComm":"Comisión por contrato (ida y vuelta) $ {v}","risk.commHint":"Solo se usa cuando tu CSV no trae comisión por trade (el export propio de Tradovate no la trae). Configúralo una vez y cada import futuro estima la comisión real automáticamente. Los trades que SÍ traen su propia comisión (TopstepX, TradingView, la mayoría de exports genéricos) ignoran esto y usan el número real.","risk.commSaved":"Guardado. Los próximos imports estimarán la comisión a esta tasa.",
+  "risk.setCap":"Límite de pérdida diaria $","risk.setWindow":"Ventana","risk.setOver":"Sobreoperar ≥","risk.setComm":"Comisión por contrato (ida y vuelta) $ {v}","risk.commHint":"Solo se usa cuando tu CSV no trae comisión por trade (el export propio de Tradovate no la trae). Configúralo una vez y cada import futuro estima la comisión real automáticamente. Los trades que SÍ traen su propia comisión (TopstepX, TradingView, la mayoría de exports genéricos) ignoran esto y usan el número real.","risk.commSaved":"Guardado. Los próximos imports estimarán la comisión a esta tasa.","risk.commByFirmTitle":"Comisión por prop firm","risk.commByFirmHint":"Cada prop firm suele cobrar distinto, y dentro de una misma firma cada activo también. Configura un valor default por firma abajo, más excepciones por símbolo si hace falta. Se revisa en este orden: tarifa del símbolo para la firma de esa cuenta → default de esa firma → la tarifa plana de arriba.","risk.commByFirmNone":"Ninguna cuenta tiene firma configurada todavía. Agrega una abajo, o pon la firma en cada cuenta (Business → Accounts) para que esto aplique.","risk.default":"Default","risk.addSymbolRate":"+ Agregar tarifa por símbolo","risk.addFirmPh":"Nombre de la firma (ej. MFF, Apex)","risk.addFirm":"Agregar firma","risk.delFirmConfirm":"¿Quitar todas las tarifas de comisión de {firm}?","risk.symPh":"Símbolo",
   "cr.title":"🧩 Mis reglas","cr.lead":"Define tu propio disparador, en términos simples, sin necesidad de IA. En el momento en que un trade lo cumple, cuenta aquí en tu contra, así ves exactamente cuánto te cuesta ese patrón.","cr.new":"Nueva regla","cr.empty":"Aún no tienes reglas personalizadas. Crea una para un patrón que sabes que repites y que no está cubierto en otro lado.","cr.paused":"pausada","cr.resume":"▶ Reanudar","cr.pause":"⏸ Pausar","cr.hitCount":"Se activó {n} vez(ces), neto","cr.delConfirm":"¿Borrar esta regla? No se puede deshacer.","cr.newTitle":"Nueva regla","cr.nameLabel":"Nombre (opcional)","cr.namePh":"ej. Trade por venganza","cr.triggerLabel":"Vigilar…","cr.created":"Regla creada.","cr.t.reentry_min":"Reentrar muy rápido tras una pérdida","cr.t.size_mult":"Subir el tamaño tras una pérdida","cr.t.after_time":"Operar después de cierta hora","cr.t.max_trades_day":"Más trades que tu tope diario","cr.d.reentry_min":"Marca cualquier trade abierto a menos de {v} min de una pérdida.","cr.d.size_mult":"Marca un trade con tamaño {v}× o más que el anterior, justo tras una pérdida.","cr.d.after_time":"Marca cualquier trade abierto a las {v} (CT) o después.","cr.d.max_trades_day":"Marca cada trade después del número {v} del día.","cr.p.reentry_min":"Minutos tras una pérdida","cr.p.size_mult":"Multiplicador de tamaño","cr.p.after_time":"Hora (CT)","cr.p.max_trades_day":"Máx trades por día",
   "risk.byDay":"Riesgo por día","th.day":"Día","th.net":"Neto","th.worstDD":"Peor (DD)","th.maxLoss":"Máx pérd. seg.","th.inWindow":"En ventana","th.dpt":"Límite diario","th.compl":"Cumpl.","risk.broke":"rompió","risk.ok":"ok","risk.noDays":"Sin días en este periodo.",
   "risk.complNote":"El cumplimiento es cuántas de tus 4 reglas de riesgo del día mantuviste: no más de 2 pérdidas seguidas, no tocar tu tope de pérdida diaria, no sobreoperar, y operar solo dentro de tu ventana. Cumple las cuatro y el día estuvo bajo control, hiciera lo que hiciera el P&L. El DD es lo más abajo que estuviste en el día.",
@@ -1031,7 +1031,7 @@ const I18N={
   "j.intro":"Una tarjeta por día: la historia de esa sesión y cada trade, listos para etiquetar con la emoción, el setup y el proceso detrás. Pulsa un día para abrirlo, aquí es donde ocurre la revisión honesta de verdad.","j.signal":"Señal","j.stopBtn":"Stop","j.addNote":"Añadir nota","j.notePrompt":"Nota del trade:","j.volume":"Volumen","j.wl":"W / L","j.onTable":"Sobre la mesa","j.peak":"pico","j.commissions":"Comisiones","j.leftOnTable":"dejó {v} sobre la mesa","j.thTime":"Hora","j.thTrade":"Trade","j.thEmotion":"Emoción","j.thBias":"Sesgo","j.thProcess":"Proceso",
   "pos.fillsGrouped":"{n} fills agrupados","pos.scaled":"Escaladas","pos.scaledSub":"con >1 fill","pos.note":"Los fills parciales (escalar dentro/fuera) se agrupan en la posición real. Necesita el timing del CSV de Tradovate, <b>reimporta tu CSV</b> para enriquecer los trades ya cargados. Los que no tienen timing quedan como 1 posición cada uno.","pos.thSymbol":"Símbolo","pos.thSide":"Lado","pos.thEntryExit":"Entrada→Salida","pos.thDuration":"Duración",
   "dd.trailing":"Trailing","dd.static":"Estático","dd.eod":"Diario (EOD)",
-  "af.editTitle":"Editar cuenta","af.newTitle":"Nueva cuenta fondeada","af.accountWord":"Cuenta","af.name":"Nombre","af.namePh":"Ej. Apex 50K #1","af.firm":"Prop firm","af.firmPh":"Ej. Apex, TopStep, Tradeify…","af.firmHint":"Vincula esta cuenta con la pestaña Finanzas (mismo nombre de prop firm).","af.startBal":"Balance inicial $","af.target":"Profit target $","af.ddType":"Tipo de drawdown","af.ddLimit":"Límite drawdown $","af.save":"Guardar","af.create":"Crear cuenta","cancel":"Cancelar","af.needName":"Ponle un nombre a la cuenta.","af.updated":"Cuenta actualizada.","af.created":"Cuenta creada.",
+  "af.editTitle":"Editar cuenta","af.newTitle":"Nueva cuenta fondeada","af.accountWord":"Cuenta","af.name":"Nombre","af.namePh":"Ej. Apex 50K #1","af.firm":"Prop firm","af.firmPh":"Ej. Apex, TopStep, Tradeify…","af.firmHint":"Vincula esta cuenta con la pestaña Finanzas (mismo nombre de prop firm).","af.firmSizes":"Tamaños de cuenta típicos: {sizes}","af.startBal":"Balance inicial $","af.target":"Profit target $","af.ddType":"Tipo de drawdown","af.ddLimit":"Límite drawdown $","af.save":"Guardar","af.create":"Crear cuenta","cancel":"Cancelar","af.needName":"Ponle un nombre a la cuenta.","af.updated":"Cuenta actualizada.","af.created":"Cuenta creada.",
   "pk.title":"Importar trades","pk.which":"¿A qué cuenta pertenecen?","pk.none":"(Sin cuenta)","pk.createNew":"＋ Crear cuenta nueva…","pk.continue":"Continuar","pk.noneYet":"Aún no tienes cuentas. Crea una para trackear tu fondeo, o importa sin cuenta.","pk.createBtn":"＋ Crear cuenta","pk.withoutAcct":"Sin cuenta",
   "ctx.eyebrow":"Contexto del Analyst","ctx.title":"Importar contexto (avanzado)","ctx.lead":"Pega un JSON <code>[{date,sym,entry,panel,align,setup,emo,wait,stop,note}]</code> para rellenar en bloque el contexto de varios trades. <b>El camino normal</b> es etiquetar cada trade en el Diario; esto es un atajo masivo (p. ej. para backfill).","ctx.preview":"Vista previa","ctx.invalid":"JSON inválido.","ctx.mustList":"Debe ser una lista [ ].","ctx.matchOf":"de {total} trades coinciden.","ctx.noMatch":"Sin match:","ctx.enriched":"{n} trades enriquecidos con contexto del Analyst.",
   "ac.title":"Cuentas fondeadas","ac.emptyLead":"Al importar un CSV te pregunto a qué cuenta pertenece. También puedes crear una aquí y definir su target y límite de drawdown.","ac.new":"＋ Nueva cuenta","ac.unassigned":"{n} trades sin cuenta asignada.","ac.assignAllTo":"Asignar todos los sin-cuenta a","ac.assign":"Asignar","ac.createToAssign":"Crea una cuenta para poder asignarlos.","ac.filterHint":"Filtra por cuenta arriba (selector junto al periodo) para ver todo el journal de una sola cuenta.","ac.closedHidden":"{n} cuenta(s) cerrada(s) (pasada o perdida) ocultas. Sus trades se quedan en tu journal de todos modos.","ac.closedShown":"Mostrando {n} cuenta(s) cerrada(s) (pasada o perdida).","ac.showClosed":"Mostrar cerradas","ac.hideClosed":"Ocultar cerradas","ac.hideFromListQ":"¿Quitar también a {name} del listado principal de cuentas (junto a Importar CSV)? Ya está fuera de Business de todos modos, y puedes traerla de vuelta cuando quieras desde aquí.","ac.hideFromListYes":"Sí, quitarla","ac.hiddenFromList":"{name} se quitó del listado principal.","ac.shownInList":"{name} volvió al listado principal.","ac.showInList":"👁 Mostrar en el listado","ac.hideInList":"🙈 Ocultar del listado","ac.hiddenTag":"oculta del listado","ac.kNet":"Neto acumulado","ac.sinceStart":"desde el inicio","ac.kProgress":"Progreso al target","ac.kBuffer":"Colchón al drawdown","ac.broken":" · ⚠ ROTO","ac.kPace":"Ritmo al target","ac.dailyUsed":"Pérdida usada hoy","ac.targetReached":"¡target alcanzado!","ac.atThisPace":"a este paso","ac.evalsSpent":"Evals gastadas","ac.payouts":"Payouts","ac.bizNet":"Neto negocio","ac.fromFinance":"(de Finanzas)","ac.edit":"✏️ Editar","ac.delTitle":"Eliminar cuenta","ac.delConfirm":"¿Eliminar la cuenta {name}? Los trades NO se borran, quedan sin cuenta.","ac.assigned":"Trades asignados a {name}.","ac.delTrades":"Borrar trades","ac.delTradesTitle":"Borrar los trades de esta cuenta","ac.delTradesConfirm":"¿Borrar los {n} trades de {name}? La cuenta se queda. No se puede deshacer.","ac.delTradesDone":"{n} trades borrados.","ac.delAcctTitle":"¿Borrar {name}?","ac.delAcctBody":"Esta cuenta tiene {n} trades. ¿Qué hacemos con ellos?","ac.delWithTrades":"Borrar cuenta + sus {n} trades","ac.delKeepTrades":"Borrar cuenta, conservar trades (sin cuenta)","del.trade":"Borrar trade","del.tradeConfirm":"¿Borrar este trade? {sym} {pnl}. No se puede deshacer.","del.tradeDone":"Trade borrado.","ac.addWithdrawal":"+ Retiro","ac.withdrawalTitle":"Añadir retiro","ac.wAmount":"Monto","ac.wDate":"Fecha","ac.wNote":"Nota (opcional)","ac.wDone":"Retiro añadido.","ac.withdrawnThis":"Retirado (esta cuenta)","ps.title":"💼 Negocio de fondeo","ps.evals":"Evals (pasadas/perdidas)","ps.funded":"Fondeadas (pasadas/perdidas)","ps.passRate":"tasa de pase","ps.activeN":"{n} activas ahora","ps.spent":"Gastado en evals","ps.spentSub":"evals + resets + activaciones","ps.withdrawn":"Retirado","ps.net":"Neto del negocio","ps.roi":"ROI",
@@ -1151,6 +1151,7 @@ function normalizeDB(s){
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
   s.settings=Object.assign({dpt:900, overtrade:8, session:"Asia", lang:"en", theme:"dark", commPerContract:0}, s.settings||{});
   s.settings.customRules=Array.isArray(s.settings.customRules)?s.settings.customRules:[];
+  s.settings.commByFirm=(s.settings.commByFirm&&typeof s.settings.commByFirm==="object")?s.settings.commByFirm:{};
   s.settings.goals=Object.assign({disc:80, proc:80, nomans:2, rr:1.5}, s.settings.goals||{});
   migrateCommissions(s);
   return s;
@@ -1459,11 +1460,49 @@ function parseGeneric(lines,H){
   return out;
 }
 function allFirms(){ const s=new Set(); (DB.ledger||[]).forEach(e=>{if(e.firm)s.add(e.firm);}); Object.values(DB.accounts||{}).forEach(a=>{if(a.firm)s.add(a.firm);}); return [...s]; }
+// Estimated round-turn commission for one contract of `sym` on account `acctId`. Looks up, in order: a
+// symbol-specific rate on that account's prop firm, that firm's default rate, then the global flat fallback
+// (Discipline -> Risk). Every propfirm can charge differently, and within one firm every instrument usually
+// does too (NQ vs GC vs 6E), so this covers both axes without asking the user to configure it per account.
+function commRateFor(acctId, sym){
+  const firm=acctId && DB.accounts[acctId] && DB.accounts[acctId].firm;
+  const cf=firm && DB.settings.commByFirm && DB.settings.commByFirm[firm];
+  if(cf){
+    const row=(cf.rows||[]).find(r=>r.sym===sym);
+    if(row && row.v) return row.v;
+    if(cf.default) return cf.default;
+  }
+  return DB.settings.commPerContract||0;
+}
+// Well-known futures prop firms, just to seed the firm autocomplete (see afFirmList below) so most users
+// can pick instead of type. Sizes are the typical evaluation account tiers each firm offers, not their
+// current pricing or commission (both change too often, and commission also depends on the data feed/
+// platform the trader picks, so those stay a manual per-firm entry in Discipline -> Risk instead of a
+// guess baked in here). Never blocks a firm that isn't on this list, the field stays free text either way.
+const PROP_FIRMS=[
+  {name:"Apex Trader Funding", sizes:"25k-300k"},
+  {name:"Topstep", sizes:"50k-150k"},
+  {name:"TakeProfit Trader", sizes:"25k-150k"},
+  {name:"My Funded Futures", sizes:"25k-150k"},
+  {name:"Tradeify", sizes:"25k-150k"},
+  {name:"FundedNext Futures", sizes:"25k-150k"},
+  {name:"FTMO Futures", sizes:"50k-100k"},
+  {name:"TradeDay", sizes:"50k-150k"},
+  {name:"Bulenox", sizes:"25k-150k"},
+  {name:"Legends Trading", sizes:"25k-100k"},
+  {name:"IQ Capital", sizes:"50k-100k"},
+  {name:"E8 Futures", sizes:"25k-100k"},
+  {name:"Day Traders", sizes:"25k-300k"},
+  {name:"BluSky", sizes:"25k-200k"},
+  {name:"Phidias Propfirm", sizes:"50k-150k"},
+  {name:"Lucid Trading", sizes:"25k-150k"},
+];
+function propFirmHint(name){ const f=PROP_FIRMS.find(p=>p.name.toLowerCase()===(name||"").trim().toLowerCase()); return f?fmt(T("af.firmSizes"),{sizes:f.sizes}):""; }
 // Formulario modal de cuenta (crear/editar). onDone(id) al guardar, onDone(null) al cancelar.
 function accountForm(id, onDone){
   const editing=!!(id&&DB.accounts[id]);
   const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000,dailyLossLimit:0,phase:"eval",status:"active"};
-  const firms=allFirms();
+  const firms=[...new Set([...PROP_FIRMS.map(f=>f.name), ...allFirms()])].sort((x,y)=>x.localeCompare(y));
   let done=false; const fin=(v)=>{ if(done)return; done=true; if(onDone)onDone(v); };
   openModal(`
     <div class="eyebrow">${editing?T("af.editTitle"):T("af.newTitle")}</div>
@@ -1473,6 +1512,7 @@ function accountForm(id, onDone){
     <label class="small muted">${T("af.firm")}</label>
     <input type="text" id="afFirm" list="afFirmList" value="${escA(a.firm||'')}" placeholder="${T("af.firmPh")}" style="width:100%; margin:4px 0 4px; padding:9px 11px">
     <datalist id="afFirmList">${firms.map(f=>`<option value="${escA(f)}"></option>`).join("")}</datalist>
+    <div class="small faint" id="afFirmSizes" style="margin-bottom:2px">${propFirmHint(a.firm)}</div>
     <div class="small faint" style="margin-bottom:12px">${T("af.firmHint")}</div>
     <div class="rowflex" style="gap:10px">
       <div style="flex:1"><label class="small muted">${T("af.startBal")}</label><input type="number" id="afBal" value="${a.startBal||0}" step="1000" style="width:100%; margin-top:4px; padding:9px 11px"></div>
@@ -1492,6 +1532,7 @@ function accountForm(id, onDone){
       <button class="btn ghost" id="afCancel" style="justify-content:center; padding:11px">${T("cancel")}</button>
     </div>`, ()=>fin(null));
   $("#afCancel").onclick=closeModal;
+  $("#afFirm").oninput=e=>{ $("#afFirmSizes").textContent=propFirmHint(e.target.value); };
   $("#afSave").onclick=()=>{
     const nm=($("#afName").value||"").trim(); if(!nm){toast(T("af.needName"));return;}
     const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, dailyLossLimit:+$("#afDLL").value||0, phase:$("#afPhase").value, status:$("#afStatus").value };
@@ -1540,12 +1581,11 @@ function importText(txt, acct){
   if(!rows.length){toast(T("imp.noRead")); return;}
   // pnl is net of commission from the moment a trade enters the journal (see migrateCommissions for the
   // one-time fix applied to trades imported before this existed). Some formats (Tradovate's own export,
-  // notably) don't carry per-trade commission at all, so if the user has set a flat round-turn rate per
-  // contract, estimate it from that instead of silently leaving those trades gross.
-  const cpc=DB.settings.commPerContract||0;
+  // notably) don't carry per-trade commission at all, so estimate it from the per-firm/per-symbol rates
+  // set in Discipline -> Risk instead of silently leaving those trades gross. See commRateFor.
   rows.forEach(r=>{
     if(r.comm){ r.pnl=+(r.pnl-r.comm).toFixed(2); }
-    else if(cpc){ const est=+((r.qty||1)*cpc).toFixed(2); r.pnl=+(r.pnl-est).toFixed(2); r.comm=est; }
+    else { const rate=commRateFor(acct,r.sym); if(rate){ const est=+((r.qty||1)*rate).toFixed(2); r.pnl=+(r.pnl-est).toFixed(2); r.comm=est; } }
   });
   const map={}; DB.trades.forEach(t=>{ map[(t.acct||"")+"|"+tid(t)]=t; });
   let added=0; const addedRows=[];
@@ -3157,6 +3197,24 @@ function riskDays(TR){
     return {date:d,count:a.length,net:cum,trough,maxC,inW,breach,comp};
   });
 }
+function commFirmCard(firm){
+  const CF=DB.settings.commByFirm=DB.settings.commByFirm||{}; const cf=CF[firm]||{default:0,rows:[]}; const rows=cf.rows||[];
+  return `<div class="card section small" style="background:var(--surface2)">
+    <div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px">
+      <b>${escA(firm)}</b>
+      <span class="rowflex small muted" style="gap:4px;align-items:center">${T('risk.default')} $<input type="number" class="cfDef" data-firm="${escA(firm)}" value="${cf.default||0}" step="0.01" min="0" style="width:64px"></span>
+    </div>
+    ${rows.map((r,ri)=>`<div class="rowflex small" style="gap:6px;margin-top:8px;align-items:center">
+      <input type="text" class="cfSym" data-firm="${escA(firm)}" data-ri="${ri}" value="${escA(r.sym||'')}" placeholder="${T('risk.symPh')}" style="width:70px;text-transform:uppercase">
+      <span class="muted">$</span><input type="number" class="cfVal" data-firm="${escA(firm)}" data-ri="${ri}" value="${r.v||0}" step="0.01" min="0" style="width:70px">
+      <button class="btn small ghost" data-cfdelrow data-firm="${escA(firm)}" data-ri="${ri}" style="margin-left:auto">✕</button>
+    </div>`).join("")}
+    <div class="rowflex" style="gap:8px;margin-top:10px">
+      <button class="btn small ghost" data-cfaddrow data-firm="${escA(firm)}">${T('risk.addSymbolRate')}</button>
+      <button class="btn small ghost" data-cfdelfirm data-firm="${escA(firm)}" style="margin-left:auto">🗑</button>
+    </div>
+  </div>`;
+}
 function renderRisk(){
   const host=$("#view-risk"); const TR=activeTrades(); const M=metrics(TR); const RD=riskDays(TR);
   const dpt=DB.settings.dpt||900, sess=DB.settings.session||"Asia";
@@ -3168,6 +3226,8 @@ function renderRisk(){
   const streakDist={}; RD.forEach(d=>{ const k=d.maxC>=3?"3+":String(d.maxC); streakDist[k]=(streakDist[k]||0)+1; });
   const over2=RD.filter(d=>d.maxC>2).length;
   const sessOpts=["Asia","NY","Break"].map(s=>`<option ${s===sess?'selected':''}>${s}</option>`).join("");
+  const CF=DB.settings.commByFirm=DB.settings.commByFirm||{};
+  const firmNames=[...new Set([...allFirms(), ...Object.keys(CF)])];
   host.innerHTML=`
     <div class="grid kpis">
       ${kpi(T("risk.compliance"),Math.round(comp)+"%",RD.length+" "+T("dDays"),comp>=80?"pos":comp>=60?"wait":"neg")}
@@ -3179,6 +3239,15 @@ function renderRisk(){
     <div class="card section small muted rowflex" style="gap:8px">${T("risk.setCap")}<input type="number" id="rDpt" value="${dpt}" step="50" style="width:80px"> · ${T("risk.setWindow")} <select id="rSess">${sessOpts}</select> · ${T("risk.setOver")} <input type="number" id="rOt" value="${DB.settings.overtrade}" style="width:52px"> <button class="btn small" id="rApply">${T("apply")}</button></div>
     <div class="card section small muted">${fmt(T("risk.setComm"),{v:'<input type="number" id="rComm" value="'+(DB.settings.commPerContract||0)+'" step="0.01" min="0" style="width:70px">'})} <button class="btn small" id="rCommApply">${T("apply")}</button>
       <p class="small muted" style="margin:8px 0 0">${T("risk.commHint")}</p></div>
+    <div class="card section">
+      <h2>${T("risk.commByFirmTitle")}</h2>
+      <p class="small muted" style="margin:0 0 12px">${T("risk.commByFirmHint")}</p>
+      ${firmNames.length?firmNames.map(commFirmCard).join(""):'<p class="small muted" style="margin:0 0 12px">'+T("risk.commByFirmNone")+'</p>'}
+      <div class="rowflex" style="gap:6px">
+        <input type="text" id="cfNewFirm" placeholder="${T('risk.addFirmPh')}" style="flex:1">
+        <button class="btn small ghost" id="cfAddFirm">${T('risk.addFirm')}</button>
+      </div>
+    </div>
     <div class="card section"><h2>${T("risk.byDay")}</h2>
       <table><thead><tr><th>${T("th.day")}</th><th class="mono">${T("th.Trades")}</th><th class="mono">${T("th.net")}</th><th class="mono">${T("th.worstDD")}</th><th class="mono">${T("th.maxLoss")}</th><th class="mono">${T("th.inWindow")}</th><th>${T("th.dpt")}</th><th class="mono">${T("th.compl")}</th></tr></thead>
       <tbody>${RD.slice().reverse().map(d=>`<tr>
@@ -3195,6 +3264,13 @@ function renderRisk(){
       </div><p class="small muted" style="margin-top:8px">${over2>0?fmt(T("risk.cbNote"),{n:over2}):T("risk.cbOk")}</p></div>`;
   $("#rApply").onclick=()=>{DB.settings.dpt=+$("#rDpt").value||900; DB.settings.session=$("#rSess").value; DB.settings.overtrade=+$("#rOt").value||8; save(); renderRisk();};
   $("#rCommApply").onclick=()=>{DB.settings.commPerContract=+$("#rComm").value||0; save(); toast(T("risk.commSaved")); renderRisk();};
+  host.querySelectorAll(".cfDef").forEach(inp=>inp.onchange=()=>{ const f=inp.dataset.firm; CF[f]=CF[f]||{default:0,rows:[]}; CF[f].default=+inp.value||0; save(); });
+  host.querySelectorAll(".cfSym").forEach(inp=>inp.onchange=()=>{ const f=inp.dataset.firm, ri=+inp.dataset.ri; CF[f]=CF[f]||{default:0,rows:[]}; CF[f].rows[ri]=CF[f].rows[ri]||{sym:"",v:0}; CF[f].rows[ri].sym=(inp.value||"").trim().toUpperCase(); save(); });
+  host.querySelectorAll(".cfVal").forEach(inp=>inp.onchange=()=>{ const f=inp.dataset.firm, ri=+inp.dataset.ri; CF[f]=CF[f]||{default:0,rows:[]}; CF[f].rows[ri]=CF[f].rows[ri]||{sym:"",v:0}; CF[f].rows[ri].v=+inp.value||0; save(); });
+  host.querySelectorAll("[data-cfdelrow]").forEach(b=>b.onclick=()=>{ const f=b.dataset.firm, ri=+b.dataset.ri; if(CF[f]&&CF[f].rows) CF[f].rows.splice(ri,1); save(); renderRisk(); });
+  host.querySelectorAll("[data-cfaddrow]").forEach(b=>b.onclick=()=>{ const f=b.dataset.firm; CF[f]=CF[f]||{default:0,rows:[]}; CF[f].rows=CF[f].rows||[]; CF[f].rows.push({sym:"",v:0}); save(); renderRisk(); });
+  host.querySelectorAll("[data-cfdelfirm]").forEach(b=>b.onclick=()=>{ const f=b.dataset.firm; confirmModal(fmt(T("risk.delFirmConfirm"),{firm:f}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; delete CF[f]; save(); renderRisk(); }); });
+  $("#cfAddFirm").onclick=()=>{ const v=($("#cfNewFirm").value||"").trim(); if(!v)return; CF[v]=CF[v]||{default:0,rows:[]}; save(); renderRisk(); };
 }
 
 // ---------- CUSTOM RULES: user-defined triggers, no AI. Pick a condition + a threshold in a form, and every
@@ -3553,7 +3629,7 @@ function ledStats(){
 }
 function renderFinance(){
   const host=$("#view-finance"); const S=ledStats(); const L=(DB.ledger||[]).slice().sort((a,b)=>a.date<b.date?1:-1);
-  const firms=allFirms();
+  const firms=[...new Set([...PROP_FIRMS.map(f=>f.name), ...allFirms()])].sort((x,y)=>x.localeCompare(y));
   const roi=S.evalSpend>0?S.income/S.evalSpend:0;
   const firmRows=Object.keys(S.byFirm).sort((a,b)=>(S.byFirm[b].earned-S.byFirm[b].spent)-(S.byFirm[a].earned-S.byFirm[a].spent)).map(f=>{const o=S.byFirm[f],net=o.earned-o.spent;
     return `<tr><td>${f.replace(/</g,'&lt;')}</td><td class="mono neg">${money(o.spent)}</td><td class="mono pos">${money(o.earned)}</td><td class="mono ${cls(net)}">${money(net)}</td><td>${net>=0?'<span class="pass ok">'+T("fin.paidOff")+'</span>':'<span class="pass no">'+money(net)+'</span>'}</td></tr>`;}).join("");
