@@ -523,6 +523,15 @@
     .daytrades td[data-label]::before{content:attr(data-label); font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--faint); font-weight:700; flex:none}
     .daytrades td .chips{justify-content:flex-end}
   }
+  .dayread{border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:12px; padding:13px 15px; margin:2px 0 10px; background:var(--surface2)}
+  .dayread .drlab{font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700}
+  .dayread .drhl{font-weight:700; font-size:14.5px; margin:3px 0 2px; line-height:1.4}
+  .dayread .sec{margin-top:11px}
+  .dayread ul{margin:5px 0 0; padding-left:17px; list-style:disc}
+  .dayread li{margin:3px 0; font-size:13px; line-height:1.5; color:var(--ink)}
+  .dayread li.bad::marker{color:var(--neg)} .dayread li.good::marker{color:var(--pos)}
+  .dayread .drlesson{margin-top:11px; padding:9px 12px; border-radius:8px; background:rgba(242,73,92,.10); border:1px solid rgba(242,73,92,.25); font-weight:600; font-size:13px; line-height:1.5}
+  .dayread .drlesson.win{background:rgba(47,182,164,.10); border-color:rgba(47,182,164,.28)}
 </style>
 <script type="application/ld+json">
 {
@@ -927,6 +936,7 @@ const I18N={
   "an.byInstrument":"P&L by instrument","an.byDirection":"P&L by direction","an.mgmt":"Winners vs losers · management","an.primary":"most traded","an.review":"review","an.long":"Long","an.short":"Short","an.holdWin":"Avg hold · winners","an.holdLoss":"Avg hold · losers","an.mgmtRead":"You held losers {x}× longer than winners: you cut the ones that work and give room to the ones that don't.","an.wl":"{w}W/{l}L","an.noTiming":"Hold-time needs the Tradovate CSV timing. Re-import to enable.","an.byHour":"P&L by hour (CT)","an.worst":"worst",
   "seq.title":"Sequence of the day","seq.revenge":"revenge size","seq.addLoser":"added to loser","seq.reentry":"revenge re-entry","seq.offEdge":"off-edge","seq.legend":"Running P&L on the right. Flags mark tilt behaviors the moment they happened.",
   "dn.flagRe":"You closed a losing **{sym}** trade down {loss} and were back in the same instrument within seconds, no new setup, just a reaction. That re-entry cost you another {cost}.","dn.flagAdd":"You then kept doing the same losing thing again on the same side, {cost} more added to the same hole.","dn.flagRev":"Right after a loss you sized up on the very next trade, that's chasing the loss, not planning the next one.","dn.flagOff":"{cost} of today's damage came from a symbol that isn't your usual edge.","dn.clean":"Clean sequence today: no revenge, no re-entries, no sizing up after a loss. Whatever kept you level, keep doing exactly that.","dn.lossNoFlag":"You closed the day at {net} with no revenge pattern in the sequence, this reads more like an off-edge day than a discipline day. Worth a look at the setups themselves, not your head.","dn.netLine":"Net for the day: **{net}**.",
+  "lcd.title":"Raw read of the day","dr.arc":"The arc","dr.errors":"Mistakes","dr.good":"What you did right","dr.longs":"longs","dr.shorts":"shorts","dr.long":"long","dr.short":"short","dr.allLosers":"all losers","dr.mostRed":"mostly red","dr.erased":"erased the rescue and ","dr.hl":"{net} in {n} trades · {w}W / {l}L ({wr}%) · {from}–{to} CT","dr.openRed":"You opened in the red: your first {n} trades lost ({sum}).","dr.burst":"Burst of **{n} {side} of {sym}** in {sec}s, {allred}: {sum}. That's oversizing / entering hot, not a plan.","dr.recovered":"You climbed back from {low} to {pre}: you'd already done the hard part.","dr.finalBlow":"And the last trade ({p}) {erased}left the day at **{net}**.","dr.gaveBack":"You reached **{peak}** and finished at {net}: gave back {gb}.","dr.recNet":"You closed at {net} after climbing back.","lcd.worst":"Your worst point was {low}.","dr.eRevenge":"Revenge-sizing: stacking {n} entries in seconds is tilt, not a setup. That cost you {sum}.","dr.eStubborn":"Opening stubbornness: you kept clicking after {n} losses in a row before your first win.","dr.eFinal":"Trade #{n} ({p}) {what}. Not knowing when to stop.","dr.eFinalErased":"erased what you'd already recovered","dr.eFinalGrew":"grew the loss","dr.eOver":"Overtrading: {n} trades from {from}–{to}. Lots of clicks together = trading the noise.","dr.eGaveBack":"You didn't protect the peak: from {peak} to {net} without stopping.","dr.eLongLeak":"Your long side was today's leak ({lnet}); short was winning ({snet}).","dr.eShortLeak":"Your short side was today's leak ({snet}); long was winning ({lnet}).","dr.gBest":"Your best trade: **{p}** on {sym} {side}{held}.","dr.heldSuffix":", held {dur}","dr.gHeld":"You held a winner {dur} ({p}): that's letting it run.","dr.gRecovered":"You knew how to climb back from {low}: you can read the market when you stop forcing.","dr.gGreen":"You closed the day green.","dr.gWinrate":"You won more trades than you lost ({wr}%).","dr.lFinalRec":"It wasn't the bad start that killed the day, it was not stopping once you'd done the hard part. When you recover the worst, close.","dr.lStubborn":"After 3 losses in a row the day is already warning you. You insisted instead of stopping.","dr.lBurst":"When the first trade fails, the answer is never more size. A loss is accepted, not avenged.","dr.lFinal":"You ended the day on your worst trade. When you're already red, the last big click almost always makes it worse.","dr.lGaveBack":"Protect the peak: set a give-back cap and stop the moment you hit it.","dr.lGreen":"Good day. Repeat the process exactly, don't force it more tomorrow.","dr.lOver":"Fewer clicks. Your edge runs out after the first trades of the day.","dr.lRed":"Controlled red day. Check whether each entry had a valid edge or was just boredom.",
   "sc.share":"Share scorecard","sc.shareTitle":"Share your scorecard","sc.cardTitle":"Trading Scorecard","sc.discipline":"Discipline","sc.cleanDays":"clean days","sc.winRate":"Win rate","sc.pf":"Profit factor","sc.trades":"Trades","sc.days":"Days","sc.net":"Net","sc.equityShape":"Equity curve (shape)","sc.tagline":"Discipline over results.","sc.best":"best {m}","sc.cta":"Get your own free journal","sc.footNote":"Educational tool, not financial advice.","sc.inclMoney":"Include net P&L ($)","sc.copy":"Copy link","sc.copied":"Link copied.","sc.copyFail":"Couldn't copy.","sc.preview":"Open preview","sc.note":"A public snapshot link, no login and no account details. Nothing is stored on a server, the data travels inside the link itself.","sc.shareX":"Share on X","sc.xText":"{disc}% clean days · 🔥{streak} clean streak · {win}% win rate. Discipline over results. Track yours free with @TradeDadLog:",
   "lk.disp.t":"Disposition effect (you hold losers longer)","lk.disp.w":"Your losing trades last {lossDur} on average; your winners only {winDur}. Read that again, you're giving your losers more time than your winners. It's hope management: you hold the red praying it comes back and grab the green before it can grow. The fix is boring and it works, decide your exit before you enter, then let the trade hit it, not your feelings.","lk.eupho.t":"Euphoria, sizing up after a win","lk.eupho.w":"You sized up {n} time(s) right after a winning trade, and those entries net {net}. A win feels like proof you're 'on,' so the next size creeps up, but the market has no idea you just won and the setup is no better for it. Keep your size fixed whether the last trade was a win or a loss, that consistency is the edge.",
   "fb.eyebrow":"Feedback","fb.title":"Report a bug or suggest something","fb.lead":"Found a bug? Want a feature or an improvement? Tell me, it helps everyone.","fb.type":"Type","fb.bug":"🐞 Bug","fb.feature":"✨ New feature","fb.improve":"🔧 Improvement","fb.other":"💬 Other","fb.msg":"Message","fb.msgPh":"Describe it as clearly as you can…","fb.send":"Send","fb.needMsg":"Write a message first.","fb.thanks":"Thanks! Sent. 🙏","fb.err":"Couldn't send, try again.","fb.thDate":"Date","fb.btn":"Feedback",
@@ -1071,6 +1081,7 @@ const I18N={
   "an.byInstrument":"P&L por instrumento","an.byDirection":"P&L por dirección","an.mgmt":"Ganadores vs perdedores · gestión","an.primary":"más operado","an.review":"revisar","an.long":"Largos","an.short":"Cortos","an.holdWin":"Aguante medio · ganadores","an.holdLoss":"Aguante medio · perdedores","an.mgmtRead":"Aguantaste los perdedores {x}× más que los ganadores: cortas los que funcionan y le das cuerda a los que no.","an.wl":"{w}W/{l}L","an.noTiming":"El aguante necesita el timing del CSV de Tradovate. Reimporta para activarlo.","an.byHour":"P&L por hora (CT)","an.worst":"peor",
   "seq.title":"Secuencia del día","seq.revenge":"tamaño revancha","seq.addLoser":"promedió a perdedor","seq.reentry":"reentrada revancha","seq.offEdge":"fuera de tu edge","seq.legend":"P&L acumulado a la derecha. Las etiquetas marcan las conductas de tilt en el momento en que pasaron.",
   "dn.flagRe":"Cerraste un trade perdedor en **{sym}** por {loss} y volviste al mismo instrumento en cuestión de segundos, sin un setup nuevo, solo una reacción. Esa reentrada te costó {cost} más.","dn.flagAdd":"Después seguiste haciendo lo mismo del lado perdedor, {cost} más metidos en el mismo hoyo.","dn.flagRev":"Justo después de una pérdida subiste el tamaño en el siguiente trade, eso es perseguir la pérdida, no planear el siguiente.","dn.flagOff":"{cost} del daño de hoy vino de un símbolo que no es tu edge habitual.","dn.clean":"Secuencia limpia hoy: sin venganza, sin reentradas, sin subir tamaño tras una pérdida. Lo que sea que hiciste para mantenerte estable, sigue haciéndolo exactamente así.","dn.lossNoFlag":"Cerraste el día en {net} sin ningún patrón de venganza en la secuencia, esto se lee más como un día fuera de tu edge que un día de disciplina. Vale la pena revisar los setups en sí, no tu cabeza.","dn.netLine":"Neto del día: **{net}**.",
+  "lcd.title":"Lectura cruda del día","dr.arc":"El arco","dr.errors":"Errores","dr.good":"Lo que hiciste bien","dr.longs":"largos","dr.shorts":"cortos","dr.long":"largo","dr.short":"corto","dr.allLosers":"todas perdedoras","dr.mostRed":"la mayoría rojas","dr.erased":"borró el rescate y ","dr.hl":"{net} en {n} trades · {w}G / {l}P ({wr}%) · {from}–{to} CT","dr.openRed":"Abriste en rojo: los primeros {n} trades perdieron ({sum}).","dr.burst":"Ráfaga de **{n} {side} de {sym}** en {sec}s, {allred}: {sum}. Eso es sobre-tamaño / entrar en caliente, no un plan.","dr.recovered":"Remontaste desde {low} hasta {pre}: ya habías hecho lo difícil.","dr.finalBlow":"Y el último trade ({p}) {erased}dejó el día en **{net}**.","dr.gaveBack":"Llegaste a tocar **{peak}** y terminaste en {net}: devolviste {gb}.","dr.recNet":"Cerraste en {net} tras remontar.","lcd.worst":"Tu peor momento fue {low}.","dr.eRevenge":"Revenge-sizing: apilar {n} entradas en segundos es tilt, no setup. Ahí perdiste {sum}.","dr.eStubborn":"Terquedad de apertura: seguiste clicando tras {n} pérdidas seguidas antes de tu primer acierto.","dr.eFinal":"El trade #{n} ({p}) {what}. No saber parar.","dr.eFinalErased":"borró lo que ya habías recuperado","dr.eFinalGrew":"agrandó la pérdida","dr.eOver":"Sobreoperación: {n} trades en {from}–{to}. Muchos clics juntos = operar el ruido.","dr.eGaveBack":"No protegiste el pico: de {peak} a {net} sin frenar.","dr.eLongLeak":"Tu lado largo fue la fuga hoy ({lnet}); en corto ganabas ({snet}).","dr.eShortLeak":"Tu lado corto fue la fuga hoy ({snet}); en largo ganabas ({lnet}).","dr.gBest":"Tu mejor trade: **{p}** en {sym} {side}{held}.","dr.heldSuffix":", aguantado {dur}","dr.gHeld":"Aguantaste un ganador {dur} ({p}): así se deja correr.","dr.gRecovered":"Supiste remontar desde {low}: sabes leer el mercado cuando dejas de forzar.","dr.gGreen":"Cerraste el día en verde.","dr.gWinrate":"Ganaste más trades de los que perdiste ({wr}%).","dr.lFinalRec":"El día no lo mató el mal arranque, lo mató no parar cuando ya habías hecho lo difícil. Cuando recuperes lo peor, cierra.","dr.lStubborn":"Tras 3 pérdidas seguidas el día ya te está avisando. Insististe en vez de parar.","dr.lBurst":"Cuando el primer trade falla, la respuesta nunca es más tamaño. Una pérdida se acepta, no se venga.","dr.lFinal":"Terminaste el día en tu peor trade. Cuando ya estás en rojo, el último clic grande casi siempre empeora.","dr.lGaveBack":"Protege el pico: fija un tope de ganancia devuelta y párate al tocarlo.","dr.lGreen":"Buen día. Repite el proceso tal cual, no lo fuerces de más mañana.","dr.lOver":"Menos clics. Tu edge se agota tras los primeros trades del día.","dr.lRed":"Día rojo controlado. Revisa si cada entrada tenía un borde válido o fue por aburrimiento.",
   "sc.share":"Compartir scorecard","sc.shareTitle":"Comparte tu scorecard","sc.cardTitle":"Scorecard de trading","sc.discipline":"Disciplina","sc.cleanDays":"días limpios","sc.winRate":"Win rate","sc.pf":"Profit factor","sc.trades":"Trades","sc.days":"Días","sc.net":"Neto","sc.equityShape":"Curva de equity (forma)","sc.tagline":"Disciplina antes que resultados.","sc.best":"récord {m}","sc.cta":"Consigue tu journal gratis","sc.footNote":"Herramienta educativa, no es asesoría financiera.","sc.inclMoney":"Incluir P&L neto ($)","sc.copy":"Copiar enlace","sc.copied":"Enlace copiado.","sc.copyFail":"No se pudo copiar.","sc.preview":"Abrir vista previa","sc.note":"Un enlace público de instantánea, sin login ni datos de cuenta. Nada se guarda en servidor: los datos viajan dentro del propio enlace.","sc.shareX":"Compartir en X","sc.xText":"{disc}% días limpios · 🔥{streak} de racha · {win}% win rate. Disciplina antes que resultados. Lleva el tuyo gratis con @TradeDadLog:",
   "lk.disp.t":"Efecto disposición (aguantas más los perdedores)","lk.disp.w":"Tus trades perdedores duran {lossDur} de media; los ganadores solo {winDur}. Léelo otra vez: le das más tiempo a los perdedores que a los ganadores. Es gestión de la esperanza: aguantas el rojo rezando que vuelva y agarras el verde antes de que crezca. El arreglo es aburrido y funciona, decide tu salida antes de entrar, y deja que la alcance el trade, no tus emociones.","lk.eupho.t":"Euforia, subir tamaño tras ganar","lk.eupho.w":"Subiste el tamaño {n} vez(es) justo después de un trade ganador, y esas entradas suman {net}. Ganar se siente como prueba de que estás 'encendido', así que el siguiente tamaño sube, pero el mercado no tiene ni idea de que acabas de ganar y el setup no es mejor por eso. Mantén el tamaño fijo gane o pierda el trade anterior, esa consistencia es el edge.",
   "fb.eyebrow":"Feedback","fb.title":"Reporta un bug o sugiere algo","fb.lead":"¿Encontraste un bug? ¿Quieres una función o una mejora? Dímelo, ayuda a todos.","fb.type":"Tipo","fb.bug":"🐞 Bug","fb.feature":"✨ Nueva función","fb.improve":"🔧 Mejora","fb.other":"💬 Otro","fb.msg":"Mensaje","fb.msgPh":"Descríbelo lo más claro que puedas…","fb.send":"Enviar","fb.needMsg":"Escribe un mensaje primero.","fb.thanks":"¡Gracias! Enviado. 🙏","fb.err":"No se pudo enviar, reintenta.","fb.thDate":"Fecha","fb.btn":"Feedback",
@@ -1292,7 +1303,7 @@ function gDate(s){
 function parseTopstepX(lines){
   const H=lines[0].split(",").map(s=>s.trim().toLowerCase());
   const idx=n=>H.indexOf(n);
-  const iSym=idx("contractname"), iEnt=idx("enteredat"), iExt=idx("exitedat"), iEP=idx("entryprice"), iXP=idx("exitprice"),
+  const iId=idx("id"), iSym=idx("contractname"), iEnt=idx("enteredat"), iExt=idx("exitedat"), iEP=idx("entryprice"), iXP=idx("exitprice"),
         iFee=idx("fees"), iPnl=idx("pnl"), iSize=idx("size"), iType=idx("type"), iComm=idx("commissions");
   const stripSym=s=>String(s||"").trim().toUpperCase().replace(/[FGHJKMNQUVXZ]\d{1,2}$/,"");
   const parseTs=s=>{ s=String(s||"").trim(); if(!s) return null;
@@ -1312,7 +1323,7 @@ function parseTopstepX(lines){
     const tclose=parseTs(c[iExt]); const dO=new Date(topen);
     const side=String(c[iType]||"").trim().toLowerCase().startsWith("s")?"short":"long";
     const entry=num(c[iEP]), exit=num(c[iXP]), pnl=iPnl>=0?(parseFloat(c[iPnl])||0):0;
-    out.push({ date:dO.toISOString().slice(0,10), time:dO.toISOString().slice(11,19), sym, side,
+    out.push({ id:iId>=0?String(c[iId]||"").trim():undefined, date:dO.toISOString().slice(0,10), time:dO.toISOString().slice(11,19), sym, side,
       qty:num(c[iSize])||1, status:pnl>0?"Win":"Loss", entry, exit, pnl:+pnl.toFixed(2),
       pts:+((side==="long"?exit-entry:entry-exit)).toFixed(2), comm:iFee>=0?num(c[iFee]):(iComm>=0?num(c[iComm]):0),
       dur:(tclose!=null?fmtDur(tclose-topen):""), topen, tclose:tclose==null?topen:tclose });
@@ -1605,11 +1616,18 @@ function importText(txt, acct){
     if(r.comm){ r.pnl=+(r.pnl-r.comm).toFixed(2); }
     else { const rate=commRateFor(acct,r.sym); if(rate){ const est=+((r.qty||1)*rate).toFixed(2); r.pnl=+(r.pnl-est).toFixed(2); r.comm=est; } }
   });
-  const map={}; DB.trades.forEach(t=>{ map[(t.acct||"")+"|"+tid(t)]=t; });
+  // Dedup: prefer the broker's unique Id when a row carries one, so identical-second fills (a revenge
+  // burst) are never merged into one. tid() stays the fallback for id-less formats and keeps tag stability.
+  const mergeTiming=(ex,src)=>["topen","tclose","dur"].forEach(f=>{ if(ex[f]===undefined && src[f]!==undefined) ex[f]=src[f]; });
+  const idMap={}, legMap={};
+  DB.trades.forEach(t=>{ const a=(t.acct||""); if(t.id) idMap[a+"|id:"+t.id]=t; else { const k=a+"|"+tid(t); if(!legMap[k]) legMap[k]=t; } });
   let added=0; const addedRows=[];
-  rows.forEach(r=>{ if(acct)r.acct=acct; const key=(r.acct||"")+"|"+tid(r); const ex=map[key];
-    if(ex){ ["topen","tclose","dur"].forEach(f=>{ if(ex[f]===undefined && r[f]!==undefined) ex[f]=r[f]; }); }
-    else { DB.trades.push(r); map[key]=r; added++; addedRows.push(r); } });
+  rows.forEach(r=>{ if(acct)r.acct=acct; const a=(r.acct||"");
+    if(r.id && idMap[a+"|id:"+r.id]){ mergeTiming(idMap[a+"|id:"+r.id],r); return; }
+    if(r.id){ const leg=legMap[a+"|"+tid(r)]; if(leg && !leg.id && !leg._claimed){ leg._claimed=true; mergeTiming(leg,r); leg.id=r.id; idMap[a+"|id:"+r.id]=leg; return; } }
+    if(!r.id){ const leg=legMap[a+"|"+tid(r)]; if(leg){ mergeTiming(leg,r); return; } }
+    DB.trades.push(r); if(r.id) idMap[a+"|id:"+r.id]=r; else legMap[a+"|"+tid(r)]=r; added++; addedRows.push(r); });
+  DB.trades.forEach(t=>{ delete t._claimed; });
   DB.trades.sort((a,b)=> (a.date+a.time) < (b.date+b.time) ? -1 : 1);
   ensureTdays(); save(); buildAccounts(); buildPeriods(); render();
   const acctPart=acct&&DB.accounts[acct]?fmt(T("imp.inAcct"),{name:DB.accounts[acct].name}):"";
@@ -1928,7 +1946,7 @@ function byKey(TR,fn){
 function dayStats(TR){ // ordered per día de trading: net, peak, final, giveback
   const by=byKey(TR,t=>t.tday); const days=Object.keys(by).sort();
   return days.map(d=>{
-    const arr=by[d].slice().sort((a,b)=>a.time<b.time?-1:1);
+    const arr=by[d].slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1);
     let cum=0,peak=0,trough=0; arr.forEach(t=>{cum+=t.pnl; if(cum>peak)peak=cum; if(cum<trough)trough=cum;});
     return {date:d, net:cum, peak, trough, count:arr.length, arr};
   });
@@ -2304,7 +2322,7 @@ function analyticsCards(TR){
 // one continuous emotional sequence. `cum`/`cumBefore` stay global, they're just the displayed
 // running P&L for the day, not what gates a flag.
 function sequenceFlags(arr){
-  const seq=arr.slice().sort((a,b)=>{ const ax=a.topen!=null?a.topen:0, bx=b.topen!=null?b.topen:0; return ax-bx || (a.time<b.time?-1:1); });
+  const seq=arr.slice().sort((a,b)=>{ const ax=a.topen!=null?a.topen:0, bx=b.topen!=null?b.topen:0; return ax-bx || ((a.date+a.time)<(b.date+b.time)?-1:1); });
   const prim=primarySym();
   let cum=0; const cumByAcct={}, lastByAcct={}, lastByAcctSym={};
   return seq.map((t,i)=>{
@@ -2337,22 +2355,78 @@ function daySequence(arr){
   return `<div class="seqwrap"><div class="seqhead">${T("seq.title")}</div>${rows}<div class="seqfoot muted small">${T("seq.legend")}</div></div>`;
 }
 // A same-day read, needs zero account history: just this day's own sequence of trades and their flags.
+// "Lectura cruda del día" — a raw, plain-language read of one trading day: the arc, the mistakes, what
+// went right, and one lesson. Self-contained (own chronological sort + burst/recovery detection) so the
+// story it tells matches the day's real sequence, including Asia sessions that cross UTC midnight.
 function dayNarrative(arr){
-  if(!arr||!arr.length) return "";
-  const seq=sequenceFlags(arr);
-  const net=seq[seq.length-1].cum;
-  const parts=[];
-  const reT=seq.find(t=>t.flags.some(f=>f[0]==='re'));
-  if(reT && reT.prevSame) parts.push(fmt(T('dn.flagRe'),{sym:reT.sym, loss:money1(reT.prevSame.pnl), cost:money1(reT.pnl)}));
-  const addTs=seq.filter(t=>t.flags.some(f=>f[0]==='add'));
-  if(addTs.length) parts.push(fmt(T('dn.flagAdd'),{n:addTs.length, cost:money1(addTs.reduce((s,t)=>s+t.pnl,0))}));
-  const revTs=seq.filter(t=>t.flags.some(f=>f[0]==='rev'));
-  if(revTs.length) parts.push(T('dn.flagRev'));
-  const offTs=seq.filter(t=>t.flags.some(f=>f[0]==='off'));
-  if(offTs.length) parts.push(fmt(T('dn.flagOff'),{cost:money1(offTs.reduce((s,t)=>s+t.pnl,0))}));
-  if(!parts.length) return net>=0 ? T('dn.clean') : fmt(T('dn.lossNoFlag'),{net:money1(net)});
-  parts.push(fmt(T('dn.netLine'),{net:money1(net)}));
-  return mdb(parts.join(' '));
+  const a=(arr||[]).slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); const n=a.length; if(!n) return "";
+  const M=metrics(a);
+  let cum=0,peak=-1e9,peakI=-1,trough=1e9,troughI=-1; const cums=[];
+  a.forEach((t,i)=>{cum+=t.pnl;cums.push(cum);if(cum>peak){peak=cum;peakI=i;}if(cum<trough){trough=cum;troughI=i;}});
+  const net=cum;
+  const wins=a.filter(t=>t.pnl>0), losses=a.filter(t=>t.pnl<0);
+  const bigWin=wins.length?wins.reduce((p,q)=>q.pnl>p.pnl?q:p):null;
+  const last=a[n-1], from=ctDisp(a[0]).hm, to=ctDisp(last).hm;
+  let openLoss=0,openSum=0; for(const t of a){ if(t.pnl<0){openLoss++;openSum+=t.pnl;} else break; }
+  const tEnt=t=>t.topen!=null?t.topen:(Date.parse((t.date||"")+"T"+(t.time||"00:00:00")+"Z")||0);
+  const tDur=t=>(t.topen!=null&&t.tclose!=null)?t.tclose-t.topen:null;
+  let bursts=[],curB=[a[0]];
+  for(let i=1;i<n;i++){ const dt=tEnt(a[i])-tEnt(a[i-1]);
+    if(dt<=25000 && a[i].sym===a[i-1].sym && a[i].side===a[i-1].side) curB.push(a[i]); else { if(curB.length>=3)bursts.push(curB); curB=[a[i]]; } }
+  if(curB.length>=3) bursts.push(curB);
+  const burst=bursts.sort((x,y)=>y.length-x.length)[0]||null;
+  const burstSum=burst?burst.reduce((s,t)=>s+t.pnl,0):0;
+  const burstSpan=burst?Math.round((tEnt(burst[burst.length-1])-tEnt(burst[0]))/1000):0;
+  const burstRed=burst&&burstSum<0;
+  const preLast=n>=2?cums[n-2]:cums[0];
+  let earlyTrough=1e9; for(let i=0;i<n-1;i++){ if(cums[i]<earlyTrough)earlyTrough=cums[i]; } if(n<2)earlyTrough=cums[0];
+  const recoveredMid=earlyTrough<-50 && preLast>earlyTrough+Math.max(150,Math.abs(earlyTrough)*0.3);
+  const gaveBack=peak>60 && net<peak-Math.max(120,peak*0.45);
+  const finalBlow=losses.length>1 && last.pnl<0 && Math.abs(last.pnl)>=Math.max(150,Math.abs(net||1)*0.2) && (recoveredMid||gaveBack||preLast>net+120);
+  const overtrade=n>=(DB.settings.overtrade||8);
+  const sideW=(s,pl)=>T(s==="long"?(pl?"dr.longs":"dr.long"):(pl?"dr.shorts":"dr.short"));
+  const hl=fmt(T("dr.hl"),{net:money(net),n:n,w:wins.length,l:losses.length,wr:M.winrate.toFixed(0),from:from,to:to});
+  const arc=[];
+  if(openLoss>=2) arc.push(fmt(T("dr.openRed"),{n:openLoss,sum:money(openSum)}));
+  if(burstRed) arc.push(fmt(T("dr.burst"),{n:burst.length,side:sideW(burst[0].side,1),sym:burst[0].sym,sec:burstSpan||1,allred:T(burst.every(t=>t.pnl<0)?"dr.allLosers":"dr.mostRed"),sum:money(burstSum)}));
+  if(recoveredMid) arc.push(fmt(T("dr.recovered"),{low:money(earlyTrough),pre:money(preLast)}));
+  if(finalBlow) arc.push(fmt(T("dr.finalBlow"),{p:money(last.pnl),erased:recoveredMid?T("dr.erased"):"",net:money(net)}));
+  else if(gaveBack) arc.push(fmt(T("dr.gaveBack"),{peak:money(peak),net:money(net),gb:money(peak-net)}));
+  else if(recoveredMid && net>=0) arc.push(fmt(T("dr.recNet"),{net:money(net)}));
+  else if(!recoveredMid && trough<-50 && trough<net-100) arc.push(fmt(T("lcd.worst"),{low:money(trough)}));
+  const bad=[];
+  if(burstRed) bad.push(fmt(T("dr.eRevenge"),{n:burst.length,sum:money(Math.abs(burstSum))}));
+  if(openLoss>=3) bad.push(fmt(T("dr.eStubborn"),{n:openLoss}));
+  if(finalBlow) bad.push(fmt(T("dr.eFinal"),{n:n,p:money(last.pnl),what:T(recoveredMid?"dr.eFinalErased":"dr.eFinalGrew")}));
+  if(overtrade) bad.push(fmt(T("dr.eOver"),{n:n,from:from,to:to}));
+  if(gaveBack && !finalBlow) bad.push(fmt(T("dr.eGaveBack"),{peak:money(peak),net:money(net)}));
+  const lnet=a.filter(t=>t.side==="long").reduce((s,t)=>s+t.pnl,0), snet=a.filter(t=>t.side==="short").reduce((s,t)=>s+t.pnl,0);
+  if(wins.length&&losses.length){ if(lnet<-50&&snet>0) bad.push(fmt(T("dr.eLongLeak"),{lnet:money(lnet),snet:money(snet)})); else if(snet<-50&&lnet>0) bad.push(fmt(T("dr.eShortLeak"),{snet:money(snet),lnet:money(lnet)})); }
+  const good=[];
+  if(bigWin){ const dm=tDur(bigWin); good.push(fmt(T("dr.gBest"),{p:money(bigWin.pnl),sym:bigWin.sym,side:sideW(bigWin.side),held:dm?fmt(T("dr.heldSuffix"),{dur:fmtDur(dm)}):""})); }
+  const heldWin=wins.filter(t=>tDur(t)!=null).sort((x,y)=>tDur(y)-tDur(x))[0];
+  if(heldWin && (!bigWin||tid(heldWin)!==tid(bigWin)) && tDur(heldWin)>=20*60000) good.push(fmt(T("dr.gHeld"),{dur:fmtDur(tDur(heldWin)),p:money(heldWin.pnl)}));
+  if(recoveredMid) good.push(fmt(T("dr.gRecovered"),{low:money(earlyTrough)}));
+  if(net>0 && !gaveBack) good.push(T("dr.gGreen"));
+  if(!good.length && M.winrate>=50) good.push(fmt(T("dr.gWinrate"),{wr:M.winrate.toFixed(0)}));
+  let lesson,win=false;
+  if(finalBlow && recoveredMid) lesson=T("dr.lFinalRec");
+  else if(openLoss>=4 && net<0) lesson=T("dr.lStubborn");
+  else if(burstRed) lesson=T("dr.lBurst");
+  else if(finalBlow) lesson=T("dr.lFinal");
+  else if(gaveBack) lesson=T("dr.lGaveBack");
+  else if(net>0){ lesson=T("dr.lGreen"); win=true; }
+  else if(overtrade) lesson=T("dr.lOver");
+  else lesson=T("dr.lRed");
+  const sec=(lab,items,cl)=>items.length?`<div class="sec"><div class="drlab">${lab}</div><ul>${items.map(x=>`<li class="${cl||''}">${mdb(x)}</li>`).join("")}</ul></div>`:"";
+  return `<div class="dayread">
+    <div class="drlab">${T("lcd.title")}</div>
+    <div class="drhl">${mdb(hl)}</div>
+    ${sec(T("dr.arc"),arc,"")}
+    ${sec(T("dr.errors"),bad,"bad")}
+    ${sec(T("dr.good"),good,"good")}
+    <div class="drlesson ${win?"win":""}">${mdb(lesson)}</div>
+  </div>`;
 }
 // ---------- Shareable public scorecard (URL-encoded, no server, no sensitive data by default) ----------
 function scEqSvg(eq){
@@ -2679,7 +2753,7 @@ function counterfactual(TR){
   const ot=DB.settings.overtrade||8;
   const by=byKey(TR,t=>t.tday);
   let stopNet=0;
-  Object.keys(by).forEach(d=>{const a=by[d].slice().sort((x,y)=>x.time<y.time?-1:1); let consec=0,stopped=false;
+  Object.keys(by).forEach(d=>{const a=by[d].slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); let consec=0,stopped=false;
     a.forEach(t=>{ if(stopped)return; stopNet+=t.pnl; if(t.pnl<0){consec++; if(consec>=2)stopped=true;} else if(t.pnl>0)consec=0; });});
   let noOtNet=0; Object.keys(by).forEach(d=>{ if(by[d].length<ot) noOtNet+=by[d].reduce((s,t)=>s+t.pnl,0); });
   const nomans=TR.filter(t=>{const g=DB.tags[tid(t)]; return g&&g.panel&&g.panel!=="VALID";});
@@ -2798,12 +2872,12 @@ function planVsActualHtml(d,arr){
   </div>`;
 }
 function dayCard(d,arrRaw){
-  const arr=arrRaw.slice().sort((a,b)=>a.time<b.time?-1:1); const M=metrics(arr);
+  const arr=arrRaw.slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1); const M=metrics(arr);
   let cum=0,peak=0; arr.forEach(t=>{cum+=t.pnl; if(cum>peak)peak=cum;});
   const left=peak-M.net, vol=arr.reduce((s,t)=>s+t.qty,0), comm=arr.reduce((s,t)=>s+(t.comm||0),0), exp=d===jExpanded;
   const kp=`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:0 8px;margin:10px 0 4px">
     ${kpiSmall(T("th.Trades"),M.n)}${kpiSmall(T("winRate"),M.winrate.toFixed(0)+"%")}${kpiSmall(T("net"),money1(M.net),cls(M.net))}${kpiSmall(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞")}${kpiSmall(T("j.volume"),vol)}${kpiSmall(T("j.wl"),M.wins+" / "+M.losses)}${left>1?kpiSmall(T("j.onTable"),money(left),"wait",T("j.peak")+" "+money(peak)):""}${comm?kpiSmall(T("j.commissions"),money(comm)):""}</div>`;
-  const body=exp?kp+sessionStatsHtml(arr,M,dayComputeExtra(arr))+planVsActualHtml(d,arr)+`<div class="why" style="font-size:13.5px;line-height:1.6;margin:2px 0 10px">${dayNarrative(arr)}</div><div data-curve="${d}" style="margin-bottom:8px"></div>${daySequence(arr)}<div style="overflow-x:auto"><table class="daytrades"><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th>Panel</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
+  const body=exp?kp+sessionStatsHtml(arr,M,dayComputeExtra(arr))+planVsActualHtml(d,arr)+`${dayNarrative(arr)}<div data-curve="${d}" style="margin-bottom:8px"></div>${daySequence(arr)}<div style="overflow-x:auto"><table class="daytrades"><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th>Panel</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
   return `<div class="card section" style="padding:14px 16px">
     <div class="rowflex" data-day="${d}" style="justify-content:space-between;cursor:pointer;align-items:center">
       <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} ${T("trades")}${left>1?' · '+fmt(T("j.leftOnTable"),{v:money(left)}):''}</span></div>
@@ -2868,7 +2942,7 @@ function jDaysHtml(TR){
   if(!days.length) return count+'<div class="card muted">'+T('jf.noneMatch')+'</div>';
   return count+days.map(d=>dayCard(d,by[d])).join("");
 }
-function jAttachCurve(TR){ const dh=$("#jDays"); if(!dh)return; const by=byKey(jFilterApply(TR),t=>t.tday); const cv=dh.querySelector('[data-curve="'+jExpanded+'"]'); if(cv&&by[jExpanded]) cv.appendChild(dayMiniCurve(by[jExpanded].slice().sort((a,b)=>a.time<b.time?-1:1))); }
+function jAttachCurve(TR){ const dh=$("#jDays"); if(!dh)return; const by=byKey(jFilterApply(TR),t=>t.tday); const cv=dh.querySelector('[data-curve="'+jExpanded+'"]'); if(cv&&by[jExpanded]) cv.appendChild(dayMiniCurve(by[jExpanded].slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1))); }
 function renderJournal(){
   const TR=activeTrades(); const host=$("#view-journal");
   if(!TR.length){ host.innerHTML=emptyCard(T("noTrades")); return; }
@@ -2880,7 +2954,7 @@ function renderJournal(){
   bind("jfEmo","emo"); bind("jfSetup","setup"); bind("jfSide","side"); bind("jfResult","result"); bind("jfMist","mist");
   const clr=$("#jfClear"); if(clr) clr.onclick=()=>{ jFilter={}; renderJournal(); };
   host.onclick=e=>{
-    const sc=e.target.closest("[data-sessioncard]"); if(sc){ const dd=sc.dataset.sessioncard; const by=byKey(jFilterApply(TR),t=>t.tday); if(by[dd]) showSessionCard(dd,by[dd].slice().sort((a,b)=>a.time<b.time?-1:1)); return; }
+    const sc=e.target.closest("[data-sessioncard]"); if(sc){ const dd=sc.dataset.sessioncard; const by=byKey(jFilterApply(TR),t=>t.tday); if(by[dd]) showSessionCard(dd,by[dd].slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1)); return; }
     const day=e.target.closest("[data-day]"); if(day){ jExpanded=jExpanded===day.dataset.day?null:day.dataset.day; renderJournal(); return; }
     const b=e.target.closest(".chip"); if(b){ const id=b.dataset.id,k=b.dataset.k,vv=b.dataset.v; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][k]=DB.tags[id][k]===vv?"":vv; save(); renderJournal(); return; }
     const nb=e.target.closest("[data-note]"); if(nb){ showNoteEditor(nb.dataset.note); return; }
@@ -2952,13 +3026,13 @@ function generateInsights(TR){
   });
   const byDay=byKey(TR,t=>t.tday);
   let eN=0,eNet=0,lN=0,lNet=0;
-  Object.keys(byDay).forEach(d=>{const a=byDay[d].slice().sort((x,y)=>x.time<y.time?-1:1); a.forEach((t,i)=>{ if(i<3){eNet+=t.pnl;eN++;} else {lNet+=t.pnl;lN++;} });});
+  Object.keys(byDay).forEach(d=>{const a=byDay[d].slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); a.forEach((t,i)=>{ if(i<3){eNet+=t.pnl;eN++;} else {lNet+=t.pnl;lN++;} });});
   if(lN>=3){ const eE=eN?eNet/eN:0, lE=lN?lNet/lN:0; const bad=lE<eE&&lE<0;
     out.push({score:Math.abs((eE-lE)*lN)+300, kind:"decay", bad,
       text:fmt(T("ins.decay"),{ee:money1(eE), en:eN, le:money1(lE), ln:lN, tail:bad?T("ins.decayBad"):lE<eE?T("ins.decayMid"):T("ins.decayOk")})});
   }
   let alN=0,alNet=0,awN=0,awNet=0;
-  Object.keys(byDay).forEach(d=>{const a=byDay[d].slice().sort((x,y)=>x.time<y.time?-1:1); for(let i=1;i<a.length;i++){ if(a[i-1].pnl<0){alNet+=a[i].pnl;alN++;} else if(a[i-1].pnl>0){awNet+=a[i].pnl;awN++;} }});
+  Object.keys(byDay).forEach(d=>{const a=byDay[d].slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); for(let i=1;i<a.length;i++){ if(a[i-1].pnl<0){alNet+=a[i].pnl;alN++;} else if(a[i-1].pnl>0){awNet+=a[i].pnl;awN++;} }});
   if(alN>=3&&awN>=3){ const al=alNet/alN, aw=awNet/awN; const bad=al<aw&&al<0;
     out.push({score:Math.abs((aw-al)*alN)+250, kind:"tilt", bad,
       text:fmt(T("ins.tilt"),{al:money1(al), aln:alN, aw:money1(aw), awn:awN, tail:bad?T("ins.tiltBad"):T("ins.tiltOk")})});
@@ -2978,7 +3052,7 @@ function personalRules(TR){
   const out=[]; if(TR.length<5) return out;
   const byDay=byKey(TR,t=>t.tday);
   let eN=0,eNet=0,lN=0,lNet=0;
-  Object.values(byDay).forEach(a=>{const s=a.slice().sort((x,y)=>x.time<y.time?-1:1); s.forEach((t,i)=>{ if(i<3){eNet+=t.pnl;eN++;} else {lNet+=t.pnl;lN++;} });});
+  Object.values(byDay).forEach(a=>{const s=a.slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); s.forEach((t,i)=>{ if(i<3){eNet+=t.pnl;eN++;} else {lNet+=t.pnl;lN++;} });});
   if(lN>=3 && lNet/lN<0) out.push({text:fmt(T("rule.maxTrades"),{v:money1(lNet/lN)}), adopt:{field:"overtrade",value:4,label:T("rule.adoptMax")}});
   const ag=TR.filter(t=>{const g=DB.tags[tid(t)];return g&&g.align==="Contra";}); const agNet=ag.reduce((s,t)=>s+t.pnl,0);
   if(ag.length>=3 && agNet<0) out.push({text:fmt(T("rule.noAgainst"),{n:ag.length,net:money(agNet)})});
@@ -2989,7 +3063,7 @@ function personalRules(TR){
   if(longs.length>=3 && lNetS<0 && sNet>lNetS) out.push({text:fmt(T("rule.sideLeak"),{side:T("side.long"),net:money(lNetS)})});
   const ins=generateInsights(TR).filter(i=>i.kind==="dim"&&i.worstNet<0);
   if(ins[0]) out.push({text:fmt(T("rule.avoidWorst"),{k:ins[0].worstK,net:money(ins[0].worstNet)})});
-  let alN=0,alNet=0; Object.values(byDay).forEach(a=>{const s=a.slice().sort((x,y)=>x.time<y.time?-1:1); for(let i=1;i<s.length;i++){ if(s[i-1].pnl<0){alNet+=s[i].pnl;alN++;} }});
+  let alN=0,alNet=0; Object.values(byDay).forEach(a=>{const s=a.slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); for(let i=1;i<s.length;i++){ if(s[i-1].pnl<0){alNet+=s[i].pnl;alN++;} }});
   if(alN>=3 && alNet<0) out.push({text:fmt(T("rule.circuitBreak"),{net:money1(alNet/alN)})});
   return out;
 }
@@ -3048,7 +3122,7 @@ function dayEval(TR){
   const dpt=DB.settings.dpt||900, ot=DB.settings.overtrade||8;
   const byDayAcct=byKey(TR,t=>t.tday+"|"+(t.acct||""));
   const perAcct=Object.keys(byDayAcct).map(k=>{
-    const arr=byDayAcct[k].slice().sort((a,b)=>a.time<b.time?-1:1);
+    const arr=byDayAcct[k].slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1);
     let cum=0,peak=0,consec=0,maxC=0,revenge=0;
     arr.forEach((t,i)=>{
       if(i>0 && arr[i-1].status==="Loss" && normSize(t)>normSize(arr[i-1])+1e-9 && cum<0) revenge++;
@@ -3349,7 +3423,7 @@ function riskDays(TR){
   const dpt=DB.settings.dpt||900, ot=DB.settings.overtrade||8, sess=DB.settings.session||"Asia";
   const by=byKey(TR,t=>t.tday);
   return Object.keys(by).sort().map(d=>{
-    const a=by[d].slice().sort((x,y)=>x.time<y.time?-1:1);
+    const a=by[d].slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1);
     let cum=0,trough=0,consec=0,maxC=0;
     a.forEach(t=>{cum+=t.pnl; if(cum<trough)trough=cum; if(t.pnl<0){consec++;if(consec>maxC)maxC=consec;}else if(t.pnl>0)consec=0;});
     const inW=a.filter(t=>sessionOf(t)===sess).length; const breach=trough<=-dpt;
@@ -3442,7 +3516,7 @@ function customRuleMatches(rule, TR){
   const byDayAcct=byKey(TR, t=>(t.tday||t.date)+"|"+(t.acct||""));
   const hits=[];
   Object.values(byDayAcct).forEach(dayArr=>{
-    const arr=dayArr.slice().sort((a,b)=>a.time<b.time?-1:1);
+    const arr=dayArr.slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1);
     if(rule.trigger==="max_trades_day"){
       const n=+rule.param||8;
       if(arr.length>n) hits.push(...arr.slice(n));
