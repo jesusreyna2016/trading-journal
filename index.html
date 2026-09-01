@@ -1284,7 +1284,7 @@ function parseTradovate(lines){
     const bMs=Date.UTC(bt.y,bt.mo-1,bt.da,bt.h,bt.mi,bt.s), sMs=Date.UTC(st.y,st.mo-1,st.da,st.h,st.mi,st.s);
     const isLong=bMs<sMs, openW=isLong?bt:st;
     const utc=toUTC(openW);
-    out.push({date:utc.toISOString().slice(0,10), time:utc.toISOString().slice(11,19), sym,
+    out.push({id:(pre[4]||"")+"-"+(pre[5]||""), date:utc.toISOString().slice(0,10), time:utc.toISOString().slice(11,19), sym,
       side:isLong?"long":"short", qty, status:pnl>0?"Win":"Loss",
       entry:isLong?buyP:sellP, exit:isLong?sellP:buyP, pnl:+pnl.toFixed(2), pts:+(sellP-buyP).toFixed(2), comm:0, dur:(last3[2]||"").trim(), topen:Math.min(bMs,sMs), tclose:Math.max(bMs,sMs)});
   }
@@ -2377,7 +2377,7 @@ function dayNarrative(arr){
   const burst=bursts.sort((x,y)=>y.length-x.length)[0]||null;
   const burstSum=burst?burst.reduce((s,t)=>s+t.pnl,0):0;
   const burstSpan=burst?Math.round((tEnt(burst[burst.length-1])-tEnt(burst[0]))/1000):0;
-  const burstRed=burst&&burstSum<0;
+  const burstRed=burst&&burstSum<=-100;
   const preLast=n>=2?cums[n-2]:cums[0];
   let earlyTrough=1e9; for(let i=0;i<n-1;i++){ if(cums[i]<earlyTrough)earlyTrough=cums[i]; } if(n<2)earlyTrough=cums[0];
   const recoveredMid=earlyTrough<-50 && preLast>earlyTrough+Math.max(150,Math.abs(earlyTrough)*0.3);
