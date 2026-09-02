@@ -2771,7 +2771,7 @@ function renderOverview(){
       ${kpi(hterm(T("expectancy"),T("help.expectancy")),money1(M.expectancy),T("perTrade"),cls(M.expectancy))}
       ${kpi(T("avgWinLoss"),money(M.avgW)+" / "+money(-M.avgL),(M.avgL?(M.avgW/M.avgL).toFixed(2):"–")+" "+T("ratioSuffix"))}
       ${kpi(T("daysTraded"),days.length,(days.length?(M.n/days.length).toFixed(1):"0")+" "+T("tradesPerDayS"))}
-      ${kpi(T("bestWorstDay"),money(bestD)+" / "+money(worstD),"")}
+      ${kpi(T("bestWorstDay"),money1(bestD)+" / "+money1(worstD),"")}
       ${kpi(hterm(T("maxDD"),T("help.maxDD")),money(-mdd),T("peakToValley"),mdd?"neg":"muted")}
     </div>
     ${cleanCard(ev)}
@@ -3131,7 +3131,7 @@ function renderReport(){
   let r=[];
   r.push(fmt(T("rep.title"),{p:periodLabel()}));
   r.push(fmt(T("rep.stats"),{n:M.n, net:money1(M.net), wr:M.winrate.toFixed(1), pf:(isFinite(M.pf)?M.pf.toFixed(2):"∞"), exp:money1(M.expectancy)}));
-  if(best) r.push(fmt(T("rep.bestWorst"),{bd:best.date, bn:money(best.net), wd:worst.date, wn:money(worst.net), avg:money1(days.length?M.net/days.length:0)}));
+  if(best) r.push(fmt(T("rep.bestWorst"),{bd:best.date, bn:money1(best.net), wd:worst.date, wn:money1(worst.net), avg:money1(days.length?M.net/days.length:0)}));
   r.push(""); r.push(T("rep.whatData")); ins.slice(0,7).forEach(i=>r.push("  • "+i.text.replace(/\*\*/g,"")));
   r.push(""); r.push(T("rep.mainLeak")+(top.length?top[0].title+" ("+top[0].metric+")":T("rep.noLeak")));
   if(top.length) r.push("  "+top[0].why);
@@ -3258,10 +3258,10 @@ function renderCalendar(){
   const opts=months.slice().reverse().map(m=>`<option value="${m}" ${m===monthSel?'selected':''}>${m}</option>`).join("");
   const wkCol=weeks.map((wk,i)=>`<div class="wkbox"><div class="lbl">${fmt(T("cal.week"),{n:i+1})}</div><div class="num ${cls(wk.net)}" style="font-weight:700; font-size:17px; margin-top:2px">${money1(wk.net)}</div><div class="small muted">${wk.days} ${T("dDays")}</div></div>`).join("");
   const monthTR=scoped().filter(t=>(t.tday||t.date).slice(0,7)===monthSel), Mm=metrics(monthTR);
-  const monthCardD={ week:monthSel, netLabel:T("net"), net:mNet, netStr:money1(mNet), discLabel:T("card.disc"), discPct:mDays?Math.round(mDisc/mDays*100):0, tradesLabel:T("th.Trades"), trades:Mm.n, winLabel:T("card.win"), winRate:Mm.winrate.toFixed(0), streakLabel:T("streak"), streak:streakDisc(inMonth), bestWorst:fmt(T("card.bestWorst"),{bd:money(bestD),wd:money(worstD)}), tagline:T("card.tagline") };
+  const monthCardD={ week:monthSel, netLabel:T("net"), net:mNet, netStr:money1(mNet), discLabel:T("card.disc"), discPct:mDays?Math.round(mDisc/mDays*100):0, tradesLabel:T("th.Trades"), trades:Mm.n, winLabel:T("card.win"), winRate:Mm.winrate.toFixed(0), streakLabel:T("streak"), streak:streakDisc(inMonth), bestWorst:fmt(T("card.bestWorst"),{bd:money1(bestD),wd:money1(worstD)}), tagline:T("card.tagline") };
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:12px">
     <h2 style="margin:0">${T("tab.calendar")}</h2><select id="monthSel">${opts}</select></div>
-    <div class="grid kpis" style="margin-bottom:14px">${kpi(T("cal.monthNet"),money1(mNet),"",cls(mNet))}${kpi(T("cal.greenDays"),greenD+"/"+mDays,mDays?Math.round(greenD/mDays*100)+"%":"–",greenD>=mDays-greenD?"pos":"wait")}${kpi(T("cal.avgDay"),money1(avgDay),"",cls(avgDay))}${kpi(T("cal.bestWorst"),money(bestD)+" / "+money(worstD),T("cal.ofMonth"))}${kpi(T("discDays"),mDisc+"/"+mDays,T("cal.thisMonth"),"calmc")}</div>
+    <div class="grid kpis" style="margin-bottom:14px">${kpi(T("cal.monthNet"),money1(mNet),"",cls(mNet))}${kpi(T("cal.greenDays"),greenD+"/"+mDays,mDays?Math.round(greenD/mDays*100)+"%":"–",greenD>=mDays-greenD?"pos":"wait")}${kpi(T("cal.avgDay"),money1(avgDay),"",cls(avgDay))}${kpi(T("cal.bestWorst"),money1(bestD)+" / "+money1(worstD),T("cal.ofMonth"))}${kpi(T("discDays"),mDisc+"/"+mDays,T("cal.thisMonth"),"calmc")}</div>
     <div class="card section"><h2>${T("card.monthTitle")}</h2><div id="monCardHost"></div>
       <div class="rowflex" style="gap:8px; margin-top:10px"><button class="btn small" id="monSave">${T("card.savePng")}</button><button class="btn small ghost" id="monCopy">${T("card.copyImg")}</button></div></div>
     <div class="card"><div class="calwrap">
@@ -3425,7 +3425,7 @@ function renderProgress(){
   const heat=wd.map(d=>`<div class="d ${d.disciplined?'g':'r'}" title="${d.date}: ${money(d.net)}${d.disciplined?' · '+T("w.disciplined"):' · '+failReasons(d)}">${d.date.slice(5)}<span class="n">${d.net>=0?'+':''}${Math.round(d.net)}</span></div>`).join("");
   const TRw=scoped().filter(t=>isoWeek(t.tday||t.date)===curW); const Mw=metrics(TRw);
   const wdNets=wd.map(d=>d.net); const bestD=wdNets.length?Math.max(...wdNets):0, worstD=wdNets.length?Math.min(...wdNets):0;
-  const cardD={ week:curW, netLabel:T("net"), net:last.net, netStr:money1(last.net), discLabel:T("card.disc"), discPct:Math.round(last.discPct), tradesLabel:T("th.Trades"), trades:Mw.n, winLabel:T("card.win"), winRate:Mw.winrate.toFixed(0), streakLabel:T("streak"), streak:streakDisc(allW), bestWorst:fmt(T("card.bestWorst"),{bd:money(bestD),wd:money(worstD)}), tagline:T("card.tagline") };
+  const cardD={ week:curW, netLabel:T("net"), net:last.net, netStr:money1(last.net), discLabel:T("card.disc"), discPct:Math.round(last.discPct), tradesLabel:T("th.Trades"), trades:Mw.n, winLabel:T("card.win"), winRate:Mw.winrate.toFixed(0), streakLabel:T("streak"), streak:streakDisc(allW), bestWorst:fmt(T("card.bestWorst"),{bd:money1(bestD),wd:money1(worstD)}), tagline:T("card.tagline") };
   const rls=personalRules(scoped());
   const rulesHtml=rls.length?`<div class="card section" style="border-color:var(--calm)"><h2>${T("rules.title")}</h2><p class="small muted" style="margin:0 0 8px">${T("rules.intro")}</p>${rls.map((r,i)=>`<div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--hair)"><span class="small">• ${mdb(r.text)}</span>${r.adopt?`<button class="btn small" data-adopt="${i}" style="flex:none">${r.adopt.label}</button>`:''}</div>`).join("")}</div>`:'';
   host.innerHTML=`
