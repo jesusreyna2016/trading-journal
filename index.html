@@ -2940,7 +2940,7 @@ function showNoteEditor(id){
     <div id="tnBody" contenteditable="true" spellcheck="true" style="min-height:180px;max-height:48vh;overflow:auto;border:1px solid var(--hair);border-radius:10px;padding:12px;background:var(--surface2);line-height:1.6;font-size:14px"></div>
     <div class="muted small" style="margin:6px 0 12px">${T("nt.imgHint")}</div>
     <div class="rowflex" style="gap:10px"><button class="btn calm" id="tnSave" style="flex:1; justify-content:center; padding:11px">${T("af.save")}</button><button class="btn ghost" id="tnCancel" style="justify-content:center; padding:11px">${T("cancel")}</button></div>`);
-  const body=$("#tnBody"); body.innerHTML=tg.note||""; hydrateImgs(body);
+  const body=$("#tnBody"); body.innerHTML=sanitizeNoteHtml(tg.note||""); hydrateImgs(body);
   document.querySelectorAll('#modal [data-cmd]').forEach(b=>b.onmousedown=e=>{ e.preventDefault(); body.focus(); document.execCommand(b.dataset.cmd,false,b.dataset.arg||null); });
   body.addEventListener("paste",e=>{ const it=(e.clipboardData||{}).items||[]; for(const x of it){ if(x.type&&x.type.indexOf("image")===0){ e.preventDefault(); const f=x.getAsFile(); if(f)insertImg(f,()=>{}); } } });
   body.addEventListener("dragover",e=>e.preventDefault());
@@ -3850,6 +3850,33 @@ async function stUpload(key,blob){ if(!user)return; try{ await sb.storage.from(I
 async function stDownload(key){ if(!user)return null; try{ const {data,error}=await sb.storage.from(IMGBUCKET).download(stPath(key)); if(error)throw error; return data; }catch(e){ return null; } }
 async function stRemove(key){ if(!user)return; try{ await sb.storage.from(IMGBUCKET).remove([stPath(key)]); }catch(e){} }
 function stripImgSrc(html){ const d=document.createElement("div"); d.innerHTML=html; d.querySelectorAll('img[data-imgkey]').forEach(im=>im.removeAttribute('src')); return d.innerHTML; }
+// Allowlist sanitizer for the rich-text trade/day notes, run every time a stored note is put back into an
+// innerHTML (never on the contenteditable's live typing, only when loading a saved value). The editor's own
+// toolbar only ever produces plain formatting tags, so this should be a no-op on anything it wrote itself --
+// it exists for everything else a note's HTML could contain by the time it's rendered: a paste from another
+// app, a value written by a future feature, or a bad sync from another device/extension. Self-heals on every
+// render instead of needing a one-time data migration, since nothing here depends on how the value got there.
+const NOTE_TAGS=new Set(['B','STRONG','I','EM','U','BR','DIV','SPAN','UL','OL','LI','H1','H2','H3','P','IMG','A']);
+const NOTE_ATTRS={IMG:['data-imgkey','style','alt'],A:['href']};
+function sanitizeNoteHtml(html){
+  const d=document.createElement('div'); d.innerHTML=html||'';
+  const clean=node=>{
+    [...node.childNodes].forEach(ch=>{
+      if(ch.nodeType===1){
+        clean(ch); // sanitize children before deciding whether to unwrap this element
+        if(NOTE_TAGS.has(ch.tagName)){
+          [...ch.attributes].forEach(a=>{
+            const name=a.name.toLowerCase(), allowed=(NOTE_ATTRS[ch.tagName]||[]).includes(name);
+            const badHref=ch.tagName==='A'&&name==='href'&&/^\s*javascript:/i.test(a.value);
+            if(!allowed || badHref) ch.removeAttribute(a.name);
+          });
+        } else { while(ch.firstChild) node.insertBefore(ch.firstChild, ch); node.removeChild(ch); }
+      } else if(ch.nodeType!==3){ node.removeChild(ch); } // drop comments etc, keep text nodes
+    });
+  };
+  clean(d);
+  return d.innerHTML;
+}
 function hydrateImgs(el){ el.querySelectorAll('img[data-imgkey]').forEach(im=>{ const k=im.dataset.imgkey; idbGet(k).then(b=>{ if(b){ im.src=URL.createObjectURL(b); return; } stDownload(k).then(d=>{ if(d){ idbPut(k,d).catch(()=>{}); im.src=URL.createObjectURL(d); } }); }).catch(()=>{ stDownload(k).then(d=>{ if(d) im.src=URL.createObjectURL(d); }); }); }); }
 function insertImg(file,doSave){ const key="img"+Date.now().toString(36)+Math.floor(Math.random()*1e4); idbPut(key,file).then(()=>{ stUpload(key,file); const url=URL.createObjectURL(file); document.execCommand('insertHTML',false,`<img data-imgkey="${key}" src="${url}" style="max-width:100%;border-radius:8px;margin:6px 0">`); doSave(); }); }
 function noteDayInfo(ds){ if(!ds) return ""; const tr=DB.trades.filter(t=>(t.tday||t.date)===ds); if(!tr.length) return '<span class="muted small">'+T("nt.noTradesDay")+'</span>'; const net=tr.reduce((s,t)=>s+t.pnl,0); const ev=dayEval(tr)[0]; return `<span class="num ${cls(net)}" style="font-weight:700">${T("net")} ${money1(net)}</span> <span class="muted small">· ${tr.length} ${T("trades")}${ev?(ev.disciplined?' · 🟢':' · 🔴 '+failReasons(ev)):''}</span>`; }
@@ -3881,7 +3908,7 @@ function renderNotes(){
   $("#ntNew").onclick=newNote;
   $("#ntSearch").addEventListener("input",e=>{host._q=e.target.value; renderNotes(); const s=$("#ntSearch"); if(s){s.focus(); s.setSelectionRange(s.value.length,s.value.length);}});
   host.querySelectorAll("[data-note]").forEach(el=>el.onclick=()=>{noteSel=el.dataset.note; renderNotes();});
-  if(n){ const body=$("#ntBody"); body.innerHTML=n.html||""; hydrateImgs(body);
+  if(n){ const body=$("#ntBody"); body.innerHTML=sanitizeNoteHtml(n.html||""); hydrateImgs(body);
     const doSave=()=>{DB.notes[noteSel].html=stripImgSrc(body.innerHTML); DB.notes[noteSel].updated=Date.now(); save();};
     let tmr; body.addEventListener("input",()=>{clearTimeout(tmr); tmr=setTimeout(doSave,600);});
     $("#ntTitle").addEventListener("input",e=>{DB.notes[noteSel].title=e.target.value; DB.notes[noteSel].updated=Date.now(); save();});
