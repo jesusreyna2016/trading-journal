@@ -1354,7 +1354,12 @@ function parseTradovate(lines){
     const qty=parseFloat(pre[6])||0, buyP=parseFloat(pre[7])||0, sellP=parseFloat(pre[8])||0;
     const pnlStr=p.slice(9,p.length-3).join(","); const neg=/\(/.test(pnlStr); const pnl=(neg?-1:1)*(parseFloat(pnlStr.replace(/[^0-9.]/g,""))||0);
     const bt=parseTs(last3[0]), st=parseTs(last3[1]); if(!bt||!st) continue;
-    const bMs=Date.UTC(bt.y,bt.mo-1,bt.da,bt.h,bt.mi,bt.s), sMs=Date.UTC(st.y,st.mo-1,st.da,st.h,st.mi,st.s);
+    // bMs/sMs must go through toUTC() (CT wall clock -> true UTC instant), same as `date`/`time` below --
+    // a plain Date.UTC() on the CSV's raw CT numbers mislabels them as UTC, leaving topen/tclose off by
+    // the CT-UTC offset. Duration and ordering were fine either way (same shift on every timestamp), but
+    // anything that formats topen/tclose back to a CT clock time -- the day's mini equity curve axis --
+    // double-applied the offset and showed the wrong time, wrapped into the wrong day.
+    const bMs=toUTC(bt).getTime(), sMs=toUTC(st).getTime();
     const isLong=bMs<sMs, openW=isLong?bt:st;
     const utc=toUTC(openW);
     out.push({id:(pre[4]||"")+"-"+(pre[5]||""), date:utc.toISOString().slice(0,10), time:utc.toISOString().slice(11,19), sym,
@@ -2222,9 +2227,12 @@ function drawEquityBars(x,ox,oy,W,H,arr){
       if(t.pnl>=0) x.fillRect(cx-bw/2,bZeroY-h,bw,h); else x.fillRect(cx-bw/2,bZeroY,bw,h); });
   }
   if(hasTime && tickH>0){
-    x.fillStyle=css('--faint'); x.font="9px "+css('--mono'); x.textAlign="center";
+    x.fillStyle=css('--faint'); x.font="9px "+css('--mono');
     const nTicks=Math.min(6,Math.max(2,arr.length));
-    for(let i=0;i<nTicks;i++){ const ms=t0+span*i/(nTicks-1); const px=ox+pad+(i/(nTicks-1))*(W-2*pad); x.fillText(ctHM(ms),px,oy+H-2); }
+    // First/last labels sit exactly at the plot edges; center-aligning them there clips half the text
+    // past the canvas boundary (e.g. "22:08" reads as "2:08"). Anchor the edge ticks inward instead.
+    for(let i=0;i<nTicks;i++){ const ms=t0+span*i/(nTicks-1); const px=ox+pad+(i/(nTicks-1))*(W-2*pad);
+      x.textAlign=i===0?"left":i===nTicks-1?"right":"center"; x.fillText(ctHM(ms),px,oy+H-2); }
     x.textAlign="left";
   }
 }
