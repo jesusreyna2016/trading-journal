@@ -1241,6 +1241,28 @@ function migrateFirmCase(s){
   }
   s.settings=s.settings||{}; s.settings.firmCaseV1=true;
 }
+// One-time fix: parseTradovate() used to compute topen/tclose by mislabeling the CSV's raw America/Chicago
+// wall-clock time as UTC, off by the CT-UTC offset (5h CDT / 6h CST) from a true UTC instant -- see the fix
+// in parseTradovate itself. `date`/`time` were never affected (always went through the correct conversion),
+// so for every already-imported Tradovate trade, `Date.parse(date+"T"+time+"Z")` IS the correct topen -- just
+// re-derive it from there and shift tclose by the same (already-correct) duration. Only touches a trade whose
+// topen is off by something that looks like exactly a CT-UTC offset, so TopstepX/TradingView/generic imports
+// (never affected) are left alone. Gated on a settings flag so it runs exactly once.
+function migrateTradovateTZ(s){
+  if(s.settings && s.settings.tzFixV1) return;
+  const OFFSETS=[5*3600000, 6*3600000]; // CDT, CST
+  (s.trades||[]).forEach(t=>{
+    if(t.topen==null || !t.date || !t.time) return;
+    const correctOpen=Date.parse(t.date+"T"+t.time+"Z");
+    if(!isFinite(correctOpen)) return;
+    const diff=correctOpen-t.topen;
+    if(OFFSETS.some(o=>Math.abs(diff-o)<2000)){
+      const span=(t.tclose!=null?t.tclose:t.topen)-t.topen;
+      t.topen=correctOpen; t.tclose=correctOpen+span;
+    }
+  });
+  s.settings=s.settings||{}; s.settings.tzFixV1=true;
+}
 function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
@@ -1252,6 +1274,7 @@ function normalizeDB(s){
   migrateTidV2(s);
   migrateFirmNames(s);
   migrateFirmCase(s);
+  migrateTradovateTZ(s);
   return s;
 }
 function load(){ let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){} return normalizeDB(s); }
@@ -1941,6 +1964,7 @@ function restoreBackup(j){
     migrateTidV2(DB);
     migrateFirmNames(DB);
     migrateFirmCase(DB);
+    migrateTradovateTZ(DB);
     ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast(fmt(T("io.restored"),{n:DB.trades.length}));
   });
 }
