@@ -1137,6 +1137,8 @@ const SETUPS=[];  // ya no hay setups por defecto; el usuario añade los suyos (
 const MISTAKES=["revenge","oversize","overwin","fighting","earlyexit","onemore","pressure","fomo","moved_sl","noplan","early","noconfirm","tightsl","chase"];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
 try{ document.documentElement.dataset.theme=(DB.settings&&DB.settings.theme)||'dark'; }catch(e){} // paint the right theme before the first render()
+// jExpanded: null = not touched yet this session (jDaysHtml defaults it to the most recent day),
+// false = user explicitly collapsed every day, a "YYYY-MM-DD" string = that day is open.
 let period="ALL", tab="overview", monthSel=null, acctSel=new Set(), noteSel=null, jExpanded=null, routineSel=null, jFilter={}, lessonQ="";
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||"cuenta";
 function scoped(){ if(!acctSel.size)return DB.trades; return DB.trades.filter(t=>acctSel.has(t.acct||"__none")); }
@@ -1181,6 +1183,19 @@ function migrateTidV2(s){
   });
   s.settings=s.settings||{}; s.settings.tidV2=true;
 }
+// One-time fix: two seed prop-firm names in PROP_FIRMS used to include a space ("My Funded Futures",
+// "Lucid Trading"). Accounts/ledger entries saved from that seed picked up the spaced name, while some
+// were typed by hand without it -- same firm, two strings, showing as duplicates in the firm dropdown.
+// Canonical form going forward is no-space (matches the firms' own branding). Gated on a settings flag so
+// it runs exactly once, ever, even across cloud sync / local cache / backup restores.
+function migrateFirmNames(s){
+  if(s.settings && s.settings.firmNamesV2) return;
+  const RENAME={"My Funded Futures":"Myfundedfutures", "Lucid Trading":"LucidTrading"};
+  Object.values(s.accounts||{}).forEach(a=>{ if(a.firm && RENAME[a.firm]) a.firm=RENAME[a.firm]; });
+  (s.ledger||[]).forEach(e=>{ if(e.firm && RENAME[e.firm]) e.firm=RENAME[e.firm]; });
+  if(s.settings && s.settings.commByFirm){ Object.keys(RENAME).forEach(old=>{ if(s.settings.commByFirm[old] && !s.settings.commByFirm[RENAME[old]]){ s.settings.commByFirm[RENAME[old]]=s.settings.commByFirm[old]; delete s.settings.commByFirm[old]; } }); }
+  s.settings=s.settings||{}; s.settings.firmNamesV2=true;
+}
 function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
@@ -1190,6 +1205,7 @@ function normalizeDB(s){
   s.settings.goals=Object.assign({disc:80, proc:80, nomans:2, rr:1.5}, s.settings.goals||{});
   migrateCommissions(s);
   migrateTidV2(s);
+  migrateFirmNames(s);
   return s;
 }
 function load(){ let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){} return normalizeDB(s); }
@@ -1523,7 +1539,7 @@ const PROP_FIRMS=[
   {name:"Apex Trader Funding", sizes:"25k-300k"},
   {name:"Topstep", sizes:"50k-150k"},
   {name:"TakeProfit Trader", sizes:"25k-150k"},
-  {name:"My Funded Futures", sizes:"25k-150k"},
+  {name:"Myfundedfutures", sizes:"25k-150k"},
   {name:"Tradeify", sizes:"25k-150k"},
   {name:"FundedNext Futures", sizes:"25k-150k"},
   {name:"FTMO Futures", sizes:"50k-100k"},
@@ -1535,7 +1551,7 @@ const PROP_FIRMS=[
   {name:"Day Traders", sizes:"25k-300k"},
   {name:"BluSky", sizes:"25k-200k"},
   {name:"Phidias Propfirm", sizes:"50k-150k"},
-  {name:"Lucid Trading", sizes:"25k-150k"},
+  {name:"LucidTrading", sizes:"25k-150k"},
 ];
 function propFirmHint(name){ const f=PROP_FIRMS.find(p=>p.name.toLowerCase()===(name||"").trim().toLowerCase()); return f?fmt(T("af.firmSizes"),{sizes:f.sizes}):""; }
 // Formulario modal de cuenta (crear/editar). onDone(id) al guardar, onDone(null) al cancelar.
@@ -1881,6 +1897,7 @@ function restoreBackup(j){
     DB.trades.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
     migrateCommissions(DB);
     migrateTidV2(DB);
+    migrateFirmNames(DB);
     ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast(fmt(T("io.restored"),{n:DB.trades.length}));
   });
 }
@@ -2986,7 +3003,7 @@ function jFilterBar(){
 }
 function jDaysHtml(TR){
   const fil=jFilterApply(TR); const by=byKey(fil,t=>t.tday); const days=Object.keys(by).sort().reverse();
-  if(jExpanded===null||!by[jExpanded]) jExpanded=days[0];
+  if(jExpanded===null||(jExpanded!==false&&!by[jExpanded])) jExpanded=days[0];
   const count=`<div class="small muted" style="margin:0 0 10px">${fmt(T('jf.count'),{n:fil.length,t:TR.length})}</div>`;
   if(!days.length) return count+'<div class="card muted">'+T('jf.noneMatch')+'</div>';
   return count+days.map(d=>dayCard(d,by[d])).join("");
@@ -3004,7 +3021,7 @@ function renderJournal(){
   const clr=$("#jfClear"); if(clr) clr.onclick=()=>{ jFilter={}; renderJournal(); };
   host.onclick=e=>{
     const sc=e.target.closest("[data-sessioncard]"); if(sc){ const dd=sc.dataset.sessioncard; const by=byKey(jFilterApply(TR),t=>t.tday); if(by[dd]) showSessionCard(dd,by[dd].slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1)); return; }
-    const day=e.target.closest("[data-day]"); if(day){ jExpanded=jExpanded===day.dataset.day?null:day.dataset.day; renderJournal(); return; }
+    const day=e.target.closest("[data-day]"); if(day){ jExpanded=jExpanded===day.dataset.day?false:day.dataset.day; renderJournal(); return; }
     const b=e.target.closest(".chip"); if(b){ const id=b.dataset.id,k=b.dataset.k,vv=b.dataset.v; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][k]=DB.tags[id][k]===vv?"":vv; save(); renderJournal(); return; }
     const nb=e.target.closest("[data-note]"); if(nb){ showNoteEditor(nb.dataset.note); return; }
     const mb=e.target.closest("[data-mist]"); if(mb){ showMistakes(mb.dataset.mist); return; }
