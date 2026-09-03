@@ -1135,6 +1135,30 @@ const PANEL=["VALID","WAIT","CHOP"];
 const ALIGN=["Con sesgo","Contra","Neutro"];
 const SETUPS=[];  // ya no hay setups por defecto; el usuario añade los suyos (DB.settings.setups)
 const MISTAKES=["revenge","oversize","overwin","fighting","earlyexit","onemore","pressure","fomo","moved_sl","noplan","early","noconfirm","tightsl","chase"];
+// Well-known futures prop firms, just to seed the firm autocomplete (see afFirmList below) so most users
+// can pick instead of type. Sizes are the typical evaluation account tiers each firm offers, not their
+// current pricing or commission (both change too often, and commission also depends on the data feed/
+// platform the trader picks, so those stay a manual per-firm entry in Discipline -> Risk instead of a
+// guess baked in here). Never blocks a firm that isn't on this list, the field stays free text either way.
+// Declared before load() so migrateFirmCase() (which runs inside load()) can reference it.
+const PROP_FIRMS=[
+  {name:"Apex Trader Funding", sizes:"25k-300k"},
+  {name:"Topstep", sizes:"50k-150k"},
+  {name:"TakeProfit Trader", sizes:"25k-150k"},
+  {name:"Myfundedfutures", sizes:"25k-150k"},
+  {name:"Tradeify", sizes:"25k-150k"},
+  {name:"FundedNext Futures", sizes:"25k-150k"},
+  {name:"FTMO Futures", sizes:"50k-100k"},
+  {name:"TradeDay", sizes:"50k-150k"},
+  {name:"Bulenox", sizes:"25k-150k"},
+  {name:"Legends Trading", sizes:"25k-100k"},
+  {name:"IQ Capital", sizes:"50k-100k"},
+  {name:"E8 Futures", sizes:"25k-100k"},
+  {name:"Day Traders", sizes:"25k-300k"},
+  {name:"BluSky", sizes:"25k-200k"},
+  {name:"Phidias Propfirm", sizes:"50k-150k"},
+  {name:"LucidTrading", sizes:"25k-150k"},
+];
 let DB=load();                       // {trades:[], tags:{}, settings:{dpt, overtrade}}
 try{ document.documentElement.dataset.theme=(DB.settings&&DB.settings.theme)||'dark'; }catch(e){} // paint the right theme before the first render()
 // jExpanded: null = not touched yet this session (jDaysHtml defaults it to the most recent day),
@@ -1196,6 +1220,27 @@ function migrateFirmNames(s){
   if(s.settings && s.settings.commByFirm){ Object.keys(RENAME).forEach(old=>{ if(s.settings.commByFirm[old] && !s.settings.commByFirm[RENAME[old]]){ s.settings.commByFirm[RENAME[old]]=s.settings.commByFirm[old]; delete s.settings.commByFirm[old]; } }); }
   s.settings=s.settings||{}; s.settings.firmNamesV2=true;
 }
+// One-time fix: firm is free text, so "Myfundedfutures" and "myfundedfutures" (or any other casing typed by
+// hand) end up as two different strings for the same firm -- still shows as a duplicate in the firm dropdown
+// even after migrateFirmNames fixed the spacing. Collapses case-only variants to one casing per firm: the
+// PROP_FIRMS seed's casing when it matches, otherwise whichever casing was already in use. Gated on a
+// settings flag so it runs exactly once, ever, even across cloud sync / local cache / backup restores.
+function migrateFirmCase(s){
+  if(s.settings && s.settings.firmCaseV1) return;
+  const canon={};
+  const consider=n=>{ if(!n) return; const key=n.trim().toLowerCase(); if(canon[key]) return; const seed=PROP_FIRMS.find(f=>f.name.toLowerCase()===key); canon[key]=seed?seed.name:n; };
+  Object.values(s.accounts||{}).forEach(a=>consider(a.firm));
+  (s.ledger||[]).forEach(e=>consider(e.firm));
+  if(s.settings && s.settings.commByFirm) Object.keys(s.settings.commByFirm).forEach(consider);
+  const rewrite=n=>n?canon[n.trim().toLowerCase()]:n;
+  Object.values(s.accounts||{}).forEach(a=>{ if(a.firm) a.firm=rewrite(a.firm); });
+  (s.ledger||[]).forEach(e=>{ if(e.firm) e.firm=rewrite(e.firm); });
+  if(s.settings && s.settings.commByFirm){
+    const merged={}; Object.keys(s.settings.commByFirm).forEach(k=>{ const ck=rewrite(k); if(!merged[ck]) merged[ck]=s.settings.commByFirm[k]; });
+    s.settings.commByFirm=merged;
+  }
+  s.settings=s.settings||{}; s.settings.firmCaseV1=true;
+}
 function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
@@ -1206,6 +1251,7 @@ function normalizeDB(s){
   migrateCommissions(s);
   migrateTidV2(s);
   migrateFirmNames(s);
+  migrateFirmCase(s);
   return s;
 }
 function load(){ let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){} return normalizeDB(s); }
@@ -1530,35 +1576,26 @@ function commRateFor(acctId, sym){
   }
   return DB.settings.commPerContract||0;
 }
-// Well-known futures prop firms, just to seed the firm autocomplete (see afFirmList below) so most users
-// can pick instead of type. Sizes are the typical evaluation account tiers each firm offers, not their
-// current pricing or commission (both change too often, and commission also depends on the data feed/
-// platform the trader picks, so those stay a manual per-firm entry in Discipline -> Risk instead of a
-// guess baked in here). Never blocks a firm that isn't on this list, the field stays free text either way.
-const PROP_FIRMS=[
-  {name:"Apex Trader Funding", sizes:"25k-300k"},
-  {name:"Topstep", sizes:"50k-150k"},
-  {name:"TakeProfit Trader", sizes:"25k-150k"},
-  {name:"Myfundedfutures", sizes:"25k-150k"},
-  {name:"Tradeify", sizes:"25k-150k"},
-  {name:"FundedNext Futures", sizes:"25k-150k"},
-  {name:"FTMO Futures", sizes:"50k-100k"},
-  {name:"TradeDay", sizes:"50k-150k"},
-  {name:"Bulenox", sizes:"25k-150k"},
-  {name:"Legends Trading", sizes:"25k-100k"},
-  {name:"IQ Capital", sizes:"50k-100k"},
-  {name:"E8 Futures", sizes:"25k-100k"},
-  {name:"Day Traders", sizes:"25k-300k"},
-  {name:"BluSky", sizes:"25k-200k"},
-  {name:"Phidias Propfirm", sizes:"50k-150k"},
-  {name:"LucidTrading", sizes:"25k-150k"},
-];
 function propFirmHint(name){ const f=PROP_FIRMS.find(p=>p.name.toLowerCase()===(name||"").trim().toLowerCase()); return f?fmt(T("af.firmSizes"),{sizes:f.sizes}):""; }
+// Case-insensitive de-dup for a list of firm names: an account/ledger entry typed as "myfundedfutures" and
+// the PROP_FIRMS seed's "Myfundedfutures" are the same firm, but a plain Set treats them as two different
+// strings and both end up in the dropdown. Prefer the seed's casing on a case-insensitive match, else keep
+// whichever casing was seen first.
+function dedupeFirmsCI(names){
+  const seen=new Map();
+  names.forEach(n=>{
+    const key=(n||"").trim().toLowerCase(); if(!key) return;
+    if(seen.has(key)) return;
+    const seed=PROP_FIRMS.find(f=>f.name.toLowerCase()===key);
+    seen.set(key, seed?seed.name:n);
+  });
+  return [...seen.values()];
+}
 // Formulario modal de cuenta (crear/editar). onDone(id) al guardar, onDone(null) al cancelar.
 function accountForm(id, onDone){
   const editing=!!(id&&DB.accounts[id]);
   const a = editing ? DB.accounts[id] : {name:"",firm:"",startBal:50000,target:3000,ddType:"trailing",ddLimit:2000,dailyLossLimit:0,phase:"eval",status:"active"};
-  const firms=[...new Set([...PROP_FIRMS.map(f=>f.name), ...allFirms()])].sort((x,y)=>x.localeCompare(y));
+  const firms=dedupeFirmsCI([...PROP_FIRMS.map(f=>f.name), ...allFirms()]).sort((x,y)=>x.localeCompare(y));
   let done=false; const fin=(v)=>{ if(done)return; done=true; if(onDone)onDone(v); };
   openModal(`
     <div class="eyebrow">${editing?T("af.editTitle"):T("af.newTitle")}</div>
@@ -1898,6 +1935,7 @@ function restoreBackup(j){
     migrateCommissions(DB);
     migrateTidV2(DB);
     migrateFirmNames(DB);
+    migrateFirmCase(DB);
     ensureTdays(); save(); buildAccounts(); buildPeriods(); render(); toast(fmt(T("io.restored"),{n:DB.trades.length}));
   });
 }
@@ -3527,7 +3565,7 @@ function renderRisk(){
   const over2=RD.filter(d=>d.maxC>2).length;
   const sessOpts=["Asia","NY","Break"].map(s=>`<option ${s===sess?'selected':''}>${s}</option>`).join("");
   const CF=DB.settings.commByFirm=DB.settings.commByFirm||{};
-  const firmNames=[...new Set([...allFirms(), ...Object.keys(CF)])];
+  const firmNames=dedupeFirmsCI([...allFirms(), ...Object.keys(CF)]);
   host.innerHTML=`
     <div class="grid kpis">
       ${kpi(T("risk.compliance"),Math.round(comp)+"%",RD.length+" "+T("dDays"),comp>=80?"pos":comp>=60?"wait":"neg")}
@@ -3956,7 +3994,7 @@ function ledStats(){
 }
 function renderFinance(){
   const host=$("#view-finance"); const S=ledStats(); const L=(DB.ledger||[]).slice().sort((a,b)=>a.date<b.date?1:-1);
-  const firms=[...new Set([...PROP_FIRMS.map(f=>f.name), ...allFirms()])].sort((x,y)=>x.localeCompare(y));
+  const firms=dedupeFirmsCI([...PROP_FIRMS.map(f=>f.name), ...allFirms()]).sort((x,y)=>x.localeCompare(y));
   const roi=S.evalSpend>0?S.income/S.evalSpend:0;
   const firmRows=Object.keys(S.byFirm).sort((a,b)=>(S.byFirm[b].earned-S.byFirm[b].spent)-(S.byFirm[a].earned-S.byFirm[a].spent)).map(f=>{const o=S.byFirm[f],net=o.earned-o.spent;
     return `<tr><td>${f.replace(/</g,'&lt;')}</td><td class="mono neg">${money(o.spent)}</td><td class="mono pos">${money(o.earned)}</td><td class="mono ${cls(net)}">${money(net)}</td><td>${net>=0?'<span class="pass ok">'+T("fin.paidOff")+'</span>':'<span class="pass no">'+money(net)+'</span>'}</td></tr>`;}).join("");
