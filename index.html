@@ -143,6 +143,19 @@
   .hero-stat{display:flex; flex-direction:column; gap:3px; min-width:78px}
   .hero-stat .hs-lab{font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700}
   .hero-stat .hs-val{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:23px; font-weight:700; letter-spacing:-.02em}
+  .onb-hero{padding:28px 26px 24px; border:1px solid var(--hair); border-radius:var(--r); background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 130%); position:relative; overflow:hidden}
+  .onb-hero::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--calm)}
+  .onb-hero .eyebrow{display:block; color:var(--calm); font-size:10.5px; letter-spacing:.22em; margin-bottom:6px}
+  .onb-hero h2{margin:0; font-size:22px; font-weight:800; letter-spacing:-.01em; max-width:26ch; text-wrap:balance}
+  .onb-hero p{margin:10px 0 0; max-width:58ch; color:var(--muted); font-size:14px; line-height:1.6}
+  .onb-cta{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:18px}
+  .onb-steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-top:14px}
+  .onb-step{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px}
+  .onb-ic{width:34px; height:34px; border-radius:9px; background:color-mix(in srgb,var(--calm) 14%,var(--surface2)); color:var(--calm); display:flex; align-items:center; justify-content:center}
+  .onb-ic svg{width:18px; height:18px}
+  .onb-t{margin-top:11px; font-weight:700; font-size:13.5px; color:var(--ink)}
+  .onb-d{margin-top:4px; font-size:12px; line-height:1.5; color:var(--muted)}
+  @media(max-width:640px){ .onb-hero h2{font-size:19px} }
   .analytics-fold{margin-top:16px}
   .analytics-fold>summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px; padding:12px 14px; border:1px solid var(--hair); border-radius:var(--r); background:var(--surface); font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700; user-select:none}
   .analytics-fold>summary:hover{border-color:var(--faint)}
@@ -842,6 +855,10 @@ const I18N={
   "obTitle":"Set up your journal","obLead":"One minute to personalize it. You can change everything later in Risk and Routine.",
   "obName":"Your name (optional)","obNamePh":"What's your name?","obSession":"Which session do you trade?","obDpt":"Daily loss cap ($)","obMaxTrades":"Max trades per day","obStart":"Start","obSkip":"Skip for now",
   "noTrades":"Nothing here yet for this period. Import a CSV or pick a different range up top, and your numbers will fill in.","trades":"trades",
+  "onb.eyebrow":"Before the numbers","onb.title":"Let's get your trades in.","onb.body":"This isn't just a P&L tracker. Once your trades are loaded, this journal reads your position sizing, your streaks and your state of mind, and calls out the moment one of them is about to cost you the account, not just totals up wins and losses.","onb.cta":"Import your first CSV","onb.dropHint":"or drop the file anywhere on this screen · Tradovate, NinjaTrader, TradingView or a generic CSV",
+  "onb.s1t":"Import your trades","onb.s1d":"Tradovate, NinjaTrader, TradingView Strategy Tester, or any CSV with date, symbol, entry, exit and P&L.",
+  "onb.s2t":"Check \"Should I trade today?\"","onb.s2d":"A 10-second read before the session, not a report to fill out.",
+  "onb.s3t":"Let it catch your leaks","onb.s3d":"Over-trading, revenge-sizing, a single trade too big for your account's drawdown, not just win rate.",
   "net":"Net","winRate":"Win rate","pf":"Profit factor","expectancy":"Expectancy","perTrade":"per trade","avgWinLoss":"Avg win / loss","ratioSuffix":"ratio",
   "daysTraded":"Days traded","tradesPerDayS":"trades/day","discDays":"Disciplined days","streak":"Streak","dDay":"day","dDays":"days","discLower":"disciplined","bestWorstDay":"Best / worst day","maxDD":"Max drawdown","peakToValley":"peak to valley",
   "help.expectancy":"The average $ you make or lose per trade, once wins and losses even out. Positive means your edge pays over time, even if single trades lose.","help.pf":"Total money won ÷ total money lost. Above 1.0 means you're net profitable; below 1.0 means your losses outweigh your wins.","help.maxDD":"The biggest drop your account took from a peak before recovering. A gauge of the worst pain you'd have sat through.","help.discDays":"A day counts as disciplined when you followed your own rules, no matter if it was a win or a loss. This is the number that matters more than P&L.",
@@ -991,6 +1008,10 @@ const I18N={
   "obTitle":"Configura tu journal","obLead":"Un minuto para personalizarlo. Podrás cambiar todo después en Riesgo y en la Rutina.",
   "obName":"Tu nombre (opcional)","obNamePh":"¿Cómo te llamas?","obSession":"¿Qué sesión operas?","obDpt":"Tope de pérdida diaria ($)","obMaxTrades":"Máx. trades por día","obStart":"Empezar","obSkip":"Saltar por ahora",
   "noTrades":"Aún no hay nada aquí para este periodo. Importa un CSV o elige otro rango arriba, y tus números aparecerán.","trades":"trades",
+  "onb.eyebrow":"Antes de los números","onb.title":"Metamos tus trades.","onb.body":"Esto no es solo un tracker de P&L. Una vez que tus trades estén cargados, el journal lee tu tamaño de posición, tus rachas y tu estado de ánimo, y te avisa el momento en que uno de ellos está por costarte la cuenta, no solo suma ganancias y pérdidas.","onb.cta":"Importar tu primer CSV","onb.dropHint":"o suelta el archivo en cualquier parte de esta pantalla · Tradovate, NinjaTrader, TradingView o un CSV genérico",
+  "onb.s1t":"Importa tus trades","onb.s1d":"Tradovate, NinjaTrader, TradingView Strategy Tester, o cualquier CSV con date, symbol, entry, exit y P&L.",
+  "onb.s2t":"Revisa \"¿Debo operar hoy?\"","onb.s2d":"Una lectura de 10 segundos antes de la sesión, no un reporte para llenar.",
+  "onb.s3t":"Deja que detecte tus fugas","onb.s3d":"Sobreoperar, revenge-sizing, un trade demasiado grande para el drawdown de tu cuenta, no solo el win rate.",
   "net":"Neto","winRate":"Win rate","pf":"Profit factor","expectancy":"Expectancy","perTrade":"por trade","avgWinLoss":"Avg win / loss","ratioSuffix":"ratio",
   "daysTraded":"Días operados","tradesPerDayS":"trades/día","discDays":"Días disciplinados","streak":"Racha","dDay":"día","dDays":"días","discLower":"disciplinados","bestWorstDay":"Mejor / peor día","maxDD":"Máx drawdown","peakToValley":"pico a valle",
   "help.expectancy":"El $ promedio que ganas o pierdes por trade, una vez que ganadores y perdedores se compensan. Positivo significa que tu edge paga con el tiempo, aunque trades individuales pierdan.","help.pf":"Dinero total ganado ÷ dinero total perdido. Arriba de 1.0 eres rentable en neto; abajo de 1.0 tus pérdidas pesan más que tus ganancias.","help.maxDD":"La caída más grande que tuvo tu cuenta desde un pico antes de recuperarse. Mide el peor dolor que habrías aguantado.","help.discDays":"Un día cuenta como disciplinado si seguiste tus propias reglas, sin importar si fue ganador o perdedor. Este número importa más que el P&L.",
@@ -2883,10 +2904,29 @@ function dashIntroCard(){
     <button class="btn small calm" id="introDismiss" style="margin-top:11px">${T('intro.cta')}</button>
   </div>`;
 }
+// First-run empty state for Overview. A bare "no trades yet" text was the very first thing a new user saw,
+// with nothing explaining what the product actually does once trades are loaded or how to get there --
+// so this replaces it with the pitch (coaching, not just a P&L tally) plus a CTA into the same import flow
+// the header button already drives, instead of leaving people to go find that button themselves.
+function onboardingEmptyHtml(){
+  const icon=d=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  const steps=[
+    {ic:icon('<path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>'), t:T('onb.s1t'), d:T('onb.s1d')},
+    {ic:icon('<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/>'), t:T('onb.s2t'), d:T('onb.s2d')},
+    {ic:icon('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.3-4.3"/>'), t:T('onb.s3t'), d:T('onb.s3d')}
+  ];
+  return `<div class="onb-hero">
+      <span class="eyebrow">${T('onb.eyebrow')}</span>
+      <h2>${T('onb.title')}</h2>
+      <p>${T('onb.body')}</p>
+      <div class="onb-cta"><button class="btn calm" id="onbImportBtn">${T('onb.cta')}</button><span class="small muted">${T('onb.dropHint')}</span></div>
+    </div>
+    <div class="onb-steps">${steps.map(s=>`<div class="onb-step"><div class="onb-ic">${s.ic}</div><div class="onb-t">${s.t}</div><div class="onb-d">${s.d}</div></div>`).join("")}</div>`;
+}
 function renderOverview(){
   const TR=activeTrades(), M=metrics(TR);
   const v=$("#view-overview");
-  if(!TR.length){ v.innerHTML=emptyCard(T("noTrades")); return; }
+  if(!TR.length){ v.innerHTML=onboardingEmptyHtml(); const ib=$("#onbImportBtn"); if(ib) ib.onclick=()=>$("#importBtn").click(); return; }
   const days=dayStats(TR), ev=dayEval(TR), disc=ev.filter(d=>d.disciplined).length, streak=streakDisc(ev);
   const bestD=Math.max(...days.map(d=>d.net)), worstD=Math.min(...days.map(d=>d.net));
   let cum=0,peak=0,mdd=0; days.forEach(d=>{cum+=d.net; if(cum>peak)peak=cum; if(peak-cum>mdd)mdd=peak-cum;});
