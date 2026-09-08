@@ -97,6 +97,10 @@
   #subtabs button.active{background:var(--surface2); border-color:var(--calm); color:var(--ink)}
   .card{background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:16px; box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 4%,transparent), var(--shadow); transition:border-color .18s ease, box-shadow .18s ease}
   .card:hover{ border-color:color-mix(in srgb,var(--calm) 20%,var(--hair)) }
+  .card-ghost{background:transparent; border:1px dashed var(--hair); box-shadow:none}
+  .card-ghost:hover{border-color:var(--faint)}
+  .ov-checkin{display:flex; flex-direction:column; gap:9px; margin-top:16px}
+  .ov-checkin-lab{font-size:10.5px; letter-spacing:.16em; color:var(--faint); margin:0 2px}
   .vdcard{position:relative; overflow:hidden; border-left-width:3px}
   .vdfold>summary{display:flex; list-style:none; cursor:pointer}
   .vdfold>summary::-webkit-details-marker{display:none}
@@ -867,7 +871,7 @@ const I18N={
   "help.acBuffer":"How much more you can lose before you breach this account's drawdown rule (Trailing/Static/Daily). Hits $0 and the account is done, so treat it as your real stop, not the P&L.","help.acPace":"Days to target at your current daily average. Just a projection from your pace so far, not a promise, a rough day speeds it up or a bad one pushes it back.","help.roi":"What you got back for every $1 you spent on evals, resets and activations. Below 1× means the evals are eating more than the payouts give back.",
   "equityCurve":"Equity curve","pnlByDay":"P&L by day","topInsight":"Top insight",
   "intro.eyebrow":"Your dashboard, in 10 seconds","intro.title":"Two boxes to check every day. Everything else can wait.","intro.body":"\"Should I trade today?\" is your pre-session gut check, read it before you click buy or sell. \"My Why\" is there to remind you what you're actually protecting when a trade gets emotional. The rest, Discipline, Analysis, the deep stats, is for when you want to dig in, not something to master today.","intro.cta":"Got it, let's go",
-  "ov.analytics":"Period analysis","ov.analyticsHint":"Stats, charts and coaching",
+  "ov.analytics":"Period analysis","ov.analyticsHint":"Stats, charts and coaching","ov.checkin":"Before you trade",
   "leaksCostTitle":"💸 What your leaks cost you","leaksCostBody":"Here's the honest math: if you had simply <b>{act}</b>, your net would read <b class='pos'>{v}</b> instead of {a}. That gap, <b class='pos'>+{d}</b>, wasn't taken by the market, you handed it back through one avoidable habit. <span class='muted'>The full breakdown is in Discipline → Leaks.</span>",
   "cf.stop":"stopped at 2 losses in a row","cf.noOt":"avoided over-trading days","cf.noNomans":"not traded outside your edge","cf.noAgainst":"not traded against the bias",
   "lk.side.t":"Longs vs shorts","lk.side.w":"Longs: {ln} trades, {lnet} ({lwr}% win). Shorts: {sn}, {snet} ({swr}%). {tail}","lk.side.bad":"Your long side is the leak: it loses while shorts win.","lk.side.ok":"Longs are holding up.",
@@ -1020,7 +1024,7 @@ const I18N={
   "help.acBuffer":"Cuánto más puedes perder antes de romper la regla de drawdown de esta cuenta (Trailing/Estático/Diario). Llega a $0 y la cuenta se acabó, trátalo como tu verdadero stop, no el P&L.","help.acPace":"Días al target a tu ritmo diario actual. Es solo una proyección de tu paso hasta ahora, no una promesa, un día bueno lo adelanta y uno malo lo atrasa.","help.roi":"Lo que recuperaste por cada $1 que gastaste en evals, resets y activaciones. Debajo de 1× significa que las evals se están comiendo más de lo que los payouts devuelven.",
   "equityCurve":"Curva de equity","pnlByDay":"P&L por día","topInsight":"Insight destacado",
   "intro.eyebrow":"Tu dashboard, en 10 segundos","intro.title":"Dos tarjetas para revisar cada día. Lo demás puede esperar.","intro.body":"\"Should I trade today?\" es tu chequeo previo a la sesión, léelo antes de dar clic en comprar o vender. \"My Why\" está ahí para recordarte qué estás protegiendo en realidad cuando un trade se pone emocional. Lo demás, Disciplina, Análisis, las estadísticas a fondo, es para cuando quieras profundizar, no algo que tengas que dominar hoy.","intro.cta":"Entendido, vamos",
-  "ov.analytics":"Análisis del periodo","ov.analyticsHint":"Stats, gráficas y coach",
+  "ov.analytics":"Análisis del periodo","ov.analyticsHint":"Stats, gráficas y coach","ov.checkin":"Antes de operar",
   "leaksCostTitle":"💸 El costo de tus fugas","leaksCostBody":"La cuenta honesta: si simplemente hubieras <b>{act}</b>, tu neto diría <b class='pos'>{v}</b> en vez de {a}. Esa diferencia, <b class='pos'>+{d}</b>, no te la quitó el mercado, la devolviste tú por un hábito evitable. <span class='muted'>El desglose completo está en Disciplina → Fugas.</span>",
   "cf.stop":"parar a las 2 pérdidas seguidas","cf.noOt":"evitar los días de sobreoperar","cf.noNomans":"no operar fuera de tu ventaja","cf.noAgainst":"no operar contra el sesgo",
   "lk.side.t":"Largos vs cortos","lk.side.w":"Largos: {ln} trades, {lnet} ({lwr}% aciertos). Cortos: {sn}, {snet} ({swr}%). {tail}","lk.side.bad":"Tu lado largo es la fuga: pierde mientras el corto gana.","lk.side.ok":"Los largos aguantan.",
@@ -2855,7 +2859,7 @@ function commitmentCard(){
   const wk=isoWeek(new Date().toISOString().slice(0,10));
   const c=(DB.settings&&DB.settings.commitment)||{}; const esc=s=>String(s||'').replace(/</g,'&lt;');
   if(c.week===wk && c.text) return `<div class="card" style="border-left:3px solid var(--a2);display:flex;justify-content:space-between;align-items:center;gap:10px"><div style="min-width:0"><div class="eyebrow" style="color:var(--a2)">${T('cm2.title')}</div><div style="font-weight:600;font-size:15px;margin-top:3px;color:var(--ink);line-height:1.4">🤝 ${esc(c.text)}</div></div><button class="btn small ghost" id="cmEdit" style="flex:none">${T('why.edit')}</button></div>`;
-  return `<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="small muted">${T('cm2.prompt')}</span><button class="btn small" id="cmEdit">🤝 ${T('cm2.set')}</button></div>`;
+  return `<div class="card card-ghost" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="small muted">${T('cm2.prompt')}</span><button class="btn small" id="cmEdit">🤝 ${T('cm2.set')}</button></div>`;
 }
 // Tendler-style reframe: when a mistake tag repeats 3+ times, invite the user to write the flawed belief
 // behind it and the corrected one, instead of just detecting the pattern again.
@@ -2957,13 +2961,15 @@ function renderOverview(){
     ? `<div class="card" style="border-color:var(--calm);${emphWhy?' box-shadow:0 0 0 2px var(--calm);':''}"><div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${T("why.title")}</h2><button class="btn small ghost" id="whyEdit">${T("why.edit")}</button></div>
         <div class="rowflex" style="gap:10px; margin-top:8px; align-items:center; flex-wrap:wrap">${W.img?`<img data-imgkey="${W.img}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;flex:none">`:''}<div style="flex:1; min-width:180px; font-size:14px; font-weight:600; line-height:1.4; color:var(--ink)">${(W.text||'').replace(/</g,'&lt;')}</div></div>
         ${emphWhy?`<div class="small wait" style="margin-top:10px">💡 ${T("why.reminder")}</div>`:''}</div>`
-    : `<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><span class="small muted">${T("why.prompt")}</span><button class="btn small" id="whyEdit">${T("why.set")}</button></div></div>`;
+    : `<div class="card card-ghost"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><span class="small muted">${T("why.prompt")}</span><button class="btn small" id="whyEdit">${T("why.set")}</button></div></div>`;
+  // Grouped instead of stacked loose: these are the "check before you trade" items (verdict, why, weekly
+  // commitment, reframe), same visual family so they read as one thing to glance at, not four separate cards
+  // competing for the same weight as the P&L hero right below them.
+  const checkinParts=[verdictCard(),whyHtml,commitmentCard(),reframeCard(TR)].filter(Boolean);
+  const checkinHtml=checkinParts.length?`<div class="ov-checkin"><div class="eyebrow ov-checkin-lab">${T('ov.checkin')}</div>${checkinParts.join('')}</div>`:'';
   v.innerHTML=`
     ${dashIntroCard()}
-    ${verdictCard()}
-    ${whyHtml}
-    ${commitmentCard()}
-    ${reframeCard(TR)}
+    ${checkinHtml}
     ${cfBest?`<div class="card section" style="border-color:var(--calm)"><h2>${T("leaksCostTitle")}</h2><div class="why" style="font-size:14px">${cfBody}</div></div>`:''}
     <div class="hero card section">
       <div>
