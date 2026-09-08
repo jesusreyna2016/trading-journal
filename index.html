@@ -91,6 +91,10 @@
   .tabs button:hover{color:var(--ink)}
   .tabs button.active{color:var(--ink); border-bottom-color:var(--calm)}
   .tabic{width:15px; height:15px; flex:none; margin-right:6px; opacity:.7}
+  .ico{width:14px; height:14px; flex:none; vertical-align:-2.5px}
+  .ico-lg{width:19px; height:19px; vertical-align:-4px}
+  .ico-xl{width:34px; height:34px}
+  button .ico, .btn .ico{margin-right:2px}
   .tabs button.active .tabic{opacity:1}
   .tabcaret{font-size:9px; opacity:.5; margin-left:4px}
   #subtabs{border-bottom:0; gap:8px; margin:-4px 0 16px}
@@ -113,8 +117,7 @@
   .vdcard.vd-med{border-left:3px solid var(--wait); background:linear-gradient(120deg,color-mix(in srgb,var(--wait) 8%,var(--surface)),var(--surface) 62%)}
   .vdcard.vd-high{border-left:3px solid var(--neg); background:linear-gradient(120deg,color-mix(in srgb,var(--neg) 9%,var(--surface)),var(--surface) 60%)}
   .vdhead{font-family:'Space Grotesk',var(--sans); font-weight:700; font-size:19px; letter-spacing:-.02em; margin-top:2px; display:flex; align-items:center; gap:7px}
-  .vdhead .vd-dot{font-size:12px; flex:none}
-  @media(max-width:640px){ .vdhead{font-size:16.5px} .vdhead .vd-dot{font-size:11px} }
+  @media(max-width:640px){ .vdhead{font-size:16.5px} }
   .qbar{display:flex; align-items:flex-start; gap:9px; margin:2px 0 14px; padding:8px 13px; border:1px solid var(--hair); border-left:3px solid var(--calm); border-radius:10px; background:color-mix(in srgb,var(--calm) 5%,var(--surface))}
   .qbar .qi{color:var(--calm); font:800 17px/1 Georgia,serif; flex:none; margin-top:-1px}
   .qbar .qt{color:var(--muted); font-style:italic; font-size:12px; line-height:1.45}
@@ -1345,7 +1348,7 @@ async function cloudSave(){
   }catch(e){ console.warn('cloudSave',e); syncBadge('err'); }
 }
 function showConflict(){ if(_conflictShown)return; _conflictShown=true;
-  openModal(`<div class="eyebrow">⚠</div><h1 style="margin:.1em 0 .5em; font-size:20px">${T("conf.title")}</h1>
+  openModal(`<div class="eyebrow">${icoSvg('warn','ico-lg')}</div><h1 style="margin:.1em 0 .5em; font-size:20px">${T("conf.title")}</h1>
     <p class="small muted" style="margin:0 0 16px; line-height:1.5">${T("conf.body")}</p>
     <div class="rowflex" style="gap:10px; flex-wrap:wrap"><button class="btn calm" id="cfReload" style="flex:1; justify-content:center; padding:11px">${T("conf.reload")}</button><button class="btn ghost" id="cfOver" style="flex:1; justify-content:center; padding:11px">${T("conf.overwrite")}</button></div>`, ()=>{_conflictShown=false;});
   $("#cfReload").onclick=()=>location.reload();
@@ -1379,6 +1382,23 @@ const cls=v=>v>0?"pos":v<0?"neg":"muted";
 // journal rule pass/fail and risk compliance, so "how bad is this" reads the same everywhere instead of a
 // color-only left bar here and an emoji dot there.
 const sevPass=sev=>sev==="hi"?"no":sev==="md"?"good":"ok";
+// Small shared icon set (24x24 viewBox, stroke-1.8, currentColor -- same convention as the tab-bar icons) for
+// the handful of spots in the app's own functional UI (delete buttons, warning markers, empty states, edit-
+// modal eyebrows) that were using an emoji as a de-facto icon. Landing/marketing copy, the changelog and the
+// admin panel keep their emoji on purpose, that's a tone choice, not an icon that needs to match a system.
+const ICO={
+  warn:'<path d="M12 3.5 21.5 20h-19L12 3.5Z"/><path d="M12 9.5v4.2"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/>',
+  trash:'<path d="M4 7h16"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M10 11v6M14 11v6"/>',
+  target:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>',
+  brain:'<path d="M9 4a3 3 0 0 0-3 3v.3A3 3 0 0 0 4 10v1a3 3 0 0 0 1.5 2.6A3 3 0 0 0 8 18a3 3 0 0 0 3-3V7a3 3 0 0 0-2-3Z"/><path d="M15 4a3 3 0 0 1 3 3v.3a3 3 0 0 1 2 2.7v1a3 3 0 0 1-1.5 2.6A3 3 0 0 1 16 18a3 3 0 0 1-3-3V7a3 3 0 0 1 2-3Z"/>',
+  note:'<path d="M6.5 2H18v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h7M8 11h7M8 15h4"/>',
+  inbox:'<path d="M4 12h4l2 3h4l2-3h4"/><path d="M5.5 5h13l1.5 7v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6l1.5-7Z"/>',
+  bulb:'<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.5.4.8 1 .8 1.6h5.4c0-.6.3-1.2.8-1.6A6 6 0 0 0 12 3Z"/>',
+  arrow:'<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
+  camera:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.4-2.4A1 1 0 0 1 10.3 4h3.4a1 1 0 0 1 .9.6L16 7"/><circle cx="12" cy="13.5" r="3.2"/>',
+  share:'<path d="M12 15V4"/><path d="M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>'
+};
+function icoSvg(name,cls){ return `<svg class="${cls||'ico'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[name]}</svg>`; }
 // Also includes exit+qty: a broker can split one order's fill across several opposing matches (Tradovate does
 // this often), producing multiple trade rows that share the same symbol+entry price+open timestamp but differ
 // in qty/exit/pnl. Keying on entry alone collided those and silently dropped every row after the first as a
@@ -2325,7 +2345,7 @@ function kpi(lab,val,sub,klass){ return `<div class="kpi"><div class="lab">${lab
 function hterm(label,tip){ return `<details class="hterm"><summary><span>${label}</span><span class="hicon" aria-hidden="true">?</span></summary><div class="hpop-body">${tip}</div></details>`; }
 function showWhyEditor(){
   const w=DB.settings.why||(DB.settings.why={});
-  openModal(`<div class="eyebrow">🎯</div><h1 style="margin:.1em 0 .5em; font-size:20px">${T("why.editTitle")}</h1>
+  openModal(`<div class="eyebrow">${icoSvg('target','ico-lg')}</div><h1 style="margin:.1em 0 .5em; font-size:20px">${T("why.editTitle")}</h1>
     <textarea id="whyText" placeholder="${T("why.textPh")}" style="width:100%; height:110px; padding:10px; margin-bottom:12px; border:1px solid var(--hair); border-radius:8px; background:var(--surface2); color:var(--ink); font-size:15px; line-height:1.5">${(w.text||'').replace(/</g,'&lt;')}</textarea>
     <label class="small muted">${T("why.image")}</label>
     <div class="rowflex" style="gap:10px; margin:6px 0 16px; align-items:center; flex-wrap:wrap">
@@ -2838,23 +2858,23 @@ function tryPublicCard(){
   document.title="TradeDadLog · "+T("sc.cardTitle");
   return true;
 }
-function emptyCard(msg, icon){ return `<div class="card" style="text-align:center;padding:34px 22px"><div style="font-size:32px;line-height:1;opacity:.85">${icon||'📭'}</div><p class="muted" style="max-width:440px;margin:13px auto 0;line-height:1.55">${msg}</p></div>`; }
+function emptyCard(msg, icon){ return `<div class="card" style="text-align:center;padding:34px 22px"><div style="color:var(--faint);opacity:.85">${icon||icoSvg('inbox','ico-xl')}</div><p class="muted" style="max-width:440px;margin:13px auto 0;line-height:1.55">${msg}</p></div>`; }
 // "Should I trade today?" verdict: a traffic light read from recent discipline + today's check-in.
 function verdictCard(){
   const days=dayEval(scoped()); if(!days.length) return '';
   const today=tradingDay({date:new Date().toISOString().slice(0,10),time:"18:00:00"});
   const ci=(DB.checkins&&DB.checkins[today])||{};
   const t=tiltScore(ci.mood||"", +ci.pressure||0);
-  const map={low:{e:'🟢',c:'pos',t:T('vd.go'),s:T('vd.goSub'),p:'ok',lab:T('tilt.low')},
-             med:{e:'🟡',c:'wait',t:T('vd.caution'),s:T('vd.cautionSub'),p:'good',lab:T('tilt.med')},
-             high:{e:'🔴',c:'neg',t:T('vd.nogo'),s:T('vd.nogoSub'),p:'no',lab:T('tilt.high')}};
+  const map={low:{c:'pos',t:T('vd.go'),s:T('vd.goSub'),p:'ok',lab:T('tilt.low')},
+             med:{c:'wait',t:T('vd.caution'),s:T('vd.cautionSub'),p:'good',lab:T('tilt.med')},
+             high:{c:'neg',t:T('vd.nogo'),s:T('vd.nogoSub'),p:'no',lab:T('tilt.high')}};
   const m=map[t.level];
   const reasons=t.reasons.length?`<div class="small muted" style="margin-top:8px">${T('tilt.why')} ${t.reasons.join(' · ')}</div>`:'';
   const truth=t.level!=="low"?`<div class="small" style="margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--surface2);color:var(--ink);line-height:1.5"><b style="color:var(--calm)">${T('d5.lab')}</b> ${douglasTruth(t.flags)}</div>`:'';
   const cta=!DB.checkins[today]?`<button class="btn small" id="vdCheckin" style="margin-top:11px">${T('vd.checkinCta')}</button>`:'';
   return `<details class="card vdcard vd-${t.level} vdfold"><summary style="justify-content:space-between;align-items:flex-start;gap:12px">
     <div style="min-width:0"><div class="eyebrow" style="color:var(--${m.c})"><span class="vdcaret">▸</span>${T('vd.title')}</div>
-      <div class="vdhead ${m.c}"><span class="vd-dot" aria-hidden="true">${m.e}</span>${m.t}</div></div>
+      <div class="vdhead ${m.c}">${m.t}</div></div>
     <span class="pass ${m.p}" style="font-size:12px;flex:none">${m.lab}</span>
   </summary>
   <div class="small" style="color:var(--muted);margin-top:5px;max-width:540px;line-height:1.5">${m.s}</div>${reasons}${truth}${cta}
@@ -2893,15 +2913,15 @@ function reframeCard(TR){
     <div class="rowflex" style="justify-content:space-between;align-items:center"><div class="eyebrow" style="color:var(--wait)">${T('rf.title')}</div><button class="btn small ghost" id="rfEdit" data-m="${rec.mk}">${T('why.edit')}</button></div>
     <div class="small muted" style="margin-top:5px">${fmt(T('rf.detected'),{n:rec.n,m:T('m.'+rec.mk)})}</div>
     ${rf.belief?`<div class="small" style="margin-top:8px;color:var(--muted)">${T('rf.beliefLabel')} <i>"${esc(rf.belief)}"</i></div>`:''}
-    ${rf.correction?`<div style="font-weight:600;font-size:14px;margin-top:5px;color:var(--ink);line-height:1.4">🧠 ${esc(rf.correction)}</div>`:''}
+    ${rf.correction?`<div style="font-weight:600;font-size:14px;margin-top:5px;color:var(--ink);line-height:1.4">${icoSvg('brain')} ${esc(rf.correction)}</div>`:''}
   </div>`;
   return `<div class="card" style="border-left:3px solid var(--wait);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
     <span class="small muted">${fmt(T('rf.prompt'),{n:rec.n,m:T('m.'+rec.mk)})}</span>
-    <button class="btn small" id="rfEdit" data-m="${rec.mk}">🧠 ${T('rf.set')}</button></div>`;
+    <button class="btn small" id="rfEdit" data-m="${rec.mk}">${icoSvg('brain')} ${T('rf.set')}</button></div>`;
 }
 function showReframeEditor(mk){
   const cur=(DB.reframes||{})[mk]||{};
-  openModal(`<div class="eyebrow">🧠</div><h1 style="margin:.1em 0 .3em; font-size:20px">${fmt(T('rf.editTitle'),{m:T('m.'+mk)})}</h1>
+  openModal(`<div class="eyebrow">${icoSvg('brain','ico-lg')}</div><h1 style="margin:.1em 0 .3em; font-size:20px">${fmt(T('rf.editTitle'),{m:T('m.'+mk)})}</h1>
     <p class="small muted" style="margin:0 0 14px">${fmt(T('rf.editLead'),{m:T('m.'+mk)})}</p>
     <label class="small muted">${T('rf.beliefLabel')}</label>
     <textarea id="rfBelief" placeholder="${T('rf.beliefPh')}" style="width:100%; height:70px; margin:4px 0 12px; padding:9px 11px; border:1px solid var(--hair); border-radius:8px; background:var(--surface2); color:var(--ink); font-size:14px">${(cur.belief||'').replace(/</g,'&lt;')}</textarea>
@@ -2972,13 +2992,13 @@ function renderOverview(){
   // At real scale (100+ trades), the top statistical insight stops being noise, worth folding into the main read instead of hiding it in Report.
   const bigSample=TR.length>=100;
   if(bigSample && hi) coachParts.push(fmt(T("coach.bigSampleLead"),{n:TR.length, insight:mdb(hi.text)}));
-  const rl0=personalRules(TR)[0]; if(rl0) coachParts.push("👉 "+rl0.text.replace(/<\/?b>/g,""));
+  const rl0=personalRules(TR)[0]; if(rl0) coachParts.push(icoSvg('arrow')+" "+rl0.text.replace(/<\/?b>/g,""));
   const coachHtml=`<div class="card" style="border-color:var(--calm)"><h2>${T("coach.title")}</h2><div class="why" style="font-size:14px; line-height:1.65">${coachParts.join(" ")}</div></div>`;
   const W=DB.settings.why||{}; const wset=!!(W.text||W.img); const emphWhy=wset && days.length && (disc/days.length<0.5);
   const whyHtml = wset
     ? `<div class="card" style="border-color:var(--calm);${emphWhy?' box-shadow:0 0 0 2px var(--calm);':''}"><div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${T("why.title")}</h2><button class="btn small ghost" id="whyEdit">${T("why.edit")}</button></div>
         <div class="rowflex" style="gap:10px; margin-top:8px; align-items:center; flex-wrap:wrap">${W.img?`<img data-imgkey="${W.img}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;flex:none">`:''}<div style="flex:1; min-width:180px; font-size:14px; font-weight:600; line-height:1.4; color:var(--ink)">${(W.text||'').replace(/</g,'&lt;')}</div></div>
-        ${emphWhy?`<div class="small wait" style="margin-top:10px">💡 ${T("why.reminder")}</div>`:''}</div>`
+        ${emphWhy?`<div class="small wait" style="margin-top:10px">${icoSvg('bulb')} ${T("why.reminder")}</div>`:''}</div>`
     : `<div class="card card-ghost"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><span class="small muted">${T("why.prompt")}</span><button class="btn small" id="whyEdit">${T("why.set")}</button></div></div>`;
   // Grouped instead of stacked loose: these are the "check before you trade" items (verdict, why, weekly
   // commitment, reframe), same visual family so they read as one thing to glance at, not four separate cards
@@ -3075,7 +3095,7 @@ function showTradeShot(id){
       <div style="text-align:center">${tg.shot?`<img data-imgkey="${tg.shot}" id="shotImg" style="max-width:100%;max-height:56vh;border-radius:10px;border:1px solid var(--hair);cursor:zoom-in">`:`<div class="drop" style="cursor:default;padding:26px">${T('shot.none')}</div>`}</div>
       <div class="rowflex" style="gap:8px;margin-top:14px;justify-content:center">
         <button class="btn calm small" id="shotUp">${tg.shot?T('shot.replace'):T('shot.add')}</button>
-        ${tg.shot?`<button class="btn small ghost" id="shotRm">🗑 ${T('shot.remove')}</button>`:''}
+        ${tg.shot?`<button class="btn small ghost" id="shotRm">${icoSvg('trash')} ${T('shot.remove')}</button>`:''}
       </div>
       <input type="file" id="shotFile" accept="image/*" class="hide">
       <p class="small muted" style="margin-top:12px;text-align:center">${T('shot.hint')}</p>`;
@@ -3105,9 +3125,9 @@ function dayTradeRows(arr){
         <button class="chip calm" data-id="${id}" data-k="stop" data-v="1" aria-pressed="${tg.stop?'true':'false'}">${T("j.stopBtn")}</button>
         ${isGraded(tg)?(pr=>`<span class="pass ${pr>=0.75?'ok':pr>=0.5?'na':'no'}">${Math.round(pr*100)}%</span>`)(procScore(id,tg).score):''}
         <button class="btn small ghost" data-note="${id}" title="${(tg.note||'').replace(/<[^>]+>/g,' ').replace(/"/g,'&quot;').trim()||T("j.addNote")}" style="padding:2px 7px">📝${tg.note?' •':''}</button>
-        <button class="btn small ghost" data-mist="${id}" title="${T("mist.btn")}" style="padding:2px 7px">⚠${(tg.mistakes&&tg.mistakes.length)?' '+tg.mistakes.length:''}</button>
-        <button class="btn small ghost" data-shot="${id}" title="${T("shot.btn")}" style="padding:2px 7px">📷${tg.shot?' •':''}</button>
-        <button class="btn small ghost" data-deltrade="${escA(tradeSig(t))}" title="${T("del.trade")}" style="padding:2px 7px">🗑</button>
+        <button class="btn small ghost" data-mist="${id}" title="${T("mist.btn")}" style="padding:2px 7px">${icoSvg('warn')}${(tg.mistakes&&tg.mistakes.length)?' '+tg.mistakes.length:''}</button>
+        <button class="btn small ghost" data-shot="${id}" title="${T("shot.btn")}" style="padding:2px 7px">${icoSvg('camera')}${tg.shot?' •':''}</button>
+        <button class="btn small ghost" data-deltrade="${escA(tradeSig(t))}" title="${T("del.trade")}" style="padding:2px 7px">${icoSvg('trash')}</button>
       </div></td>
     </tr>`;}).join("");
 }
@@ -3165,12 +3185,12 @@ function dayCard(d,arrRaw){
   return `<div class="card section" style="padding:14px 16px">
     <div class="rowflex" data-day="${d}" style="justify-content:space-between;cursor:pointer;align-items:center">
       <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} ${T("trades")}${left>1?' · '+fmt(T("j.leftOnTable"),{v:money(left)}):''}</span></div>
-      <button class="btn small ghost" data-sessioncard="${d}" style="flex:none" title="${T('ss.shareTitle')}" aria-label="${T('ss.shareTitle')}">📤</button>
+      <button class="btn small ghost" data-sessioncard="${d}" style="flex:none" title="${T('ss.shareTitle')}" aria-label="${T('ss.shareTitle')}">${icoSvg('share')}</button>
     </div>${body}</div>`;
 }
 function showNoteEditor(id){
   const tg=DB.tags[id]||(DB.tags[id]={});
-  openModal(`<div class="eyebrow">📝</div><h1 style="margin:.1em 0 .6em; font-size:20px">${T("note.title")}</h1>
+  openModal(`<div class="eyebrow">${icoSvg('note','ico-lg')}</div><h1 style="margin:.1em 0 .6em; font-size:20px">${T("note.title")}</h1>
     <div class="rowflex" style="gap:4px;margin-bottom:6px"><button class="btn small ghost" data-cmd="bold" style="font-weight:700" title="${T('nt.boldTip')}">B</button><button class="btn small ghost" data-cmd="italic" style="font-style:italic" title="${T('nt.italicTip')}">I</button><button class="btn small ghost" data-cmd="insertUnorderedList">${T("nt.list")}</button><button class="btn small ghost" data-cmd="formatBlock" data-arg="H3">${T("nt.heading")}</button></div>
     <div id="tnBody" contenteditable="true" spellcheck="true" style="min-height:180px;max-height:48vh;overflow:auto;border:1px solid var(--hair);border-radius:10px;padding:12px;background:var(--surface2);line-height:1.6;font-size:14px"></div>
     <div class="muted small" style="margin:6px 0 12px">${T("nt.imgHint")}</div>
@@ -3185,7 +3205,7 @@ function showNoteEditor(id){
 }
 function showMistakes(id){
   const tg=DB.tags[id]||(DB.tags[id]={}); const sel=new Set(tg.mistakes||[]);
-  openModal(`<div class="eyebrow">⚠</div><h1 style="margin:.1em 0 .6em; font-size:20px">${T("mist.title")}</h1>
+  openModal(`<div class="eyebrow">${icoSvg('warn','ico-lg')}</div><h1 style="margin:.1em 0 .6em; font-size:20px">${T("mist.title")}</h1>
     <div class="chips" id="mChips" style="margin-bottom:16px">${MISTAKES.map(m=>`<button class="chip c" data-m="${m}" aria-pressed="${sel.has(m)}">${T("m."+m)}</button>`).join("")}</div>
     <button class="btn calm" id="mSave" style="width:100%; justify-content:center; padding:11px">${T("mist.close")}</button>`);
   $("#mChips").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{ const m=b.dataset.m; if(sel.has(m))sel.delete(m); else sel.add(m); b.setAttribute("aria-pressed", sel.has(m)); });
@@ -3389,7 +3409,7 @@ function renderReport(){
     ${uf.length?`<div class="card section"><h2>${T("rep.whereFocusH")}</h2><ul style="margin:0; padding-left:18px; line-height:1.75">${uf.map(f=>`<li>${mdb(f)}</li>`).join("")}</ul></div>`:''}
     ${(()=>{ const mc={}; TR.forEach(t=>{((DB.tags[tid(t)]||{}).mistakes||[]).forEach(m=>mc[m]=(mc[m]||0)+1);}); const rws=Object.entries(mc).sort((a,b)=>b[1]-a[1]); return rws.length?`<div class="card section"><h2>${T("mist.top")}</h2>${rws.map(([m,n])=>`<div class="r"><span class="lab">${T("m."+m)}</span><span class="v neg">${n}</span></div>`).join("")}</div>`:''; })()}
     <div class="card section"><h2>${T("rep.copyableH")}</h2><pre class="report" id="rep">${txt.replace(/</g,'&lt;')}</pre><div class="rowflex" style="gap:8px"><button class="btn calm" id="copyRep">${T("rep.copyBtn")}</button><button class="btn ghost" id="saveLetter">${T("cl2.save")}</button></div></div>
-    ${(()=>{ const letters=DB.coachLetters||[]; return `<div class="card section"><div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">${T('cl2.archive')}</h2><span class="small muted">${fmt(T('cl2.count'),{n:letters.length})}</span></div><p class="small muted" style="margin:8px 0 0">${T('cl2.archiveLead')}</p>${letters.length?`<div style="margin-top:8px">${letters.map((l,i)=>`<div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--hair)"><div style="min-width:0"><span class="mono small" style="font-weight:700">${String(l.d||'').replace(/</g,'&lt;')}</span> <span class="small muted">· ${String(l.p||'').replace(/</g,'&lt;')}</span></div><div class="rowflex" style="gap:6px;flex:none"><button class="btn small ghost" data-lview="${i}">${T('cl2.view')}</button><button class="btn small ghost" data-ldel="${i}" title="${T('cm.delete')}">🗑</button></div></div>`).join('')}</div>`:`<p class="small muted" style="margin-top:8px">${T('cl2.none')}</p>`}</div>`; })()}`;
+    ${(()=>{ const letters=DB.coachLetters||[]; return `<div class="card section"><div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">${T('cl2.archive')}</h2><span class="small muted">${fmt(T('cl2.count'),{n:letters.length})}</span></div><p class="small muted" style="margin:8px 0 0">${T('cl2.archiveLead')}</p>${letters.length?`<div style="margin-top:8px">${letters.map((l,i)=>`<div class="rowflex" style="justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--hair)"><div style="min-width:0"><span class="mono small" style="font-weight:700">${String(l.d||'').replace(/</g,'&lt;')}</span> <span class="small muted">· ${String(l.p||'').replace(/</g,'&lt;')}</span></div><div class="rowflex" style="gap:6px;flex:none"><button class="btn small ghost" data-lview="${i}">${T('cl2.view')}</button><button class="btn small ghost" data-ldel="${i}" title="${T('cm.delete')}">${icoSvg('trash')}</button></div></div>`).join('')}</div>`:`<p class="small muted" style="margin-top:8px">${T('cl2.none')}</p>`}</div>`; })()}`;
   $("#copyRep").onclick=()=>{navigator.clipboard.writeText(txt).then(()=>toast(T("rep.copied"))).catch(()=>toast(T("rep.copyFail")));};
   $("#saveLetter").onclick=()=>{ DB.coachLetters=DB.coachLetters||[]; DB.coachLetters.unshift({d:new Date().toISOString().slice(0,10), p:periodLabel(), txt}); if(DB.coachLetters.length>40)DB.coachLetters.length=40; save(); toast(T("cl2.saved")); renderReport(); };
   $("#view-report").querySelectorAll('[data-lview]').forEach(b=>b.onclick=()=>{ const l=(DB.coachLetters||[])[+b.dataset.lview]; if(!l)return; openModal(`<div class="rowflex" style="justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px"><h2 style="margin:0">${String(l.d||'')} · ${String(l.p||'')}</h2><button class="btn small ghost" id="lvClose">${T('cancel')}</button></div><pre class="report" style="max-height:60vh;overflow:auto">${String(l.txt||'').replace(/</g,'&lt;')}</pre>`); const c=$("#lvClose"); if(c)c.onclick=closeModal; });
@@ -3729,7 +3749,7 @@ function commFirmCard(firm){
     </div>`).join("")}
     <div class="rowflex" style="gap:8px;margin-top:10px">
       <button class="btn small ghost" data-cfaddrow data-firm="${escA(firm)}">${T('risk.addSymbolRate')}</button>
-      <button class="btn small ghost" data-cfdelfirm data-firm="${escA(firm)}" style="margin-left:auto">🗑</button>
+      <button class="btn small ghost" data-cfdelfirm data-firm="${escA(firm)}" style="margin-left:auto">${icoSvg('trash')}</button>
     </div>
   </div>`;
 }
@@ -3839,7 +3859,7 @@ function renderCustomRules(){
         </div>
         <div class="rowflex" style="gap:6px;flex:none">
           <button class="btn small ghost" data-crtoggle="${r.id}">${r.active===false?T('cr.resume'):T('cr.pause')}</button>
-          <button class="btn small ghost" data-crdel="${r.id}" title="${T('cm.delete')}">🗑</button>
+          <button class="btn small ghost" data-crdel="${r.id}" title="${T('cm.delete')}">${icoSvg('trash')}</button>
         </div>
       </div>
       <div class="small" style="margin-top:10px">${fmt(T('cr.hitCount'),{n:hits.length})} <span class="${cls(cost)}" style="font-weight:700">${money1(cost)}</span></div>
@@ -3974,8 +3994,8 @@ function renderAccounts(){
         ${a.status&&a.status!=='active'?`<button class="btn small ghost" data-st="active" data-id="${id}">${T("ac.markActive")}</button>`:''}
         ${(a.status==='passed'||a.status==='lost')?`<button class="btn small ghost" data-togglehidden="${id}">${a.hidden?T('ac.showInList'):T('ac.hideInList')}</button>`:''}
         <button class="btn small" data-edit="${id}">${T("ac.edit")}</button>
-        ${st.count>0?`<button class="btn small ghost" data-deltrades="${id}" title="${T("ac.delTradesTitle")}">🧹 ${T("ac.delTrades")}</button>`:''}
-        <button class="btn small ghost" data-del="${id}" title="${T("ac.delTitle")}">🗑</button>
+        ${st.count>0?`<button class="btn small ghost" data-deltrades="${id}" title="${T("ac.delTradesTitle")}">${icoSvg('trash')} ${T("ac.delTrades")}</button>`:''}
+        <button class="btn small ghost" data-del="${id}" title="${T("ac.delTitle")}">${icoSvg('trash')}</button>
       </div></div>`;
   }).join("");
   const P=propfirmSummary();
@@ -4046,7 +4066,7 @@ function renderPlaybooks(){
     const diag=(x.arr.length>=3&&x.adh!=null)?(m.expectancy>0&&x.adh<60?{t:T("pb.diagExec"),c:"wait"}:(m.expectancy<0&&x.adh>=75?{t:T("pb.diagRules"),c:"neg"}:(m.expectancy>0&&x.adh>=75?{t:T("pb.diagSolid"),c:"pos"}:null))):null;
     return `<div class="card section">
       <div class="rowflex" style="justify-content:space-between; align-items:center"><h2 style="margin:0">${vLabel("setup",x.n)}</h2>
-        <span class="rowflex" style="gap:6px">${x.arr.length?`<span class="tag ${m.net>=0?'S':'L'}">${money1(m.net)}</span>`:'<span class="muted small">'+T("pb.noneYet")+'</span>'}<button class="btn small ghost" data-delpb="${x.n}" title="${T("pb.delTitle")}" style="padding:2px 8px">🗑</button></span></div>
+        <span class="rowflex" style="gap:6px">${x.arr.length?`<span class="tag ${m.net>=0?'S':'L'}">${money1(m.net)}</span>`:'<span class="muted small">'+T("pb.noneYet")+'</span>'}<button class="btn small ghost" data-delpb="${x.n}" title="${T("pb.delTitle")}" style="padding:2px 8px">${icoSvg('trash')}</button></span></div>
       ${x.arr.length?`<div class="grid kpis" style="margin-top:10px">
         ${kpi(T("th.Trades"),m.n,m.wins+"W / "+m.losses+"L")}
         ${kpi(T("winRate"),m.winrate.toFixed(0)+"%","")}
@@ -4054,7 +4074,7 @@ function renderPlaybooks(){
         ${kpi(T("pb.rAvg"),x.rr?x.rr.toFixed(2):"–",T("pb.rSub"))}
         ${kpi(T("pb.adherence"),x.adh==null?"–":Math.round(x.adh)+"%",T("pb.adhSub"),"calmc")}
       </div>`:''}
-      ${diag?`<div class="small" style="margin-top:8px;color:var(--${diag.c})">💡 ${diag.t}</div>`:''}
+      ${diag?`<div class="small" style="margin-top:8px;color:var(--${diag.c})">${icoSvg('bulb')} ${diag.t}</div>`:''}
       <div style="margin-top:12px"><div class="small muted" style="margin-bottom:4px">${T("pb.rulesLabel")}</div>
         <textarea data-rules="${x.n}" style="width:100%; min-height:68px; font-family:var(--sans); font-size:13px; color:var(--ink); background:var(--surface2); border:1px solid var(--hair); border-radius:8px; padding:8px" placeholder="${T("pb.rulesPh")}">${rulesTxt.replace(/</g,'&lt;')}</textarea>
         <button class="btn small" data-saverules="${x.n}" style="margin-top:6px">${T("pb.saveRules")}</button></div>
@@ -4130,7 +4150,7 @@ function renderNotes(){
   const ed=n?`
     <input type="text" id="ntTitle" value="${(n.title||'').replace(/"/g,'&quot;')}" placeholder="${T("nt.titlePh")}" style="width:100%;font-size:16px;font-weight:700;margin-bottom:6px">
     <div class="rowflex small" style="gap:8px;margin-bottom:8px;align-items:center"><span class="muted">${T("ci.day")}</span><input type="text" id="ntDate" value="${n.date||''}" placeholder="YYYY-MM-DD" style="width:118px"><span id="ntDay">${noteDayInfo(n.date)}</span></div>
-    <div class="rowflex small" style="gap:6px;margin-bottom:8px"><input type="text" id="ntTags" value="${(n.tags||[]).join(', ').replace(/"/g,'&quot;')}" placeholder="${T("nt.tagsPh")}" style="flex:1"><button class="btn small" id="ntTpl">${T("nt.template")}</button><button class="btn small ghost" id="ntDel" title="${T('cm.delete')}">🗑</button></div>
+    <div class="rowflex small" style="gap:6px;margin-bottom:8px"><input type="text" id="ntTags" value="${(n.tags||[]).join(', ').replace(/"/g,'&quot;')}" placeholder="${T("nt.tagsPh")}" style="flex:1"><button class="btn small" id="ntTpl">${T("nt.template")}</button><button class="btn small ghost" id="ntDel" title="${T('cm.delete')}">${icoSvg('trash')}</button></div>
     <div class="rowflex" style="gap:4px;margin-bottom:6px"><button class="btn small ghost" data-cmd="bold" style="font-weight:700" title="${T('nt.boldTip')}">B</button><button class="btn small ghost" data-cmd="italic" style="font-style:italic" title="${T('nt.italicTip')}">I</button><button class="btn small ghost" data-cmd="insertUnorderedList">${T("nt.list")}</button><button class="btn small ghost" data-cmd="formatBlock" data-arg="H3">${T("nt.heading")}</button></div>
     <div id="ntBody" contenteditable="true" spellcheck="true" style="min-height:300px;border:1px solid var(--hair);border-radius:10px;padding:12px;background:var(--surface2);line-height:1.6;font-size:14px"></div>
     <div class="muted small" style="margin-top:6px">${T("nt.imgHint")}</div>`
@@ -4180,7 +4200,7 @@ function renderFinance(){
     return `<tr><td>${f.replace(/</g,'&lt;')}</td><td class="mono neg">${money(o.spent)}</td><td class="mono pos">${money(o.earned)}</td><td class="mono ${cls(net)}">${money(net)}</td><td>${net>=0?'<span class="pass ok">'+T("fin.paidOff")+'</span>':'<span class="pass no">'+money(net)+'</span>'}</td></tr>`;}).join("");
   const catRows=Object.keys(S.byCat).sort((a,b)=>S.byCat[b]-S.byCat[a]).map(c=>`<tr><td>${catLabel(c)}</td><td class="mono neg">${money(S.byCat[c])}</td><td class="mono muted">${S.expense?Math.round(S.byCat[c]/S.expense*100):0}%</td></tr>`).join("");
   let acc=0; const monRows=Object.keys(S.byMonth).sort().map(m=>{const o=S.byMonth[m],net=o.inc-o.exp; acc+=net; return `<tr><td class="mono">${m}</td><td class="mono pos">${money(o.inc)}</td><td class="mono neg">${money(o.exp)}</td><td class="mono ${cls(net)}">${money(net)}</td><td class="mono ${cls(acc)}">${money(acc)}</td></tr>`;}).reverse().join("");
-  const entryRows=L.slice(0,50).map(e=>`<tr><td class="mono small">${e.date}</td><td>${e.type==="income"?'<span class="tag S">IN</span>':'<span class="tag L">OUT</span>'} ${catLabel(e.category)}</td><td class="small">${(e.firm||'–').replace(/</g,'&lt;')}</td><td class="small muted">${(e.note||'').replace(/</g,'&lt;')}</td><td class="mono ${e.type==="income"?'pos':'neg'}">${e.type==="income"?'+':'−'}$${e.amount.toLocaleString('en-US',{maximumFractionDigits:0})}</td><td><button class="btn small ghost" data-delled="${e.id}" style="padding:2px 7px">🗑</button></td></tr>`).join("");
+  const entryRows=L.slice(0,50).map(e=>`<tr><td class="mono small">${e.date}</td><td>${e.type==="income"?'<span class="tag S">IN</span>':'<span class="tag L">OUT</span>'} ${catLabel(e.category)}</td><td class="small">${(e.firm||'–').replace(/</g,'&lt;')}</td><td class="small muted">${(e.note||'').replace(/</g,'&lt;')}</td><td class="mono ${e.type==="income"?'pos':'neg'}">${e.type==="income"?'+':'−'}$${e.amount.toLocaleString('en-US',{maximumFractionDigits:0})}</td><td><button class="btn small ghost" data-delled="${e.id}" style="padding:2px 7px">${icoSvg('trash')}</button></td></tr>`).join("");
   host.innerHTML=`
     <div class="grid kpis">
       ${kpi(T("fin.income"),money1(S.income),"","pos")}
@@ -4416,7 +4436,7 @@ function renderRoutine(){
        <div class="kpi"><div class="lab">${T("streak")}</div><div class="val calmc">${streak} 🔥</div><div class="sub">${T("rt.streakSub")}</div></div>
      </div>
      <div class="rbar" style="margin-top:12px"><i style="width:${pct}%"></i></div>
-     ${!routineCustomized()?'<div class="small muted" style="margin-top:12px; padding:8px 11px; background:var(--surface2); border-radius:8px; line-height:1.5">💡 '+T("rt.starterNote")+'</div>':''}
+     ${!routineCustomized()?'<div class="small muted" style="margin-top:12px; padding:8px 11px; background:var(--surface2); border-radius:8px; line-height:1.5">'+icoSvg('bulb')+' '+T("rt.starterNote")+'</div>':''}
      ${blocks || '<div class="small muted" style="margin-top:14px">'+T("rt.empty")+'</div>'}
    </div>
    <div class="card section">
@@ -4449,7 +4469,7 @@ function renderRoutineEditor(host, def){
        <div class="rblock">
          <div class="rowflex" style="gap:6px; align-items:center">
            <input type="text" class="rEditLab" data-bi="${bi}" value="${escA(b.lab)}" style="flex:1; font-weight:600">
-           <button class="btn ghost small" data-delblock="${bi}" title="${T("rt.delBlock")}">🗑</button>
+           <button class="btn ghost small" data-delblock="${bi}" title="${T("rt.delBlock")}">${icoSvg('trash')}</button>
          </div>
          ${b.items.map((it,ii)=>`
            <div class="rowflex" style="gap:8px; margin-top:6px; align-items:center">
