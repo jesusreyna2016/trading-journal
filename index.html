@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
@@ -1905,7 +1905,9 @@ function scheduleAutoLoop(){
 // Reusa dayEval (disciplina/fugas por dia) + los tags de auto-grade (con/contra sesgo,
 // dentro/fuera de ventaja). NO incluye $ / P&L / balance / nombre de cuenta.
 function buildDisciplineDigest(maxDays){
-  const TR=scoped();
+  // Always use the full trade set for the agent digest (not the account filter).
+  // A partial scoped sync used to overwrite live/journal.json with 1 day and wipe history.
+  const TR=DB.trades||[];
   const evals=dayEval(TR);
   const byDay={}; TR.forEach(t=>{ (byDay[t.tday]=byDay[t.tday]||[]).push(t); });
   const rows=evals.slice(-(maxDays||45)).map(d=>{
