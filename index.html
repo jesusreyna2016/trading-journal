@@ -620,7 +620,7 @@
     { "@type": "Question", "name": "Is it really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, the full journal is free, no trial, no card, no feature paywalled behind a plan. It stays free because it's part of TradeDadLog, not a startup chasing a subscription." } },
     { "@type": "Question", "name": "Is my data private?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Your trades live in your own account, protected by row-level security, nobody else, including us, can see them. The public scorecard is opt-in and only shares what you choose to show." } },
     { "@type": "Question", "name": "Do I need trades already imported to start?", "acceptedAnswer": { "@type": "Answer", "text": "No. The Daily Routine and check-in work with zero data from day one, and \"Should I trade today?\" reads your recent discipline the moment you have any history at all." } },
-    { "@type": "Question", "name": "Which brokers or CSV formats work?", "acceptedAnswer": { "@type": "Answer", "text": "Tradovate and TopstepX are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl)." } },
+    { "@type": "Question", "name": "Which brokers or CSV formats work?", "acceptedAnswer": { "@type": "Answer", "text": "Tradovate, TopstepX and Vest (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl)." } },
     { "@type": "Question", "name": "Is this financial advice?", "acceptedAnswer": { "@type": "Answer", "text": "No. This is an educational journaling and analytics tool. It doesn't recommend trades or strategies, it reflects your own data back at you. Trading futures carries real risk of loss." } },
     { "@type": "Question", "name": "What happens to my account if I stop using it?", "acceptedAnswer": { "@type": "Answer", "text": "Nothing, your data just sits there waiting. You can export a full backup as JSON anytime, and delete everything permanently from the settings menu if you ever want to." } }
   ]
@@ -735,7 +735,7 @@
         <details class="lfaqitem"><summary data-i18n="l2.faq1q">Is it really free?</summary><p data-i18n="l2.faq1a">Yes, the full journal is free, no trial, no card, no feature paywalled behind a plan. It stays free because it's part of TradeDadLog, not a startup chasing a subscription.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq2q">Is my data private?</summary><p data-i18n="l2.faq2a">Yes. Your trades live in your own account, protected by row-level security, nobody else, including us, can see them. The public scorecard is opt-in and only shares what you choose to show.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq3q">Do I need trades already imported to start?</summary><p data-i18n="l2.faq3a">No. The Daily Routine and check-in work with zero data from day one, and "Should I trade today?" reads your recent discipline the moment you have any history at all.</p></details>
-        <details class="lfaqitem"><summary data-i18n="l2.faq4q">Which brokers or CSV formats work?</summary><p data-i18n="l2.faq4a">Tradovate and TopstepX are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.</p></details>
+        <details class="lfaqitem"><summary data-i18n="l2.faq4q">Which brokers or CSV formats work?</summary><p data-i18n="l2.faq4a">Tradovate, TopstepX and Vest (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq5q">Is this financial advice?</summary><p data-i18n="l2.faq5a">No. This is an educational journaling and analytics tool. It doesn't recommend trades or strategies, it reflects your own data back at you. Trading futures carries real risk of loss.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq6q">What happens to my account if I stop using it?</summary><p data-i18n="l2.faq6a">Nothing, your data just sits there waiting. You can export a full backup as JSON anytime, and delete everything permanently from the settings menu if you ever want to.</p></details>
       </div>
@@ -1012,7 +1012,7 @@ const I18N={
   "l2.faq1q":"Is it really free?","l2.faq1a":"Yes, the full journal is free, no trial, no card, no feature paywalled behind a plan. It stays free because it's part of TradeDadLog, not a startup chasing a subscription.",
   "l2.faq2q":"Is my data private?","l2.faq2a":"Yes. Your trades live in your own account, protected by row-level security, nobody else, including us, can see them. The public scorecard is opt-in and only shares what you choose to show.",
   "l2.faq3q":"Do I need trades already imported to start?","l2.faq3a":"No. The Daily Routine and check-in work with zero data from day one, and \"Should I trade today?\" reads your recent discipline the moment you have any history at all.",
-  "l2.faq4q":"Which brokers or CSV formats work?","l2.faq4a":"Tradovate and TopstepX are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.",
+  "l2.faq4q":"Which brokers or CSV formats work?","l2.faq4a":"Tradovate, TopstepX and Vest (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.",
   "l2.faq5q":"Is this financial advice?","l2.faq5a":"No. This is an educational journaling and analytics tool. It doesn't recommend trades or strategies, it reflects your own data back at you. Trading futures carries real risk of loss.",
   "l2.faq6q":"What happens to my account if I stop using it?","l2.faq6a":"Nothing, your data just sits there waiting. You can export a full backup as JSON anytime, and delete everything permanently from the settings menu if you ever want to.",
   "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email, we send you a magic link. No password, no card.","l2.footNote":"Educational tool, not financial advice.","l2.ebProblem":"THE REAL PROBLEM","l2.ebFeatures":"WHAT'S INSIDE","l2.ebSteps":"3 SIMPLE STEPS","l2.ebGet":"JOIN FREE","l2.fvTilt":"RISK TODAY","l2.fvClean":"CLEAN STREAK","l2.fvLeak1":"Bigger bets after a loss","l2.fvLeak2":"Over-trading","l2.fvWhy":"“Get out of debt and give my family stability.”","l2.fvBackup":"+ backup","l2.fvAcct1":"Eval · 50K","l2.fvAcct2":"Funded · 100K","l2.fvEmo1":"Calm","l2.fvEmo2":"FOMO","l2.fvEmo3":"Revenge","l2.fvEmo4":"Setup A","l2.fvRt1":"Pre-market plan","l2.fvRt2":"Risk set","l2.fvRt3":"Post-review","l2.ebSc":"A LOOK INSIDE","l2.demoCta":"Try the live demo","demo.banner":"You're exploring a demo with sample data.","demo.signup":"Create free account","l2.scT":"See it in action","l2.scP":"A real journal, built for discipline. Here's what it looks like in use.","l2.sc1e":"DASHBOARD","l2.sc1t":"A coach reads your day, not just your P&L","l2.sc1d":"Coach's Read tells you what happened and what to fix. KPIs, the clean-day scoreboard and your top insight, all auto-calculated the moment you import.","l2.sc2e":"JOURNAL","l2.sc2t":"Tag every trade in seconds","l2.sc2d":"Emotion, panel context, bias, setup, mistakes and a rich note per trade. The day's equity curve turns red under water and green in profit.","l2.sc3e":"SCORE","l2.sc3t":"A grade out of 100, and your weakest point","l2.sc3d":"Six factors, win rate, profit factor, avg win/loss, drawdown, recovery and consistency, on a radar, with the one thing dragging your score down called out.","l2.sc4e":"CALENDAR","l2.sc4t":"Your whole month at a glance","l2.sc4d":"Daily P&L with trades and win rate in each cell, weekly totals on the side, and a dot for discipline kept or broken."
@@ -1167,7 +1167,7 @@ const I18N={
   "l2.faq1q":"¿De verdad es gratis?","l2.faq1a":"Sí, el journal completo es gratis, sin prueba, sin tarjeta, sin funciones detrás de un plan de pago. Sigue siendo gratis porque es parte de TradeDadLog, no una startup persiguiendo suscripciones.",
   "l2.faq2q":"¿Mis datos son privados?","l2.faq2a":"Sí. Tus trades viven en tu propia cuenta, protegidos por row-level security, nadie más, ni siquiera nosotros, puede verlos. El scorecard público es opcional y solo comparte lo que tú elijas mostrar.",
   "l2.faq3q":"¿Necesito trades ya importados para empezar?","l2.faq3a":"No. La Rutina diaria y el check-in funcionan con cero datos desde el primer día, y \"Should I trade today?\" lee tu disciplina reciente en cuanto tengas algo de historial.",
-  "l2.faq4q":"¿Qué brokers o formatos de CSV funcionan?","l2.faq4a":"Tradovate y TopstepX se detectan automáticamente, el export del Strategy Tester de TradingView y los exports estilo Tradezella también funcionan, y un parser genérico cubre la mayoría de otros CSVs (fecha, símbolo, lado, entrada, salida, tamaño, pnl). Si el tuyo no importa limpio, dínoslo y lo agregamos.",
+  "l2.faq4q":"¿Qué brokers o formatos de CSV funcionan?","l2.faq4a":"Tradovate, TopstepX y Vest (perps) se detectan automáticamente, el export del Strategy Tester de TradingView y los exports estilo Tradezella también funcionan, y un parser genérico cubre la mayoría de otros CSVs (fecha, símbolo, lado, entrada, salida, tamaño, pnl). Si el tuyo no importa limpio, dínoslo y lo agregamos.",
   "l2.faq5q":"¿Esto es asesoría financiera?","l2.faq5a":"No. Es una herramienta educativa de journaling y análisis. No recomienda trades ni estrategias, te refleja tus propios datos. Operar futuros conlleva riesgo real de pérdida.",
   "l2.faq6q":"¿Qué pasa con mi cuenta si dejo de usarla?","l2.faq6a":"Nada, tus datos simplemente se quedan ahí esperando. Puedes exportar un backup completo en JSON cuando quieras, y borrar todo permanentemente desde el menú de ajustes si alguna vez lo deseas.",
   "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo, te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa, no es asesoría financiera.","l2.ebProblem":"EL PROBLEMA REAL","l2.ebFeatures":"QUÉ INCLUYE","l2.ebSteps":"3 PASOS SIMPLES","l2.ebGet":"ÚNETE GRATIS","l2.fvTilt":"RIESGO HOY","l2.fvClean":"RACHA LIMPIA","l2.fvLeak1":"Apostar más tras perder","l2.fvLeak2":"Sobreoperar","l2.fvWhy":"“Salir de deudas y darle estabilidad a mi familia.”","l2.fvBackup":"+ respaldo","l2.fvAcct1":"Eval · 50K","l2.fvAcct2":"Fondeada · 100K","l2.fvEmo1":"Calma","l2.fvEmo2":"FOMO","l2.fvEmo3":"Venganza","l2.fvEmo4":"Setup A","l2.fvRt1":"Plan pre-mercado","l2.fvRt2":"Riesgo fijado","l2.fvRt3":"Revisión post","l2.ebSc":"POR DENTRO","l2.demoCta":"Prueba la demo en vivo","demo.banner":"Estás explorando una demo con datos de ejemplo.","demo.signup":"Crear cuenta gratis","l2.scT":"Míralo en acción","l2.scP":"Un journal real, hecho para la disciplina. Así se ve cuando lo usas.","l2.sc1e":"PANEL","l2.sc1t":"Un coach lee tu día, no solo tu P&L","l2.sc1d":"El Coach's Read te dice qué pasó y qué corregir. KPIs, el marcador de días limpios y tu insight principal, todo calculado al importar.","l2.sc2e":"JOURNAL","l2.sc2t":"Etiqueta cada trade en segundos","l2.sc2d":"Emoción, contexto del panel, sesgo, setup, errores y una nota enriquecida por trade. La curva del día se pone roja bajo agua y verde en ganancia.","l2.sc3e":"SCORE","l2.sc3t":"Una nota sobre 100, y tu punto más débil","l2.sc3d":"Seis factores, winrate, profit factor, win/loss, drawdown, recuperación y consistencia, en un radar, señalando lo que más baja tu score.","l2.sc4e":"CALENDARIO","l2.sc4t":"Todo tu mes de un vistazo","l2.sc4d":"P&L diario con trades y winrate en cada casilla, totales por semana al lado, y un punto por disciplina cumplida o rota."
@@ -1379,6 +1379,9 @@ function save(){ if(window.__demo) return; cacheLocal(); scheduleCloud(); }
 function toast(m,ms){const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),ms||1800);}
 // What's-new log (newest first). Bump the top v when you ship something worth surfacing.
 const CHANGELOG=[
+  {v:"Oct 2026", items:[
+    {en:"Vest (perps) import: drop the orders CSV and each position becomes one trade, with fees and P&L rebuilt from the fills.", es:"Import de Vest (perps): suelta el CSV de órdenes y cada posición se vuelve un trade, con comisiones y P&L reconstruidos de los fills."},
+  ]},
   {v:"Aug 2026", items:[
     {en:"Premium redesign across the app: gradient P&L bars, glowing charts, and adaptive diverging bars.", es:"Rediseño premium en toda la app: barras P&L con degradado, gráficos con glow y barras divergentes adaptativas."},
     {en:"Shareable public scorecard, with one-tap Share on X.", es:"Scorecard público compartible, con botón Compartir en X."},
@@ -1607,12 +1610,46 @@ function parseTVPaperBalance(lines){
   out.reverse(); // export is newest-first
   return out;
 }
+// Vest (perps DEX) "orders" export -> one trade per position_id. Rows are individual orders (filled, cancelled,
+// limits); only filled ones matter. reduce_only=false legs open/add, reduce_only=true legs close. Timestamps are
+// epoch ms (UTC). P&L isn't in the file, so it's rebuilt from fills: linear perps pay qty x price move in USD.
+// Positions still open at export time (closed qty < opened qty) are skipped and land on the next import.
+function parseVest(lines){
+  const H=csvSplitQ(lines[0]).map(s=>s.trim().toLowerCase()), ix=n=>H.indexOf(n);
+  const iPos=ix("position_id"), iSym=ix("symbol"), iSide=ix("side"), iQty=ix("executed_quantity"), iSt=ix("status"),
+        iPx=ix("execution_price"), iT=ix("execution_time"), iFee=ix("fee"), iRo=ix("reduce_only");
+  const symOf=s=>String(s||"").trim().toUpperCase().replace(/-USD/,"").replace(/-PERP$/,"");
+  const byPos={};
+  for(let i=1;i<lines.length;i++){
+    const c=csvSplitQ(lines[i]); if(c.length<H.length-2) continue;
+    if(String(c[iSt]).trim().toLowerCase()!=="filled") continue;
+    const q=parseFloat(c[iQty])||0, px=parseFloat(c[iPx])||0, t=+c[iT]||0; if(!q||!px||!t) continue;
+    (byPos[c[iPos]]=byPos[c[iPos]]||[]).push({sym:symOf(c[iSym]), side:String(c[iSide]).trim().toLowerCase(), q, px, t,
+      fee:parseFloat(c[iFee])||0, close:String(c[iRo]).trim().toLowerCase()==="true"});
+  }
+  const out=[];
+  Object.keys(byPos).forEach(pid=>{
+    const f=byPos[pid].sort((a,b)=>a.t-b.t), op=f.filter(x=>!x.close), cl=f.filter(x=>x.close);
+    if(!op.length||!cl.length) return;
+    const qO=op.reduce((a,x)=>a+x.q,0), qC=cl.reduce((a,x)=>a+x.q,0);
+    if(qC<qO*0.999) return;
+    const isLong=op[0].side==="buy", sg=isLong?1:-1;
+    const entry=op.reduce((a,x)=>a+x.q*x.px,0)/qO, exit=cl.reduce((a,x)=>a+x.q*x.px,0)/qC;
+    const pnl=sg*qO*(exit-entry), comm=f.reduce((a,x)=>a+x.fee,0);
+    const topen=op[0].t, tclose=cl[cl.length-1].t, d=new Date(topen);
+    out.push({id:"vest-"+pid, date:d.toISOString().slice(0,10), time:d.toISOString().slice(11,19), sym:op[0].sym,
+      side:isLong?"long":"short", qty:+qO.toFixed(4), status:pnl-comm>0?"Win":"Loss", entry:+entry.toFixed(2), exit:+exit.toFixed(2),
+      pnl:+pnl.toFixed(2), pts:+(sg*(exit-entry)).toFixed(2), comm:+comm.toFixed(2), dur:fmtDur(tclose-topen), topen, tclose});
+  });
+  return out.sort((a,b)=>a.topen-b.topen);
+}
 function parseCSV(txt){
   const lines=txt.replace(/^﻿/,"").replace(/\r\n?/g,"\n").split("\n").filter(l=>l.trim().length);
   if(!lines.length) return [];
   const H=lines[0].split(",").map(s=>s.trim().toLowerCase());
   if(H.includes("boughttimestamp") && H.includes("soldtimestamp")) return parseTradovate(lines);
   if(H.includes("enteredat") && H.includes("exitedat")) return parseTopstepX(lines);
+  if(H.includes("position_id") && H.includes("reduce_only") && H.includes("execution_price")) return parseVest(lines);
   if(H.includes("trade #") && H.includes("type") && H.includes("date/time")){
     const sym=(window.prompt(T("imp.tvSymPrompt"),"NQ1!")||"").trim()||"TV";
     return parseTradingView(lines, sym);
