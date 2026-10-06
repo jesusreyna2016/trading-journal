@@ -1917,8 +1917,22 @@ function buildDisciplineDigest(maxDays){
       if(tg.align==="Con sesgo")withBias++; else if(tg.align==="Contra")againstBias++;
       if(tg.panel==="VALID")validEdge++; else if(tg.panel==="CHOP")outsideEdge++;
       if(tg.align||tg.panel)graded++; });
+    // Exit quality (counts + a unitless pts ratio, never money). One account only, so copy-trades don't multiply it.
+    const acct0=(trs[0]&&trs[0].acct)||"";
+    const pos=positions(trs.filter(t=>(t.acct||"")===acct0));
+    let partials=0,scratches=0,fullStops=0,wPts=0,wN=0,lPts=0,lN=0;
+    pos.forEach(p=>{
+      const tk=TICKSZ[(String(p.sym).match(/^M?(NQ|ES|GC|YM|CL|RTY)/)||[])[1]]||0.25;
+      const scratch=Math.abs(p.pts)<=4*tk;
+      if(p.partialWin)partials++;
+      if(scratch)scratches++;
+      else if(p.pts<0 && p.exitsN===1)fullStops++;
+      if(!scratch){ if(p.pts>0){wPts+=p.pts;wN++;} else {lPts-=p.pts;lN++;} }
+    });
     return { date:d.date, trades:d.count, disciplined:!!d.disciplined, maxLossStreak:d.maxC,
-      overtrade:!d.r3, revenge:!d.r1, roundTrip:!d.r4, graded, withBias, againstBias, validEdge, outsideEdge };
+      overtrade:!d.r3, revenge:!d.r1, roundTrip:!d.r4, graded, withBias, againstBias, validEdge, outsideEdge,
+      positions:pos.length, partials, scratches, fullStops,
+      wlPtsRatio:(wN&&lN)?+((wPts/wN)/(lPts/lN)).toFixed(2):null };
   });
   const n=rows.length, gtot=rows.reduce((s,r)=>s+r.graded,0);
   const sum=(f)=>rows.reduce((s,r)=>s+f(r),0);
@@ -1929,7 +1943,10 @@ function buildDisciplineDigest(maxDays){
     againstBiasRate: gtot?+(sum(r=>r.againstBias)/gtot).toFixed(2):null,
     outsideEdgeRate: gtot?+(sum(r=>r.outsideEdge)/gtot).toFixed(2):null,
     overtradeDays: sum(r=>r.overtrade?1:0),
-    revengeDays: sum(r=>r.revenge?1:0) };
+    revengeDays: sum(r=>r.revenge?1:0),
+    positions: sum(r=>r.positions),
+    partialRate: sum(r=>r.positions)?+(sum(r=>r.partials)/sum(r=>r.positions)).toFixed(2):null,
+    scratchRate: sum(r=>r.positions)?+(sum(r=>r.scratches)/sum(r=>r.positions)).toFixed(2):null };
   return { schema:"journal-digest-1", updatedAt:new Date().toISOString(), window:{days:n}, rollup, byDay:rows };
 }
 async function syncToAgent(opts){
@@ -4373,8 +4390,12 @@ function mkPos(arr){
   const wEntry=arr.reduce((s,t)=>s+t.entry*t.qty,0)/qty, wExit=arr.reduce((s,t)=>s+t.exit*t.qty,0)/qty;
   const f=arr[0], hasT=arr.every(t=>t.topen!=null);
   const durMs=hasT?Math.max(...arr.map(t=>t.tclose))-Math.min(...arr.map(t=>t.topen)):null;
+  // Exit shape: distinct exit prices = tranches; partialWin = scaled out AND the first tranche closed green.
+  const exitsN=new Set(arr.map(t=>t.exit)).size;
+  const firstOut=hasT?arr.slice().sort((a,b)=>a.tclose-b.tclose)[0]:f;
   return {date:f.date, time:f.time, tday:f.tday, sym:f.sym, side:f.side, qty, entry:+wEntry.toFixed(2), exit:+wExit.toFixed(2),
-    pnl:+net.toFixed(2), pts:+(arr.reduce((s,t)=>s+t.pts*t.qty,0)/qty).toFixed(2), fills:arr.length, comm:arr.reduce((s,t)=>s+(t.comm||0),0), durMs, acct:f.acct};
+    pnl:+net.toFixed(2), pts:+(arr.reduce((s,t)=>s+t.pts*t.qty,0)/qty).toFixed(2), fills:arr.length, comm:arr.reduce((s,t)=>s+(t.comm||0),0), durMs, acct:f.acct,
+    exitsN, partialWin:exitsN>=2 && firstOut.pts>0};
 }
 function positions(TR){
   const GAP=5*1000, by={};
