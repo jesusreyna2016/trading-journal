@@ -1331,7 +1331,8 @@ function migrateTradovateTZ(s){
 function normalizeDB(s){
   if(!s||!s.trades) s={trades:[], tags:{}};
   s.tags=s.tags||{}; s.checkins=s.checkins||{}; s.accounts=s.accounts||{}; s.playbooks=s.playbooks||{}; s.notes=s.notes||{}; s.ledger=Array.isArray(s.ledger)?s.ledger:[]; s.acctEvents=Array.isArray(s.acctEvents)?s.acctEvents:[]; s.routine=s.routine||{}; s.coachLetters=Array.isArray(s.coachLetters)?s.coachLetters:[]; s.reframes=s.reframes||{};
-  s.settings=Object.assign({dpt:900, overtrade:8, bigWinStop:200, session:"Asia", lang:"en", theme:"dark", commPerContract:0}, s.settings||{});
+  if(s.settings) delete s.settings.bigWinStop;
+  s.settings=Object.assign({dpt:900, overtrade:8, session:"Asia", lang:"en", theme:"dark", commPerContract:0}, s.settings||{});
   s.settings.customRules=Array.isArray(s.settings.customRules)?s.settings.customRules:[];
   s.settings.commByFirm=(s.settings.commByFirm&&typeof s.settings.commByFirm==="object")?s.settings.commByFirm:{};
   s.settings.goals=Object.assign({disc:80, proc:80, nomans:2, rr:1.5}, s.settings.goals||{});
@@ -1821,10 +1822,12 @@ function pickAccountModal(){
   });
 }
 // Big-win rule (agreed 7 oct after three days in a row of: big winner -> instant flip at record size).
-// A single trade at or above DB.settings.bigWinStop ends the trading day; everything opened after its close,
+// A single trade at or above bigWinThr() ends the trading day; everything opened after its close,
 // same trading day + account, is a violation. Returns one entry per broken day, worst (most given back) first.
+// Off by default for everyone (testers included); on at $200 for the owner until changed in Risk.
+function bigWinThr(){ const v=DB.settings.postWinStop; if(v!=null) return +v||0; return (typeof user!=="undefined"&&user&&user.email===ADMIN_EMAIL)?200:0; }
 function postWinBreaches(TR){
-  const thr=+DB.settings.bigWinStop||0; if(!thr) return [];
+  const thr=bigWinThr(); if(!thr) return [];
   const g={}; TR.forEach(t=>{ const k=(t.tday||t.date)+"|"+(t.acct||""); (g[k]=g[k]||[]).push(t); });
   const ts=t=>t.topen!=null?t.topen:Date.parse(t.date+"T"+(t.time||"00:00:00")+"Z");
   const out=[];
@@ -1839,7 +1842,7 @@ function postWinBreaches(TR){
   return out.sort((a,b)=>a.net-b.net);
 }
 function postWinText(b, key){
-  return fmt(T(key),{day:b.day, win:money1(b.win.pnl), thr:money(+DB.settings.bigWinStop), n:b.after.length, net:money1(b.net),
+  return fmt(T(key),{day:b.day, win:money1(b.win.pnl), thr:money(bigWinThr()), n:b.after.length, net:money1(b.net),
     flip:b.flip?T("imp.pwFlip"):"", size:b.sizeX>1.05?fmt(T("imp.pwSize"),{x:b.sizeX.toFixed(2)}):""});
 }
 function importText(txt, acct){
@@ -3896,7 +3899,7 @@ function renderRisk(){
       ${kpi(fmt(T("risk.inWindow"),{sess:sess}),Math.round(inPct)+"%",totalIn+"/"+TR.length+" "+T("trades"),inPct>=90?"pos":"wait")}
       ${kpi(T("risk.worstDD"),money(worstDD),T("risk.worstDDSub"),worstDD<0?"neg":"muted")}
     </div>
-    <div class="card section small muted rowflex" style="gap:8px">${T("risk.setCap")}<input type="number" id="rDpt" value="${dpt}" step="50" style="width:80px"> · ${T("risk.setWindow")} <select id="rSess">${sessOpts}</select> · ${T("risk.setOver")} <input type="number" id="rOt" value="${DB.settings.overtrade}" style="width:52px"> · ${T("risk.setBigWin")}<input type="number" id="rBw" value="${DB.settings.bigWinStop||0}" step="50" min="0" style="width:70px"> <button class="btn small" id="rApply">${T("apply")}</button></div>
+    <div class="card section small muted rowflex" style="gap:8px">${T("risk.setCap")}<input type="number" id="rDpt" value="${dpt}" step="50" style="width:80px"> · ${T("risk.setWindow")} <select id="rSess">${sessOpts}</select> · ${T("risk.setOver")} <input type="number" id="rOt" value="${DB.settings.overtrade}" style="width:52px"> · ${T("risk.setBigWin")}<input type="number" id="rBw" value="${bigWinThr()}" step="50" min="0" style="width:70px"> <button class="btn small" id="rApply">${T("apply")}</button></div>
     <div class="card section small muted">${fmt(T("risk.setComm"),{v:'<input type="number" id="rComm" value="'+(DB.settings.commPerContract||0)+'" step="0.01" min="0" style="width:70px">'})} <button class="btn small" id="rCommApply">${T("apply")}</button>
       <p class="small muted" style="margin:8px 0 0">${T("risk.commHint")}</p></div>
     <div class="card section">
@@ -3922,7 +3925,7 @@ function renderRisk(){
     <div class="card section"><h2>${T("risk.streakTitle")}</h2><div class="cf">
       ${["0","1","2","3+"].map(k=>{const n=streakDist[k]||0; const bad=k==="3+"&&n>0; return `<div class="r"><span class="lab">${k==="0"?T("risk.noStreak"):k+" "+T("risk.inRow")}</span><span class="v ${bad?'neg':'muted'}">${n} ${n===1?T("risk.day"):T("risk.days")}</span></div>`;}).join("")}
       </div><p class="small muted" style="margin-top:8px">${over2>0?fmt(T("risk.cbNote"),{n:over2}):T("risk.cbOk")}</p></div>`;
-  $("#rApply").onclick=()=>{DB.settings.dpt=+$("#rDpt").value||900; DB.settings.session=$("#rSess").value; DB.settings.overtrade=+$("#rOt").value||8; DB.settings.bigWinStop=Math.max(0,+$("#rBw").value||0); save(); renderRisk();};
+  $("#rApply").onclick=()=>{DB.settings.dpt=+$("#rDpt").value||900; DB.settings.session=$("#rSess").value; DB.settings.overtrade=+$("#rOt").value||8; DB.settings.postWinStop=Math.max(0,+$("#rBw").value||0); save(); renderRisk();};
   $("#rCommApply").onclick=()=>{DB.settings.commPerContract=+$("#rComm").value||0; save(); toast(T("risk.commSaved")); renderRisk();};
   host.querySelectorAll(".cfDef").forEach(inp=>inp.onchange=()=>{ const f=inp.dataset.firm; CF[f]=CF[f]||{default:0,rows:[]}; CF[f].default=+inp.value||0; save(); });
   host.querySelectorAll(".cfSym").forEach(inp=>inp.onchange=()=>{ const f=inp.dataset.firm, ri=+inp.dataset.ri; CF[f]=CF[f]||{default:0,rows:[]}; CF[f].rows[ri]=CF[f].rows[ri]||{sym:"",v:0}; CF[f].rows[ri].sym=(inp.value||"").trim().toUpperCase(); save(); });
