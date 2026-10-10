@@ -1961,10 +1961,12 @@ function scheduleAutoLoop(){
   if(DB.settings && DB.settings.autoSync===false) return;   // opt-out
   clearTimeout(__autoLoopTimer);
   __autoLoopTimer=setTimeout(async ()=>{
+    // Grading is best-effort: symbols outside the plan (e.g. Vest perps) grade 0 trades,
+    // and the agent still needs the discipline + exit digest for those days.
+    try{ await autoGradeAgainstPlan({silent:true}); }catch(e){}
     try{
-      const r=await autoGradeAgainstPlan({silent:true});
       const key=(DB.settings&&DB.settings.saSyncKey)||"";
-      if(key && r && r.graded){ await syncToAgent({silent:true}); }
+      if(key && (DB.trades||[]).length){ await syncToAgent({silent:true}); }
     }catch(e){}
   }, 1400);   // debounce: varios CSV a la vez disparan un solo bucle
 }
