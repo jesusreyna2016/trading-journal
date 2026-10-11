@@ -2753,7 +2753,7 @@ function dayNarrative(arr, raw){
   const bigFlip=bigWin?flipHits.find(t=>t.prevSame && winMomentSum(t.prevSame)>=Math.max(150,bigWin.pnl*0.5)):null;
   const bad=[];
   if(burstRed) bad.push(fmt(T("dr.eRevenge"),{n:burst.length,sum:money1(Math.abs(burstSum))}));
-  if(openLoss>=3) bad.push(fmt(T("dr.eStubborn"),{n:openLoss}));
+  const stubTxt=openLoss>=3?fmt(T("dr.eStubborn"),{n:openLoss}):null; if(stubTxt) bad.push(stubTxt);
   if(finalBlow) bad.push(fmt(T("dr.eFinal"),{n:n,p:money1(last.pnl),what:T(recoveredMid?"dr.eFinalErased":"dr.eFinalGrew")}));
   if(overtrade) bad.push(fmt(T("dr.eOver"),{n:n,from:from,to:to}));
   if(gaveBack && !finalBlow) bad.push(fmt(T("dr.eGaveBack"),{peak:money1(peak),net:money1(net)}));
@@ -2788,7 +2788,7 @@ function dayNarrative(arr, raw){
   else if(net>0){ lesson=T("dr.lGreen"); win=true; }
   else if(overtrade) lesson=T("dr.lOver");
   else lesson=T("dr.lRed");
-  if(raw) return {hl, arc, bad, good, lesson, win, net};
+  if(raw) return {hl, arc, bad, good, lesson, win, net, stubTxt};
   const sec=(lab,items,cl)=>items.length?`<div class="sec"><div class="drlab">${lab}</div><ul>${items.map(x=>`<li class="${cl||''}">${mdb(x)}</li>`).join("")}</ul></div>`:"";
   return `<div class="dayread">
     <div class="drlab">${T("lcd.title")}</div>
@@ -3234,6 +3234,8 @@ function renderToday(){
   const esc=s=>String(s||'').replace(/</g,'&lt;'), li=(items,c)=>items.slice(0,2).map(x=>`<li class="${c}">${mdb(x)}</li>`).join("");
   const lang=(DB.settings&&DB.settings.lang)||"en";
   const dateLab=new Date().toLocaleDateString(lang==="es"?"es":"en",{weekday:"long",month:"long",day:"numeric"});
+  // Do not scold for trading on after a losing start when this trader's own replay says stopping would have cost them.
+  { const lr=focus.all.find(c=>c.id==="lossrun"); if(lr && lr.cost<-1) r.bad=r.bad.filter(x=>x!==r.stubTxt); }
   const lastHtml=`<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px"><div class="eyebrow">${fmt(T("td.last"),{d:last.date})}</div><button class="btn small ghost" id="tdFull">${T("td.fullDay")}</button></div>
     <div class="td-hl">${mdb(r.hl)}</div>
     <div class="dayread td-read">
