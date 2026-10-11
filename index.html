@@ -648,7 +648,7 @@
     { "@type": "Question", "name": "Is it really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, the full journal is free, no trial, no card, no feature paywalled behind a plan. It stays free because it's part of TradeDadLog, not a startup chasing a subscription." } },
     { "@type": "Question", "name": "Is my data private?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Your trades live in your own account, protected by row-level security, nobody else, including us, can see them. The public scorecard is opt-in and only shares what you choose to show." } },
     { "@type": "Question", "name": "Do I need trades already imported to start?", "acceptedAnswer": { "@type": "Answer", "text": "No. The Daily Routine and check-in work with zero data from day one, and \"Should I trade today?\" reads your recent discipline the moment you have any history at all." } },
-    { "@type": "Question", "name": "Which brokers or CSV formats work?", "acceptedAnswer": { "@type": "Answer", "text": "Tradovate, TopstepX and Vest (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl)." } },
+    { "@type": "Question", "name": "Which brokers or CSV formats work?", "acceptedAnswer": { "@type": "Answer", "text": "Tradovate, TopstepX, Vest and MyFundedPerpetuals (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl)." } },
     { "@type": "Question", "name": "Is this financial advice?", "acceptedAnswer": { "@type": "Answer", "text": "No. This is an educational journaling and analytics tool. It doesn't recommend trades or strategies, it reflects your own data back at you. Trading futures carries real risk of loss." } },
     { "@type": "Question", "name": "What happens to my account if I stop using it?", "acceptedAnswer": { "@type": "Answer", "text": "Nothing, your data just sits there waiting. You can export a full backup as JSON anytime, and delete everything permanently from the settings menu if you ever want to." } }
   ]
@@ -747,7 +747,7 @@
         <details class="lfaqitem"><summary data-i18n="l2.faq1q">Is it really free?</summary><p data-i18n="l2.faq1a">Yes, the full journal is free, no trial, no card, no feature paywalled behind a plan. It stays free because it's part of TradeDadLog, not a startup chasing a subscription.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq2q">Is my data private?</summary><p data-i18n="l2.faq2a">Yes. Your trades live in your own account, protected by row-level security, nobody else, including us, can see them. The public scorecard is opt-in and only shares what you choose to show.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq3q">Do I need trades already imported to start?</summary><p data-i18n="l2.faq3a">No. The Daily Routine and check-in work with zero data from day one, and "Should I trade today?" reads your recent discipline the moment you have any history at all.</p></details>
-        <details class="lfaqitem"><summary data-i18n="l2.faq4q">Which brokers or CSV formats work?</summary><p data-i18n="l2.faq4a">Tradovate, TopstepX and Vest (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.</p></details>
+        <details class="lfaqitem"><summary data-i18n="l2.faq4q">Which brokers or CSV formats work?</summary><p data-i18n="l2.faq4a">Tradovate, TopstepX, Vest and MyFundedPerpetuals (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq5q">Is this financial advice?</summary><p data-i18n="l2.faq5a">No. This is an educational journaling and analytics tool. It doesn't recommend trades or strategies, it reflects your own data back at you. Trading futures carries real risk of loss.</p></details>
         <details class="lfaqitem"><summary data-i18n="l2.faq6q">What happens to my account if I stop using it?</summary><p data-i18n="l2.faq6a">Nothing, your data just sits there waiting. You can export a full backup as JSON anytime, and delete everything permanently from the settings menu if you ever want to.</p></details>
       </div>
@@ -1034,7 +1034,7 @@ const I18N={
   "l2.faq1q":"Is it really free?","l2.faq1a":"Yes, the full journal is free, no trial, no card, no feature paywalled behind a plan. It stays free because it's part of TradeDadLog, not a startup chasing a subscription.",
   "l2.faq2q":"Is my data private?","l2.faq2a":"Yes. Your trades live in your own account, protected by row-level security, nobody else, including us, can see them. The public scorecard is opt-in and only shares what you choose to show.",
   "l2.faq3q":"Do I need trades already imported to start?","l2.faq3a":"No. The Daily Routine and check-in work with zero data from day one, and \"Should I trade today?\" reads your recent discipline the moment you have any history at all.",
-  "l2.faq4q":"Which brokers or CSV formats work?","l2.faq4a":"Tradovate, TopstepX and Vest (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.",
+  "l2.faq4q":"Which brokers or CSV formats work?","l2.faq4a":"Tradovate, TopstepX, Vest and MyFundedPerpetuals (perps) are auto-detected, TradingView's Strategy Tester export and Tradezella-style exports work too, and a generic parser covers most other CSVs (date, symbol, side, entry, exit, size, pnl). If yours doesn't import cleanly, tell us and we'll add it.",
   "l2.faq5q":"Is this financial advice?","l2.faq5a":"No. This is an educational journaling and analytics tool. It doesn't recommend trades or strategies, it reflects your own data back at you. Trading futures carries real risk of loss.",
   "l2.faq6q":"What happens to my account if I stop using it?","l2.faq6a":"Nothing, your data just sits there waiting. You can export a full backup as JSON anytime, and delete everything permanently from the settings menu if you ever want to.",
   "l2.getT":"Start free in 30 seconds","l2.getP":"Enter your email, we send you a magic link. No password, no card.","l2.footNote":"Educational tool, not financial advice.","l2.ebProblem":"THE REAL PROBLEM","l2.ebFeatures":"WHAT'S INSIDE","l2.ebSteps":"3 SIMPLE STEPS","l2.ebGet":"JOIN FREE","l2.fvFocus":"YOUR FOCUS","l2.fvFocusV":"SAME SIZE","l2.fvKept":"KEPT IT","l2.fvGood":"Held your best trade 11 min","l2.fvBad":"Gave back half the day","l2.fvTilt":"RISK TODAY","l2.fvClean":"CLEAN STREAK","l2.fvLeak1":"Bigger bets after a loss","l2.fvLeak2":"Over-trading","l2.fvWhy":"“Get out of debt and give my family stability.”","l2.fvBackup":"+ backup","l2.fvAcct1":"This week","l2.fvAcct2":"Focus kept","l2.fvEmo1":"Calm","l2.fvEmo2":"FOMO","l2.fvEmo3":"Revenge","l2.fvEmo4":"Setup A","l2.fvRt1":"In control","l2.fvRt2":"Mixed","l2.fvRt3":"Off my game","l2.ebSc":"A LOOK INSIDE","l2.demoCta":"Try the live demo","demo.banner":"You're exploring a demo with sample data.","demo.signup":"Create free account","l2.scT":"See it in action","l2.scP":"A real journal, built for discipline. Here's what it looks like in use.","l2.sc1e":"TODAY","l2.sc1t":"One screen that tells you what to fix","l2.sc1d":"Your last session in plain words, your one focus with the number that tracks it, and a 30-second close. This is what you see every time you open it.","l2.sc2e":"JOURNAL","l2.sc2t":"Tag every trade in seconds","l2.sc2d":"Emotion, panel context, bias, setup, mistakes and a rich note per trade. The day's equity curve turns red under water and green in profit.","l2.sc3e":"SCORE","l2.sc3t":"A grade out of 100, and your weakest point","l2.sc3d":"Six factors, win rate, profit factor, avg win/loss, drawdown, recovery and consistency, on a radar, with the one thing dragging your score down called out.","l2.sc4e":"CALENDAR","l2.sc4t":"Your whole month at a glance","l2.sc4d":"Daily P&L with trades and win rate in each cell, weekly totals on the side, and a dot for discipline kept or broken."
@@ -1198,7 +1198,7 @@ const I18N={
   "l2.faq1q":"¿De verdad es gratis?","l2.faq1a":"Sí, el journal completo es gratis, sin prueba, sin tarjeta, sin funciones detrás de un plan de pago. Sigue siendo gratis porque es parte de TradeDadLog, no una startup persiguiendo suscripciones.",
   "l2.faq2q":"¿Mis datos son privados?","l2.faq2a":"Sí. Tus trades viven en tu propia cuenta, protegidos por row-level security, nadie más, ni siquiera nosotros, puede verlos. El scorecard público es opcional y solo comparte lo que tú elijas mostrar.",
   "l2.faq3q":"¿Necesito trades ya importados para empezar?","l2.faq3a":"No. La Rutina diaria y el check-in funcionan con cero datos desde el primer día, y \"Should I trade today?\" lee tu disciplina reciente en cuanto tengas algo de historial.",
-  "l2.faq4q":"¿Qué brokers o formatos de CSV funcionan?","l2.faq4a":"Tradovate, TopstepX y Vest (perps) se detectan automáticamente, el export del Strategy Tester de TradingView y los exports estilo Tradezella también funcionan, y un parser genérico cubre la mayoría de otros CSVs (fecha, símbolo, lado, entrada, salida, tamaño, pnl). Si el tuyo no importa limpio, dínoslo y lo agregamos.",
+  "l2.faq4q":"¿Qué brokers o formatos de CSV funcionan?","l2.faq4a":"Tradovate, TopstepX, Vest y MyFundedPerpetuals (perps) se detectan automáticamente, el export del Strategy Tester de TradingView y los exports estilo Tradezella también funcionan, y un parser genérico cubre la mayoría de otros CSVs (fecha, símbolo, lado, entrada, salida, tamaño, pnl). Si el tuyo no importa limpio, dínoslo y lo agregamos.",
   "l2.faq5q":"¿Esto es asesoría financiera?","l2.faq5a":"No. Es una herramienta educativa de journaling y análisis. No recomienda trades ni estrategias, te refleja tus propios datos. Operar futuros conlleva riesgo real de pérdida.",
   "l2.faq6q":"¿Qué pasa con mi cuenta si dejo de usarla?","l2.faq6a":"Nada, tus datos simplemente se quedan ahí esperando. Puedes exportar un backup completo en JSON cuando quieras, y borrar todo permanentemente desde el menú de ajustes si alguna vez lo deseas.",
   "l2.getT":"Empieza gratis en 30 segundos","l2.getP":"Escribe tu correo, te enviamos un enlace mágico. Sin contraseña, sin tarjeta.","l2.footNote":"Herramienta educativa, no es asesoría financiera.","l2.ebProblem":"EL PROBLEMA REAL","l2.ebFeatures":"QUÉ INCLUYE","l2.ebSteps":"3 PASOS SIMPLES","l2.ebGet":"ÚNETE GRATIS","l2.fvFocus":"TU FOCO","l2.fvFocusV":"MISMO TAMAÑO","l2.fvKept":"CUMPLIDO","l2.fvGood":"Aguantaste tu mejor trade 11 min","l2.fvBad":"Devolviste la mitad del día","l2.fvTilt":"RIESGO HOY","l2.fvClean":"RACHA LIMPIA","l2.fvLeak1":"Apostar más tras perder","l2.fvLeak2":"Sobreoperar","l2.fvWhy":"“Salir de deudas y darle estabilidad a mi familia.”","l2.fvBackup":"+ respaldo","l2.fvAcct1":"Esta semana","l2.fvAcct2":"Foco cumplido","l2.fvEmo1":"Calma","l2.fvEmo2":"FOMO","l2.fvEmo3":"Venganza","l2.fvEmo4":"Setup A","l2.fvRt1":"En control","l2.fvRt2":"Regular","l2.fvRt3":"Fuera de mí","l2.ebSc":"POR DENTRO","l2.demoCta":"Prueba la demo en vivo","demo.banner":"Estás explorando una demo con datos de ejemplo.","demo.signup":"Crear cuenta gratis","l2.scT":"Míralo en acción","l2.scP":"Un journal real, hecho para la disciplina. Así se ve cuando lo usas.","l2.sc1e":"HOY","l2.sc1t":"Una pantalla que te dice qué arreglar","l2.sc1d":"Tu última sesión en palabras simples, tu único foco con el número que lo sigue y un cierre de 30 segundos. Esto es lo que ves cada vez que lo abres.","l2.sc2e":"JOURNAL","l2.sc2t":"Etiqueta cada trade en segundos","l2.sc2d":"Emoción, contexto del panel, sesgo, setup, errores y una nota enriquecida por trade. La curva del día se pone roja bajo agua y verde en ganancia.","l2.sc3e":"SCORE","l2.sc3t":"Una nota sobre 100, y tu punto más débil","l2.sc3d":"Seis factores, winrate, profit factor, win/loss, drawdown, recuperación y consistencia, en un radar, señalando lo que más baja tu score.","l2.sc4e":"CALENDARIO","l2.sc4t":"Todo tu mes de un vistazo","l2.sc4d":"P&L diario con trades y winrate en cada casilla, totales por semana al lado, y un punto por disciplina cumplida o rota."
@@ -1411,6 +1411,7 @@ function toast(m,ms){const t=$("#toast"); t.textContent=m; t.classList.add("show
 // What's-new log (newest first). Bump the top v when you ship something worth surfacing.
 const CHANGELOG=[
   {v:"Oct 2026", items:[
+    {en:"MyFundedPerpetuals import: drop the trade history CSV and each position becomes one trade, with fees kept apart from the P&L.", es:"Import de MyFundedPerpetuals: suelta el CSV de historial de trades y cada posición se vuelve un trade, con las comisiones separadas del P&L."},
     {en:"Today now keeps the habits you fixed, flags a weak signal when the evidence is thin, adds a one-tap check before you trade and a calendar reminder to close your day. Routine and check-in share one page, and the day read describes what happened without judging.", es:"Hoy ahora guarda los hábitos que corregiste, avisa cuando la señal es débil, añade un chequeo de un toque antes de operar y un recordatorio de calendario para cerrar tu día. Rutina y check-in comparten una página, y la lectura del día describe lo que pasó sin juzgar."},
     {en:"New Today screen: what cost you last session, what you did well, one focus with one number, and a 30-second day close. Navigation trimmed to Today, Trades, Progress and More.", es:"Nueva pantalla Hoy: qué te costó la última sesión, qué hiciste bien, un foco con un solo número y cierre del día en 30 segundos. Navegación reducida a Hoy, Trades, Progreso y Más."},
     {en:"Vest (perps) import: drop the orders CSV and each position becomes one trade, with fees and P&L rebuilt from the fills.", es:"Import de Vest (perps): suelta el CSV de órdenes y cada posición se vuelve un trade, con comisiones y P&L reconstruidos de los fills."},
@@ -1676,6 +1677,49 @@ function parseVest(lines){
   });
   return out.sort((a,b)=>a.topen-b.topen);
 }
+// MyFundedPerpetuals "trade history" export -> one trade per position. Rows are orders, newest first, with no
+// position id, so positions are rebuilt per coin from a running net size over the filled orders: an order against
+// the open side closes it (and opens the other way with whatever is left), anything else opens or adds.
+// Timestamps are ISO UTC. Realized P&L comes from the file (gross, fees kept apart like the other importers).
+// A position still open at export time is skipped and lands on the next import.
+function parseMFP(lines){
+  const H=csvSplitQ(lines[0]).map(s=>s.trim().toLowerCase()), ix=n=>H.indexOf(n);
+  const iT=ix("completed at (utc)"), iSym=ix("coin"), iSide=ix("side"), iQty=ix("size"), iPx=ix("fill price"), iFee=ix("fee (usd)"),
+        iG=ix("gross realized p&l (usd)"), iSt=ix("status"), iRo=ix("reduce only");
+  const byC={};
+  for(let i=1;i<lines.length;i++){
+    const c=csvSplitQ(lines[i]);
+    if(String(c[iSt]).trim().toLowerCase()!=="filled") continue;
+    const q=parseFloat(c[iQty])||0, px=parseFloat(c[iPx])||0, t=Date.parse(String(c[iT]).trim()); if(!q||!px||!t) continue;
+    const sym=String(c[iSym]||"").trim().toUpperCase().replace(/-USD.*$/,"").replace(/-PERP$/,""); if(!sym) continue;
+    (byC[sym]=byC[sym]||[]).push({sg:String(c[iSide]).trim().toLowerCase().startsWith("b")?1:-1, q, px, t, n:i,
+      fee:parseFloat(c[iFee])||0, g:parseFloat(c[iG]), ro:String(c[iRo]).trim().toLowerCase()==="yes"});
+  }
+  const out=[];
+  Object.keys(byC).forEach(sym=>{
+    let cur=null;
+    const emit=()=>{ const entry=cur.vO/cur.qO, exit=cur.vC/cur.qC, pnl=cur.hasG?cur.g:cur.sg*cur.qO*(exit-entry), d=new Date(cur.topen);
+      out.push({id:"mfp-"+sym+"-"+cur.topen, date:d.toISOString().slice(0,10), time:d.toISOString().slice(11,19), sym,
+        side:cur.sg>0?"long":"short", qty:+cur.qO.toFixed(4), status:pnl-cur.comm>0?"Win":"Loss", entry:+entry.toFixed(2), exit:+exit.toFixed(2),
+        pnl:+pnl.toFixed(2), pts:+(cur.sg*(exit-entry)).toFixed(2), comm:+cur.comm.toFixed(2), dur:fmtDur(cur.tclose-cur.topen), topen:cur.topen, tclose:cur.tclose});
+      cur=null; };
+    // same-millisecond orders: the file is newest first, so the later line happened earlier
+    byC[sym].sort((a,b)=>a.t-b.t||b.n-a.n).forEach(x=>{
+      let q=x.q;
+      if(cur && x.sg!==cur.sg){
+        const part=Math.min(q,cur.left);
+        cur.qC+=part; cur.vC+=part*x.px; cur.comm+=x.fee*part/x.q; cur.left-=part; cur.tclose=x.t; q-=part;
+        if(isFinite(x.g)){ cur.g+=x.g; cur.hasG=true; }
+        if(cur.left<=cur.qO*0.001) emit();
+      }
+      // a reduce-only order can never open: with nothing open it belongs to a position older than the export
+      if(q<=x.q*0.001 || x.ro) return;
+      if(!cur) cur={sg:x.sg,qO:0,vO:0,qC:0,vC:0,g:0,hasG:false,comm:0,left:0,topen:x.t,tclose:x.t};
+      cur.qO+=q; cur.vO+=q*x.px; cur.left+=q; cur.comm+=x.fee*q/x.q;
+    });
+  });
+  return out.sort((a,b)=>a.topen-b.topen);
+}
 function parseCSV(txt){
   const lines=txt.replace(/^﻿/,"").replace(/\r\n?/g,"\n").split("\n").filter(l=>l.trim().length);
   if(!lines.length) return [];
@@ -1683,6 +1727,7 @@ function parseCSV(txt){
   if(H.includes("boughttimestamp") && H.includes("soldtimestamp")) return parseTradovate(lines);
   if(H.includes("enteredat") && H.includes("exitedat")) return parseTopstepX(lines);
   if(H.includes("position_id") && H.includes("reduce_only") && H.includes("execution_price")) return parseVest(lines);
+  if(H.includes("completed at (utc)") && H.includes("reduce only") && H.includes("fill price")) return parseMFP(lines);
   if(H.includes("trade #") && H.includes("type") && H.includes("date/time")){
     const sym=(window.prompt(T("imp.tvSymPrompt"),"NQ1!")||"").trim()||"TV";
     return parseTradingView(lines, sym);
