@@ -950,7 +950,7 @@ const I18N={
   "td.closeT":"Close {d}","td.closeLead":"30 seconds. How did you trade, and one line for tomorrow.","td.feel.ok":"In control","td.feel.mixed":"Mixed","td.feel.off":"Off my game","td.notePh":"Tomorrow I will...","td.closeBtn":"Close the day","td.pickFeel":"Pick how you traded first","td.closed":"Day closed. See you tomorrow.",
   "td.doneToday":"You are up to date.","td.nextUp":"Nothing logged for today yet.","td.import":"Import trades","td.noTrade":"I did not trade today","td.noTradeSaved":"Logged. Sitting out counts.",
   "td.wkT":"Your week · {w}","td.wk.net":"You closed the week at **{net}** over {n} trades in {d} sessions.","td.wk.up":"That is **{v}** better than the week before.","td.wk.down":"That is **{v}** behind the week before.","td.wk.focus":"You kept your focus in **{k} of {n}** sessions.","td.wk.focusPrev":"The week before it was {k} of {n}.","td.wk.best":"Best session: {d} at **{net}**.","td.wk.next":"For next week:",
-  "td.allStats":"All stats","td.pickT":"Choose your focus","td.pickLead":"One thing at a time. Ranked by how much each rule would have saved you.","td.pickAuto":"Automatic: the costliest one","td.pickOwn":"Or write your own","td.pickNone":"No costly pattern detected yet.",
+  "td.allStats":"All stats","td.pickNoT":"Rules that would not help you right now","td.pickCostYou":"would have cost you {v}","td.pickFixed":"you already keep it","td.pickFlat":"no real difference","td.pickT":"Choose your focus","td.pickLead":"One thing at a time. Ranked by how much each rule would have saved you.","td.pickAuto":"Automatic: the costliest one","td.pickOwn":"Or write your own","td.pickNone":"No costly pattern detected yet.",
   "grp.summary":"Summary","grp.routine":"Routine","grp.diary":"Trades","grp.discipline":"Discipline","grp.analysis":"Analysis","grp.progress":"Progress","grp.business":"Business",
   "tab.overview":"Stats","tab.routine":"Routine","tab.checkin":"Check-in","tab.leaks":"Leaks","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Positions","tab.notes":"Notes","tab.lessons":"Lessons","tab.progress":"Progress",
   "les.title":"Lessons library","les.lead":"Everything you've written to yourself, in one place: daily reviews, trade notes and your honest 'why'. Your own words are the best coach you have, reread them before the next session.","les.search":"Search your lessons…","les.empty":"Nothing here yet. Your daily reviews (Check-in) and trade notes land here automatically as you write them.","les.noMatch":"No lessons match your search.","les.review":"Daily review","les.note":"Trade note","les.why":"Why I traded","les.count":"{n} entries","tab.calendar":"Calendar","tab.risk":"Risk","tab.customrules":"My Rules","tab.accounts":"Accounts","tab.finance":"Finance","tab.report":"Report",
@@ -1114,7 +1114,7 @@ const I18N={
   "td.closeT":"Cierra el {d}","td.closeLead":"30 segundos. Cómo operaste y una línea para mañana.","td.feel.ok":"En control","td.feel.mixed":"Regular","td.feel.off":"Fuera de mí","td.notePh":"Mañana voy a...","td.closeBtn":"Cerrar el día","td.pickFeel":"Primero elige cómo operaste","td.closed":"Día cerrado. Nos vemos mañana.",
   "td.doneToday":"Estás al día.","td.nextUp":"Aún no hay nada registrado hoy.","td.import":"Importar trades","td.noTrade":"Hoy no operé","td.noTradeSaved":"Registrado. No operar también cuenta.",
   "td.wkT":"Tu semana · {w}","td.wk.net":"Cerraste la semana en **{net}** con {n} trades en {d} sesiones.","td.wk.up":"Son **{v}** mejor que la semana anterior.","td.wk.down":"Son **{v}** por debajo de la semana anterior.","td.wk.focus":"Cumpliste tu foco en **{k} de {n}** sesiones.","td.wk.focusPrev":"La semana anterior fueron {k} de {n}.","td.wk.best":"Mejor sesión: {d} con **{net}**.","td.wk.next":"Para la próxima semana:",
-  "td.allStats":"Todas las estadísticas","td.pickT":"Elige tu foco","td.pickLead":"Una cosa a la vez. Ordenados por cuánto te habría ahorrado cada regla.","td.pickAuto":"Automático: el más costoso","td.pickOwn":"O escribe el tuyo","td.pickNone":"Todavía no se detecta un patrón costoso.",
+  "td.allStats":"Todas las estadísticas","td.pickNoT":"Reglas que ahora no te ayudarían","td.pickCostYou":"te habría costado {v}","td.pickFixed":"ya la cumples","td.pickFlat":"sin diferencia real","td.pickT":"Elige tu foco","td.pickLead":"Una cosa a la vez. Ordenados por cuánto te habría ahorrado cada regla.","td.pickAuto":"Automático: el más costoso","td.pickOwn":"O escribe el tuyo","td.pickNone":"Todavía no se detecta un patrón costoso.",
   "grp.summary":"Resumen","grp.routine":"Rutina","grp.diary":"Trades","grp.discipline":"Disciplina","grp.analysis":"Análisis","grp.progress":"Progreso","grp.business":"Negocio",
   "tab.overview":"Estadísticas","tab.routine":"Rutina","tab.checkin":"Check-in","tab.leaks":"Fugas","tab.playbooks":"Playbooks","tab.score":"Score","tab.journal":"Trades","tab.positions":"Posiciones","tab.notes":"Notas","tab.lessons":"Lecciones","tab.progress":"Progreso",
   "les.title":"Biblioteca de lecciones","les.lead":"Todo lo que te has escrito a ti mismo, en un solo lugar: revisiones diarias, notas de trade y tu 'por qué' honesto. Tus propias palabras son el mejor coach que tienes, reléelas antes de la próxima sesión.","les.search":"Busca en tus lecciones…","les.empty":"Aún no hay nada. Tus revisiones diarias (Check-in) y notas de trade aparecen aquí solas conforme las escribes.","les.noMatch":"Ninguna lección coincide con tu búsqueda.","les.review":"Revisión diaria","les.note":"Nota de trade","les.why":"Por qué operé","les.count":"{n} entradas","tab.calendar":"Calendario","tab.risk":"Riesgo","tab.customrules":"Mis reglas","tab.accounts":"Cuentas","tab.finance":"Finanzas","tab.report":"Informe",
@@ -3179,17 +3179,21 @@ function focusCandidates(TR){
       if(i===ot-2 && i<a.length-1){ C.overtrade.cost-=rest(a,i); C.overtrade.fail.add(d); }
     }); });
   const bs=bigSizeLeak(TR); if(bs) C.bigsize=bs;
-  Object.values(C).forEach(c=>{ if(c.cost>1 && c.fail.size>=2) out.push(c); });
+  // every rule is returned with its replay result, so the picker can also show the ones that would NOT have helped
+  Object.values(C).forEach(c=>{ c.ok=c.cost>1 && c.fail.size>=2; if(c.id!=="bigsize" || c.cap) out.push(c); });
   return out.sort((x,y)=>y.cost-x.cost);
 }
 // The focus has to be the leak the trader has NOW. Over a long history an old habit can out-cost the current one
 // in total while already being fixed, so candidates are priced on the most recent sessions only.
 const FOCUS_WINDOW=20;
 function currentFocus(TR){
-  const recentDays=new Set([...new Set(TR.map(t=>t.tday||t.date))].sort().slice(-FOCUS_WINDOW));
-  const cands=focusCandidates(TR.filter(t=>recentDays.has(t.tday||t.date))), f=(DB.settings&&DB.settings.focus)||{};
-  if(f.custom) return {custom:f.custom, cands};
-  return {pick:(f.id&&cands.find(x=>x.id===f.id))||cands[0]||null, cands};
+  const dates=[...new Set(TR.map(t=>t.tday||t.date))].sort(), recentDays=new Set(dates.slice(-FOCUS_WINDOW)), last10=dates.slice(-10);
+  const all=focusCandidates(TR.filter(t=>recentDays.has(t.tday||t.date))), f=(DB.settings&&DB.settings.focus)||{};
+  // A habit already kept in 9 of the last 10 sessions is fixed, not a focus, however much it cost before that.
+  all.forEach(c=>{ if(c.ok && last10.filter(d=>c.fail.has(d)).length<2){ c.ok=false; c.fixed=true; } });
+  const cands=all.filter(c=>c.ok);
+  if(f.custom) return {custom:f.custom, cands, all};
+  return {pick:(f.id&&cands.find(x=>x.id===f.id))||cands[0]||null, cands, all};
 }
 function focusRule(c){ return fmt(T("td.rule."+c.id),{ot:DB.settings.overtrade||8,sym:c.sym||"",cap:c.cap?sizeLabel(c.sym,c.cap):""}); }
 function weeklyLetterHtml(days, focus){
@@ -3206,12 +3210,15 @@ function weeklyLetterHtml(days, focus){
   const dow=new Date().getDay(), open=(dow===0||dow===6||dow===1)?" open":"";
   return `<details class="card td-week"${open}><summary>${fmt(T("td.wkT"),{w:cw})}</summary>${lines.map(x=>`<p>${mdb(x)}</p>`).join("")}</details>`;
 }
-function showFocusPicker(cands){
+function showFocusPicker(all){
+  const cands=all.filter(c=>c.ok), no=all.filter(c=>!c.ok);
+  const why=c=>c.fixed?T("td.pickFixed"):(c.cost<-1?fmt(T("td.pickCostYou"),{v:money1(-c.cost).replace(/^[−-]/,"")}):T("td.pickFlat"));
   const f=(DB.settings&&DB.settings.focus)||{}, esc=s=>String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
   const row=(fid,label,right)=>`<button class="btn ghost" data-fid="${fid}" style="justify-content:space-between; text-align:left; gap:12px; padding:11px 13px; display:flex"><span style="flex:1; min-width:0">${label}</span>${right||''}</button>`;
   openModal(`<h1 style="margin:.1em 0 .3em; font-size:20px">${T("td.pickT")}</h1>
     <p class="small muted" style="margin:0 0 14px">${T("td.pickLead")}</p>
-    <div style="display:grid; gap:8px">${row("",T("td.pickAuto"))}${cands.map(c=>row(c.id,focusRule(c),`<span class="mono neg" style="flex:none">${money1(-c.cost)}</span>`)).join("")||`<div class="small muted">${T("td.pickNone")}</div>`}</div>
+    <div style="display:grid; gap:8px">${row("",T("td.pickAuto"))}${cands.map(c=>row(c.id,focusRule(c),`<span class="mono neg" style="flex:none">${money1(-c.cost)}</span>`)).join("")}${cands.length?"":`<div class="small muted">${T("td.pickNone")}</div>`}</div>
+    ${no.length?`<div class="small muted" style="margin-top:14px; font-weight:700">${T("td.pickNoT")}</div>${no.map(c=>`<div class="small muted" style="margin-top:6px; line-height:1.45">${focusRule(c)} <span class="faint">· ${why(c)}</span></div>`).join("")}`:""}
     <label class="small muted" style="display:block; margin-top:14px">${T("td.pickOwn")}</label>
     <input type="text" id="fcOwn" value="${esc(f.custom)}" style="width:100%; margin:4px 0 14px">
     <div class="rowflex" style="gap:10px"><button class="btn calm" id="fcSave" style="flex:1; justify-content:center; padding:11px">${T("af.save")}</button><button class="btn ghost" id="fcCancel" style="justify-content:center; padding:11px">${T("cancel")}</button></div>`);
@@ -3261,7 +3268,7 @@ function renderToday(){
   const go=t=>{ tab=t; groupLast[groupOf(t).lab]=t; render(); };
   $("#tdFull").onclick=()=>{ jExpanded=last.date; go("journal"); };
   $("#tdStats").onclick=()=>go("overview");
-  $("#tdFocus").onclick=()=>showFocusPicker(focus.cands);
+  $("#tdFocus").onclick=()=>showFocusPicker(focus.all);
   const ib=$("#tdImport"); if(ib) ib.onclick=()=>$("#importBtn").click();
   let feel="";
   v.querySelectorAll("[data-feel]").forEach(b=>b.onclick=()=>{ feel=b.dataset.feel; v.querySelectorAll("[data-feel]").forEach(x=>x.setAttribute("aria-pressed",x===b)); });
