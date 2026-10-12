@@ -3318,6 +3318,10 @@ function renderToday(){
   const esc=s=>String(s||'').replace(/</g,'&lt;'), li=(items,c)=>items.slice(0,2).map(x=>`<li class="${c}">${mdb(x)}</li>`).join("");
   const lang=(DB.settings&&DB.settings.lang)||"en";
   const dateLab=new Date().toLocaleDateString(lang==="es"?"es":"en",{weekday:"long",month:"long",day:"numeric"});
+  // Only where the import can tell: how many of the day's positions had a stop resting, and what the worst one without cost.
+  let stopHtml="";
+  { const ks=last.arr.filter(t=>t.stop===0||t.stop===1), no=ks.filter(t=>!t.stop), w=no.reduce((m,t)=>Math.min(m,t.pnl),0);
+    if(ks.length) stopHtml=`<div class="td-weak">${mdb(fmt(T(ks.length===1?"td.stop1":"td.stopN"),{k:ks.length-no.length,n:ks.length}))}${w<-1?" "+mdb(fmt(T("td.stopWorst"),{v:money1(w)})):""}</div>`; }
   // Do not scold for trading on after a losing start when this trader's own replay says stopping would have cost them.
   { const lr=focus.all.find(c=>c.id==="lossrun"); if(lr && lr.cost<-1) r.bad=r.bad.filter(x=>x!==r.stubTxt); }
   const lastHtml=`<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px"><div class="eyebrow">${fmt(T("td.last"),{d:last.date})}</div><button class="btn small ghost" id="tdFull">${T("td.fullDay")}</button></div>
@@ -3326,10 +3330,6 @@ function renderToday(){
       ${r.good.length?`<div class="sec"><div class="drlab">${T("td.well")}</div><ul>${li(r.good,"good")}</ul></div>`:""}
       ${r.bad.length?`<div class="sec"><div class="drlab">${T("td.cost")}</div><ul>${li(r.bad,"bad")}</ul></div><div class="drlesson ${r.win?"win":""}">${mdb(r.lesson)}</div>`:`<div class="drlesson win">${T("td.noBad")}</div>`}
     </div>${stopHtml}</div>`;
-  // Only where the import can tell: how many of the day's positions had a stop resting, and what the worst one without cost.
-  let stopHtml="";
-  { const ks=last.arr.filter(t=>t.stop===0||t.stop===1), no=ks.filter(t=>!t.stop), w=no.reduce((m,t)=>Math.min(m,t.pnl),0);
-    if(ks.length) stopHtml=`<div class="td-weak">${mdb(fmt(T(ks.length===1?"td.stop1":"td.stopN"),{k:ks.length-no.length,n:ks.length}))}${w<-1?" "+mdb(fmt(T("td.stopWorst"),{v:money1(w)})):""}</div>`; }
   const recent=days.slice(-10);
   // The last one-liner the trader wrote when closing a day: reading your own words back is the hook to return.
   const told=Object.keys(DB.checkins||{}).sort().reverse().map(d=>((DB.checkins[d]||{}).close||{}).note).find(Boolean);
