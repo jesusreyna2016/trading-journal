@@ -254,13 +254,13 @@
   .cal{display:grid; grid-template-columns:repeat(7,1fr); gap:6px}
   .cal .cell{min-height:58px; border:1px solid var(--hair); border-radius:8px; padding:5px 6px; position:relative; display:flex; flex-direction:column; gap:2px}
   .cal .cell.empty{border:0; background:transparent}
-  .cal .cell .dn{font-size:10px; color:var(--faint); font-family:var(--mono)}
+  .cal .cell .dn{font-size:12px; font-weight:700; color:var(--muted); font-family:var(--mono)}
   .cal .cell .dv{font-family:var(--mono); font-weight:700; font-size:13px}
   .cal .cell.gpos{background:rgba(38,194,129,.12)} .cal .cell.gpos .dv{color:var(--pos)}
   .cal .cell.gneg{background:rgba(242,73,92,.12)} .cal .cell.gneg .dv{color:var(--neg)}
   .cal .cell .dot{position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%}
   .cal .cell .dot.ok{background:var(--pos)} .cal .cell .dot.no{background:var(--neg)}
-  .cal .cell .tiltmark{position:absolute; top:5px; left:6px; font-size:9px; line-height:1}
+  .cal .cell .tiltmark{position:absolute; top:5px; right:18px; font-size:9px; line-height:1}
   .cal .cell{min-height:64px}
   .cal .cell .cst{font-size:9px; color:var(--muted); font-family:var(--mono)}
   .calwrap{display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap}
