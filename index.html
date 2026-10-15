@@ -2539,13 +2539,14 @@ function drawBars(c,days,H){
 // Draws a time-scaled intraday equity curve with a per-trade P&L bar row underneath, directly on an
 // already-set-up 2D context at logical offset (ox,oy) and size WxH. `arr` must be sorted by time.
 // Falls back to even index spacing (no hour ticks) when any trade is missing topen (older/no-timing imports).
-function drawEquityBars(x,ox,oy,W,H,arr){
+// noBars: curve only, using the full height (Today keeps it clean; the day view keeps the per-trade bars).
+function drawEquityBars(x,ox,oy,W,H,arr,noBars){
   const hasTime=arr.length>0 && arr.every(t=>t.topen!=null);
   let cum=0; const pts=[{y:0, ms:hasTime?arr[0].topen:0}];
   arr.forEach(t=>{ cum+=t.pnl; pts.push({y:cum, ms:hasTime?(t.tclose!=null?t.tclose:t.topen):null}); });
   const t0=hasTime?arr[0].topen:0, t1=hasTime?(arr[arr.length-1].tclose!=null?arr[arr.length-1].tclose:arr[arr.length-1].topen):Math.max(1,arr.length);
   const span=Math.max(1,t1-t0), pad=6, tickH=hasTime?15:0;
-  const curveH=Math.round((H-tickH)*0.66), barsY=oy+curveH+6, barsH=Math.max(0,H-tickH-curveH-6);
+  const curveH=noBars?H-tickH-4:Math.round((H-tickH)*0.66), barsY=oy+curveH+6, barsH=noBars?0:Math.max(0,H-tickH-curveH-6);
   const X=i=>{ if(!hasTime) return ox+pad+(pts.length>1? i*(W-2*pad)/(pts.length-1):(W/2));
     return ox+pad+((pts[i].ms-t0)/span)*(W-2*pad); };
   const ys=pts.map(p=>p.y); let mn=Math.min(0,...ys), mx=Math.max(0,...ys); if(mn===mx)mx=mn+1;
@@ -3473,7 +3474,7 @@ function renderToday(){
   </div>`;
   const go=t=>{ tab=t; groupLast[groupOf(t).lab]=t; render(); };
   $("#tdFull").onclick=()=>{ jExpanded=last.date; go("journal"); };
-  { const host=$("#tdCurve"); if(host) host.appendChild(dayMiniCurve(last.arr.slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1))); }
+  { const host=$("#tdCurve"); if(host) host.appendChild(dayMiniCurve(last.arr.slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1),true)); }
   const sr=$("#tdSetRules"); if(sr) sr.onclick=()=>accountForm(lastAcct,()=>renderToday());
   $("#tdStats").onclick=()=>go("overview");
   $("#tdFocus").onclick=()=>showFocusPicker(focus.all);
@@ -3658,8 +3659,8 @@ function dayTradeRows(arr){
     </tr>`;}).join("");
 }
 function kpiSmall(lab,val,kl,sub){ return `<div style="padding:8px 10px 8px 0"><div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700">${lab}</div><div class="num ${kl||''}" style="font-size:17px;font-weight:700;margin-top:2px">${val}</div>${sub?`<div class="muted" style="font-size:11px">${sub}</div>`:''}</div>`; }
-function dayMiniCurve(arr){ const c=document.createElement("canvas"); wrapCanvas(c); const H=130;
-  const draw=()=>{ const {x,w}=setup(c,H); drawEquityBars(x,0,0,w,H,arr); };
+function dayMiniCurve(arr,noBars){ const c=document.createElement("canvas"); wrapCanvas(c); const H=noBars?115:130;
+  const draw=()=>{ const {x,w}=setup(c,H); drawEquityBars(x,0,0,w,H,arr,noBars); };
   requestAnimationFrame(draw); c._draw=draw; return c; }
 // Biggest win/loss, longest win streak, peak-to-trough drawdown, long/short split and session span for one day's trades.
 function dayComputeExtra(arr){
