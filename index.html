@@ -1314,6 +1314,15 @@ function migrateCommissions(s){
 // got silently dropped as a "duplicate" on import (see tid). Existing tags (notes/emotion/setup/etc) were keyed
 // by that old id, so remap them once to the new id so nothing already tagged goes orphaned. Gated on a settings
 // flag so it runs exactly once, ever, even across cloud sync / local cache / backup restores.
+// Trades imported from MyFundedPerpetuals before mfpSym existed carry the provider code (XYZ100). Rename them and
+// move their tags (notes, checklist, mistakes) to the new trade key, which includes the symbol. Idempotent.
+function migrateMfpSymbols(s){
+  // same key as tid(), written out because tid is a const declared after load() runs
+  const key=t=>t.date+"|"+t.time+"|"+t.sym+"|"+t.entry+"|"+t.exit+"|"+(t.qty||1);
+  (s.trades||[]).forEach(t=>{ const to=mfpSym(t.sym); if(!to || !String(t.id||"").startsWith("mfp-")) return;
+    const ok=key(t); t.sym=to; const nk=key(t);
+    if(s.tags && s.tags[ok] && !s.tags[nk]){ s.tags[nk]=s.tags[ok]; delete s.tags[ok]; } });
+}
 function migrateTidV2(s){
   if(s.settings && s.settings.tidV2) return;
   (s.trades||[]).forEach(t=>{
@@ -1391,6 +1400,7 @@ function normalizeDB(s){
   migrateFirmNames(s);
   migrateFirmCase(s);
   migrateTradovateTZ(s);
+  migrateMfpSymbols(s);
   return s;
 }
 function load(){ let s=null; try{s=JSON.parse(localStorage.getItem(KEY));}catch(e){} return normalizeDB(s); }
@@ -1706,6 +1716,10 @@ function parseVest(lines){
 // A position still open at export time is skipped and lands on the next import.
 // The export also lists stop orders that never filled, so each trade records whether a stop was resting at any
 // point while it was open (stop: 1 or 0). Formats that cannot tell leave the field undefined.
+// MyFundedPerpetuals' price provider names markets by its own codes; show the name the trader knows. The trade id
+// keeps the raw code so re-importing an old file still matches trades imported before the rename.
+// A function, not a const: migrateMfpSymbols runs from load() before later top-level consts are initialized.
+function mfpSym(code){ return ({XYZ100:"NAS100"})[code]||null; }
 function parseMFP(lines){
   const H=csvSplitQ(lines[0]).map(s=>s.trim().toLowerCase()), ix=n=>H.indexOf(n);
   const iT=ix("completed at (utc)"), iSym=ix("coin"), iSide=ix("side"), iQty=ix("size"), iPx=ix("fill price"), iFee=ix("fee (usd)"),
@@ -1730,7 +1744,7 @@ function parseMFP(lines){
       const ss=stops.filter(x=>x.sym===sym && x.sg===-cur.sg && x.t0<=cur.tclose && x.t1>cur.topen && isFinite(x.px)).sort((a,b)=>a.t0-b.t0);
       const eps=entry*0.00002, widen=ss.some((x,i)=>i>0 && cur.sg*(ss[i-1].px-x.px)>eps)?1:0;
       const risk=ss.reduce((m,x)=>Math.max(m,cur.sg*(entry-x.px)*cur.qO),0);
-      out.push({id:"mfp-"+sym+"-"+cur.topen, date:d.toISOString().slice(0,10), time:d.toISOString().slice(11,19), sym,
+      out.push({id:"mfp-"+sym+"-"+cur.topen, date:d.toISOString().slice(0,10), time:d.toISOString().slice(11,19), sym:mfpSym(sym)||sym,
         side:cur.sg>0?"long":"short", qty:+cur.qO.toFixed(4), status:pnl-cur.comm>0?"Win":"Loss", entry:+entry.toFixed(2), exit:+exit.toFixed(2),
         pnl:+pnl.toFixed(2), pts:+(cur.sg*(exit-entry)).toFixed(2), comm:+cur.comm.toFixed(2), dur:fmtDur(cur.tclose-cur.topen), topen:cur.topen, tclose:cur.tclose,
         stop:stops.some(x=>x.sym===sym && x.sg===-cur.sg && x.t0<=cur.tclose && x.t1>cur.topen)?1:0,
