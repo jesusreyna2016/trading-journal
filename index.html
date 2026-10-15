@@ -3389,8 +3389,9 @@ function renderToday(){
   const chk=contractChecks(last.arr), chkBy={}; chk.forEach(c=>{ chkBy[c.k]=chkBy[c.k]?{...chkBy[c.k],ok:chkBy[c.k].ok&&c.ok}:c; });
   const chkOrder=["risk","notional","dayStop","maxTrades","adds","widen"].filter(k=>chkBy[k]);
   const lastAcct=last.arr.map(t=>t.acct).find(id=>id&&DB.accounts[id]);
-  const rulesHtml=chkOrder.length?`<div class="td-rules">${chkOrder.map(k=>{ const c=chkBy[k]; return `<span class="td-rc ${c.ok?"ok":"no"}">${c.ok?"✓":"✕"} ${fmt(T("ctc."+k),{v:c.k==="maxTrades"?c.lim:money(c.lim)})}</span>`; }).join("")}</div>`
-    :(lastAcct?`<div class="td-weak rowflex" style="justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${T("td.rulesNone")}</span><button class="btn small" id="tdSetRules">${T("td.rulesSet")}</button></div>`:"");
+  // The stop-widened chip needs no setup, so it alone does not count as the account having rules.
+  const rulesHtml=(chkOrder.length?`<div class="td-rules">${chkOrder.map(k=>{ const c=chkBy[k]; return `<span class="td-rc ${c.ok?"ok":"no"}">${c.ok?"✓":"✕"} ${fmt(T("ctc."+k),{v:c.k==="maxTrades"?c.lim:money(c.lim)})}</span>`; }).join("")}</div>`:"")
+    +(lastAcct&&!chkOrder.some(k=>k!=="widen")?`<div class="td-weak rowflex" style="justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${T("td.rulesNone")}</span><button class="btn small" id="tdSetRules">${T("td.rulesSet")}</button></div>`:"");
   const ddHtml=[...new Set(last.arr.map(t=>t.acct))].filter(id=>id&&DB.accounts[id]&&DB.accounts[id].ddLimit>0).slice(0,2).map(id=>{
     const st=acctStats(id), lim=st.a.ddLimit, b=Math.max(0,st.buffer), pct=b/lim*100, col=pct<30?"var(--neg)":pct<60?"var(--wait)":"var(--pos)";
     return `<div class="td-dd"><div class="rowflex small" style="justify-content:space-between;gap:10px"><span class="muted">${fmt(T("td.ddLab"),{name:esc(st.a.name)})} · ${st.ddLabel}</span><b style="color:${col}">${st.breached?T("td.ddBreached"):fmt(T("td.ddLeft"),{b:money(b),l:money(lim)})}</b></div>${riskBar(pct,col)}</div>`; }).join("");
