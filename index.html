@@ -945,7 +945,9 @@ const I18N={
   "pb.rulesLabel":"Play rules (one per line):","pb.rulesPh":"E.g.:&#10;Bullish bias&#10;Price at VAH&#10;Rejection candle&#10;Wait for ▲ signal","pb.saveRules":"Save rules","pb.empty":"No plays yet. Tag your trades' setup in the Journal, or create a new play.",
   "pb.promptName":"Play name:","pb.created":"Play created. You can now tag it in the Journal.","pb.saved":"Rules saved.",
   "grp.today":"Today","grp.more":"More","tab.today":"Today","tt.grp.today":"What cost you money last session and the one thing to do differently.","tt.grp.more":"Leaks, reports, playbooks, routine, risk, rules, accounts and finances.",
-  "td.eyebrow":"Today","td.streak":"{n} days logged in a row","td.streak1":"1 day logged","td.streak0":"Log today to start a streak","td.last":"Last session · {d}","td.fullDay":"See the full day","td.well":"What you did well","td.cost":"What cost you","td.noBad":"Nothing broke your process this session. This is the day to repeat.",
+  "td.eyebrow":"Today","td.streak":"{n} days logged in a row","td.streak1":"1 day logged","td.streak0":"Log today to start a streak","td.last":"Last session · {d}","td.fullDay":"See the full day","td.well":"What you did well","td.cost":"What cost you","ct.risk":"Loss past your per-trade risk: **{p}** against a {lim} limit ({x}x).","ct.notional":"Size past your cap: **{v}** notional against {lim}.","ct.dayStop":"Day closed at **{net}**, past your {lim} daily stop.","ct.maxTrades":"**{n} trades**, over your limit of {lim}.","ct.adds":"Added to an open position ({n}), against your no-adding rule: {p}.","ct.widen":"Moved the stop **further from entry** on {n} position(s): {p}. A stop only moves in your favor.",
+  "af.rulesTitle":"Your rules","af.rulesHint":"Optional, 0 = off. Any day that breaks one is marked as not disciplined, even if it was green.","af.maxRisk":"Max risk per trade ($)","af.maxNotional":"Max notional ($)","af.dayStop":"Personal daily stop ($)","af.maxTrades":"Max trades per day","af.noAdds":"Never add to an open position",
+  "td.noBad":"Nothing broke your process this session. This is the day to repeat.",
   "td.weak":"Weak signal: that is small next to the {gl} you lost in those same sessions. Treat it as a hint, not a rule yet.","td.fixedT":"Habits you fixed","td.fixedLine":"Last slip: {d}. It was costing you about **{v}**.","td.fixedToast":"🏆 Habit fixed: {r}","td.preT":"Before you trade","td.preLead":"How are you arriving? One tap. Your focus and your own note are right above.","td.headsUp":"Heads up today:","td.remind":"🔔 Daily reminder","td.remAsk":"What time does your session end? (24h, like 16:00). You get a calendar file with a weekday reminder to close your day.","td.icsTitle":"Close your trading day (30 seconds)","td.remBad":"Use the format HH:MM","td.remDone":"Calendar file downloaded. Open it to add the reminder.","td.stopN":"Stop order placed on **{k} of {n}** positions.","td.stop1":"Stop order placed on **{k} of {n}** position.","td.stopWorst":"The largest loss without one was **{v}**.","td.focusT":"Your one focus","td.change":"Change","td.keptLab":"of your last {n} sessions kept it","td.noLeak":"No costly pattern in your recent sessions. Keep logging and the journal will name the next one.","td.focusCustom":"Your own focus. Pick an automatic one to track it with a number.","td.toldSelf":"You told yourself:",
   "td.rule.sizeup":"Same size after a loss. No sizing up to win it back.","td.rule.lossrun":"Two losses in a row, done for the session.","td.rule.overtrade":"Stop before trade #{ot}.","td.rule.giveback":"Once you are up, protect half of it.","td.contract":"contract","td.contracts":"contracts","td.rule.bigsize":"Keep {sym} at {cap} or less. Your bigger trades are the ones losing.",
   "td.why.sizeup":"At your previous size, those trades would have left you about **{v}** better off. It happened in {n} of your last {m} sessions.","td.why.lossrun":"Stopping after two straight losses would have left you about **{v}** better off. You traded on in {n} of your last {m} sessions.","td.why.overtrade":"Stopping there would have left you about **{v}** better off. You went past it in {n} of your last {m} sessions.","td.why.giveback":"Stopping once you had given back half of your peak would have left you about **{v}** better off. It happened in {n} of your last {m} sessions.","td.why.bigsize":"At that size, your larger trades would have left you about **{v}** better off. You went above it in {n} of your last {m} sessions.",
@@ -1109,7 +1111,9 @@ const I18N={
   "pb.rulesLabel":"Reglas de la jugada (una por línea):","pb.rulesPh":"Ej:&#10;Sesgo alcista (nube verde)&#10;Precio en VAH&#10;Vela de rechazo&#10;Esperar señal ▲","pb.saveRules":"Guardar reglas","pb.empty":"Aún no hay jugadas. Etiqueta el setup de tus trades en el Diario, o crea una jugada nueva.",
   "pb.promptName":"Nombre de la jugada:","pb.created":"Jugada creada. Ya puedes etiquetarla en el Diario.","pb.saved":"Reglas guardadas.",
   "grp.today":"Hoy","grp.more":"Más","tab.today":"Hoy","tt.grp.today":"Qué te costó dinero la última sesión y la única cosa que hacer distinto.","tt.grp.more":"Fugas, reportes, playbooks, rutina, riesgo, reglas, cuentas y finanzas.",
-  "td.eyebrow":"Hoy","td.streak":"{n} días seguidos registrando","td.streak1":"1 día registrado","td.streak0":"Registra hoy y empieza una racha","td.last":"Última sesión · {d}","td.fullDay":"Ver el día completo","td.well":"Lo que hiciste bien","td.cost":"Lo que te costó","td.noBad":"Nada rompió tu proceso en esta sesión. Este es el día que hay que repetir.",
+  "td.eyebrow":"Hoy","td.streak":"{n} días seguidos registrando","td.streak1":"1 día registrado","td.streak0":"Registra hoy y empieza una racha","td.last":"Última sesión · {d}","td.fullDay":"Ver el día completo","td.well":"Lo que hiciste bien","td.cost":"Lo que te costó","ct.risk":"Pérdida por encima de tu riesgo por trade: **{p}** contra un límite de {lim} ({x}x).","ct.notional":"Tamaño por encima de tu tope: **{v}** de notional contra {lim}.","ct.dayStop":"Cerraste el día en **{net}**, pasado tu stop diario de {lim}.","ct.maxTrades":"**{n} trades**, por encima de tu límite de {lim}.","ct.adds":"Agregaste a una posición abierta ({n}), contra tu regla de no agregar: {p}.","ct.widen":"Moviste el stop **más lejos de la entrada** en {n} posición(es): {p}. El stop solo se mueve a tu favor.",
+  "af.rulesTitle":"Tus reglas","af.rulesHint":"Opcional, 0 = apagada. Cualquier día que rompa una queda como no disciplinado, aunque haya sido verde.","af.maxRisk":"Riesgo máx. por trade ($)","af.maxNotional":"Notional máx. ($)","af.dayStop":"Stop diario personal ($)","af.maxTrades":"Máx. trades por día","af.noAdds":"Nunca agregar a una posición abierta",
+  "td.noBad":"Nada rompió tu proceso en esta sesión. Este es el día que hay que repetir.",
   "td.weak":"Señal débil: es poco frente a los {gl} que perdiste en esas mismas sesiones. Tómalo como pista, todavía no como regla.","td.fixedT":"Hábitos que ya corregiste","td.fixedLine":"Último desliz: {d}. Te costaba unos **{v}**.","td.fixedToast":"🏆 Hábito corregido: {r}","td.preT":"Antes de operar","td.preLead":"¿Cómo llegas? Un toque. Tu foco y tu propia nota están justo arriba.","td.headsUp":"Ojo hoy:","td.remind":"🔔 Recordatorio diario","td.remAsk":"¿A qué hora termina tu sesión? (24h, por ejemplo 16:00). Recibes un archivo de calendario con un recordatorio de lunes a viernes para cerrar tu día.","td.icsTitle":"Cierra tu día de trading (30 segundos)","td.remBad":"Usa el formato HH:MM","td.remDone":"Archivo de calendario descargado. Ábrelo para añadir el recordatorio.","td.stopN":"Orden stop puesta en **{k} de {n}** posiciones.","td.stop1":"Orden stop puesta en **{k} de {n}** posición.","td.stopWorst":"La mayor pérdida sin stop fue **{v}**.","td.focusT":"Tu único foco","td.change":"Cambiar","td.keptLab":"de tus últimas {n} sesiones lo cumpliste","td.noLeak":"No hay un patrón costoso en tus sesiones recientes. Sigue registrando y el journal nombrará el siguiente.","td.focusCustom":"Foco propio. Elige uno automático para seguirlo con un número.","td.toldSelf":"Te dijiste:",
   "td.rule.sizeup":"Mismo tamaño tras una pérdida. Nada de subir para recuperar.","td.rule.lossrun":"Dos pérdidas seguidas y se acaba la sesión.","td.rule.overtrade":"Para antes del trade #{ot}.","td.rule.giveback":"Cuando vayas arriba, protege la mitad.","td.contract":"contrato","td.contracts":"contratos","td.rule.bigsize":"Mantén {sym} en {cap} o menos. Tus trades más grandes son los que pierden.",
   "td.why.sizeup":"Con el tamaño anterior, esos trades te habrían dejado unos **{v}** mejor. Pasó en {n} de tus últimas {m} sesiones.","td.why.lossrun":"Parar tras dos pérdidas seguidas te habría dejado unos **{v}** mejor. Seguiste operando en {n} de tus últimas {m} sesiones.","td.why.overtrade":"Parar ahí te habría dejado unos **{v}** mejor. Lo pasaste en {n} de tus últimas {m} sesiones.","td.why.giveback":"Parar al devolver la mitad de tu pico te habría dejado unos **{v}** mejor. Pasó en {n} de tus últimas {m} sesiones.","td.why.bigsize":"Con ese tamaño, tus trades más grandes te habrían dejado unos **{v}** mejor. Lo pasaste en {n} de tus últimas {m} sesiones.",
@@ -1688,13 +1692,13 @@ function parseVest(lines){
 function parseMFP(lines){
   const H=csvSplitQ(lines[0]).map(s=>s.trim().toLowerCase()), ix=n=>H.indexOf(n);
   const iT=ix("completed at (utc)"), iSym=ix("coin"), iSide=ix("side"), iQty=ix("size"), iPx=ix("fill price"), iFee=ix("fee (usd)"),
-        iG=ix("gross realized p&l (usd)"), iSt=ix("status"), iRo=ix("reduce only"), iReq=ix("requested at (utc)"), iTy=ix("order type");
+        iG=ix("gross realized p&l (usd)"), iSt=ix("status"), iRo=ix("reduce only"), iReq=ix("requested at (utc)"), iTy=ix("order type"), iRqPx=ix("requested price");
   const byC={}, stops=[];
   for(let i=1;i<lines.length;i++){
     const c=csvSplitQ(lines[i]), st=String(c[iSt]).trim().toLowerCase();
     const sym=String(c[iSym]||"").trim().toUpperCase().replace(/-USD.*$/,"").replace(/-PERP$/,""); if(!sym) continue;
     const t=Date.parse(String(c[iT]).trim()), sg=String(c[iSide]).trim().toLowerCase().startsWith("b")?1:-1;
-    if(/stop/i.test(c[iTy]||"") && st!=="rejected"){ const t0=Date.parse(String(c[iReq]).trim())||t; if(t0) stops.push({sym,sg,t0,t1:t||t0}); }
+    if(/stop/i.test(c[iTy]||"") && st!=="rejected"){ const t0=Date.parse(String(c[iReq]).trim())||t; if(t0) stops.push({sym,sg,t0,t1:t||t0,px:parseFloat(c[iRqPx])}); }
     if(st!=="filled") continue;
     const q=parseFloat(c[iQty])||0, px=parseFloat(c[iPx])||0; if(!q||!px||!t) continue;
     (byC[sym]=byC[sym]||[]).push({sg, q, px, t, n:i,
@@ -1704,10 +1708,16 @@ function parseMFP(lines){
   Object.keys(byC).forEach(sym=>{
     let cur=null;
     const emit=()=>{ const entry=cur.vO/cur.qO, exit=cur.vC/cur.qC, pnl=cur.hasG?cur.g:cur.sg*cur.qO*(exit-entry), d=new Date(cur.topen);
+      // Stops that rested while this position was open, oldest first: the farthest one on the losing side is the
+      // risk actually taken at full size, and a later stop further from entry than the one before is a widened stop.
+      const ss=stops.filter(x=>x.sym===sym && x.sg===-cur.sg && x.t0<=cur.tclose && x.t1>cur.topen && isFinite(x.px)).sort((a,b)=>a.t0-b.t0);
+      const eps=entry*0.00002, widen=ss.some((x,i)=>i>0 && cur.sg*(ss[i-1].px-x.px)>eps)?1:0;
+      const risk=ss.reduce((m,x)=>Math.max(m,cur.sg*(entry-x.px)*cur.qO),0);
       out.push({id:"mfp-"+sym+"-"+cur.topen, date:d.toISOString().slice(0,10), time:d.toISOString().slice(11,19), sym,
         side:cur.sg>0?"long":"short", qty:+cur.qO.toFixed(4), status:pnl-cur.comm>0?"Win":"Loss", entry:+entry.toFixed(2), exit:+exit.toFixed(2),
         pnl:+pnl.toFixed(2), pts:+(cur.sg*(exit-entry)).toFixed(2), comm:+cur.comm.toFixed(2), dur:fmtDur(cur.tclose-cur.topen), topen:cur.topen, tclose:cur.tclose,
-        stop:stops.some(x=>x.sym===sym && x.sg===-cur.sg && x.t0<=cur.tclose && x.t1>cur.topen)?1:0});
+        stop:stops.some(x=>x.sym===sym && x.sg===-cur.sg && x.t0<=cur.tclose && x.t1>cur.topen)?1:0,
+        adds:cur.nOpen-1, notional:Math.round(cur.qO*entry), risk:ss.length?Math.round(risk):undefined, widen});
       cur=null; };
     // same-millisecond orders: the file is newest first, so the later line happened earlier
     byC[sym].sort((a,b)=>a.t-b.t||b.n-a.n).forEach(x=>{
@@ -1720,8 +1730,8 @@ function parseMFP(lines){
       }
       // a reduce-only order can never open: with nothing open it belongs to a position older than the export
       if(q<=x.q*0.001 || x.ro) return;
-      if(!cur) cur={sg:x.sg,qO:0,vO:0,qC:0,vC:0,g:0,hasG:false,comm:0,left:0,topen:x.t,tclose:x.t};
-      cur.qO+=q; cur.vO+=q*x.px; cur.left+=q; cur.comm+=x.fee*q/x.q;
+      if(!cur) cur={sg:x.sg,qO:0,vO:0,qC:0,vC:0,g:0,hasG:false,comm:0,left:0,topen:x.t,tclose:x.t,nOpen:0};
+      cur.qO+=q; cur.vO+=q*x.px; cur.left+=q; cur.comm+=x.fee*q/x.q; cur.nOpen++;
     });
   });
   return out.sort((a,b)=>a.topen-b.topen);
@@ -1855,6 +1865,11 @@ function accountForm(id, onDone){
       <div style="flex:1"><label class="small muted">${T("af.phase")}</label><select id="afPhase" style="width:100%; margin-top:4px; padding:9px 11px"><option value="eval"${(a.phase||'eval')==='eval'?' selected':''}>${T("phase.eval")}</option><option value="funded"${a.phase==='funded'?' selected':''}>${T("phase.funded")}</option></select></div>
       <div style="flex:1"><label class="small muted">${T("af.status")}</label><select id="afStatus" style="width:100%; margin-top:4px; padding:9px 11px"><option value="active"${(a.status||'active')==='active'?' selected':''}>${T("status.active")}</option><option value="passed"${a.status==='passed'?' selected':''}>${T("status.passed")}</option><option value="lost"${a.status==='lost'?' selected':''}>${T("status.lost")}</option></select></div>
     </div>
+    <div class="small muted" style="margin:16px 0 2px; font-weight:700">${T("af.rulesTitle")}</div>
+    <div class="small faint" style="margin-bottom:6px">${T("af.rulesHint")}</div>
+    <div class="rowflex" style="gap:10px; flex-wrap:wrap"><div style="flex:1; min-width:130px"><label class="small muted">${T("af.maxRisk")}</label><input type="number" id="afRisk" value="${a.maxRisk||0}" step="5" min="0" style="width:100%; margin-top:4px; padding:9px 11px"></div><div style="flex:1; min-width:130px"><label class="small muted">${T("af.maxNotional")}</label><input type="number" id="afNotional" value="${a.maxNotional||0}" step="1000" min="0" style="width:100%; margin-top:4px; padding:9px 11px"></div></div>
+    <div class="rowflex" style="gap:10px; flex-wrap:wrap; margin-top:10px"><div style="flex:1; min-width:130px"><label class="small muted">${T("af.dayStop")}</label><input type="number" id="afDayStop" value="${a.dayStop||0}" step="10" min="0" style="width:100%; margin-top:4px; padding:9px 11px"></div><div style="flex:1; min-width:130px"><label class="small muted">${T("af.maxTrades")}</label><input type="number" id="afMaxTr" value="${a.maxTrades||0}" step="1" min="0" style="width:100%; margin-top:4px; padding:9px 11px"></div></div>
+    <label class="rowflex small" style="gap:8px; margin-top:10px; align-items:center; cursor:pointer"><input type="checkbox" id="afNoAdds"${a.noAdds?' checked':''}> ${T("af.noAdds")}</label>
     <div class="rowflex" style="gap:10px; margin-top:18px">
       <button class="btn calm" id="afSave" style="flex:1; justify-content:center; padding:11px">${editing?T("af.save"):T("af.create")}</button>
       <button class="btn ghost" id="afCancel" style="justify-content:center; padding:11px">${T("cancel")}</button>
@@ -1863,7 +1878,8 @@ function accountForm(id, onDone){
   $("#afFirm").oninput=e=>{ $("#afFirmSizes").textContent=propFirmHint(e.target.value); };
   $("#afSave").onclick=()=>{
     const nm=($("#afName").value||"").trim(); if(!nm){toast(T("af.needName"));return;}
-    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, dailyLossLimit:+$("#afDLL").value||0, phase:$("#afPhase").value, status:$("#afStatus").value };
+    const data={ name:nm, firm:($("#afFirm").value||"").trim(), startBal:+$("#afBal").value||0, target:+$("#afTarget").value||0, ddType:$("#afDdType").value, ddLimit:+$("#afDdLimit").value||0, dailyLossLimit:+$("#afDLL").value||0, phase:$("#afPhase").value, status:$("#afStatus").value,
+      maxRisk:+$("#afRisk").value||0, maxNotional:+$("#afNotional").value||0, dayStop:+$("#afDayStop").value||0, maxTrades:+$("#afMaxTr").value||0, noAdds:$("#afNoAdds").checked };
     const prevStatus=editing?(a.status||"active"):"active";
     let newId=id;
     if(editing){ Object.assign(DB.accounts[id],data); }
@@ -1941,7 +1957,7 @@ function importText(txt, acct){
   });
   // Dedup: prefer the broker's unique Id when a row carries one, so identical-second fills (a revenge
   // burst) are never merged into one. tid() stays the fallback for id-less formats and keeps tag stability.
-  const mergeTiming=(ex,src)=>["topen","tclose","dur","stop"].forEach(f=>{ if(ex[f]===undefined && src[f]!==undefined) ex[f]=src[f]; });
+  const mergeTiming=(ex,src)=>["topen","tclose","dur","stop","adds","notional","risk","widen"].forEach(f=>{ if(ex[f]===undefined && src[f]!==undefined) ex[f]=src[f]; });
   const idMap={}, legMap={};
   DB.trades.forEach(t=>{ const a=(t.acct||""); if(t.id) idMap[a+"|id:"+t.id]=t; else { const k=a+"|"+tid(t); if(!legMap[k]) legMap[k]=t; } });
   let added=0; const addedRows=[];
@@ -2751,6 +2767,30 @@ function daySequence(arr){
 // "Lectura cruda del día" — a raw, plain-language read of one trading day: the arc, the mistakes, what
 // went right, and one lesson. Self-contained (own chronological sort + burst/recovery detection) so the
 // story it tells matches the day's real sequence, including Asia sessions that cross UTC midnight.
+// The trader's own rules for an account (all optional, 0 = off: max risk per trade, max notional, personal daily
+// stop, max trades, no adding) plus one habit the import can see directly: a stop moved further from entry.
+// One line per broken rule, for the day's "what cost you" list and for dayEval's disciplined flag.
+function contractBreaches(arr){
+  const out=[];
+  Object.values(byKey(arr||[],t=>t.acct||"")).forEach(g=>{
+    const a=DB.accounts[g[0].acct]||{}, net=g.reduce((s,t)=>s+t.pnl,0), sum=x=>money1(x.reduce((s,t)=>s+t.pnl,0));
+    const big=a.maxRisk>0?g.filter(t=>t.pnl< -a.maxRisk*1.15):[];
+    if(big.length){ const w=big.reduce((m,t)=>t.pnl<m.pnl?t:m); out.push(fmt(T("ct.risk"),{p:money1(w.pnl),lim:money(a.maxRisk),x:(Math.abs(w.pnl)/a.maxRisk).toFixed(1)})); }
+    const nt=a.maxNotional>0?g.filter(t=>t.notional>a.maxNotional):[];
+    if(nt.length) out.push(fmt(T("ct.notional"),{v:money(Math.max(...nt.map(t=>t.notional))),lim:money(a.maxNotional)}));
+    if(a.dayStop>0 && net< -a.dayStop) out.push(fmt(T("ct.dayStop"),{net:money1(net),lim:money(a.dayStop)}));
+    if(a.maxTrades>0 && g.length>a.maxTrades) out.push(fmt(T("ct.maxTrades"),{n:g.length,lim:a.maxTrades}));
+    const ad=a.noAdds?g.filter(t=>t.adds>0):[]; if(ad.length) out.push(fmt(T("ct.adds"),{n:ad.length,p:sum(ad)}));
+    const wd=g.filter(t=>t.widen); if(wd.length) out.push(fmt(T("ct.widen"),{n:wd.length,p:sum(wd)}));
+  });
+  return out;
+}
+// CT clock time the session ended: the latest open plus that trade's own holding time when the import has it.
+// topen/tclose are only ever compared to each other here, so it works whichever clock a parser stored them in.
+function ctEnd(arr){
+  const end=t=>(Date.parse(t.date+"T"+(t.time||"00:00:00")+"Z")||0)+((t.topen!=null&&t.tclose!=null)?Math.max(0,t.tclose-t.topen):0);
+  const d=new Date(Math.max(...arr.map(end))); return ctDisp({date:d.toISOString().slice(0,10),time:d.toISOString().slice(11,19)}).hm;
+}
 function dayNarrative(arr, raw){
   const a=(arr||[]).slice().sort((x,y)=>(x.date+x.time)<(y.date+y.time)?-1:1); const n=a.length; if(!n) return raw?null:"";
   const M=metrics(a);
@@ -2759,7 +2799,7 @@ function dayNarrative(arr, raw){
   const net=cum;
   const wins=a.filter(t=>t.pnl>0), losses=a.filter(t=>t.pnl<0);
   const bigWin=wins.length?wins.reduce((p,q)=>q.pnl>p.pnl?q:p):null;
-  const last=a[n-1], from=ctDisp(a[0]).hm, to=ctDisp(last).hm;
+  const last=a[n-1], from=ctDisp(a[0]).hm, to=ctEnd(a);
   let openLoss=0,openSum=0; for(const t of a){ if(t.pnl<0){openLoss++;openSum+=t.pnl;} else break; }
   const tEnt=t=>t.topen!=null?t.topen:(Date.parse((t.date||"")+"T"+(t.time||"00:00:00")+"Z")||0);
   const tDur=t=>(t.topen!=null&&t.tclose!=null)?t.tclose-t.topen:null;
@@ -2805,7 +2845,7 @@ function dayNarrative(arr, raw){
   // fills would never look big enough on its own.
   const winMomentSum=t=>a.filter(x=>x.pnl>0 && x.sym===t.sym && (x.acct||"")===(t.acct||"") && x.tclose!=null && t.tclose!=null && x.tclose===t.tclose).reduce((s,x)=>s+x.pnl,0);
   const bigFlip=bigWin?flipHits.find(t=>t.prevSame && winMomentSum(t.prevSame)>=Math.max(150,bigWin.pnl*0.5)):null;
-  const bad=[];
+  const bad=contractBreaches(a);
   if(burstRed) bad.push(fmt(T("dr.eRevenge"),{n:burst.length,sum:money1(Math.abs(burstSum))}));
   const stubTxt=openLoss>=3?fmt(T("dr.eStubborn"),{n:openLoss}):null; if(stubTxt) bad.push(stubTxt);
   if(finalBlow) bad.push(fmt(T("dr.eFinal"),{n:n,p:money1(last.pnl),what:T(recoveredMid?"dr.eFinalErased":"dr.eFinalGrew")}));
@@ -3854,8 +3894,9 @@ function dayEval(TR){
     const procFrac=graded.length?graded.reduce((s,t)=>s+procScore(tid(t)).score,0)/graded.length:null;
     const r1=revenge===0, r2=maxC<=2, r3=arr.length<ot, r4=!(peak>=50 && cum<peak*0.5);
     const r5=procFrac===null?null:procFrac>=0.75;
-    const disciplined=r1&&r2&&r3&&r4&&(r5!==false);
-    return {date:arr[0].tday,count:arr.length,net:cum,peak,maxC,revenge,r1,r2,r3,r4,r5,disciplined};
+    const r6=!contractBreaches(arr).length;
+    const disciplined=r1&&r2&&r3&&r4&&r6&&(r5!==false);
+    return {date:arr[0].tday,count:arr.length,net:cum,peak,maxC,revenge,r1,r2,r3,r4,r5,r6,disciplined};
   });
   const byDay={}; perAcct.forEach(row=>{ (byDay[row.date]=byDay[row.date]||[]).push(row); });
   return Object.keys(byDay).sort().map(d=>{
@@ -3868,7 +3909,7 @@ function dayEval(TR){
       peak:Math.max(...rows.map(r=>r.peak)),
       maxC:Math.max(...rows.map(r=>r.maxC)),
       revenge:rows.reduce((s,r)=>s+r.revenge,0),
-      r1:rows.every(r=>r.r1), r2:rows.every(r=>r.r2), r3:rows.every(r=>r.r3), r4:rows.every(r=>r.r4),
+      r1:rows.every(r=>r.r1), r2:rows.every(r=>r.r2), r3:rows.every(r=>r.r3), r4:rows.every(r=>r.r4), r6:rows.every(r=>r.r6),
       r5:graded5.length?graded5.every(r=>r.r5):null,
       // Each account judged on its own, then averaged: a day is clean when at least half of that
       // day's active accounts were individually disciplined, not only when every single one was.
