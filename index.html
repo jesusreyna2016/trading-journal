@@ -1887,8 +1887,6 @@ function maybeAskHideFromList(id,prevStatus,newStatus){
 function pickAccountModal(){
   return new Promise(resolve=>{
     if(acctSel.size===1){ const k=[...acctSel][0]; if(DB.accounts[k]) return resolve(k); }
-    // First import ever: go straight to the read. Accounts can be created and assigned later.
-    if(!DB.trades.length && !Object.keys(DB.accounts||{}).length) return resolve("");
     const ids=Object.keys(DB.accounts).filter(id=>!DB.accounts[id].hidden);
     let done=false, toCreate=false; const fin=(v)=>{ if(done)return; done=true; resolve(v); };
     const openCreate=()=>{ toCreate=true; closeModal(); accountForm(null,(nid)=>fin(nid||null)); };
