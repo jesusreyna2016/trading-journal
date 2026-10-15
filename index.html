@@ -179,6 +179,12 @@
   .td-num{font:700 34px/1 var(--mono); color:var(--calm)} .td-num span{font-size:17px; color:var(--muted)}
   .td-dots{display:flex; gap:5px; margin-top:6px} .td-dots span{width:11px; height:11px; border-radius:50%; background:var(--pos)} .td-dots span.no{background:transparent; border:1.5px solid var(--neg)}
   .today .chip{ opacity:1; color:var(--ink); border-color:var(--hair); padding:7px 13px; font-size:12.5px }
+  .td-rules{ display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 2px }
+  .td-rc{ font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; border:1px solid var(--hair); white-space:nowrap }
+  .td-rc.ok{ color:var(--pos); border-color:color-mix(in srgb, var(--pos) 40%, transparent) }
+  .td-rc.no{ color:var(--neg); border-color:color-mix(in srgb, var(--neg) 45%, transparent); background:color-mix(in srgb, var(--neg) 10%, transparent) }
+  .td-curve{ margin:10px 0 4px }
+  .td-dd{ margin:8px 0 12px }
   .td-weak{ margin-top:10px; padding:8px 11px; border-radius:8px; border:1px dashed var(--hair); font-size:12.5px; line-height:1.5; color:var(--muted) }
   .td-fx{ margin-top:10px } .td-fx b{ font-size:14px; color:var(--ink) }
   .td-told{margin-top:12px; padding:9px 12px; border-radius:8px; background:var(--surface2); font-size:13.5px; line-height:1.5; color:var(--ink)}
@@ -947,6 +953,9 @@ const I18N={
   "grp.today":"Today","grp.more":"More","tab.today":"Today","tt.grp.today":"What cost you money last session and the one thing to do differently.","tt.grp.more":"Leaks, reports, playbooks, routine, risk, rules, accounts and finances.",
   "td.eyebrow":"Today","td.streak":"{n} days logged in a row","td.streak1":"1 day logged","td.streak0":"Log today to start a streak","td.last":"Last session · {d}","td.fullDay":"See the full day","td.well":"What you did well","td.cost":"What cost you","ct.risk":"Loss past your per-trade risk: **{p}** against a {lim} limit ({x}x).","ct.notional":"Size past your cap: **{v}** notional against {lim}.","ct.dayStop":"Day closed at **{net}**, past your {lim} daily stop.","ct.maxTrades":"**{n} trades**, over your limit of {lim}.","ct.adds":"Added to an open position ({n}), against your no-adding rule: {p}.","ct.widen":"Moved the stop **further from entry** on {n} position(s): {p}. A stop only moves in your favor.",
   "af.rulesTitle":"Your rules","af.rulesHint":"Optional, 0 = off. Any day that breaks one is marked as not disciplined, even if it was green.","af.maxRisk":"Max risk per trade ($)","af.maxNotional":"Max notional ($)","af.dayStop":"Personal daily stop ($)","af.maxTrades":"Max trades per day","af.noAdds":"Never add to an open position",
+  "ctc.risk":"Risk ≤ {v}/trade","ctc.notional":"Notional ≤ {v}","ctc.dayStop":"Daily stop {v}","ctc.maxTrades":"≤ {v} trades","ctc.adds":"No adding","ctc.widen":"Stop never widened",
+  "ctf.risk":"Risk {v} or less per trade. Size from the stop, not from the feeling.","ctf.notional":"Keep every position under {v} notional.","ctf.dayStop":"At -{v} the day is over.","ctf.maxTrades":"Stop at {v} trades.","ctf.adds":"No adding to an open position.","ctf.widen":"The stop only moves in your favor. Never further away.",
+  "td.rulesNone":"This account has no rules yet, so nothing is checked against your plan.","td.rulesSet":"Set rules","td.ddLab":"Drawdown room · {name}","td.ddLeft":"{b} of {l} left","td.ddBreached":"Drawdown limit reached","td.focusFromRules":"The rule you broke last session. It stays your focus until the journal has enough sessions to price your habits.",
   "td.noBad":"Nothing broke your process this session. This is the day to repeat.",
   "td.weak":"Weak signal: that is small next to the {gl} you lost in those same sessions. Treat it as a hint, not a rule yet.","td.fixedT":"Habits you fixed","td.fixedLine":"Last slip: {d}. It was costing you about **{v}**.","td.fixedToast":"🏆 Habit fixed: {r}","td.preT":"Before you trade","td.preLead":"How are you arriving? One tap. Your focus and your own note are right above.","td.headsUp":"Heads up today:","td.remind":"🔔 Daily reminder","td.remAsk":"What time does your session end? (24h, like 16:00). You get a calendar file with a weekday reminder to close your day.","td.icsTitle":"Close your trading day (30 seconds)","td.remBad":"Use the format HH:MM","td.remDone":"Calendar file downloaded. Open it to add the reminder.","td.stopN":"Stop order placed on **{k} of {n}** positions.","td.stop1":"Stop order placed on **{k} of {n}** position.","td.stopWorst":"The largest loss without one was **{v}**.","td.focusT":"Your one focus","td.change":"Change","td.keptLab":"of your last {n} sessions kept it","td.noLeak":"No costly pattern in your recent sessions. Keep logging and the journal will name the next one.","td.focusCustom":"Your own focus. Pick an automatic one to track it with a number.","td.toldSelf":"You told yourself:",
   "td.rule.sizeup":"Same size after a loss. No sizing up to win it back.","td.rule.lossrun":"Two losses in a row, done for the session.","td.rule.overtrade":"Stop before trade #{ot}.","td.rule.giveback":"Once you are up, protect half of it.","td.contract":"contract","td.contracts":"contracts","td.rule.bigsize":"Keep {sym} at {cap} or less. Your bigger trades are the ones losing.",
@@ -1115,6 +1124,9 @@ const I18N={
   "grp.today":"Hoy","grp.more":"Más","tab.today":"Hoy","tt.grp.today":"Qué te costó dinero la última sesión y la única cosa que hacer distinto.","tt.grp.more":"Fugas, reportes, playbooks, rutina, riesgo, reglas, cuentas y finanzas.",
   "td.eyebrow":"Hoy","td.streak":"{n} días seguidos registrando","td.streak1":"1 día registrado","td.streak0":"Registra hoy y empieza una racha","td.last":"Última sesión · {d}","td.fullDay":"Ver el día completo","td.well":"Lo que hiciste bien","td.cost":"Lo que te costó","ct.risk":"Pérdida por encima de tu riesgo por trade: **{p}** contra un límite de {lim} ({x}x).","ct.notional":"Tamaño por encima de tu tope: **{v}** de notional contra {lim}.","ct.dayStop":"Cerraste el día en **{net}**, pasado tu stop diario de {lim}.","ct.maxTrades":"**{n} trades**, por encima de tu límite de {lim}.","ct.adds":"Agregaste a una posición abierta ({n}), contra tu regla de no agregar: {p}.","ct.widen":"Moviste el stop **más lejos de la entrada** en {n} posición(es): {p}. El stop solo se mueve a tu favor.",
   "af.rulesTitle":"Tus reglas","af.rulesHint":"Opcional, 0 = apagada. Cualquier día que rompa una queda como no disciplinado, aunque haya sido verde.","af.maxRisk":"Riesgo máx. por trade ($)","af.maxNotional":"Notional máx. ($)","af.dayStop":"Stop diario personal ($)","af.maxTrades":"Máx. trades por día","af.noAdds":"Nunca agregar a una posición abierta",
+  "ctc.risk":"Riesgo ≤ {v}/trade","ctc.notional":"Notional ≤ {v}","ctc.dayStop":"Stop diario {v}","ctc.maxTrades":"≤ {v} trades","ctc.adds":"Sin agregar","ctc.widen":"Stop nunca alejado",
+  "ctf.risk":"Riesgo de {v} o menos por trade. El tamaño sale del stop, no de la sensación.","ctf.notional":"Cada posición por debajo de {v} de notional.","ctf.dayStop":"En -{v} se acaba el día.","ctf.maxTrades":"Para en {v} trades.","ctf.adds":"Nada de agregar a una posición abierta.","ctf.widen":"El stop solo se mueve a tu favor. Nunca más lejos.",
+  "td.rulesNone":"Esta cuenta aún no tiene reglas, así que nada se compara con tu plan.","td.rulesSet":"Poner reglas","td.ddLab":"Colchón de drawdown · {name}","td.ddLeft":"Quedan {b} de {l}","td.ddBreached":"Límite de drawdown alcanzado","td.focusFromRules":"La regla que rompiste en la última sesión. Se queda como tu foco hasta que el journal tenga suficientes sesiones para medir tus hábitos.",
   "td.noBad":"Nada rompió tu proceso en esta sesión. Este es el día que hay que repetir.",
   "td.weak":"Señal débil: es poco frente a los {gl} que perdiste en esas mismas sesiones. Tómalo como pista, todavía no como regla.","td.fixedT":"Hábitos que ya corregiste","td.fixedLine":"Último desliz: {d}. Te costaba unos **{v}**.","td.fixedToast":"🏆 Hábito corregido: {r}","td.preT":"Antes de operar","td.preLead":"¿Cómo llegas? Un toque. Tu foco y tu propia nota están justo arriba.","td.headsUp":"Ojo hoy:","td.remind":"🔔 Recordatorio diario","td.remAsk":"¿A qué hora termina tu sesión? (24h, por ejemplo 16:00). Recibes un archivo de calendario con un recordatorio de lunes a viernes para cerrar tu día.","td.icsTitle":"Cierra tu día de trading (30 segundos)","td.remBad":"Usa el formato HH:MM","td.remDone":"Archivo de calendario descargado. Ábrelo para añadir el recordatorio.","td.stopN":"Orden stop puesta en **{k} de {n}** posiciones.","td.stop1":"Orden stop puesta en **{k} de {n}** posición.","td.stopWorst":"La mayor pérdida sin stop fue **{v}**.","td.focusT":"Tu único foco","td.change":"Cambiar","td.keptLab":"de tus últimas {n} sesiones lo cumpliste","td.noLeak":"No hay un patrón costoso en tus sesiones recientes. Sigue registrando y el journal nombrará el siguiente.","td.focusCustom":"Foco propio. Elige uno automático para seguirlo con un número.","td.toldSelf":"Te dijiste:",
   "td.rule.sizeup":"Mismo tamaño tras una pérdida. Nada de subir para recuperar.","td.rule.lossrun":"Dos pérdidas seguidas y se acaba la sesión.","td.rule.overtrade":"Para antes del trade #{ot}.","td.rule.giveback":"Cuando vayas arriba, protege la mitad.","td.contract":"contrato","td.contracts":"contratos","td.rule.bigsize":"Mantén {sym} en {cap} o menos. Tus trades más grandes son los que pierden.",
@@ -2775,21 +2787,26 @@ function daySequence(arr){
 // The trader's own rules for an account (all optional, 0 = off: max risk per trade, max notional, personal daily
 // stop, max trades, no adding) plus one habit the import can see directly: a stop moved further from entry.
 // One line per broken rule, for the day's "what cost you" list and for dayEval's disciplined flag.
-function contractBreaches(arr){
+// Which broken rule becomes the focus first: the behaviors behind a big loss before the limits it then crosses.
+const CT_PRIO=["widen","adds","risk","notional","dayStop","maxTrades"];
+function contractChecks(arr){
   const out=[];
   Object.values(byKey(arr||[],t=>t.acct||"")).forEach(g=>{
     const a=DB.accounts[g[0].acct]||{}, net=g.reduce((s,t)=>s+t.pnl,0), sum=x=>money1(x.reduce((s,t)=>s+t.pnl,0));
+    const add=(k,on,bad,lim,text)=>{ if(on) out.push({k,ok:!bad,lim,text:bad?text():""}); };
     const big=a.maxRisk>0?g.filter(t=>t.pnl< -a.maxRisk*1.15):[];
-    if(big.length){ const w=big.reduce((m,t)=>t.pnl<m.pnl?t:m); out.push(fmt(T("ct.risk"),{p:money1(w.pnl),lim:money(a.maxRisk),x:(Math.abs(w.pnl)/a.maxRisk).toFixed(1)})); }
+    add("risk",a.maxRisk>0,big.length,a.maxRisk,()=>{ const w=big.reduce((m,t)=>t.pnl<m.pnl?t:m); return fmt(T("ct.risk"),{p:money1(w.pnl),lim:money(a.maxRisk),x:(Math.abs(w.pnl)/a.maxRisk).toFixed(1)}); });
     const nt=a.maxNotional>0?g.filter(t=>t.notional>a.maxNotional):[];
-    if(nt.length) out.push(fmt(T("ct.notional"),{v:money(Math.max(...nt.map(t=>t.notional))),lim:money(a.maxNotional)}));
-    if(a.dayStop>0 && net< -a.dayStop) out.push(fmt(T("ct.dayStop"),{net:money1(net),lim:money(a.dayStop)}));
-    if(a.maxTrades>0 && g.length>a.maxTrades) out.push(fmt(T("ct.maxTrades"),{n:g.length,lim:a.maxTrades}));
-    const ad=a.noAdds?g.filter(t=>t.adds>0):[]; if(ad.length) out.push(fmt(T("ct.adds"),{n:ad.length,p:sum(ad)}));
-    const wd=g.filter(t=>t.widen); if(wd.length) out.push(fmt(T("ct.widen"),{n:wd.length,p:sum(wd)}));
+    add("notional",a.maxNotional>0,nt.length,a.maxNotional,()=>fmt(T("ct.notional"),{v:money(Math.max(...nt.map(t=>t.notional))),lim:money(a.maxNotional)}));
+    add("dayStop",a.dayStop>0,net< -a.dayStop,a.dayStop,()=>fmt(T("ct.dayStop"),{net:money1(net),lim:money(a.dayStop)}));
+    add("maxTrades",a.maxTrades>0,g.length>a.maxTrades,a.maxTrades,()=>fmt(T("ct.maxTrades"),{n:g.length,lim:a.maxTrades}));
+    const ad=a.noAdds?g.filter(t=>t.adds>0):[]; add("adds",!!a.noAdds,ad.length,0,()=>fmt(T("ct.adds"),{n:ad.length,p:sum(ad)}));
+    // only where the import can tell whether a stop was moved
+    const wd=g.filter(t=>t.widen); add("widen",g.some(t=>t.widen!==undefined),wd.length,0,()=>fmt(T("ct.widen"),{n:wd.length,p:sum(wd)}));
   });
   return out;
 }
+function contractBreaches(arr){ return contractChecks(arr).filter(c=>!c.ok).map(c=>c.text); }
 // CT clock time the session ended: the latest open plus that trade's own holding time when the import has it.
 // topen/tclose are only ever compared to each other here, so it works whichever clock a parser stored them in.
 function ctEnd(arr){
@@ -3367,8 +3384,18 @@ function renderToday(){
     if(ks.length) stopHtml=`<div class="td-weak">${mdb(fmt(T(ks.length===1?"td.stop1":"td.stopN"),{k:ks.length-no.length,n:ks.length}))}${w<-1?" "+mdb(fmt(T("td.stopWorst"),{v:money1(w)})):""}</div>`; }
   // Do not scold for trading on after a losing start when this trader's own replay says stopping would have cost them.
   { const lr=focus.all.find(c=>c.id==="lossrun"); if(lr && lr.cost<-1) r.bad=r.bad.filter(x=>x!==r.stubTxt); }
+  // The contract at a glance: one chip per rule set on the account (green kept, red broken), the session's own equity
+  // curve, and how much drawdown room the account has left. A chip is red if any account traded that day broke it.
+  const chk=contractChecks(last.arr), chkBy={}; chk.forEach(c=>{ chkBy[c.k]=chkBy[c.k]?{...chkBy[c.k],ok:chkBy[c.k].ok&&c.ok}:c; });
+  const chkOrder=["risk","notional","dayStop","maxTrades","adds","widen"].filter(k=>chkBy[k]);
+  const lastAcct=last.arr.map(t=>t.acct).find(id=>id&&DB.accounts[id]);
+  const rulesHtml=chkOrder.length?`<div class="td-rules">${chkOrder.map(k=>{ const c=chkBy[k]; return `<span class="td-rc ${c.ok?"ok":"no"}">${c.ok?"✓":"✕"} ${fmt(T("ctc."+k),{v:c.k==="maxTrades"?c.lim:money(c.lim)})}</span>`; }).join("")}</div>`
+    :(lastAcct?`<div class="td-weak rowflex" style="justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${T("td.rulesNone")}</span><button class="btn small" id="tdSetRules">${T("td.rulesSet")}</button></div>`:"");
+  const ddHtml=[...new Set(last.arr.map(t=>t.acct))].filter(id=>id&&DB.accounts[id]&&DB.accounts[id].ddLimit>0).slice(0,2).map(id=>{
+    const st=acctStats(id), lim=st.a.ddLimit, b=Math.max(0,st.buffer), pct=b/lim*100, col=pct<30?"var(--neg)":pct<60?"var(--wait)":"var(--pos)";
+    return `<div class="td-dd"><div class="rowflex small" style="justify-content:space-between;gap:10px"><span class="muted">${fmt(T("td.ddLab"),{name:esc(st.a.name)})} · ${st.ddLabel}</span><b style="color:${col}">${st.breached?T("td.ddBreached"):fmt(T("td.ddLeft"),{b:money(b),l:money(lim)})}</b></div>${riskBar(pct,col)}</div>`; }).join("");
   const lastHtml=`<div class="card"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px"><div class="eyebrow">${fmt(T("td.last"),{d:last.date})}</div><button class="btn small ghost" id="tdFull">${T("td.fullDay")}</button></div>
-    <div class="td-hl">${mdb(r.hl)}</div>
+    <div class="td-hl">${mdb(r.hl)}</div>${rulesHtml}<div id="tdCurve" class="td-curve"></div>${ddHtml}
     <div class="dayread td-read">
       ${r.good.length?`<div class="sec"><div class="drlab">${T("td.well")}</div><ul>${li(r.good,"good")}</ul></div>`:""}
       ${r.bad.length?`<div class="sec"><div class="drlab">${T("td.cost")}</div><ul>${li(r.bad,"bad")}</ul></div><div class="drlesson ${r.win?"win":""}">${mdb(r.lesson)}</div>`:`<div class="drlesson win">${T("td.noBad")}</div>`}
@@ -3384,7 +3411,10 @@ function renderToday(){
     body=`<div class="td-rule">${focusRule(p)}</div><div class="small muted" style="line-height:1.55">${mdb(fmt(T("td.why."+p.id),{v:money1(p.cost),n:p.fail.size,m:Math.min(FOCUS_WINDOW,days.length)}))}</div>
       ${weak?`<div class="td-weak">${fmt(T("td.weak"),{gl:money1(focus.grossLoss)})}</div>`:""}
       <div class="td-numrow"><div class="td-num">${kept}<span>/${recent.length}</span></div><div><div class="small muted">${fmt(T("td.keptLab"),{n:recent.length})}</div><div class="td-dots">${recent.map(d=>`<span class="${p.fail.has(d.date)?"no":""}" title="${d.date}"></span>`).join("")}</div></div></div>`; }
-  else body=`<div class="small muted" style="margin-top:9px; line-height:1.55">${T("td.noLeak")}</div>`;
+  else { const br=chk.filter(c=>!c.ok).sort((a,b)=>CT_PRIO.indexOf(a.k)-CT_PRIO.indexOf(b.k))[0];
+    // Too few sessions to price a habit yet, but a rule the trader set was broken: that rule is the focus meanwhile.
+    body=br?`<div class="td-rule">${fmt(T("ctf."+br.k),{v:br.k==="maxTrades"?br.lim:money(br.lim)})}</div><div class="small muted" style="line-height:1.55">${T("td.focusFromRules")}</div>`
+      :`<div class="small muted" style="margin-top:9px; line-height:1.55">${T("td.noLeak")}</div>`; }
   const focusHtml=`<div class="card td-focus"><div class="rowflex" style="justify-content:space-between; align-items:center; gap:10px"><div class="eyebrow">${T("td.focusT")}</div><button class="btn small ghost" id="tdFocus">${T("td.change")}</button></div>${body}${told?`<div class="td-told"><span class="muted">${T("td.toldSelf")}</span> "${esc(told)}"</div>`:""}</div>`;
   const fixed=syncFixedHabits(focus);
   const fixedHtml=fixed.length?`<div class="card card-ghost"><div class="eyebrow">🏆 ${T("td.fixedT")}</div>${fixed.slice(-3).reverse().map(h=>`<div class="td-fx"><b>${focusRule(h)}</b><div class="small muted">${mdb(fmt(T("td.fixedLine"),{d:h.last,v:money1(h.cost)}))}</div></div>`).join("")}</div>`:"";
@@ -3413,6 +3443,8 @@ function renderToday(){
   </div>`;
   const go=t=>{ tab=t; groupLast[groupOf(t).lab]=t; render(); };
   $("#tdFull").onclick=()=>{ jExpanded=last.date; go("journal"); };
+  { const host=$("#tdCurve"); if(host) host.appendChild(dayMiniCurve(last.arr.slice().sort((a,b)=>(a.date+a.time)<(b.date+b.time)?-1:1))); }
+  const sr=$("#tdSetRules"); if(sr) sr.onclick=()=>accountForm(lastAcct,()=>renderToday());
   $("#tdStats").onclick=()=>go("overview");
   $("#tdFocus").onclick=()=>showFocusPicker(focus.all);
   $("#tdRemind").onclick=()=>promptModal(T("td.remAsk"),{value:"16:00",placeholder:"16:00"}).then(t=>{ if(t==null) return; toast(T(downloadReminderIcs(String(t).trim())?"td.remDone":"td.remBad"),3200); });
