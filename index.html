@@ -4376,9 +4376,9 @@ function addWithdrawalModal(id){
 function renderAccounts(){
   const host=$("#view-accounts"); const ids=Object.keys(DB.accounts); const unassigned=DB.trades.filter(t=>!t.acct).length;
   const assignableIds=ids.filter(id=>!DB.accounts[id].hidden);
-  const reCard=unassigned?`<div class="card section"><p class="small wait" style="margin:0 0 8px">${fmt(T("ac.unassigned"),{n:unassigned})}</p>${assignableIds.length?`<div class="rowflex small">${T("ac.assignAllTo")} <select id="reAcct">${assignableIds.map(i=>`<option value="${i}">${escA(DB.accounts[i].name)}</option>`).join("")}</select> <button class="btn small" id="reApply">${T("ac.assign")}</button></div>`:'<span class="small muted">'+T("ac.createToAssign")+'</span>'}</div>`:'';
+  const reCard=unassigned?`<div class="card section"><p class="small wait" style="margin:0 0 8px">${fmt(T("ac.unassigned"),{n:unassigned})}</p><div class="rowflex small">${T("ac.assignAllTo")} <select id="reAcct">${assignableIds.map(i=>`<option value="${i}">${escA(DB.accounts[i].name)}</option>`).join("")}<option value="__new">${T("pk.createNew")}</option></select> <button class="btn small calm" id="reApply">${T("ac.assign")}</button></div></div>`:'';
   if(!ids.length){ host.innerHTML=`<div class="card"><h2>${T("ac.title")}</h2><p class="muted small">${T("ac.emptyLead")}</p><button class="btn calm" id="newAcct">${T("ac.new")}</button></div>${reCard}`;
-    $("#newAcct").onclick=addAccount; return; }
+    $("#newAcct").onclick=addAccount; wireReassign(); return; }
   const selReal=[...acctSel].filter(k=>DB.accounts[k]);
   const closedIds=ids.filter(id=>['passed','lost'].includes(DB.accounts[id].status));
   const showClosed=!!DB.settings.showClosedAccounts;
@@ -4429,7 +4429,7 @@ function renderAccounts(){
       ${kpi(T("ps.net"), money1(P.net), hterm(T("ps.roi"),T("help.roi"))+" "+(P.roi?P.roi.toFixed(2)+"×":"–"), cls(P.net))}
     </div></div>`:'';
   host.innerHTML=`<div class="rowflex" style="justify-content:space-between; margin-bottom:4px"><h2 style="margin:0">${T("ac.title")}</h2><button class="btn calm small" id="newAcct">${T("ac.new")}</button></div>
-    <p class="small muted" style="margin:0 0 8px">${T("ac.filterHint")}</p>${psCard}${closedBar}${cards}${reCard}`;
+    <p class="small muted" style="margin:0 0 8px">${T("ac.filterHint")}</p>${reCard}${psCard}${closedBar}${cards}`;
   $("#newAcct").onclick=addAccount;
   const tgc=$("#toggleClosed"); if(tgc)tgc.onclick=()=>{ DB.settings.showClosedAccounts=!showClosed; save(); renderAccounts(); };
   host.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>accountForm(b.dataset.edit));
@@ -4442,7 +4442,13 @@ function renderAccounts(){
     a.hidden=!a.hidden; save(); buildAccounts(); renderAccounts(); toast(a.hidden?fmt(T('ac.hiddenFromList'),{name:a.name}):fmt(T('ac.shownInList'),{name:a.name})); });
   host.querySelectorAll("[data-deltrades]").forEach(b=>b.onclick=()=>{ const id=b.dataset.deltrades; const a=DB.accounts[id]; if(!a)return; const n=DB.trades.filter(t=>(t.acct||"")===id).length; confirmModal(fmt(T("ac.delTradesConfirm"),{n,name:a.name}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; const c=deleteTradesWhere(t=>(t.acct||"")===id); toast(fmt(T("ac.delTradesDone"),{n:c})); }); });
   host.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>delAccountFlow(b.dataset.del));
-  const re=$("#reApply"); if(re)re.onclick=()=>{ const to=$("#reAcct").value; DB.trades.forEach(t=>{if(!t.acct)t.acct=to;}); save(); buildAccounts(); render(); toast(fmt(T("ac.assigned"),{name:DB.accounts[to].name})); };
+  wireReassign();
+}
+// Unassigned-trades card: assign them all to an existing account, or create one on the spot and assign to it.
+function wireReassign(){
+  const re=$("#reApply"); if(!re) return;
+  const assignTo=(to)=>{ if(!to||!DB.accounts[to]) return; DB.trades.forEach(t=>{if(!t.acct)t.acct=to;}); acctSel.delete("__none"); save(); buildAccounts(); render(); toast(fmt(T("ac.assigned"),{name:DB.accounts[to].name})); };
+  re.onclick=()=>{ const to=$("#reAcct").value; if(to==="__new") accountForm(null,(nid)=>assignTo(nid)); else assignTo(to); };
 }
 
 // Delete an account. If it has trades, let the user choose: delete them too, or keep them (unassigned).
