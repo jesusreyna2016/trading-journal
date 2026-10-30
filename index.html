@@ -2175,7 +2175,11 @@ function buildDisciplineDigest(maxDays){
     return { date:d.date, trades:d.count, disciplined:!!d.disciplined, maxLossStreak:d.maxC,
       overtrade:!d.r3, revenge:!d.r1, roundTrip:!d.r4, graded, withBias, againstBias, validEdge, outsideEdge,
       positions:pos.length, partials, scratches, fullStops,
-      wlPtsRatio:(wN&&lN)?+((wPts/wN)/(lPts/lN)).toFixed(2):null };
+      wlPtsRatio:(wN&&lN)?+((wPts/wN)/(lPts/lN)).toFixed(2):null,
+      // Per-position prices in points so the agent can check each entry against the plan
+      // that was live at that minute. No money and no size (qty x pts would rebuild P&L).
+      fills:pos.map(p=>({ t:(p.date&&p.time)?p.date+"T"+p.time+"Z":null, sym:p.sym, side:p.side,
+        entry:p.entry, exit:p.exit, pts:p.pts, durMin:p.durMs!=null?Math.round(p.durMs/60000):null })).filter(f=>f.t) };
   });
   const n=rows.length, gtot=rows.reduce((s,r)=>s+r.graded,0);
   const sum=(f)=>rows.reduce((s,r)=>s+f(r),0);
