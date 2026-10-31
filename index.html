@@ -2073,14 +2073,30 @@ function rootPlanSym(s){ s=String(s||"").toUpperCase();
   if(isIndexProxy(s)) return "NQ"; return null; }
 // NDX/US100 CFDs and perps follow NQ's plan by bias only: index and futures prices differ by the basis
 function isIndexProxy(s){ return /^(NDX|US100|NAS100|USTEC)/.test(String(s||"").toUpperCase()); }
+// ETH/BTC perps grade against the daily crypto plan: plans/crypto/<UTC day>-close.json (built 00:15 UTC)
+// and <UTC day>-ny.json (the 08:45 CT update, ~13:50 UTC), whichever was live at the entry.
+function cryptoPlanSym(s){ s=String(s||"").toUpperCase(); if(/^ETH/.test(s)) return "ETHUSDT"; if(/^BTC/.test(s)) return "BTCUSDT"; return null; }
+function cryptoPlanKeys(t){
+  const ms=t.topen>0?t.topen:Date.parse(t.date+"T"+(t.time||"00:00:00")+"Z");
+  if(!isFinite(ms)) return [];
+  const d=new Date(ms), day=d.toISOString().slice(0,10), h=d.getUTCHours()+d.getUTCMinutes()/60;
+  return h>=13.85 ? [day+"-ny", day+"-close"] : [day+"-close"];
+}
+// crypto plans carry levels as {vah:2249.7,...}; the grader reads keyLevels [{price}]
+function cryptoInstrument(inst){
+  const kl=Object.entries(inst.levels||{}).filter(([,v])=>v!=null&&isFinite(+v)).map(([k,v])=>({name:k,price:+v}));
+  return Object.assign({},inst,{keyLevels:kl});
+}
 function saRunForTime(hhmm){ const h=parseInt(String(hhmm||"00").slice(0,2),10)||0;
   if(h>=17 || h<2) return "pre-asia"; if(h<8) return "pre-london"; return "pre-ny"; }
-function saTol(d,psym){ const em=d&&d.expectedMove&&+d.expectedMove.base;
-  if(em) return Math.max(em*0.05, 1); return psym==="NQ"?10:(psym==="ES"?3:2); }
+function saTol(d,psym,px){ const em=d&&d.expectedMove&&+d.expectedMove.base;
+  if(em) return Math.max(em*0.05, 1);
+  if(/USDT$/.test(psym||"") && px>0) return px*0.0005;   // crypto: 0.05% of price
+  return psym==="NQ"?10:(psym==="ES"?3:2); }
 // grades one trade vs one instrument's plan -> {date,sym,entry,panel,align,[setup],[wait]}
 function saGradeTrade(t,d,run,psym){
   const e=+t.entry, side=String(t.side||"").toLowerCase();
-  const tol=saTol(d,psym);
+  const tol=saTol(d,psym,e);
   const zones=Array.isArray(d.zones)?d.zones:[];
   let hit=null;
   for(const z of zones){ const r=z.range; if(Array.isArray(r)&&r.length===2){
@@ -2106,7 +2122,7 @@ function saGradeTrade(t,d,run,psym){
 }
 async function autoGradeAgainstPlan(opts){
   opts=opts||{};
-  const trades=scoped().filter(t=>rootPlanSym(t.sym) && t.date && t.entry!=null);
+  const trades=scoped().filter(t=>(rootPlanSym(t.sym)||cryptoPlanSym(t.sym)) && t.date && t.entry!=null);
   if(!trades.length){ if(!opts.silent)toast(T("ctx.autoNone")); return {graded:0}; }
   if(!opts.silent)toast(T("ctx.autoRun"));
   const cache={};
@@ -2114,8 +2130,21 @@ async function autoGradeAgainstPlan(opts){
     try{ const r=await fetch(SA_PLAN_BASE+date+"-"+run+".json?t="+Date.now(),{cache:"no-store"});
       cache[key]= r.ok? await r.json(): null; }catch(e){ cache[key]="ERR"; }
     return cache[key]; }
+  async function getCryptoPlan(key){ const ck="crypto|"+key; if(ck in cache) return cache[ck];
+    try{ const r=await fetch(SA_PLAN_BASE+"crypto/"+key+".json?t="+Date.now(),{cache:"no-store"});
+      cache[ck]= r.ok? await r.json(): null; }catch(e){ cache[ck]="ERR"; }
+    return cache[ck]; }
   const ctx=[]; let noPlan=0, netErr=false;
   for(const t of trades){
+    const csym=cryptoPlanSym(t.sym);
+    if(csym){
+      let cp=null, ckey=null;
+      for(const k of cryptoPlanKeys(t)){ const p=await getCryptoPlan(k); if(p==="ERR"){ netErr=true; break; } if(p&&p.instruments&&p.instruments[csym]){ cp=p; ckey=k; break; } }
+      if(netErr) break;
+      if(!cp){ noPlan++; continue; }
+      ctx.push(saGradeTrade(t,cryptoInstrument(cp.instruments[csym]),"crypto-"+ckey.split("-").pop(),csym));
+      continue;
+    }
     const psym=rootPlanSym(t.sym);
     let run=saRunForTime(t.time);
     let plan=await getPlan(t.date,run);
