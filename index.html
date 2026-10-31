@@ -2069,7 +2069,10 @@ function importText(txt, acct){
 // the bus and grades each trade locally, then feeds the existing context/leak machinery.
 const SA_PLAN_BASE="https://raw.githubusercontent.com/jesusreyna2016/session-analyst-bus/main/plans/";
 function rootPlanSym(s){ s=String(s||"").toUpperCase();
-  if(/^M?NQ/.test(s)) return "NQ"; if(/^M?ES/.test(s)) return "ES"; if(/^M?GC/.test(s)) return "GC"; return null; }
+  if(/^M?NQ/.test(s)) return "NQ"; if(/^M?ES/.test(s)) return "ES"; if(/^M?GC/.test(s)) return "GC";
+  if(isIndexProxy(s)) return "NQ"; return null; }
+// NDX/US100 CFDs and perps follow NQ's plan by bias only: index and futures prices differ by the basis
+function isIndexProxy(s){ return /^(NDX|US100|NAS100|USTEC)/.test(String(s||"").toUpperCase()); }
 function saRunForTime(hhmm){ const h=parseInt(String(hhmm||"00").slice(0,2),10)||0;
   if(h>=17 || h<2) return "pre-asia"; if(h<8) return "pre-london"; return "pre-ny"; }
 function saTol(d,psym){ const em=d&&d.expectedMove&&+d.expectedMove.base;
@@ -2095,6 +2098,7 @@ function saGradeTrade(t,d,run,psym){
   if(bias==="LONG") align = side==="long"?"Con sesgo":"Contra";
   else if(bias==="SHORT") align = side==="short"?"Con sesgo":"Contra";
   const g={date:t.date, sym:String(t.sym||"").toUpperCase(), entry:e, align};
+  if(isIndexProxy(t.sym)) return g;   // zones are in futures prices: grade the bias only
   if(hit){ g.panel="VALID"; if(hit.type) g.setup=hit.type; }
   else if(atLevel){ g.panel="VALID"; }
   else { g.panel="CHOP"; g.wait="1"; }   // outside your edge -> should've waited
