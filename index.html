@@ -2079,8 +2079,14 @@ function cryptoPlanSym(s){ s=String(s||"").toUpperCase(); if(/^ETH/.test(s)) ret
 function cryptoPlanKeys(t){
   const ms=t.topen>0?t.topen:Date.parse(t.date+"T"+(t.time||"00:00:00")+"Z");
   if(!isFinite(ms)) return [];
-  const d=new Date(ms), day=d.toISOString().slice(0,10), h=d.getUTCHours()+d.getUTCMinutes()/60;
-  return h>=13.85 ? [day+"-ny", day+"-close"] : [day+"-close"];
+  // the runs are scheduled in Chicago time (crypto-ny 08:45, crypto-close 19:15), so the cutoffs follow DST;
+  // crypto-close is filed under the UTC date, which at 19:15 CT is already the next Chicago day
+  const ct={};
+  new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"})
+    .formatToParts(new Date(ms)).forEach(p=>{ct[p.type]=+p.value;});
+  const h=ct.hour+ct.minute/60, dayOf=n=>new Date(Date.UTC(ct.year,ct.month-1,ct.day+n)).toISOString().slice(0,10), day=dayOf(0);
+  if(h>=19.25) return [dayOf(1)+"-close"];
+  return h>=8.85 ? [day+"-ny", day+"-close"] : [day+"-close"];
 }
 // crypto plans carry levels as {vah:2249.7,...}; the grader reads keyLevels [{price}]
 function cryptoInstrument(inst){
