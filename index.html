@@ -841,6 +841,7 @@
           <button class="btn ghost small mobonly" id="mFbBtn">💬 <span data-i18n="fb.btn">Feedback</span></button>
           <button class="btn ghost small" id="whatsnewBtn">✨ <span data-i18n="cl.menu">What's new</span></button>
           <button class="btn ghost small" id="backupBtn" data-i18n="backup" data-i18n-title="tt.backup">⬇ Backup</button>
+          <button class="btn ghost small" id="moneyBtn">$ Hide amounts</button>
           <button class="btn ghost small" id="themeBtn" data-i18n-title="tt.theme">◐ Theme</button>
           <button class="btn ghost small" id="wipeBtn" data-i18n-title="tt.erase">🗑 Erase</button>
           <div class="acsep mobonly"></div>
@@ -986,6 +987,7 @@ const I18N={
   "score.sampleSize":"🎲 Only {n} trades so far. Even a real edge produces a random mix of wins and losses, most traders don't get an honest read until 20-30 trades. Treat this score as a rough draft, not a verdict, and keep judging your process, not this number.",
   "ax.win.l":"Win rate","ax.win.tip":"win more often or improve trade selection","ax.pf.l":"Profit factor","ax.pf.tip":"your wins must outweigh your losses","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"let winners run and cut losers sooner","ax.dd.l":"Max drawdown","ax.dd.tip":"control the losing streaks, stop after 2 losses","ax.rec.l":"Recovery","ax.rec.tip":"you recover slowly from drawdown; shrink your losses","ax.consist.l":"Consistency","ax.consist.tip":"fewer red days, more regularity",
   "score.ratioSub":"win ÷ loss","score.recovery":"Recovery factor","score.recSub":"net ÷ max DD","score.consistency":"Consistency","score.greenDays":"{g}/{t} green days","score.annualized":"annualized","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Performance by weekday","score.byHour":"Performance by hour (CT)",
+  "badge.early":"{n} MORE DAYS","score.draft":"draft","score.chartNeed":"Not enough days yet to compare.","mp.hideMoney":"Hide $ amounts","mp.showMoney":"Show $ amounts","j.bulk":"Tag the untagged trades of this day:","j.bulkDone":"{n} trades tagged","j.bulkNone":"Every trade here already has that tag.",
   "badge.great":"GREAT","badge.good":"GOOD","badge.needs":"NEEDS WORK",
   "pb.new":"＋ New play","pb.intro":"Every setup you tag becomes a play, and the journal tracks how each one actually performs and, just as telling, how well you follow it. Good numbers with low adherence means the play works and your execution is the leak. Tag your setups in the Journal and the stats land here.","pb.yours":"Your plays","pb.mostPrints":"🏆 Most profitable","pb.mostCosts":"💸 Costs you the most","pb.adh":"adh","pb.noneYet":"no trades yet","pb.delTitle":"Delete play",
   "pb.rAvg":"Avg R","pb.rSub":"win/loss in pts","pb.adherence":"Adherence","pb.adhSub":"avg process",
@@ -1158,6 +1160,7 @@ const I18N={
   "score.sampleSize":"🎲 Solo {n} trades hasta ahora. Hasta un edge real produce una mezcla al azar de ganadores y perdedores, la mayoría no tiene una lectura honesta antes de 20-30 trades. Trata este score como un borrador, no un veredicto, y sigue juzgando tu proceso, no este número.",
   "ax.win.l":"Win rate","ax.win.tip":"gana más seguido o mejora la selección de trades","ax.pf.l":"Profit factor","ax.pf.tip":"tus ganancias deben pesar más que tus pérdidas","ax.ratio.l":"Avg win/loss","ax.ratio.tip":"deja correr los ganadores y corta los perdedores antes","ax.dd.l":"Max drawdown","ax.dd.tip":"controla las rachas de pérdidas, para tras 2 seguidas","ax.rec.l":"Recovery","ax.rec.tip":"recuperas lento del drawdown; reduce el tamaño de las pérdidas","ax.consist.l":"Consistencia","ax.consist.tip":"menos días rojos, más regularidad",
   "score.ratioSub":"ganancia÷pérdida","score.recovery":"Recovery factor","score.recSub":"neto÷max DD","score.consistency":"Consistencia","score.greenDays":"{g}/{t} días verdes","score.annualized":"anualizado","score.avgWin":"Avg win","score.avgLoss":"Avg loss","score.byWeekday":"Rendimiento por día de la semana","score.byHour":"Rendimiento por hora (CT)",
+  "badge.early":"FALTAN {n} DÍAS","score.draft":"borrador","score.chartNeed":"Aún no hay días suficientes para comparar.","mp.hideMoney":"Ocultar importes en $","mp.showMoney":"Mostrar importes en $","j.bulk":"Etiquetar los trades sin etiqueta de este día:","j.bulkDone":"{n} trades etiquetados","j.bulkNone":"Todos los trades de aquí ya tienen esa etiqueta.",
   "badge.great":"GENIAL","badge.good":"BIEN","badge.needs":"MEJORAR",
   "pb.new":"＋ Nueva jugada","pb.intro":"Cada setup que etiquetas se vuelve una jugada, y el journal mide cómo rinde de verdad cada una y, igual de revelador, qué tan bien la sigues. Buenos números con adherencia baja significa que la jugada funciona y tu ejecución es la fuga. Etiqueta tus setups en el Diario y las stats aterrizan aquí.","pb.yours":"Tus jugadas","pb.mostPrints":"🏆 La que más imprime","pb.mostCosts":"💸 La que más te cuesta","pb.adh":"adh","pb.noneYet":"sin trades aún","pb.delTitle":"Eliminar jugada",
   "pb.rAvg":"R medio","pb.rSub":"gan/pérd en pts","pb.adherence":"Adherencia","pb.adhSub":"proceso medio",
@@ -1484,6 +1487,9 @@ function save(){ if(window.__demo) return; cacheLocal(); scheduleCloud(); }
 function toast(m,ms){const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),ms||1800);}
 // What's-new log (newest first). Bump the top v when you ship something worth surfacing.
 const CHANGELOG=[
+  {v:"Nov 2026", items:[
+    {en:"Hide $ amounts (⋯ menu) to review your process without staring at the money. The Score no longer rates drawdown, recovery or consistency before 5 trading days, and each day in Trades can tag all its untagged trades at once.", es:"Ocultar importes en $ (menú ⋯) para revisar tu proceso sin mirar el dinero. El Score ya no califica drawdown, recuperación ni consistencia antes de 5 días operados, y cada día en Trades puede etiquetar de una vez todos sus trades sin etiqueta."}
+  ]},
   {v:"Oct 2026", items:[
     {en:"Today shows how many of your positions had a stop order placed, when the import can tell (MyFundedPerpetuals for now).", es:"Hoy muestra en cuántas de tus posiciones pusiste una orden stop, cuando el import lo permite ver (por ahora MyFundedPerpetuals)."},
     {en:"MyFundedPerpetuals import: drop the trade history CSV and each position becomes one trade, with fees kept apart from the P&L.", es:"Import de MyFundedPerpetuals: suelta el CSV de historial de trades y cada posición se vuelve un trade, con las comisiones separadas del P&L."},
@@ -1508,8 +1514,10 @@ function showChangelog(){
   $("#clOk").onclick=closeModal;
   if(DB.settings){ DB.settings.seenChangelog=CHANGELOG[0].v; save(); } updateChangelogDot();
 }
-const money=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
-const money1=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+// "Hide $ amounts" (⋯ menu): every amount keeps its sign and color but not its size, so the review is about process.
+function hideMoney(){ try{ return !!(DB&&DB.settings&&DB.settings.hideMoney); }catch(e){ return false; } }
+const money=v=>hideMoney()?(v<0?"−":"")+"$•••":(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
+const money1=v=>hideMoney()?(v<0?"−":"")+"$•••":(v<0?"−$":"$")+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const cls=v=>v>0?"pos":v<0?"neg":"muted";
 // Maps a leak's sev ("hi"/"md"/"ok") onto the SAME .pass pill classes already used for the daily verdict,
 // journal rule pass/fail and risk compliance, so "how bad is this" reads the same everywhere instead of a
@@ -3793,12 +3801,16 @@ function dayCard(d,arrRaw){
   const left=peak-M.net, vol=arr.reduce((s,t)=>s+t.qty,0), comm=arr.reduce((s,t)=>s+(t.comm||0),0), exp=d===jExpanded;
   const kp=`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:0 8px;margin:10px 0 4px">
     ${kpiSmall(T("th.Trades"),M.n)}${kpiSmall(T("winRate"),M.winrate.toFixed(0)+"%")}${kpiSmall(T("net"),money1(M.net),cls(M.net))}${kpiSmall(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞")}${kpiSmall(T("j.volume"),vol)}${kpiSmall(T("j.wl"),M.wins+" / "+M.losses)}${left>1?kpiSmall(T("j.onTable"),money(left),"wait",T("j.peak")+" "+money(peak)):""}${comm?kpiSmall(T("j.commissions"),money(comm)):""}</div>`;
-  const body=exp?kp+sessionStatsHtml(arr,M,dayComputeExtra(arr))+planVsActualHtml(d,arr)+`${dayNarrative(arr)}<div data-curve="${d}" style="margin-bottom:8px"></div>${daySequence(arr)}<div style="overflow-x:auto"><table class="daytrades"><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th title="${T('j.thPanelTip')}">${T('j.thPanel')}</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
+  const body=exp?kp+sessionStatsHtml(arr,M,dayComputeExtra(arr))+planVsActualHtml(d,arr)+`${dayNarrative(arr)}<div data-curve="${d}" style="margin-bottom:8px"></div>${daySequence(arr)}${bulkTagBar(d)}<div style="overflow-x:auto"><table class="daytrades"><thead><tr><th>${T("j.thTime")}</th><th>${T("j.thTrade")}</th><th class="mono">P&amp;L</th><th>${T("j.thEmotion")}</th><th title="${T('j.thPanelTip')}">${T('j.thPanel')}</th><th>${T("j.thBias")}</th><th>Setup</th><th>${T("j.thProcess")}</th></tr></thead><tbody>${dayTradeRows(arr)}</tbody></table></div>`:"";
   return `<div class="card section" style="padding:14px 16px">
     <div class="rowflex" data-day="${d}" style="justify-content:space-between;cursor:pointer;align-items:center">
       <div><span style="color:var(--faint);margin-right:8px">${exp?'▾':'▸'}</span><span style="font-weight:700;font-size:15px">${weekdayOf(arr[0])} ${d}</span><span class="num ${cls(M.net)}" style="font-weight:700;margin-left:10px">${money1(M.net)}</span><span class="muted small"> · ${M.n} ${T("trades")}${left>1?' · '+fmt(T("j.leftOnTable"),{v:money(left)}):''}</span></div>
       <button class="btn small ghost" data-sessioncard="${d}" style="flex:none" title="${T('ss.shareTitle')}" aria-label="${T('ss.shareTitle')}">${icoSvg('share')}</button>
     </div>${body}</div>`;
+}
+function bulkTagBar(d){
+  const sel=(k,lab,vals,vp)=>`<select class="bulkSel" data-bulkday="${d}" data-k="${k}" aria-label="${lab}"><option value="">${lab}</option>${vals.map(v=>'<option value="'+escA(v)+'">'+vLabel(vp,v)+'</option>').join("")}</select>`;
+  return `<div class="rowflex small muted" style="gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 10px"><span>${T("j.bulk")}</span>${sel("emo",T("j.thEmotion"),EMO,"emo")}${sel("panel",T("j.thPanel"),PANEL,"pan")}${sel("align",T("j.thBias"),ALIGN,"aln")}${sel("setup","Setup",allSetups(),"setup")}</div>`;
 }
 function showNoteEditor(id){
   const tg=DB.tags[id]||(DB.tags[id]={});
@@ -3909,6 +3921,9 @@ function renderJournal(){
     const tb=e.target.closest("[data-deltrade]"); if(tb){ const sig=tb.dataset.deltrade; const t=DB.trades.find(x=>tradeSig(x)===sig); if(t){ confirmModal(fmt(T("del.tradeConfirm"),{sym:t.sym+" "+(t.side==='long'?'L':'S'),pnl:money1(t.pnl)}),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(ok && deleteTradeBySig(sig)) toast(T("del.tradeDone")); }); } return; }
   };
   host.onchange=e=>{
+    const bk=e.target.closest(".bulkSel"); if(bk){ if(!bk.value)return; const k=bk.dataset.k; let n=0;
+      (byKey(jFilterApply(TR),x=>x.tday)[bk.dataset.bulkday]||[]).forEach(x=>{ const id=tid(x); const g=DB.tags[id]=DB.tags[id]||{}; if(!g[k]){ g[k]=bk.value; n++; } });
+      if(n){ save(); renderJournal(); toast(fmt(T("j.bulkDone"),{n})); } else { bk.value=""; toast(T("j.bulkNone")); } return; }
     const t=e.target.closest(".tagSel"); if(t){ const id=t.dataset.id; DB.tags[id]=DB.tags[id]||{}; DB.tags[id][t.dataset.k]=t.value; save(); return; }
     const s=e.target.closest(".setupSel"); if(!s)return; const id=s.dataset.id; DB.tags[id]=DB.tags[id]||{};
     if(s.value==="__add"){ promptModal(T("setup.addPrompt")).then(nm=>{ if(nm){ DB.settings.setups=DB.settings.setups||[]; if(!allSetups().includes(nm)) DB.settings.setups.push(nm); DB.tags[id].setup=nm; save(); } renderJournal(); }); return; }
@@ -4957,29 +4972,33 @@ function renderScore(){
   if(TR.length<2){ host.innerHTML='<div class="card muted">'+T("score.needMore")+'</div>'; return; }
   const S=scoreStats(TR), M=S.M;
   const pk=promiseKeepingStats(TR);
-  const badge=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass good">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
-  const stat=(lab,val,sub,v)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><div class="lab">${lab}</div>${badge(v)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
+  // Drawdown, recovery and consistency are measured per day: with fewer than 5 days they read "perfect" by accident.
+  const nd=S.days.length, DAYAX={dd:1,rec:1,consist:1}, rated=k=>!(nd<5&&DAYAX[k]), early=TR.length<20||nd<5;
+  const badge0=v=>v>=70?'<span class="pass ok">'+T("badge.great")+'</span>':v>=45?'<span class="pass good">'+T("badge.good")+'</span>':'<span class="pass no">'+T("badge.needs")+'</span>';
+  const badge=k=>rated(k)?badge0(S.sc[k]):'<span class="pass na">'+fmt(T("badge.early"),{n:5-nd})+'</span>';
+  const stat=(lab,val,sub,k)=>`<div class="kpi"><div class="rowflex" style="justify-content:space-between;align-items:center"><div class="lab">${lab}</div>${badge(k)}</div><div class="val">${val}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
   const wdOrder=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"], byWd={}; TR.forEach(t=>{const k=weekdayOf(t); byWd[k]=(byWd[k]||0)+t.pnl;});
   const wdRows=wdOrder.filter(k=>byWd[k]!==undefined).map(k=>({k,net:byWd[k]}));
   const byHr={}; TR.forEach(t=>{const m=ctMinutes(t); if(m===null)return; const k=String(Math.floor(m/60)).padStart(2,"0"); byHr[k]=(byHr[k]||0)+t.pnl;});
   const hrRows=Object.keys(byHr).sort().map(k=>({k,net:byHr[k]}));
-  const oc=S.overall>=70?'var(--pos)':S.overall>=45?'var(--wait)':'var(--neg)';
+  const AX=["win","pf","ratio","dd","rec","consist"].filter(rated), overall=AX.reduce((a,k)=>a+S.sc[k],0)/AX.length;
+  const oc=early?'var(--muted)':overall>=70?'var(--pos)':overall>=45?'var(--wait)':'var(--neg)';
   const axes=[{k:"win",l:T("ax.win.l"),tip:T("ax.win.tip")},{k:"pf",l:T("ax.pf.l"),tip:T("ax.pf.tip")},{k:"ratio",l:T("ax.ratio.l"),tip:T("ax.ratio.tip")},{k:"dd",l:T("ax.dd.l"),tip:T("ax.dd.tip")},{k:"rec",l:T("ax.rec.l"),tip:T("ax.rec.tip")},{k:"consist",l:T("ax.consist.l"),tip:T("ax.consist.tip")}];
-  const weakest=axes.slice().sort((a,b)=>S.sc[a.k]-S.sc[b.k])[0];
+  const weakest=axes.filter(a=>rated(a.k)).sort((a,b)=>S.sc[a.k]-S.sc[b.k])[0];
   host.innerHTML=`
     <div class="card"><div class="rowflex" style="justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center">
-      <div><h2 style="margin:0 0 2px">${hterm(T("score.yourScore"),T("help.score"))}</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${S.overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100</span></div></div>
+      <div><h2 style="margin:0 0 2px">${hterm(T("score.yourScore"),T("help.score"))}</h2><div class="num" style="font-size:42px;font-weight:800;color:${oc}">${overall.toFixed(1)}<span class="muted" style="font-size:16px;font-weight:600">/100${early?' · '+T("score.draft"):''}</span></div></div>
       <div id="radarhost" style="flex:1 1 300px;max-width:440px"></div></div></div>
     ${TR.length<20?`<div class="card section" style="border-color:var(--calm)"><div class="small" style="color:var(--muted);line-height:1.55">${fmt(T("score.sampleSize"),{n:TR.length})}</div></div>`:''}
     ${pk.n>=1?`<div class="card section" style="border-color:var(--calm)"><h2>${T('pkeep.title')}</h2><div class="why" style="font-size:14px">${fmt(pk.pct>=80?T('pkeep.bodyGood'):pk.pct>=50?T('pkeep.bodyMid'):T('pkeep.bodyLow'),{kept:pk.kept,n:pk.n,pct:pk.pct})}</div></div>`:''}
-    <div class="card section" style="border-color:var(--wait)"><h2>${T("score.weakest")}</h2><div class="why" style="font-size:14px">${fmt(T("score.weakestBody"),{l:weakest.l,v:Math.round(S.sc[weakest.k]),tip:weakest.tip})}</div></div>
+    ${early?'':`<div class="card section" style="border-color:var(--wait)"><h2>${T("score.weakest")}</h2><div class="why" style="font-size:14px">${fmt(T("score.weakestBody"),{l:weakest.l,v:Math.round(S.sc[weakest.k]),tip:weakest.tip})}</div></div>`}
     <div class="grid kpis section">
-      ${stat(T("winRate"),M.winrate.toFixed(1)+"%","",S.sc.win)}
-      ${stat(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞","",S.sc.pf)}
-      ${stat(T("ax.ratio.l"),S.ratio?S.ratio.toFixed(2):"–",T("score.ratioSub"),S.sc.ratio)}
-      ${stat(T("maxDD"),money(-S.mdd),T("peakToValley"),S.sc.dd)}
-      ${stat(hterm(T("score.recovery"),T("help.recovery")),isFinite(S.recovery)?S.recovery.toFixed(2):"∞",T("score.recSub"),S.sc.rec)}
-      ${stat(T("score.consistency"),Math.round(S.consist*100)+"%",fmt(T("score.greenDays"),{g:S.posDays,t:S.days.length}),S.sc.consist)}
+      ${stat(T("winRate"),M.winrate.toFixed(1)+"%","","win")}
+      ${stat(T("pf"),isFinite(M.pf)?M.pf.toFixed(2):"∞","","pf")}
+      ${stat(T("ax.ratio.l"),S.ratio?S.ratio.toFixed(2):"–",T("score.ratioSub"),"ratio")}
+      ${stat(T("maxDD"),money(-S.mdd),T("peakToValley"),"dd")}
+      ${stat(hterm(T("score.recovery"),T("help.recovery")),isFinite(S.recovery)?S.recovery.toFixed(2):"∞",T("score.recSub"),"rec")}
+      ${stat(T("score.consistency"),Math.round(S.consist*100)+"%",fmt(T("score.greenDays"),{g:S.posDays,t:S.days.length}),"consist")}
     </div>
     <div class="grid kpis section">
       ${kpi(hterm("Sharpe",T("help.sharpe")),S.sharpe==null?"N/A":S.sharpe.toFixed(2),T("score.annualized"))}
@@ -4990,9 +5009,9 @@ function renderScore(){
     </div>
     <div class="card section"><h2>${T("score.byWeekday")}</h2><div id="wdhost"></div></div>
     <div class="card section"><h2>${T("score.byHour")}</h2><div id="hrhost"></div></div>`;
-  const rv=[S.sc.win,S.sc.pf,S.sc.ratio,S.sc.dd,S.sc.rec,S.sc.consist], rl=["Win%","PF","Avg W/L","Max DD","Recovery","Consist"];
+  const rk=["win","pf","ratio","dd","rec","consist"], rv=rk.map(k=>rated(k)?S.sc[k]:0), rl=["Win%","PF","Avg W/L","Max DD","Recovery","Consist"].map((l,i)=>rated(rk[i])?l:l+" ·");
   const rc=document.createElement("canvas"); wrapCanvas(rc); $("#radarhost").appendChild(rc); requestAnimationFrame(()=>drawRadar(rc,rv,rl,250)); rc._draw=()=>drawRadar(rc,rv,rl,250);
-  const wc=document.createElement("canvas"); wrapCanvas(wc); $("#wdhost").appendChild(wc); requestAnimationFrame(()=>drawCatBars(wc,wdRows,150)); wc._draw=()=>drawCatBars(wc,wdRows,150);
+  const wc=document.createElement("canvas"); wrapCanvas(wc); if(wdRows.length>=2) $("#wdhost").appendChild(wc); if(wdRows.length<2) $("#wdhost").innerHTML='<div class="small muted">'+T("score.chartNeed")+'</div>'; else { requestAnimationFrame(()=>drawCatBars(wc,wdRows,150)); wc._draw=()=>drawCatBars(wc,wdRows,150); }
   const hc=document.createElement("canvas"); wrapCanvas(hc); $("#hrhost").appendChild(hc); requestAnimationFrame(()=>drawCatBars(hc,hrRows,150)); hc._draw=()=>drawCatBars(hc,hrRows,150);
 }
 
@@ -5180,6 +5199,7 @@ function applyTheme(){ document.documentElement.dataset.theme=(DB.settings&&DB.s
 let lastRenderedTab=null;
 function render(){
   applyTheme();
+  { const mb=$("#moneyBtn"); if(mb) mb.textContent=T(hideMoney()?"mp.showMoney":"mp.hideMoney"); }
   const has=DB.trades.length>0;
   setGreet();
   const showViews=has||tab==="routine";
@@ -5241,6 +5261,7 @@ document.addEventListener("click",e=>{ const p=$("#morePop"); if(p && !p.classLi
 { const mc=$("#mCtxBtn"); if(mc) mc.onclick=()=>{ $("#morePop").classList.add("hide"); showContextModal(); }; }
 { const mf=$("#mFbBtn"); if(mf) mf.onclick=()=>{ $("#morePop").classList.add("hide"); showFeedback(); }; }
 { const ml=$("#mLogoutBtn"); if(ml) ml.onclick=()=>$("#logoutBtn").click(); }
+$("#moneyBtn").onclick=()=>{ DB.settings=DB.settings||{}; DB.settings.hideMoney=!DB.settings.hideMoney; save(); render(); };
 $("#themeBtn").onclick=()=>{ DB.settings=DB.settings||{}; DB.settings.theme=((DB.settings.theme||document.documentElement.dataset.theme)==="dark")?"light":"dark"; save(); render(); };
 $("#wipeBtn").onclick=()=>{ confirmModal(T("io.wipeConfirm"),{danger:true,ok:T("cm.delete")}).then(ok=>{ if(!ok)return; DB={trades:[],tags:{},checkins:{},accounts:{},playbooks:{},notes:{},ledger:[],acctEvents:[],routine:DB.routine||{},settings:DB.settings}; acctSel=new Set(); noteSel=null; idb().then(db=>{try{db.transaction("imgs","readwrite").objectStore("imgs").clear();}catch(e){}}); save(); buildAccounts(); buildPeriods(); render(); toast(T("io.wiped")); }); };
 window.addEventListener("resize",()=>{ $$("canvas").forEach(c=>{if(c._draw)c._draw();}); });
